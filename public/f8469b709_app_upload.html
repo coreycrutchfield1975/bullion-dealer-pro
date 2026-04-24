@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#08080F">
+<title>Bullion Dealer Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --gold:#FFD700;--gold2:#F5C518;--gold3:#AA8800;
+  --silver:#D0E8FF;--silver2:#EEF6FF;--silver3:#90B8E8;
+  --copper:#E8A060;--copper2:#F0C090;
+  --green:#00FF88;--red:#FF4455;--blue:#00D4FF;
+  --purple:#CC99FF;--teal:#66DDFF;
+  --bg:#08080F;--bg2:#10101A;--bg3:#181828;--bg4:#202035;
+  --text:#F2F2FF;--muted:#5A5A88;--border:#252545;
+}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:16px;line-height:1.3;overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh;-webkit-font-smoothing:antialiased}
+.main-wrap{flex:1;padding-bottom:68px}
+/* Trial/Upgrade Banner */
+.upgrade-banner{background:linear-gradient(90deg,rgba(255,215,0,.12),rgba(255,215,0,.05));border-bottom:1px solid rgba(255,215,0,.3);padding:8px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;display:none}
+.upgrade-banner.show{display:flex}
+.ub-text{font-size:14px;font-weight:700;color:var(--gold)}
+.ub-btn{background:var(--gold);color:#08080F;border:none;padding:6px 16px;border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:.5px}
+/* Top Ticker */
+.ticker-wrap{background:var(--bg2);border-bottom:1px solid var(--border);overflow:hidden;height:34px;display:flex;align-items:center}
+.ticker{display:flex;animation:tickscroll 60s linear infinite;white-space:nowrap;gap:60px;padding-left:100%;will-change:transform}
+@keyframes tickscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ti{font-family:'Share Tech Mono',monospace;font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.tg{color:var(--gold)}.ts{color:var(--silver)}.tc{color:var(--copper)}.tp{color:var(--purple)}.tpa{color:var(--teal)}
+/* Header */
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:200}
+.logo{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(90deg,var(--gold),var(--silver3),var(--copper));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s infinite;display:inline-block;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.badge{font-size:11px;padding:4px 8px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;letter-spacing:.5px}
+.b-live{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.35)}
+.b-lbma{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.35)}
+.b-err{background:rgba(255,68,85,.1);color:var(--red);border:1px solid rgba(255,68,85,.3)}
+.b-plan{background:rgba(0,212,255,.08);color:var(--blue);border:1px solid rgba(0,212,255,.25);cursor:pointer}
+.cd{font-family:'Share Tech Mono',monospace;color:var(--gold);font-size:13px}
+.btn{background:rgba(255,215,0,.12);border:1px solid var(--gold3);color:var(--gold);padding:6px 14px;border-radius:5px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;-webkit-appearance:none}
+.btn:hover{background:rgba(255,215,0,.22)}
+.btn-logout{background:rgba(255,68,85,.08);border:1px solid rgba(255,68,85,.3);color:var(--red);padding:6px 12px;border-radius:5px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700}
+.btn-ext{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.35);color:var(--blue);text-decoration:none;padding:6px 14px;border-radius:5px;font-size:14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;display:inline-block;letter-spacing:.5px}
+.btn-ext:hover{background:rgba(0,212,255,.18)}
+/* LBMA Strip */
+.lbma-strip{background:rgba(255,215,0,.03);border-bottom:1px solid rgba(255,215,0,.15);padding:6px 16px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.strip-title{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;white-space:nowrap;color:var(--gold3)}
+.si{display:flex;gap:5px;align-items:baseline;flex-shrink:0}
+.sl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;font-weight:600}
+.sv{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:bold}
+/* Container */
+.container{padding:14px 16px;max-width:1440px;margin:0 auto}
+.sec{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+/* Spot Cards */
+.spot-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.spot-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;position:relative;overflow:hidden}
+.spot-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sg{border-color:#665500;background:linear-gradient(150deg,var(--bg2),#140e00)}.sg::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.ss{border-color:#1a3060;background:linear-gradient(150deg,var(--bg2),#060d20)}.ss::before{background:linear-gradient(90deg,transparent,var(--silver3),transparent)}
+.sc{border-color:#6a3810;background:linear-gradient(150deg,var(--bg2),#140600)}.sc::before{background:linear-gradient(90deg,transparent,var(--copper),transparent)}
+.spt{border-color:#442088;background:linear-gradient(150deg,var(--bg2),#100820)}.spt::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+.spa{border-color:#103860;background:linear-gradient(150deg,var(--bg2),#040f20)}.spa::before{background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+.sp-lbl{font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;font-weight:800}
+.sp-px{font-family:'Share Tech Mono',monospace;font-size:26px;font-weight:bold;margin-bottom:3px;line-height:1}
+.sp-chg{font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:3px}
+.sp-ba{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:5px}
+.sp-sub{font-size:12px;color:var(--muted);display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
+.sv2{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:bold}
+/* Tables */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.tcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.tcard:last-child{margin-bottom:0}
+.th{padding:10px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+th{padding:8px 10px;text-align:right;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);white-space:nowrap;font-family:'Barlow Condensed',sans-serif}
+th:first-child{text-align:left}
+td{padding:7px 10px;text-align:right;font-family:'Share Tech Mono',monospace;border-bottom:1px solid rgba(37,37,69,.5);font-size:13px;white-space:nowrap}
+td:first-child{text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text);font-size:15px;white-space:normal}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.03)}
+.cm{color:var(--text)}.cmkt{color:var(--blue)}.cb5{color:#88DD44}.cb10{color:var(--green)}.cs5{color:#FFAA22}.cs10{color:#FF7744}
+.tag{display:inline-block;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;vertical-align:middle}
+.t40{background:rgba(0,212,255,.1);color:var(--blue);border:1px solid rgba(0,212,255,.3)}
+.t35{background:rgba(255,170,34,.12);color:#FFAA22;border:1px solid rgba(255,170,34,.35)}
+/* Karat Grid */
+.karat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:12px}
+.kc{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.kc-lbl{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--gold)}
+.kc-pur{font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px;font-weight:600}
+.kc-oz{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--text);margin-bottom:2px;font-weight:bold}
+.kc-g{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gold3)}
+.kd{height:1px;background:var(--border);margin:6px 0}
+.kr{font-size:11px;display:flex;justify-content:space-between;margin-bottom:3px}
+.kb{color:var(--green)}.ks{color:#FF7744}
+.klbl{font-size:10px;color:var(--muted);margin-bottom:2px;text-align:left;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+/* Copper Grid */
+.cu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}
+.cc{background:var(--bg3);border:1px solid #5a3010;border-radius:8px;padding:10px;text-align:center}
+.cc .cl{font-size:11px;letter-spacing:.5px;color:var(--copper);text-transform:uppercase;margin-bottom:4px;font-weight:800}
+.cc .cv{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--copper2);margin-bottom:3px;font-weight:bold}
+.cc .cs{font-size:11px;color:var(--muted);font-weight:600}
+/* Goldback */
+.gb-ex{padding:12px 14px;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px}
+.gbe{text-align:center}
+.gbel{font-size:11px;letter-spacing:.5px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;font-weight:700}
+.gbev{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:bold}
+/* Dealer Tips */
+.dtips{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:8px;padding:12px}
+.tip{background:var(--bg3);border-radius:8px;padding:10px;border-left:3px solid var(--gold)}
+.tip .tt{font-size:10px;letter-spacing:.5px;color:var(--gold);text-transform:uppercase;margin-bottom:4px;font-weight:800}
+.tip .tv{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:bold;color:var(--text)}
+.tip .tsub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:600}
+.upd{font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;padding:4px 14px 8px;text-align:right}
+.rnote{font-size:11px;color:var(--muted);padding:4px 14px;font-style:italic;font-weight:600}
+.sinfo{font-size:11px;color:var(--muted);padding:4px 14px;font-weight:600}
+/* News Bar */
+.news-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:2px solid var(--blue);z-index:300}
+.news-hdr{background:var(--bg3);border-bottom:1px solid var(--border);padding:4px 14px;display:flex;align-items:center;gap:10px}
+.news-lbl{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;color:var(--blue);flex-shrink:0}
+.news-src{font-size:11px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600}
+.news-wrap{overflow:hidden;height:32px;display:flex;align-items:center}
+.news-tick{display:flex;white-space:nowrap;gap:72px;animation:newsroll 110s linear infinite;will-change:transform}
+.news-tick.paused{animation-play-state:paused}
+@keyframes newsroll{0%{transform:translateX(100vw)}100%{transform:translateX(-200%)}}
+.ni{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.ni-bull{color:var(--gold);font-size:12px}
+.ni-cat{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:800;text-transform:uppercase}
+.cat-bullion{background:rgba(255,215,0,.14);color:var(--gold);border:1px solid rgba(255,215,0,.3)}
+.cat-market{background:rgba(0,212,255,.1);color:var(--blue);border:1px solid rgba(0,212,255,.25)}
+.cat-macro{background:rgba(136,221,68,.1);color:#88DD44;border:1px solid rgba(136,221,68,.3)}
+.cat-futures{background:rgba(204,153,255,.1);color:var(--purple);border:1px solid rgba(204,153,255,.3)}
+/* Paywall overlay */
+.paywall{display:none;position:fixed;inset:0;background:rgba(8,8,15,.92);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.paywall.show{display:flex}
+.pw-box{background:var(--bg2);border:1px solid var(--gold);border-radius:16px;padding:48px 40px;max-width:420px;width:90%;text-align:center}
+.pw-box h2{font-family:'Orbitron',monospace;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+.pw-box p{font-size:16px;color:#A0A0CC;font-weight:600;margin-bottom:28px;line-height:1.5}
+.pw-btn{display:block;width:100%;padding:14px;background:var(--gold);color:#08080F;border:none;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;cursor:pointer;letter-spacing:1px;margin-bottom:12px;text-decoration:none}
+.pw-link{color:var(--muted);font-size:14px;font-weight:600}
+/* Responsive */
+@media(max-width:960px){.spot-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}}
+@media(max-width:620px){.spot-grid{grid-template-columns:repeat(2,1fr)}.sp-px{font-size:22px}.cu-grid{grid-template-columns:repeat(2,1fr)}.karat-grid{grid-template-columns:repeat(2,1fr)}header{padding:8px 12px}.container{padding:10px 12px}}
+@media(max-width:400px){.spot-grid{grid-template-columns:repeat(2,1fr)}.sp-px{font-size:19px}.logo{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="paywall" id="paywall">
+  <div class="pw-box">
+    <h2>TRIAL EXPIRED</h2>
+    <p>Your 14-day free trial has ended. Subscribe to continue using Bullion Dealer Pro.</p>
+    <a href="/pricing" class="pw-btn">VIEW PLANS FROM $19/MO</a>
+    <div class="pw-link"><a href="/login" style="color:var(--muted)">Already subscribed? Log in again</a></div>
+  </div>
+</div>
+
+<div class="main-wrap">
+<!-- UPGRADE BANNER -->
+<div class="upgrade-banner" id="upgrade-banner">
+  <span class="ub-text" id="ub-text">Your trial expires in X days</span>
+  <button class="ub-btn" onclick="window.location.href='/pricing'">UPGRADE NOW</button>
+</div>
+
+<!-- TOP TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="top-ticker">
+    <span class="ti tg">XAU <span id="t-g">—</span> <span id="t-gc"></span></span>
+    <span class="ti ts">XAG <span id="t-s">—</span> <span id="t-sc"></span></span>
+    <span class="ti tc">HG COPPER <span id="t-c">—</span>/lb</span>
+    <span class="ti tp">XPT PLATINUM <span id="t-p">—</span></span>
+    <span class="ti tpa">XPD PALLADIUM <span id="t-pa">—</span></span>
+    <span class="ti" style="color:#8899CC">G:S RATIO <span id="t-gsr">—</span></span>
+    <span class="ti" style="color:#8899CC">LBMA Au AM <span id="t-lam">—</span></span>
+    <span class="ti tg">XAU <span id="t-g2">—</span></span>
+    <span class="ti ts">XAG <span id="t-s2">—</span></span>
+    <span class="ti" style="color:#8899CC">G:S RATIO <span id="t-gsr2">—</span></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">⬡ BULLION DEALER PRO</div>
+  <div class="hdr-right">
+    <span class="badge b-live" id="mb"><span class="dot"></span>&nbsp;CONNECTING</span>
+    <span class="badge b-lbma" id="lb">LBMA —</span>
+    <span style="font-size:13px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600">NEXT: <span class="cd" id="cd">5:00</span></span>
+    <span class="badge b-plan" id="plan-badge" onclick="manageSub()">TRIAL</span>
+    <a class="btn-ext" href="https://www.apmex.com/gold-price" target="_blank">↗ APMEX</a>
+    <a class="btn-ext" href="https://www.kitco.com/gold-price-today-usa.html" target="_blank">↗ KITCO</a>
+    <button class="btn" onclick="fetchAll()">↻ REFRESH</button>
+    <button class="btn-logout" onclick="logout()">LOGOUT</button>
+  </div>
+</header>
+
+<!-- LBMA STRIP -->
+<div class="lbma-strip">
+  <span class="strip-title">⬡ LONDON FIX · LBMA</span>
+  <div class="si"><span class="sl">Au AM</span><span class="sv" id="lbma-gam" style="color:var(--gold)">—</span></div>
+  <div class="si"><span class="sl">Au PM</span><span class="sv" id="lbma-gpm" style="color:var(--gold)">—</span></div>
+  <div class="si"><span class="sl">Ag</span><span class="sv" id="lbma-ag" style="color:var(--silver2)">—</span></div>
+  <div class="si"><span class="sl">Pt AM</span><span class="sv" id="lbma-pam" style="color:var(--purple)">—</span></div>
+  <div class="si"><span class="sl">Pt PM</span><span class="sv" id="lbma-ppm" style="color:var(--purple)">—</span></div>
+  <div class="si"><span class="sl">Pd AM</span><span class="sv" id="lbma-pdam" style="color:var(--teal)">—</span></div>
+  <div class="si"><span class="sl">Pd PM</span><span class="sv" id="lbma-pdpm" style="color:var(--teal)">—</span></div>
+  <div class="si" style="margin-left:auto"><span class="sl">Date</span><span class="sv" id="lbma-dt" style="color:var(--muted)">—</span></div>
+</div>
+
+<div class="container">
+<div class="sec">Live Spot Prices · gold-api.com</div>
+<div class="spot-grid">
+  <div class="spot-card sg">
+    <div class="sp-lbl" style="color:var(--gold)">Gold · XAU</div>
+    <div class="sp-px" id="gp" style="color:var(--gold)">—</div>
+    <div class="sp-chg" id="g-chg"></div>
+    <div class="sp-ba" id="g-ba"></div>
+    <div class="sp-sub">
+      <span>gram</span><span class="sv2" id="g-gram" style="color:var(--gold)">—</span>
+      <span>DWT</span><span class="sv2" id="g-dwt" style="color:var(--gold)">—</span>
+      <span>kg</span><span class="sv2" id="g-kg" style="color:var(--gold)">—</span>
+    </div>
+  </div>
+  <div class="spot-card ss">
+    <div class="sp-lbl" style="color:var(--silver3)">Silver · XAG</div>
+    <div class="sp-px" id="sp" style="color:var(--silver2)">—</div>
+    <div class="sp-chg" id="s-chg"></div>
+    <div class="sp-ba" id="s-ba"></div>
+    <div class="sp-sub">
+      <span>gram</span><span class="sv2" id="s-gram" style="color:var(--silver2)">—</span>
+      <span>DWT</span><span class="sv2" id="s-dwt" style="color:var(--silver2)">—</span>
+      <span>Face/$1</span><span class="sv2" id="s-face" style="color:var(--silver2)">—</span>
+    </div>
+  </div>
+  <div class="spot-card sc">
+    <div class="sp-lbl" style="color:var(--copper)">Copper · HG</div>
+    <div class="sp-px" id="cp" style="color:var(--copper2)">—</div>
+    <div class="sp-chg" id="c-chg"></div>
+    <div class="sp-ba" id="c-ba"></div>
+    <div class="sp-sub">
+      <span>gram</span><span class="sv2" id="c-gram" style="color:var(--copper2)">—</span>
+      <span>kg</span><span class="sv2" id="c-kg" style="color:var(--copper2)">—</span>
+      <span>penny</span><span class="sv2" id="c-cent" style="color:var(--copper2)">—</span>
+    </div>
+  </div>
+  <div class="spot-card spt">
+    <div class="sp-lbl" style="color:var(--purple)">Platinum · XPT</div>
+    <div class="sp-px" id="pp" style="color:var(--purple)">—</div>
+    <div class="sp-chg" id="p-chg"></div>
+    <div class="sp-sub">
+      <span>gram</span><span class="sv2" id="p-gram" style="color:var(--purple)">—</span>
+      <span>Buy -10%</span><span class="sv2" id="p-b10" style="color:var(--green)">—</span>
+      <span>Sell +10%</span><span class="sv2" id="p-s10" style="color:#FF7744">—</span>
+    </div>
+  </div>
+  <div class="spot-card spa">
+    <div class="sp-lbl" style="color:var(--teal)">Palladium · XPD</div>
+    <div class="sp-px" id="pap" style="color:var(--teal)">—</div>
+    <div class="sp-chg" id="pa-chg"></div>
+    <div class="sp-sub">
+      <span>gram</span><span class="sv2" id="pa-gram" style="color:var(--teal)">—</span>
+      <span>Buy -10%</span><span class="sv2" id="pa-b10" style="color:var(--green)">—</span>
+      <span>Sell +10%</span><span class="sv2" id="pa-s10" style="color:#FF7744">—</span>
+    </div>
+  </div>
+</div>
+
+<!-- SILVER + COPPER -->
+<div class="two-col">
+  <div>
+    <div class="sec">Constitutional Silver</div>
+    <div class="tcard">
+      <div class="th" style="color:var(--silver3)">90% · 40% · 35% Coins — Per Coin Melt Value</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Coin</th><th>Oz Ag</th><th>Melt</th><th>Mkt~</th><th>Buy -5%</th><th>Buy -10%</th><th>Sell +5%</th><th>Sell +10%</th></tr></thead><tbody id="silver-coins"></tbody></table></div>
+    </div>
+    <div class="tcard">
+      <div class="th" style="color:#8899CC">Coin Rolls — Melt Value Per Roll</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Roll Type</th><th>Qty</th><th>Face</th><th>Oz Ag</th><th>Melt/Roll</th><th>Buy -10%</th><th>Sell +10%</th></tr></thead><tbody id="silver-rolls"></tbody></table></div>
+      <div class="rnote">Standard US bank roll quantities.</div>
+      <div class="upd" id="s-upd"></div>
+    </div>
+  </div>
+  <div>
+    <div class="sec">Copper Pennies · Pre-1982 · 95% Cu</div>
+    <div class="tcard">
+      <div class="th" style="color:var(--copper2)">COMEX HG Live Feed · Per-Penny Melt</div>
+      <div class="cu-grid" id="cu-cards"></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Quantity</th><th>Face</th><th>Grams</th><th>Pounds</th><th>Cu Melt</th><th>+/− vs Face</th></tr></thead><tbody id="cu-tbl"></tbody></table></div>
+      <div class="upd" id="c-upd"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">Gold Karat Melt Values — XAU Live Feed</div>
+<div class="tcard">
+  <div class="th" style="color:var(--gold)">Per Ounce & Per Gram · Buy −5%/−10% · Sell +5%/+10%</div>
+  <div class="karat-grid" id="karat-grid"></div>
+  <div class="upd" id="g-upd"></div>
+</div>
+
+<div class="sec">Goldbacks — Average Retail Price & Vendor Comparison</div>
+<div class="tcard">
+  <div class="th" style="color:var(--blue)">UPMA Daily Rate · Avg Retail · Buy −10% · Sell +10%</div>
+  <div class="gb-ex" id="gb-ex"></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Denomination</th><th>Au Content</th><th>Raw Spot</th><th>Avg Retail</th><th>Buy −10%</th><th>Sell +10%</th><th>SDBullion~</th><th>DefyTheGrid~</th><th>FinestKnown~</th><th>APMEX~</th></tr></thead>
+      <tbody id="gb-tbl"></tbody>
+    </table>
+  </div>
+  <div class="sinfo">Avg retail = spot + manufacturing premium (scales by denom). Verify live prices: defythegrid.com · finestknown.com · sdbullion.com · apmex.com · goldback.com</div>
+  <div class="upd" id="gb-upd"></div>
+</div>
+
+<div class="sec">Dealer Quick Reference</div>
+<div class="tcard">
+  <div class="th" style="color:var(--green)">Market Benchmarks, Buy/Sell Signals & Key Formulas</div>
+  <div class="dtips" id="dtips"></div>
+</div>
+</div>
+</div>
+
+<!-- NEWS BAR -->
+<div class="news-bar">
+  <div class="news-hdr">
+    <span class="news-lbl">⬡ MARKET NEWS</span>
+    <span class="news-src" id="news-src">Loading headlines…</span>
+    <span style="margin-left:auto;font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace" id="news-ts"></span>
+  </div>
+  <div class="news-wrap" ontouchstart="pauseNews()" onmouseenter="pauseNews()" ontouchend="resumeNews()" onmouseleave="resumeNews()">
+    <div class="news-tick" id="news-tick">
+      <span class="ni"><span class="ni-bull">◆</span><span class="ni-cat cat-bullion">BULLION</span><span class="ni-tx">&nbsp;Loading live precious metals and market news…</span></span>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let G=3200,S=32,CLB=4.8,P=980,PA=1010;
+let GCHp=0,GCH=0,SCHp=0,SCH=0,PCH=0,PACh=0,CCHp=0,Gask=0,Sask=0,Cask=0;
+let G0=0,S0=0,CLB0=0,P0=0,PA0=0; // first-fetch baseline for session % change
+let secs=300,clockH=null;
+
+const f=(n,d=2)=>(!n||isNaN(n))?'—':'$'+Number(n).toFixed(d);
+const pctStr=(v)=>(v>=0?'+':'')+Number(v).toFixed(2)+'%';
+const upColor=v=>v>=0?'var(--green)':'var(--red)';
+const API='/api/metals/';
+
+/* ─── Auth check on load ─── */
+async function checkAccess() {
+  try {
+    const r = await fetch('/api/access', { credentials: 'include' });
+    if (r.status === 401) { window.location.href = '/login'; return false; }
+    const d = await r.json();
+
+    // Update plan badge
+    const pb = $('plan-badge');
+    if (pb) {
+      pb.textContent = (d.plan || 'TRIAL').toUpperCase();
+      if (d.plan === 'admin') pb.style.color = 'var(--gold)';
+      else if (d.plan === 'monthly' || d.plan === 'annual') { pb.style.color = 'var(--green)'; }
+    }
+
+    // Trial warning banner
+    if (d.plan === 'trial' && d.trialEnd && !d.trialExpired) {
+      const days = Math.ceil((new Date(d.trialEnd) - new Date()) / 86400000);
+      if (days <= 7) {
+        $('ub-text').textContent = `Trial expires in ${days} day${days===1?'':'s'} — upgrade to keep access`;
+        $('upgrade-banner').classList.add('show');
+      }
+    }
+
+    if (d.trialExpired || !d.access) {
+      $('paywall').classList.add('show');
+      return false;
+    }
+    return true;
+  } catch { return true; }
+}
+
+async function logout() {
+  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+  window.location.href = '/';
+}
+
+async function manageSub() {
+  try {
+    const r = await fetch('/api/stripe/portal', { method: 'POST', credentials: 'include', headers: {'Content-Type':'application/json'} });
+    const d = await r.json();
+    if (d.url) window.location.href = d.url;
+    else window.location.href = '/pricing';
+  } catch { window.location.href = '/pricing'; }
+}
+
+/* ─── Metal Fetch ─── */
+async function fetchMetal(sym) {
+  const r = await fetch(API+sym, {cache:'no-store', credentials:'include', signal:AbortSignal.timeout(8000)});
+  if (!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+
+async function fetchAll() {
+  $('mb').innerHTML='<span class="dot"></span>&nbsp;FETCHING…';
+  try {
+    const [gd,sd,cd,pd,pad] = await Promise.all([
+      fetchMetal('XAU'),fetchMetal('XAG'),fetchMetal('HG'),fetchMetal('XPT'),fetchMetal('XPD')
+    ]);
+    const gp=Number(gd.price)||G, sp=Number(sd.price)||S,
+          cp=Number(cd.price)||CLB, pp=Number(pd.price)||P, pap=Number(pad.price)||PA;
+    // Set baseline on first successful fetch
+    if(!G0&&gp){G0=gp;S0=sp;CLB0=cp;P0=pp;PA0=pap;}
+    G=gp;S=sp;CLB=cp;P=pp;PA=pap;
+    Gask=G;Sask=S;Cask=CLB;
+    // Compute change vs session baseline
+    GCH=G0?G-G0:0;          GCHp=G0?((G-G0)/G0)*100:0;
+    SCH=S0?S-S0:0;           SCHp=S0?((S-S0)/S0)*100:0;
+    CCHp=CLB0?((CLB-CLB0)/CLB0)*100:0;
+    PCH=P0?P-P0:0;
+    PACh=PA0?PA-PA0:0;
+
+    $('mb').innerHTML='<span class="dot"></span>&nbsp;LIVE · gold-api.com';
+    $('mb').className='badge b-live';
+    $('lbma-gam').textContent='$'+(gd.open?Number(gd.open).toFixed(2):G.toFixed(2));
+    $('lbma-gpm').textContent='$'+G.toFixed(2);
+    $('lbma-ag').textContent='$'+S.toFixed(3);
+    $('lbma-pam').textContent='$'+(pd.open?Number(pd.open).toFixed(2):P.toFixed(2));
+    $('lbma-ppm').textContent='$'+P.toFixed(2);
+    $('lbma-pdam').textContent='$'+(pad.open?Number(pad.open).toFixed(2):PA.toFixed(2));
+    $('lbma-pdpm').textContent='$'+PA.toFixed(2);
+    $('lbma-dt').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    $('lb').textContent='LBMA LIVE'; $('lb').className='badge b-lbma';
+    $('t-lam').textContent='$'+(gd.open?Number(gd.open).toFixed(2):G.toFixed(2));
+  } catch(e) {
+    console.warn('Metals fetch failed:',e);
+    $('mb').innerHTML='⚠ RETRYING…'; $('mb').className='badge b-err';
+  }
+  renderAll();
+  fetchNews();
+}
+
+/* ─── News ─── */
+const fallbackNews=[
+  {text:'Cross-reference spot prices with APMEX and Kitco links above',cat:'bullion'},
+  {text:'London Fix (LBMA) AM and PM prices displayed in the gold strip',cat:'macro'},
+  {text:'Constitutional silver melt values update every 5 minutes from live XAG feed',cat:'bullion'},
+  {text:'Copper penny melt value recalculated from live COMEX HG price',cat:'market'},
+  {text:'Gold karat values — 24K through 9K — updated from live XAU feed',cat:'bullion'},
+  {text:'Goldback average retail prices reflect UPMA daily rate plus manufacturing premium',cat:'market'},
+  {text:'Gold:Silver ratio and DWT values in Dealer Quick Reference below',cat:'macro'},
+];
+
+async function fetchNews() {
+  buildNewsTicker(fallbackNews,'Static dealer reference');
+  try {
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(25000),
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:1200,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:'Use web search to find 8 real current financial news headlines from today about gold silver copper precious metals and financial markets. Return ONLY this exact JSON with no markdown fences no backticks no extra text: {"news":[{"text":"headline here","cat":"bullion"},{"text":"headline 2","cat":"market"}]} Categories must be one of: bullion market macro futures. Use real searched headlines only.'}]
+      })
+    });
+    if(!resp.ok)throw new Error('API '+resp.status);
+    const data=await resp.json();
+    const txt=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    const i=txt.indexOf('{'),j=txt.lastIndexOf('}');
+    if(i<0||j<=i)throw new Error('No JSON');
+    const parsed=JSON.parse(txt.slice(i,j+1));
+    if(parsed.news?.length>0)buildNewsTicker(parsed.news,'Live headlines · web search');
+  } catch(e){console.warn('News note:',e.message);}
+}
+
+function buildNewsTicker(items,src) {
+  const doubled=[...items,...items];
+  $('news-tick').innerHTML=doubled.map(n=>`<span class="ni"><span class="ni-bull">◆</span><span class="ni-cat cat-${n.cat||'market'}">${(n.cat||'market').toUpperCase()}</span><span class="ni-tx">&nbsp;${n.text}</span></span>`).join('');
+  if(src){const ts=new Date().toLocaleTimeString();$('news-src').textContent=src+' · '+ts;$('news-ts').textContent=ts;}
+}
+function pauseNews(){$('news-tick').classList.add('paused');}
+function resumeNews(){$('news-tick').classList.remove('paused');}
+
+/* ─── Render ─── */
+function renderAll() {
+  const ts=new Date().toLocaleTimeString();
+  const Cg=CLB/453.592,pm=2.375*Cg,gsr=G/S;
+  $('gp').textContent=f(G,2);
+  $('g-chg').innerHTML=`<span style="color:${upColor(GCHp)}">${pctStr(GCHp)} (${GCH>=0?'+':''}${Number(GCH).toFixed(2)})</span>`;
+  $('g-ba').textContent=Gask?`Bid $${G.toFixed(2)} · Ask $${Gask.toFixed(2)}`:'';
+  $('g-gram').textContent=f(G/31.1035,2);$('g-dwt').textContent=f(G/20,2);$('g-kg').textContent=f(G*32.1507,0);
+  $('sp').textContent=f(S,3);
+  $('s-chg').innerHTML=`<span style="color:${upColor(SCHp)}">${pctStr(SCHp)} (${SCH>=0?'+':''}${Number(SCH).toFixed(3)})</span>`;
+  $('s-ba').textContent=Sask?`Bid $${S.toFixed(3)} · Ask $${Sask.toFixed(3)}`:'';
+  $('s-gram').textContent=f(S/31.1035,3);$('s-dwt').textContent=f(S/20,3);$('s-face').textContent=f(S*0.715,2);
+  $('cp').textContent=f(CLB,4);
+  $('c-chg').innerHTML=`<span style="color:${upColor(CCHp)}">${pctStr(CCHp)}</span> per lb · COMEX HG`;
+  $('c-ba').textContent=Cask?`Ask $${Cask.toFixed(4)}/lb`:'';
+  $('c-gram').textContent=f(Cg,5);$('c-kg').textContent=f(Cg*1000,3);$('c-cent').textContent='$'+pm.toFixed(4);
+  $('pp').textContent=f(P,2);
+  $('p-chg').innerHTML=`<span style="color:${upColor(PCH)}">${PCH>=0?'+':''}${Number(PCH).toFixed(2)}</span>`;
+  $('p-gram').textContent=f(P/31.1035,2);$('p-b10').textContent=f(P*.9,2);$('p-s10').textContent=f(P*1.1,2);
+  $('pap').textContent=f(PA,2);
+  $('pa-chg').innerHTML=`<span style="color:${upColor(PACh)}">${PACh>=0?'+':''}${Number(PACh).toFixed(2)}</span>`;
+  $('pa-gram').textContent=f(PA/31.1035,2);$('pa-b10').textContent=f(PA*.9,2);$('pa-s10').textContent=f(PA*1.1,2);
+  $('t-g').textContent=f(G,2);$('t-g2').textContent=f(G,2);
+  $('t-gc').textContent=pctStr(GCHp);$('t-gc').style.color=upColor(GCHp);
+  $('t-s').textContent=f(S,3);$('t-s2').textContent=f(S,3);
+  $('t-sc').textContent=pctStr(SCHp);$('t-sc').style.color=upColor(SCHp);
+  $('t-c').textContent=f(CLB,3);$('t-p').textContent=f(P,0);$('t-pa').textContent=f(PA,0);
+  $('t-gsr').textContent=gsr.toFixed(1)+':1';$('t-gsr2').textContent=gsr.toFixed(1)+':1';
+  buildSilverCoins();buildSilverRolls();buildCopper(Cg,pm);buildKarats();buildGoldbacks();buildDealerTips(gsr,pm);
+  $('s-upd').textContent='Updated: '+ts+' · gold-api.com XAG';
+  $('c-upd').textContent='Updated: '+ts+' · COMEX HG live';
+  $('g-upd').textContent='Updated: '+ts+' · gold-api.com XAU';
+  $('gb-upd').textContent='Updated: '+ts;
+}
+
+function buildSilverCoins() {
+  const coins=[
+    {n:'Morgan Dollar',oz:0.7734,face:1.00},
+    {n:'Peace Dollar',oz:0.7734,face:1.00},
+    {n:'Walking Liberty Half Dollar',oz:0.3617,face:0.50},
+    {n:'Ben Franklin Half Dollar',oz:0.3617,face:0.50},
+    {n:'Kennedy Half Dollar 1964 (90%)',oz:0.3617,face:0.50},
+    {n:'Kennedy Half Dollar 1965-70',oz:0.1479,face:0.50,note:'40%'},
+    {n:'Eisenhower Dollar',oz:0.3161,face:1.00,note:'40%'},
+    {n:'Washington Quarter (pre-65)',oz:0.1808,face:0.25},
+    {n:'Standing Liberty Quarter',oz:0.1808,face:0.25},
+    {n:'Barber Quarter',oz:0.1808,face:0.25},
+    {n:'Roosevelt Dime (pre-65)',oz:0.07234,face:0.10},
+    {n:'Mercury Dime',oz:0.07234,face:0.10},
+    {n:'Barber Dime',oz:0.07234,face:0.10},
+    {n:'Barber Half Dollar',oz:0.3617,face:0.50},
+    {n:'War Nickel 1942-45',oz:0.05626,face:0.05,note:'35%'},
+  ];
+  $('silver-coins').innerHTML=coins.map(c=>{
+    const m=c.oz*S,b5=m*.95,b10=m*.9,s5=m*1.05,s10=m*1.1;
+    const pt=c.note==='40%'?`<span class="tag t40">40%</span>`:c.note==='35%'?`<span class="tag t35">35%</span>`:'';
+    return`<tr><td>${c.n}${pt}</td><td style="color:var(--muted)">${c.oz.toFixed(5)}</td><td class="cm">${f(m,3)}</td><td class="cmkt">${f(m*1.05,2)}</td><td class="cb5">${f(b5,3)}</td><td class="cb10">${f(b10,3)}</td><td class="cs5">${f(s5,3)}</td><td class="cs10">${f(s10,3)}</td></tr>`;
+  }).join('');
+}
+
+function buildSilverRolls() {
+  const rolls=[
+    {n:'Dimes (Roosevelt / Mercury / Barber)',q:50,oz:0.07234,face:5,pct:'90%'},
+    {n:'Quarters (Washington / Standing / Barber)',q:40,oz:0.1808,face:10,pct:'90%'},
+    {n:'Half Dollars (Walking Liberty / Franklin)',q:20,oz:0.3617,face:10,pct:'90%'},
+    {n:'Kennedy Halves 1964 (90%)',q:20,oz:0.3617,face:10,pct:'90%'},
+    {n:'Kennedy Halves 1965-70 (40%)',q:20,oz:0.1479,face:10,pct:'40%'},
+    {n:'Morgan / Peace Dollars',q:20,oz:0.7734,face:20,pct:'90%'},
+    {n:'Eisenhower Dollars (40%)',q:20,oz:0.3161,face:20,pct:'40%'},
+    {n:'War Nickels 1942-45 (35%)',q:40,oz:0.05626,face:2,pct:'35%'},
+  ];
+  $('silver-rolls').innerHTML=rolls.map(r=>{
+    const tot=r.q*r.oz,melt=tot*S,b10=melt*.9,s10=melt*1.1;
+    const pc=r.pct==='90%'?'var(--silver3)':r.pct==='40%'?'var(--blue)':'#FFAA22';
+    const abv=r.pct==='40%'?`<span class="tag t40">40%</span>`:r.pct==='35%'?`<span class="tag t35">35%</span>`:'';
+    return`<tr><td>${r.n}${abv}</td><td style="color:var(--muted)">${r.q}</td><td style="color:var(--muted)">${f(r.face,2)}</td><td style="color:${pc}">${tot.toFixed(4)}</td><td class="cm">${f(melt,2)}</td><td class="cb10">${f(b10,2)}</td><td class="cs10">${f(s10,2)}</td></tr>`;
+  }).join('');
+}
+
+function buildCopper(Cg,pm) {
+  $('cu-cards').innerHTML=[
+    {l:'Per Penny',v:'$'+pm.toFixed(4),s:'2.375 g × 95% Cu'},
+    {l:'Per $1 Face',v:f(pm*100,3),s:'100 pennies · 250 g'},
+    {l:'Per Pound (pennies)',v:f(pm*181,3),s:'~181 pennies / lb'},
+    {l:'Copper $/lb (HG)',v:f(CLB,4),s:'COMEX live feed'},
+    {l:'Copper $/gram',v:'$'+Cg.toFixed(5),s:'fine copper metal'},
+    {l:'vs Face Value',v:((pm/.01)*100).toFixed(2)+'%',s:pm>.01?'OVER FACE ▲':'below face value'},
+  ].map(c=>`<div class="cc"><div class="cl">${c.l}</div><div class="cv">${c.v}</div><div class="cs">${c.s}</div></div>`).join('');
+  $('cu-tbl').innerHTML=[1,10,100,500,1000,2500,5000].map(n=>{
+    const face=n*.01,wtG=n*2.5,wtLb=wtG/453.592,melt=pm*n,pl=melt-face;
+    return`<tr><td>${n.toLocaleString()} pennies</td><td>${f(face,2)}</td><td>${wtG.toFixed(1)}</td><td>${wtLb.toFixed(3)}</td><td class="cb5">${f(melt,3)}</td><td style="color:${pl>=0?'var(--green)':'var(--red)'}">${pl>=0?'+':''}${f(pl,3)}</td></tr>`;
+  }).join('');
+}
+
+function buildKarats() {
+  const kg=$('karat-grid');kg.innerHTML='';
+  [['24K',1,'999'],['22K',.9167,'916'],['21K',.875,'875'],['18K',.75,'750'],
+   ['14K',.5833,'583'],['12K',.5,'500'],['10K',.4167,'417'],['9K',.375,'375']
+  ].forEach(([k,p,l])=>{
+    const m=G*p,gm=m/31.1035;
+    kg.innerHTML+=`<div class="kc"><div class="kc-lbl">${k}</div><div class="kc-pur">${l} Fine</div><div class="kc-oz">${f(m,0)}/oz</div><div class="kc-g">${f(gm,2)}/g</div><div class="kd"></div><div class="klbl">per oz</div><div class="kr"><span class="kb">−5% ${f(m*.95,0)}</span><span class="ks">+5% ${f(m*1.05,0)}</span></div><div class="kr"><span class="kb">−10% ${f(m*.9,0)}</span><span class="ks">+10% ${f(m*1.1,0)}</span></div><div class="klbl" style="margin-top:5px">per gram</div><div class="kr"><span class="kb">−5% ${f(gm*.95,2)}</span><span class="ks">+5% ${f(gm*1.05,2)}</span></div><div class="kr"><span class="kb">−10% ${f(gm*.9,2)}</span><span class="ks">+10% ${f(gm*1.1,2)}</span></div></div>`;
+  });
+}
+
+function buildGoldbacks() {
+  const prems={1:1.55,5:1.45,10:1.40,25:1.35,50:1.32,100:1.30};
+  const sv1=0.001*G,r1=sv1*prems[1];
+  $('gb-ex').innerHTML=`
+    <div class="gbe"><div class="gbel">Raw Spot (1GB)</div><div class="gbev" style="color:var(--muted)">${f(sv1,4)}</div></div>
+    <div class="gbe"><div class="gbel">Avg Retail (1GB)</div><div class="gbev" style="color:var(--gold)">${f(r1,4)}</div></div>
+    <div class="gbe"><div class="gbel">Buy at −10%</div><div class="gbev" style="color:var(--green)">${f(r1*.9,4)}</div></div>
+    <div class="gbe"><div class="gbel">Sell at +10%</div><div class="gbev" style="color:#FF7744">${f(r1*1.1,4)}</div></div>
+    <div class="gbe"><div class="gbel">GBs per oz Au</div><div class="gbev">1,000</div></div>
+    <div class="gbe"><div class="gbel">XAU Live</div><div class="gbev">${f(G,2)}</div></div>`;
+  $('gb-tbl').innerHTML=[{d:'1 Goldback',u:1},{d:'5 Goldback',u:5},{d:'10 Goldback',u:10},{d:'25 Goldback',u:25},{d:'50 Goldback',u:50},{d:'100 Goldback',u:100}].map(d=>{
+    const sv=sv1*d.u,prem=prems[d.u]||1.35,avg=sv*prem,b10=avg*.9,s10=avg*1.1;
+    const sdb=sv*1.38,dtg=sv*1.40,fk=sv*1.42,ap=sv*1.37,dp=d.u>=25?2:4;
+    return`<tr><td>${d.d}</td><td style="color:var(--muted)">${d.u}.0 mg</td><td style="color:var(--muted)">${f(sv,dp)}</td><td style="color:var(--gold)">${f(avg,dp)}</td><td class="cb10">${f(b10,dp)}</td><td class="cs10">${f(s10,dp)}</td><td style="color:var(--silver3)">${f(sdb,2)}</td><td style="color:var(--silver3)">${f(dtg,2)}</td><td style="color:var(--silver3)">${f(fk,2)}</td><td style="color:var(--silver3)">${f(ap,2)}</td></tr>`;
+  }).join('');
+}
+
+function buildDealerTips(gsr,pm) {
+  const tips=[
+    {t:'Gold : Silver Ratio',v:gsr.toFixed(1)+':1',s:gsr>80?'Silver undervalued — buy Ag':gsr<50?'Gold undervalued — buy Au':'Neutral range 50–80'},
+    {t:'Silver Face Break-Even',v:f(1/.715,2)+' spot',s:'90% silver exactly = face'},
+    {t:'40% Half Break-Even',v:f(.5/.1479,2)+' spot',s:'Kennedy 1965-70 at face'},
+    {t:'War Nickel Break-Even',v:f(.05/.05626,2)+' spot',s:'35% nickel at face value'},
+    {t:'Penny vs Face Value',v:((pm/.01)*100).toFixed(2)+'%',s:pm>.01?'Worth more than 1¢':'Below melt value'},
+    {t:'24K Gold per DWT',v:f(G/20,2),s:'1 pennyweight = 1/20 troy oz'},
+    {t:'14K Gold per DWT',v:f(G*.5833/20,2),s:'Most common jewelry karat'},
+    {t:'10K Gold per DWT',v:f(G*.4167/20,2),s:'US minimum jewelry karat'},
+    {t:'18K Gold per DWT',v:f(G*.75/20,2),s:'European standard karat'},
+    {t:'Dime Roll Melt',v:f(50*.07234*S,2),s:'50 dimes · 3.617 oz Ag total'},
+    {t:'Quarter Roll Melt',v:f(40*.1808*S,2),s:'40 quarters · 7.232 oz Ag total'},
+    {t:'Half Dollar Roll Melt',v:f(20*.3617*S,2),s:'20 halves · 7.234 oz Ag total'},
+    {t:'Dollar Roll Melt',v:f(20*.7734*S,2),s:'20 Morgans · 15.468 oz Ag total'},
+    {t:'Silver per Gram (spot)',v:f(S/31.1035,3),s:'Live XAG ÷ 31.1035'},
+    {t:'Gold per Gram (spot)',v:f(G/31.1035,2),s:'Live XAU ÷ 31.1035'},
+  ];
+  $('dtips').innerHTML=tips.map(t=>`<div class="tip"><div class="tt">${t.t}</div><div class="tv">${t.v}</div><div class="tsub">${t.s}</div></div>`).join('');
+}
+
+function startClock(){
+  if(clockH)clearInterval(clockH);secs=300;
+  clockH=setInterval(()=>{secs--;const m=Math.floor(secs/60),s=secs%60;$('cd').textContent=m+':'+(s<10?'0':'')+s;if(secs<=0){secs=300;fetchAll();}},1000);
+}
+
+/* ─── Init ─── */
+(async()=>{
+  const ok = await checkAccess();
+  if(ok){fetchAll();startClock();}
+})();
+</script>
+</body>
+</html>
