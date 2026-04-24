@@ -11,7 +11,7 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production';
-const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+const APP_URL = process.env.APP_URL || 'http://localhost:${PORT}';
 
 /* ── Stripe (optional — only loads if keys are set) ── */
 let stripe = null;
