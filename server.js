@@ -11,47 +11,42 @@ const crypto = require('crypto');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production';
-const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+const APP_URL = [process.env.APP](https://process.env.APP)_URL || `http://localhost:${PORT}`;
 
-/* ── Stripe (optional — only loads if keys are set) ── */
 let stripe = null;
 if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY.startsWith('sk_')) {
   stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 }
 
-/* ── In-memory user store (replace with a real DB in production) ── */
-/* For Render free tier this is fine for launch; swap for PostgreSQL later */
-const users = new Map(); // email → { email, passwordHash, plan, stripeCustomerId, stripeSubId, createdAt }
-const sessions = new Map(); // token → { email, exp }
+const users = new Map();
+const sessions = new Map();
 
-/* Seed admin from env */
 async function seedAdmin() {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminHash  = process.env.ADMIN_PASSWORD_HASH;
-  if (adminEmail && adminHash && !users.has(adminEmail)) {
+  const adminEmail = (process.env.ADMIN_EMAIL || '').toLowerCase().trim();
+  const adminPassword = (process.env.ADMIN_PASSWORD || '').trim();
+  if (!adminEmail || !adminPassword) {
+    console.log('Admin env vars not set, skipping seed');
+    return;
+  }
+  if (!users.has(adminEmail)) {
+    const passwordHash = await bcrypt.hash(adminPassword, 10);
     users.set(adminEmail, {
       email: adminEmail,
-      passwordHash: adminHash,
+      passwordHash,
       plan: 'admin',
       createdAt: new Date().toISOString(),
     });
-    console.log(`Admin seeded: ${adminEmail}`);
+    console.log('Admin seeded: ' + adminEmail);
   }
 }
 seedAdmin();
 
-/* ── Middleware ── */
 app.use(cors({ origin: APP_URL, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
-
-/* Raw body for Stripe webhooks */
 app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
-
-/* Static files */
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* ── Auth helpers ── */
 function signToken(email) {
   return jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
 }
@@ -81,93 +76,74 @@ function hasPaidAccess(user) {
   return user.plan === 'admin' || user.plan === 'monthly' || user.plan === 'annual';
 }
 
-/* ── AUTH ROUTES ── */
-
-/* Register */
 app.post('/api/auth/register', async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
   if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
   if (users.has(email.toLowerCase())) return res.status(409).json({ error: 'Email already registered' });
-
   const passwordHash = await bcrypt.hash(password, 10);
   users.set(email.toLowerCase(), {
     email: email.toLowerCase(),
     passwordHash,
     plan: 'trial',
     createdAt: new Date().toISOString(),
-    trialEnd: new Date(Date.now() + 14 * 86400000).toISOString(), // 14 day trial
+    trialEnd: new Date(Date.now() + 14 * 86400000).toISOString(),
   });
-
   const token = signToken(email.toLowerCase());
   res.cookie('bdp_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7 * 86400000 });
   res.json({ ok: true, plan: 'trial' });
 });
 
-/* Login */
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
-
   const user = users.get(email.toLowerCase());
   if (!user) return res.status(401).json({ error: 'Invalid email or password' });
-
-  const ok = await bcrypt.compare(password, user.passwordHash);
+  const ok = await [bcrypt.com](https://bcrypt.com)pare(password, user.passwordHash);
   if (!ok) return res.status(401).json({ error: 'Invalid email or password' });
-
   const token = signToken(user.email);
   res.cookie('bdp_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7 * 86400000 });
   res.json({ ok: true, plan: user.plan });
 });
 
-/* Logout */
 app.post('/api/auth/logout', (req, res) => {
   res.clearCookie('bdp_token');
   res.json({ ok: true });
 });
 
-/* Me */
 app.get('/api/auth/me', authMiddleware, (req, res) => {
   const { passwordHash, ...safe } = req.user;
   res.json(safe);
 });
 
-/* ── STRIPE ROUTES ── */
-
-/* Create checkout session */
 app.post('/api/stripe/checkout', authMiddleware, async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Payments not configured' });
   const { plan } = req.body || {};
   const priceId = plan === 'annual' ? process.env.STRIPE_PRICE_ANNUAL : process.env.STRIPE_PRICE_MONTHLY;
   if (!priceId) return res.status(400).json({ error: 'Invalid plan' });
-
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
     customer_email: req.user.email,
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${APP_URL}/app?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${APP_URL}/pricing`,
+    success_url: APP_URL + '/app?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url: APP_URL + '/pricing',
     metadata: { email: req.user.email },
   });
-
   res.json({ url: session.url });
 });
 
-/* Customer portal */
 app.post('/api/stripe/portal', authMiddleware, async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Payments not configured' });
   const user = req.user;
   if (!user.stripeCustomerId) return res.status(400).json({ error: 'No subscription found' });
-
   const session = await stripe.billingPortal.sessions.create({
     customer: user.stripeCustomerId,
-    return_url: `${APP_URL}/app`,
+    return_url: APP_URL + '/app',
   });
   res.json({ url: session.url });
 });
 
-/* Stripe webhook */
 app.post('/api/stripe/webhook', (req, res) => {
   if (!stripe) return res.sendStatus(200);
   const sig = req.headers['stripe-signature'];
@@ -175,38 +151,22 @@ app.post('/api/stripe/webhook', (req, res) => {
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('Webhook sig failed:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    return res.status(400).send('Webhook Error: ' + [err.me](https://err.me)ssage);
   }
-
-  if (event.type === 'checkout.session.completed') {
+  if (event.type === '[checkout.session.com](https://checkout.session.com)pleted') {
     const sess = event.data.object;
-    const email = (sess.customer_email || sess.metadata?.email || '').toLowerCase();
+    const email = (sess.customer_email || ([sess.me](https://sess.me)tadata && [sess.me](https://sess.me)tadata.email) || '').toLowerCase();
     const user = users.get(email);
     if (user) {
       user.stripeCustomerId = sess.customer;
       user.stripeSubId = sess.subscription;
-      user.plan = 'monthly'; // refine in invoice.paid below
+      user.plan = 'monthly';
       users.set(email, user);
     }
   }
-
-  if (event.type === 'invoice.paid') {
-    const inv = event.data.object;
-    const custId = inv.customer;
-    for (const [, u] of users) {
-      if (u.stripeCustomerId === custId) {
-        // Detect annual vs monthly from subscription
-        u.plan = u.plan === 'annual' ? 'annual' : 'monthly';
-        users.set(u.email, u);
-        break;
-      }
-    }
-  }
-
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object;
-    for (const [, u] of users) {
+    for (const u of users.values()) {
       if (u.stripeCustomerId === sub.customer) {
         u.plan = 'trial';
         users.set(u.email, u);
@@ -214,11 +174,8 @@ app.post('/api/stripe/webhook', (req, res) => {
       }
     }
   }
-
   res.sendStatus(200);
 });
-
-/* ── ADMIN API ── */
 
 app.get('/api/admin/stats', adminMiddleware, (req, res) => {
   const all = [...users.values()];
@@ -249,7 +206,6 @@ app.delete('/api/admin/user', adminMiddleware, (req, res) => {
   res.json({ ok: true });
 });
 
-/* ── ACCESS CHECK ── */
 app.get('/api/access', authMiddleware, (req, res) => {
   const user = req.user;
   const trialExpired = user.plan === 'trial' && user.trialEnd && new Date() > new Date(user.trialEnd);
@@ -261,9 +217,7 @@ app.get('/api/access', authMiddleware, (req, res) => {
   });
 });
 
-/* ── PAGE ROUTES ── */
 const send = (file) => (req, res) => res.sendFile(path.join(__dirname, 'public', file));
-
 app.get('/', send('index.html'));
 app.get('/login', send('login.html'));
 app.get('/register', send('register.html'));
@@ -271,13 +225,10 @@ app.get('/pricing', send('pricing.html'));
 app.get('/app', send('app.html'));
 app.get('/admin', send('admin.html'));
 
-/* 404 */
 app.use((req, res) => res.status(404).sendFile(path.join(__dirname, 'public', 'index.html')));
-
-/* Error handler */
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: 'Server error' });
 });
 
-app.listen(PORT, () => console.log(`Bullion Dealer Pro running on port ${PORT}`));
+app.listen(PORT, () => console.log('Bullion Dealer Pro running on port ' + PORT));
