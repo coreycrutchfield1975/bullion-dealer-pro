@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production';
 const env = process.env;
-const APP_URL = [env.APP](https://env.APP)_URL || 'http://localhost:' + PORT;
+const APP_URL = [process.env.APP](https://process.env.APP)_URL || 'http://localhost:${PORT}';
 
 let stripe = null;
 if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY.startsWith('sk_')) {
