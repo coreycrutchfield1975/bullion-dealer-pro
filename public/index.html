@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08080F">
+<title>Bullion Dealer Pro — Live Precious Metals Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#FFD700;--bg:#08080F;--bg2:#10101A;--bg3:#181828;--border:#252545;--text:#F2F2FF;--muted:#5A5A88;--green:#00FF88;--blue:#00D4FF}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;line-height:1.4;min-height:100vh}
+nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;background:linear-gradient(90deg,var(--gold),#90B8E8,#E8A060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+.nav-links{display:flex;gap:12px;align-items:center}
+.btn{padding:8px 20px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.5px;border:none;text-decoration:none;display:inline-block}
+.btn-gold{background:var(--gold);color:#08080F}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero{padding:80px 24px 60px;text-align:center;max-width:800px;margin:0 auto}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(24px,5vw,52px);font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,var(--gold),#90B8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:20px;color:#A0A0CC;margin-bottom:36px;font-weight:600}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding:40px 24px;max-width:1100px;margin:0 auto}
+.feat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px}
+.feat-icon{font-size:32px;margin-bottom:12px}
+.feat h3{font-family:'Orbitron',monospace;font-size:13px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.feat p{font-size:15px;color:#8888AA;font-weight:600}
+.pricing-sec{padding:60px 24px;text-align:center;max-width:900px;margin:0 auto}
+.pricing-sec h2{font-family:'Orbitron',monospace;font-size:24px;letter-spacing:2px;margin-bottom:12px;color:var(--gold)}
+.pricing-sec p{color:var(--muted);margin-bottom:40px;font-size:16px;font-weight:600}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.plan{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px 24px;position:relative}
+.plan.featured{border-color:var(--gold);background:linear-gradient(150deg,var(--bg2),#140e00)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#08080F;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:1px;white-space:nowrap}
+.plan h3{font-family:'Orbitron',monospace;font-size:14px;letter-spacing:2px;margin-bottom:8px}
+.plan .price{font-size:42px;font-weight:800;color:var(--gold);line-height:1}
+.plan .price sup{font-size:20px;vertical-align:top;margin-top:8px}
+.plan .period{font-size:14px;color:var(--muted);margin-bottom:20px}
+.plan ul{list-style:none;margin-bottom:28px;text-align:left}
+.plan ul li{padding:6px 0;font-size:15px;font-weight:600;color:#A0A0CC;border-bottom:1px solid var(--border)}
+.plan ul li::before{content:'✓ ';color:var(--green)}
+.trial-note{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.2);border-radius:8px;padding:16px;margin-top:40px;font-size:15px;color:#A0A0CC;font-weight:600}
+footer{border-top:1px solid var(--border);padding:20px 24px;text-align:center;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">⬡ BULLION DEALER PRO</div>
+  <div class="nav-links">
+    <a href="/pricing" class="btn btn-outline">Pricing</a>
+    <a href="/login" class="btn btn-outline">Log In</a>
+    <a href="/register" class="btn btn-gold">Start Free Trial</a>
+  </div>
+</nav>
+<div class="hero">
+  <h1>The Pro Dashboard for Serious Bullion Dealers</h1>
+  <p>Live XAU · XAG · HG · XPT · XPD spot prices. Constitutional silver, karat gold melt values, copper pennies, Goldbacks — all in one professional tool.</p>
+  <div class="hero-btns">
+    <a href="/register" class="btn btn-gold" style="font-size:18px;padding:14px 36px">Start 14-Day Free Trial</a>
+    <a href="/login" class="btn btn-outline" style="font-size:16px;padding:14px 28px">Log In</a>
+  </div>
+</div>
+<div class="features">
+  <div class="feat"><div class="feat-icon">📡</div><h3>Live Spot Prices</h3><p>Real-time Gold, Silver, Copper, Platinum & Palladium from [gold-api.com](https://gold-api.com), refreshing every 5 minutes.</p></div>
+  <div class="feat"><div class="feat-icon">🪙</div><h3>Constitutional Silver</h3><p>Per-coin and per-roll melt values for 90%, 40%, and 35% silver — buy/sell spread calculators included.</p></div>
+  <div class="feat"><div class="feat-icon">⚗️</div><h3>Karat Gold Melt</h3><p>24K through 9K values per ounce and per gram with adjustable buy/sell margins.</p></div>
+  <div class="feat"><div class="feat-icon">🏭</div><h3>Copper Pennies</h3><p>Live COMEX HG feed drives real-time pre-1982 penny melt calculations.</p></div>
+  <div class="feat"><div class="feat-icon">📰</div><h3>Live Market News</h3><p>Scrolling ticker with real-time precious metals and macro financial headlines.</p></div>
+  <div class="feat"><div class="feat-icon">💼</div><h3>Dealer Quick Ref</h3><p>GSR, DWT conversions, face break-even prices, roll melt values — everything at a glance.</p></div>
+</div>
+<div class="pricing-sec">
+  <h2>Simple Pricing</h2>
+  <p>No hidden fees. Cancel anytime.</p>
+  <div class="plans">
+    <div class="plan">
+      <h3>Monthly</h3>
+      <div class="price"><sup>$</sup>19</div>
+      <div class="period">per month</div>
+      <ul><li>Full live dashboard</li><li>All 5 metals tracked</li><li>Constitutional silver tables</li><li>Karat gold & copper</li><li>Live news ticker</li></ul>
+      <a href="/register" class="btn btn-outline" style="width:100%;text-align:center">Get Started</a>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">BEST VALUE</div>
+      <h3>Annual</h3>
+      <div class="price"><sup>$</sup>149</div>
+      <div class="period">per year — save $79</div>
+      <ul><li>Everything in Monthly</li><li>Priority support</li><li>Early access to new features</li><li>2 months free</li></ul>
+      <a href="/register" class="btn btn-gold" style="width:100%;text-align:center">Get Started</a>
+    </div>
+  </div>
+  <div class="trial-note">✓ All plans include a 14-day free trial. No credit card required to start.</div>
+</div>
+<footer>© 2026 Bullion Dealer Pro · <a href="/pricing" style="color:var(--muted)">Pricing</a> · <a href="/login" style="color:var(--muted)">Login</a></footer>
+</body>
+</html>
