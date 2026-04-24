@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — Bullion Dealer Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#FFD700;--bg:#08080F;--bg2:#10101A;--bg3:#181828;--border:#252545;--text:#F2F2FF;--muted:#5A5A88;--green:#00FF88;--red:#FF4455;--blue:#00D4FF}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;background:linear-gradient(90deg,var(--gold),#90B8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+.hdr-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;border:none}
+.btn-gold{background:var(--gold);color:#08080F}
+.btn-red{background:rgba(255,68,85,.1);border:1px solid rgba(255,68,85,.3);color:var(--red)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.container{padding:20px;max-width:1300px;margin:0 auto}
+.sec{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.stat-lbl{font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.stat-val{font-family:'Share Tech Mono',monospace;font-size:32px;font-weight:bold}
+.s-total{color:var(--text)}.s-trial{color:var(--blue)}.s-monthly{color:var(--green)}.s-annual{color:var(--gold)}.s-rev{color:var(--gold)}
+/* Users table */
+.tcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.th{padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th{padding:9px 12px;text-align:left;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);white-space:nowrap;font-family:'Barlow Condensed',sans-serif}
+td{padding:8px 12px;border-bottom:1px solid rgba(37,37,69,.5);font-size:14px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.plan-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:800;letter-spacing:.5px}
+.p-trial{background:rgba(0,212,255,.1);color:var(--blue);border:1px solid rgba(0,212,255,.25)}
+.p-monthly{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+.p-annual{background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.25)}
+.p-admin{background:rgba(204,153,255,.1);color:#CC99FF;border:1px solid rgba(204,153,255,.25)}
+.action-sel{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:13px;cursor:pointer}
+.del-btn{background:transparent;border:1px solid rgba(255,68,85,.3);color:var(--red);padding:4px 10px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow Condensed',sans-serif}
+/* Search */
+.search-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.search-bar input{flex:1;min-width:180px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;outline:none}
+.search-bar input:focus{border-color:var(--gold)}
+/* Msg */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--green);color:var(--green);padding:10px 20px;border-radius:8px;font-size:14px;font-weight:700;display:none;z-index:999}
+.toast.err{border-color:var(--red);color:var(--red)}
+.toast.show{display:block}
+/* Nav link */
+.nav-a{color:var(--blue);text-decoration:none;font-size:14px;font-weight:700}
+.nav-a:hover{color:var(--gold)}
+/* Revenue calc */
+.rev-note{font-size:13px;color:var(--muted);font-family:'Share Tech Mono',monospace;padding:8px 16px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⬡ ADMIN DASHBOARD</div>
+  <div class="hdr-right">
+    <a href="/app" class="nav-a">← LIVE DASHBOARD</a>
+    <button class="btn btn-outline" onclick="loadStats()">↻ REFRESH</button>
+    <button class="btn btn-red" onclick="logout()">LOGOUT</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="sec">Overview</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-lbl">Total Users</div><div class="stat-val s-total" id="s-total">—</div></div>
+    <div class="stat-card"><div class="stat-lbl">Trial</div><div class="stat-val s-trial" id="s-trial">—</div></div>
+    <div class="stat-card"><div class="stat-lbl">Monthly</div><div class="stat-val s-monthly" id="s-monthly">—</div></div>
+    <div class="stat-card"><div class="stat-lbl">Annual</div><div class="stat-val s-annual" id="s-annual">—</div></div>
+    <div class="stat-card"><div class="stat-lbl">Est. MRR</div><div class="stat-val s-rev" id="s-rev">—</div></div>
+  </div>
+
+  <div class="sec">Users</div>
+  <div class="tcard">
+    <div class="th">
+      <span style="color:var(--gold)">ALL USERS</span>
+      <div class="search-bar" style="margin:0">
+        <input type="text" id="search" placeholder="Filter by email…" oninput="filterUsers()">
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Email</th><th>Plan</th><th>Joined</th><th>Trial End</th><th>Stripe Customer</th><th>Change Plan</th><th>Delete</th></tr></thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+    <div class="rev-note" id="rev-note"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let allUsers = [];
+
+async function checkAdmin() {
+  try {
+    const r = await fetch('/api/auth/me', {credentials:'include'});
+    if (!r.ok) { window.location.href = '/login'; return; }
+    const u = await r.json();
+    if (u.plan !== 'admin') { window.location.href = '/app'; return; }
+    loadStats();
+  } catch { window.location.href = '/login'; }
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch('/api/admin/stats', {credentials:'include'});
+    if (!r.ok) { window.location.href = '/login'; return; }
+    const d = await r.json();
+    document.getElementById('s-total').textContent = d.total;
+    document.getElementById('s-trial').textContent = d.trial;
+    document.getElementById('s-monthly').textContent = d.monthly;
+    document.getElementById('s-annual').textContent = d.annual;
+    const mrr = d.monthly * 19 + Math.round(d.annual * 149 / 12);
+    document.getElementById('s-rev').textContent = '$' + mrr.toLocaleString();
+    document.getElementById('rev-note').textContent =
+      `Est. MRR: $${mrr.toLocaleString()} | Annual run rate: $${(mrr*12).toLocaleString()} | `+
+      `Monthly subs: ${d.monthly} × $19 | Annual subs: ${d.annual} × $149/yr`;
+    allUsers = d.users || [];
+    renderUsers(allUsers);
+  } catch(e) { showToast('Failed to load stats', true); }
+}
+
+function renderUsers(users) {
+  const tbody = document.getElementById('users-tbody');
+  if (!users.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">No users yet</td></tr>'; return; }
+  tbody.innerHTML = users.map(u => {
+    const planClass = `p-${u.plan}`;
+    const trialEnd = u.trialEnd ? new Date(u.trialEnd).toLocaleDateString() : '—';
+    const joined = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—';
+    const stripe = u.stripeCustomerId ? `<a href="https://dashboard.stripe.com/customers/${u.stripeCustomerId}" target="_blank" style="color:var(--blue);font-size:12px">${u.stripeCustomerId.slice(0,18)}…</a>` : '—';
+    return `<tr>
+      <td style="font-family:'Share Tech Mono',monospace;font-size:13px">${u.email}</td>
+      <td><span class="plan-badge ${planClass}">${u.plan.toUpperCase()}</span></td>
+      <td style="color:var(--muted);font-size:13px">${joined}</td>
+      <td style="color:var(--muted);font-size:13px">${trialEnd}</td>
+      <td>${stripe}</td>
+      <td>
+        <select class="action-sel" onchange="changePlan('${u.email}', this.value)">
+          <option value="">— change —</option>
+          <option value="trial"${u.plan==='trial'?' selected':''}>Trial</option>
+          <option value="monthly"${u.plan==='monthly'?' selected':''}>Monthly</option>
+          <option value="annual"${u.plan==='annual'?' selected':''}>Annual</option>
+          <option value="admin"${u.plan==='admin'?' selected':''}>Admin</option>
+        </select>
+      </td>
+      <td><button class="del-btn" onclick="deleteUser('${u.email}')">DELETE</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterUsers() {
+  const q = document.getElementById('search').value.toLowerCase();
+  renderUsers(allUsers.filter(u => u.email.toLowerCase().includes(q)));
+}
+
+async function changePlan(email, plan) {
+  if (!plan) return;
+  if (!confirm(`Change ${email} to "${plan}"?`)) return;
+  try {
+    const r = await fetch('/api/admin/set-plan', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email, plan})
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    showToast(`✓ ${email} → ${plan}`);
+    loadStats();
+  } catch(e) { showToast(e.message, true); }
+}
+
+async function deleteUser(email) {
+  if (!confirm(`Permanently delete ${email}? This cannot be undone.`)) return;
+  try {
+    const r = await fetch('/api/admin/user', {
+      method:'DELETE', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email})
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    showToast(`✓ Deleted ${email}`);
+    loadStats();
+  } catch(e) { showToast(e.message, true); }
+}
+
+async function logout() {
+  await fetch('/api/auth/logout', {method:'POST', credentials:'include'});
+  window.location.href = '/';
+}
+
+function showToast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (err?' err':'');
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+checkAdmin();
+</script>
+</body>
+</html>
