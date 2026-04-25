@@ -1,8 +1,0 @@
-{
-  "name": "Bullion Dealer Pro",
-  "short_name": "Bullion",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#08080F",
-  "theme_color": "#FFD700"
-}
