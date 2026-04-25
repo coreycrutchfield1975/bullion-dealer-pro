@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register · Bullion Dealer Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#f0b429;--bg:#050508;--bg2:#0b0b12;--bg3:#12121e;--border:rgba(240,180,41,.18);--text:#d4cbb8;--muted:#6b6580;--red:#ff4b6e;--green:#00e676;--font:'Rajdhani',sans-serif;--display:'Orbitron',sans-serif}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background-image:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,180,41,.08) 0%,transparent 60%)}
+.box{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:44px 36px;width:100%;max-width:440px;box-shadow:0 0 60px rgba(240,180,41,.06);position:relative;overflow:hidden}
+.box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.brand{font-family:var(--display);font-size:13px;letter-spacing:3px;color:var(--gold);text-align:center;margin-bottom:6px}
+h2{font-family:var(--display);font-size:20px;font-weight:900;color:var(--text);text-align:center;letter-spacing:2px;margin-bottom:8px}
+.trial-badge{text-align:center;font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:28px}
+label{display:block;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;font-family:var(--display)}
+input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:13px 14px;border-radius:8px;font-size:15px;font-family:var(--font);outline:none;margin-bottom:16px;transition:border-color .2s}
+input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,180,41,.08)}
+.btn{width:100%;background:linear-gradient(135deg,var(--gold),#c88a00);color:#000;border:none;padding:14px;border-radius:8px;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:var(--display);transition:opacity .2s;margin-top:4px}
+.btn:hover{opacity:.85}
+.msg{text-align:center;font-size:14px;margin-top:14px;min-height:20px}
+.ok{color:var(--green)} .err{color:var(--red)}
+.links{text-align:center;margin-top:22px;font-size:13px;color:var(--muted)}
+.links a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="brand">◆ BULLION DEALER PRO</div>
+  <h2>CREATE ACCOUNT</h2>
+  <div class="trial-badge">14-day free trial · No credit card required</div>
+  <label>EMAIL ADDRESS</label>
+  <input type="email" id="email" placeholder="you@example.com">
+  <label>PASSWORD</label>
+  <input type="password" id="pass" placeholder="Min 8 characters" onkeydown="if(event.key==='Enter')register()">
+  <label>CONFIRM PASSWORD</label>
+  <input type="password" id="pass2" placeholder="Repeat password" onkeydown="if(event.key==='Enter')register()">
+  <button class="btn" onclick="register()">START FREE TRIAL</button>
+  <div class="msg" id="msg"></div>
+  <div class="links">Already have an account? <a href="/login">Log in</a></div>
+</div>
+<script>
+async function register(){
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('pass').value;
+  const pass2=document.getElementById('pass2').value;
+  const msg=document.getElementById('msg');
+  msg.innerHTML='';
+  if(!email||!pass||!pass2){msg.innerHTML='<span class="err">Fill in all fields.</span>';return;}
+  if(pass!==pass2){msg.innerHTML='<span class="err">Passwords do not match.</span>';return;}
+  if(pass.length<8){msg.innerHTML='<span class="err">Password must be at least 8 characters.</span>';return;}
+  const r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
+  const d=await r.json();
+  if(r.ok){msg.innerHTML='<span class="ok">✓ Account created! Redirecting…</span>';setTimeout(()=>window.location.href='/app',1000);}
+  else msg.innerHTML=`<span class="err">${d.error||'Registration failed.'}</span>`;
+}
+</script>
+</body>
+</html>
