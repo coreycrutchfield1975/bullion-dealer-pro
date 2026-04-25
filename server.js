@@ -93,8 +93,13 @@ function activeAuth(req, res, next) {
 
 // ── DB CONNECT + ADMIN SEED ───────────────────────────────────────────────────
 async function connectDB() {
-  if (!MONGO_URI) { console.warn('No MONGO_URI — skipping DB'); return; }
-  await mongoose.connect(MONGO_URI);
+  if (!MONGO_URI) { console.error('FATAL: MONGO_URI environment variable is not set!'); process.exit(1); }
+  console.log('Connecting to MongoDB...');
+  await mongoose.connect(MONGO_URI, {
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+  });
   console.log('MongoDB connected');
   if (ADMIN_EMAIL && ADMIN_PASSWORD) {
     const hash = await bcrypt.hash(ADMIN_PASSWORD, 12);
