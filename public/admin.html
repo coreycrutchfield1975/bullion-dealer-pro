@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Bullion Dealer Pro</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--gold:#ffd700;--bg:#08080f;--bg2:#10100f;--bg3:#1a1a2e;--border:rgba(255,185,0,.25);--text:#e8e0c8;--muted:#888;--green:#00e676;--red:#ff5252;--blue:#40c4ff}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:16px;min-height:100vh}
+  header{background:#0a0900;border-bottom:2px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+  .logo{color:var(--gold);font-size:20px;font-weight:700;letter-spacing:2px}
+  .hbtns{display:flex;gap:10px}
+  .hbtn{background:transparent;border:1px solid var(--border);color:var(--text);padding:7px 16px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:14px;letter-spacing:1px;text-decoration:none;display:inline-block}
+  .hbtn:hover{border-color:var(--gold);color:var(--gold)}
+  .hbtn.danger{border-color:var(--red);color:var(--red)}
+  main{max-width:1100px;margin:0 auto;padding:32px 20px}
+  h2{color:var(--gold);letter-spacing:2px;font-size:18px;margin-bottom:20px;text-transform:uppercase}
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:36px}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center}
+  .card-label{font-size:12px;letter-spacing:2px;color:var(--muted);margin-bottom:8px}
+  .card-val{font-size:36px;font-weight:700;color:var(--gold)}
+  /* table */
+  .tbl-wrap{overflow-x:auto;margin-bottom:40px}
+  table{width:100%;border-collapse:collapse}
+  th{background:var(--bg3);color:var(--muted);font-size:12px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  td{padding:11px 12px;border-bottom:1px solid rgba(255,185,0,.08);vertical-align:middle}
+  tr:hover td{background:rgba(255,185,0,.03)}
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px}
+  .badge-admin{background:#ffd700;color:#000}
+  .badge-monthly{background:#00e676;color:#000}
+  .badge-annual{background:#40c4ff;color:#000}
+  .badge-trial{background:#555;color:#fff}
+  select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:6px;font-size:14px;font-family:inherit;cursor:pointer}
+  .del-btn{background:transparent;border:1px solid var(--red);color:var(--red);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit}
+  .del-btn:hover{background:var(--red);color:#fff}
+  /* promo */
+  .promo-form{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:32px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:12px;letter-spacing:1px;color:var(--muted)}
+  .field input,.field select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:6px;font-size:15px;font-family:inherit;width:160px}
+  .create-btn{background:var(--gold);color:#000;border:none;padding:10px 22px;border-radius:6px;font-size:15px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:inherit}
+  .create-btn:hover{background:#ffec6e}
+  .msg{font-size:14px;padding:10px 16px;border-radius:6px;margin-top:10px}
+  .msg.ok{background:rgba(0,230,118,.1);border:1px solid #00e676;color:#00e676}
+  .msg.err{background:rgba(255,82,82,.1);border:1px solid #ff5252;color:#ff5252}
+  .code-box{font-family:monospace;background:var(--bg3);padding:4px 10px;border-radius:4px;color:var(--gold);font-size:15px;letter-spacing:2px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">◆ BULLION DEALER PRO · ADMIN</div>
+  <div class="hbtns">
+    <a class="hbtn" href="/app">← Live Dashboard</a>
+    <button class="hbtn danger" onclick="logout()">LOGOUT</button>
+  </div>
+</header>
+<main>
+
+  <!-- STATS -->
+  <div class="stats" id="stats">
+    <div class="card"><div class="card-label">TOTAL USERS</div><div class="card-val" id="s-total">—</div></div>
+    <div class="card"><div class="card-label">TRIAL</div><div class="card-val" id="s-trial" style="color:#888">—</div></div>
+    <div class="card"><div class="card-label">MONTHLY</div><div class="card-val" id="s-monthly" style="color:var(--green)">—</div></div>
+    <div class="card"><div class="card-label">ANNUAL</div><div class="card-val" id="s-annual" style="color:var(--blue)">—</div></div>
+    <div class="card"><div class="card-label">EST. MRR</div><div class="card-val" id="s-mrr" style="color:var(--gold)">—</div></div>
+  </div>
+
+  <!-- USERS TABLE -->
+  <h2>Users</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>EMAIL</th><th>PLAN</th><th>JOINED</th><th>TRIAL END</th><th>STRIPE ID</th><th>CHANGE PLAN</th><th>DELETE</th>
+      </tr></thead>
+      <tbody id="user-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- PROMO CODES -->
+  <h2>Create Promo Code</h2>
+  <div class="promo-form">
+    <div class="field"><label>CODE (optional)</label><input id="p-code" placeholder="AUTO"></div>
+    <div class="field"><label>PLAN</label><select id="p-plan"><option value="monthly">Monthly</option><option value="annual">Annual</option></select></div>
+    <div class="field"><label>MONTHS FREE</label><input id="p-months" type="number" value="1" min="1" max="12"></div>
+    <div class="field"><label>MAX USES</label><input id="p-uses" type="number" value="1" min="1"></div>
+    <button class="create-btn" onclick="createPromo()">CREATE</button>
+  </div>
+  <div id="promo-msg"></div>
+
+  <!-- PROMO LIST -->
+  <h2 style="margin-top:28px">Active Promo Codes</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>CODE</th><th>PLAN</th><th>MONTHS</th><th>USES</th><th>MAX</th><th>CREATED</th></tr></thead>
+      <tbody id="promo-tbody"></tbody>
+    </table>
+  </div>
+
+</main>
+<script>
+// ── Load data ──────────────────────────────────────────────────────────────
+async function load() {
+  const [uRes, pRes] = await Promise.all([
+    fetch('/api/admin/users'),
+    fetch('/api/admin/promos')
+  ]);
+  if (uRes.status === 401 || uRes.status === 403) { window.location.href = '/login'; return; }
+  const users  = await uRes.json();
+  const promos = await pRes.json();
+  renderUsers(users);
+  renderPromos(promos);
+}
+
+function planBadge(p) {
+  const cls = { admin:'badge-admin', monthly:'badge-monthly', annual:'badge-annual', trial:'badge-trial' };
+  return `<span class="badge ${cls[p]||'badge-trial'}">${p.toUpperCase()}</span>`;
+}
+
+function renderUsers(users) {
+  const tbody = document.getElementById('user-tbody');
+  let total=0, trial=0, monthly=0, annual=0, mrr=0;
+  tbody.innerHTML = '';
+  for (const u of users) {
+    total++;
+    if (u.plan==='trial') trial++;
+    else if (u.plan==='monthly') { monthly++; mrr+=19; }
+    else if (u.plan==='annual') { annual++; mrr+=149/12; }
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${u.email}</td>
+      <td>${planBadge(u.plan)}</td>
+      <td>${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—'}</td>
+      <td>${u.trialEnd ? new Date(u.trialEnd).toLocaleDateString() : '—'}</td>
+      <td style="font-size:13px;color:var(--muted)">${u.stripeCustomerId||'—'}</td>
+      <td>
+        <select onchange="changePlan('${u._id}', this.value)">
+          <option value="">— change —</option>
+          <option value="trial">Trial</option>
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
+          <option value="admin">Admin</option>
+        </select>
+      </td>
+      <td><button class="del-btn" onclick="deleteUser('${u._id}','${u.email}')">DELETE</button></td>`;
+    tbody.appendChild(tr);
+  }
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-trial').textContent = trial;
+  document.getElementById('s-monthly').textContent = monthly;
+  document.getElementById('s-annual').textContent = annual;
+  document.getElementById('s-mrr').textContent = '$'+Math.round(mrr);
+}
+
+function renderPromos(promos) {
+  const tbody = document.getElementById('promo-tbody');
+  tbody.innerHTML = '';
+  for (const p of promos) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="code-box">${p.code}</span></td>
+      <td>${planBadge(p.plan)}</td>
+      <td>${p.months}</td>
+      <td>${p.usedBy.length}</td>
+      <td>${p.maxUses}</td>
+      <td>${new Date(p.createdAt).toLocaleDateString()}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+async function changePlan(id, plan) {
+  if (!plan) return;
+  await fetch(`/api/admin/users/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({plan}) });
+  load();
+}
+
+async function deleteUser(id, email) {
+  if (!confirm(`Delete ${email}?`)) return;
+  await fetch(`/api/admin/users/${id}`, { method:'DELETE' });
+  load();
+}
+
+async function createPromo() {
+  const code   = document.getElementById('p-code').value.trim();
+  const plan   = document.getElementById('p-plan').value;
+  const months = parseInt(document.getElementById('p-months').value) || 1;
+  const maxUses= parseInt(document.getElementById('p-uses').value) || 1;
+  const msg    = document.getElementById('promo-msg');
+  try {
+    const r = await fetch('/api/admin/promo/create', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ code, plan, months, maxUses })
+    });
+    const d = await r.json();
+    if (!r.ok) { msg.innerHTML = `<div class="msg err">${d.error}</div>`; return; }
+    msg.innerHTML = `<div class="msg ok">Created: <strong>${d.code}</strong> — ${d.plan} plan, ${d.months} month(s), max ${d.maxUses} use(s)</div>`;
+    document.getElementById('p-code').value = '';
+    load();
+  } catch(e) { msg.innerHTML = `<div class="msg err">Error: ${e.message}</div>`; }
+}
+
+async function logout() {
+  await fetch('/api/logout', { method:'POST' });
+  window.location.href = '/login';
+}
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>
