@@ -27,6 +27,9 @@ const {
 } = process.env;
 
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
+const TEST_MODE = process.env.TEST_MODE === 'true';
+const STRIPE_TEST_MONTHLY = process.env.STRIPE_TEST_MONTHLY_PRICE_ID;
+const STRIPE_TEST_ANNUAL  = process.env.STRIPE_TEST_ANNUAL_PRICE_ID;
 const rssParser = new Parser();
 
 // ── MONGOOSE MODELS ──────────────────────────────────────────────────────────
@@ -172,7 +175,9 @@ app.post('/api/logout', (req, res) => {
 
 app.get('/api/me', auth, async (req, res) => {
   const user = await User.findById(req.user.id).select('-passwordHash -resetToken');
-  res.json(user);
+  const userData = user.toObject();
+  userData.testMode = TEST_MODE;
+  res.json(userData);
 });
 
 app.post('/api/forgot-password', async (req, res) => {
@@ -274,7 +279,9 @@ app.get('/api/news', async (req, res) => {
 app.post('/api/create-checkout', auth, async (req, res) => {
   try {
     const { plan } = req.body;
-    const priceId = plan === 'annual' ? STRIPE_ANNUAL_PRICE_ID : STRIPE_MONTHLY_PRICE_ID;
+    const priceId = TEST_MODE
+      ? (plan === 'annual' ? STRIPE_TEST_ANNUAL : STRIPE_TEST_MONTHLY)
+      : (plan === 'annual' ? STRIPE_ANNUAL_PRICE_ID : STRIPE_MONTHLY_PRICE_ID);
     const user = await User.findById(req.user.id);
     let customerId = user.stripeCustomerId;
     if (!customerId) {

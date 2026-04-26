@@ -32,6 +32,13 @@ a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;tex
   <div class="brand">◆ BULLION DEALER PRO</div>
   <h1>SIMPLE PRICING</h1>
   <div class="sub">Start with a 14-day free trial · No credit card required</div>
+  <div id="test-banner">⚠ TEST MODE ACTIVE — Use card 4242 4242 4242 4242 · No real charges</div>
+  <div id="test-card">
+    Test Card: 4242 4242 4242 4242<br>
+    Expiry: any future date (e.g. 12/29)<br>
+    CVC: any 3 digits (e.g. 123)<br>
+    ZIP: any 5 digits (e.g. 12345)
+  </div>
   <div class="plans">
     <div class="plan">
       <div class="plan-name">MONTHLY</div>
@@ -50,7 +57,19 @@ a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;tex
     </div>
   </div>
   <a class="back" href="/">← Back to home</a>
+<style>
+#test-banner{display:none;background:#1a0a00;border:2px solid #ff6600;color:#ff9933;font-family:'Share Tech Mono',monospace;font-size:13px;text-align:center;padding:10px;letter-spacing:1px;margin-bottom:20px;border-radius:8px;}
+#test-card{display:none;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.3);border-radius:8px;padding:12px 20px;margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#ff9933;line-height:1.8;}
+</style>
 <script>
+// Check if test mode is active
+fetch('/api/me').then(r=>r.json()).then(u=>{
+  if(u.testMode){
+    document.getElementById('test-banner').style.display='block';
+    document.getElementById('test-card').style.display='block';
+  }
+}).catch(()=>{});
+
 async function checkout(plan){
   const r=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
   const d=await r.json();
