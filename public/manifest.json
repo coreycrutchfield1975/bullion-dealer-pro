@@ -1,0 +1,17 @@
+{
+  "name": "Bullion Dealer Pro",
+  "short_name": "BullionPro",
+  "description": "Live precious metals spot prices, deal calculator, and coin reference tools for bullion dealers.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#f0b429",
+  "icons": [
+    {
+      "src": "https://media.base44.com/images/public/69eae2a3c39807325aed8509/7d36e61b2_generated_image.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
