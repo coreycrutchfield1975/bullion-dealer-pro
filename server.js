@@ -283,14 +283,20 @@ app.post('/api/create-checkout', auth, async (req, res) => {
       user.stripeCustomerId = customerId;
       await user.save();
     }
-    const session = await stripe.checkout.sessions.create({
+    // Only apply trial if user is still in their free trial period
+    const trialDaysLeft = user.trialEnd ? Math.ceil((new Date(user.trialEnd) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+    const sessionParams = {
       customer: customerId,
       payment_method_types: ['card'],
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${APP_URL}/app?success=1`,
       cancel_url:  `${APP_URL}/pricing`
-    });
+    };
+    if (trialDaysLeft > 0) {
+      sessionParams.subscription_data = { trial_period_days: trialDaysLeft };
+    }
+    const session = await stripe.checkout.sessions.create(sessionParams);
     res.json({ url: session.url });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
