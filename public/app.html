@@ -77,6 +77,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
 .nbtn:hover,.nbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.06)}
 
 /* LOGO BANNER */
+#tab-bar{
+  position:sticky;top:0;z-index:150;
+  background:var(--bg);
+}
 #logo-banner{
   width:100%;background:#000;
   border-bottom:2px solid rgba(240,180,41,.4);
@@ -445,7 +449,11 @@ tr:hover td{background:rgba(240,180,41,.025)}
 
 
   /* Logo banner — stack vertically on mobile */
-  #logo-banner{
+  #tab-bar{
+  position:sticky;top:0;z-index:150;
+  background:var(--bg);
+}
+#logo-banner{
     flex-direction:column;
     min-height:auto;
     padding:10px 8px;
@@ -480,8 +488,9 @@ tr:hover td{background:rgba(240,180,41,.025)}
   /* News bar */
   #news-bar{height:26px;}
 
-  /* Tabs — sticky + scrollable on mobile */
-  .tabs{padding:6px 8px;gap:6px;position:sticky;top:0;z-index:200;}
+  /* Tab bar fixed on mobile */
+  #tab-bar{position:fixed;left:0;right:0;z-index:200;background:var(--bg);}
+  .tabs{padding:6px 8px;gap:6px;}
   .tab{padding:7px 12px;font-size:12px;}
 
   /* Content padding */
@@ -553,7 +562,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
   </div>
 </div>
 
-<div id="content">
+<div id="tab-bar">
   <div id="news-bar">
     <div id="news-label">◈ MARKET NEWS</div>
     <div id="news-track"><div id="news-inner"><span>Loading…</span></div></div>
@@ -574,6 +583,9 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div class="tab" onclick="showTab('grading')">📋 GRADING</div>
     <div class="tab" onclick="showTab('account')">👤 ACCOUNT</div>
   </div>
+</div>
+
+<div id="content">
 
   <!-- SPOT -->
   <div id="tab-spot" class="section active">
@@ -1143,7 +1155,12 @@ async function loadNews(){
 }
 async function doLogout(){await fetch('/api/logout',{method:'POST'});window.location.href='/login';}
 function refreshAll(){loadSpot();loadNews();}
-function adjustPad(){const h=document.getElementById('header').offsetHeight;document.getElementById('content').style.paddingTop=h+'px';}
+function adjustPad(){
+  const h=document.getElementById('header').offsetHeight;
+  const tb=document.getElementById('tab-bar').offsetHeight;
+  document.getElementById('tab-bar').style.top=h+'px';
+  document.getElementById('content').style.paddingTop=(h+tb)+'px';
+}
 window.addEventListener('load',adjustPad);window.addEventListener('resize',adjustPad);
 async function init(){
   await loadAccount();renderPremiums();renderErrors();renderGrading();renderKeyDates();renderInventory();
