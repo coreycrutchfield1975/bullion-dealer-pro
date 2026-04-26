@@ -947,7 +947,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
       <button class="add-btn" onclick="addInv()">+ ADD</button>
       <button class="clr-btn" onclick="clearInv()">CLEAR ALL</button>
     </div>
-    <div class="tbl-wrap"><table><thead><tr><th>DATE</th><th>DESC</th><th>METAL</th><th>QTY</th><th>COST</th><th>BASIS</th><th>GRADE</th><th>FMV</th><th>SPOT VAL</th><th>P&L</th><th>%</th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+    <div class="tbl-wrap"><table><thead><tr><th>DATE</th><th>DESC</th><th>METAL</th><th>QTY</th><th>COST</th><th>BASIS</th><th>GRADE</th><th>FMV</th><th>MELT VAL</th><th>P&L</th><th>%</th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
     <div style="margin-top:16px;font-size:14px;font-family:var(--mono)" id="inv-totals"></div>
   </div>
 
@@ -1373,15 +1373,18 @@ function addInv(){
   const qty=+$('inv-qty').value||1,cost=+$('inv-cost').value||0;
   const date=$('inv-date').value||new Date().toISOString().slice(0,10);
   if(!qty||!cost){alert('Enter qty and buy price.');return;}
-  // Capture coin grade + FMV if set
   const grade=$('inv-coin-grade').value||'';
   const fmvTxt=$('inv-fmv-display').textContent||'';
-  const fmv=fmvTxt?parseFloat(fmvTxt.replace('FMV: $','').replace(/,/g,''))||0:0;
-  inventory.push({metal,desc,qty,cost,date,grade,fmv});
+  // Parse FMV from display text (may include melt info)
+  const fmvMatch=fmvTxt.match(/FMV:\s*\$([0-9,]+)/);
+  const fmv=fmvMatch?parseFloat(fmvMatch[1].replace(/,/g,''))||0:0;
+  const ozContent=parseFloat($('inv-metal').dataset.ozContent)||0;
+  inventory.push({metal,desc,qty,cost,date,grade,fmv,ozContent});
   localStorage.setItem('bdp-inv',JSON.stringify(inventory));
   $('inv-desc').value='';$('inv-qty').value='1';$('inv-cost').value='';
   $('inv-coin-series').value='';$('inv-coin-variety').innerHTML='<option value="">— Select Variety —</option>';
   $('inv-coin-grade').value='';$('inv-fmv-display').textContent='';
+  delete $('inv-metal').dataset.ozContent;
   renderInventory();
 }
 function clearInv(){if(!confirm('Clear all inventory?'))return;inventory=[];localStorage.setItem('bdp-inv','[]');renderInventory();}
@@ -1391,14 +1394,26 @@ function renderInventory(){
   $('inv-tbody').innerHTML=inventory.map(r=>{
     const s=spot[r.metal]||0;
     const b=r.qty*r.cost;
-    // For COIN type, use stored FMV * qty as market value; else use spot
-    const mk=r.metal==='COIN'?(r.fmv?r.fmv*r.qty:0):(s*r.qty);
+    // Melt value: use stored oz content × spot if available, else spot × qty for raw metals
+    let melt=0;
+    if(r.metal==='COIN'){
+      // Coin with no spot metal — melt is 0, use FMV for P&L
+      melt=0;
+    } else if(r.ozContent && s){
+      // Silver/gold coin added via coin lookup — melt = oz per coin × qty × spot
+      melt=r.ozContent*r.qty*s;
+    } else {
+      // Raw bullion — melt = spot × qty (qty is in oz)
+      melt=s*r.qty;
+    }
+    // Market value for P&L: prefer FMV for numismatic coins, else melt
+    const mk=r.fmv?(r.fmv*r.qty):melt;
     const pl=mk-b,pct=b?(pl/b*100).toFixed(1):0;
     tc+=b;if(mk)tm+=mk;
     const gradeCell=r.grade?`<td style="color:var(--gold);font-family:var(--mono)">${r.grade}</td>`:'<td>—</td>';
     const fmvCell=r.fmv?`<td style="color:var(--gold);font-family:var(--mono)">$${r.fmv.toLocaleString()}</td>`:'<td style="color:var(--muted)">—</td>';
-    const spotCell=r.metal==='COIN'?'<td style="color:var(--muted)">COIN</td>':`<td>${s?'$'+s.toFixed(2):'—'}</td>`;
-    return`<tr><td>${r.date}</td><td>${r.desc}</td><td>${r.metal}</td><td>${r.qty}</td><td>$${r.cost.toFixed(2)}</td><td>$${b.toFixed(2)}</td>${gradeCell}${fmvCell}${spotCell}<td class="${pl>=0?'up':'dn'}">${mk?'$'+pl.toFixed(2):'—'}</td><td class="${pl>=0?'up':'dn'}">${mk?pct+'%':'—'}</td></tr>`;
+    const meltCell=melt?`<td style="color:#aaa;font-family:var(--mono)">$${melt.toFixed(2)}</td>`:'<td style="color:var(--muted)">—</td>';
+    return`<tr><td>${r.date}</td><td>${r.desc}</td><td>${r.metal}</td><td>${r.qty}</td><td>$${r.cost.toFixed(2)}</td><td>$${b.toFixed(2)}</td>${gradeCell}${fmvCell}${meltCell}<td class="${pl>=0?'up':'dn'}">${mk?'$'+pl.toFixed(2):'—'}</td><td class="${pl>=0?'up':'dn'}">${mk?pct+'%':'—'}</td></tr>`;
   }).join('');
   const tp=tm-tc;$('inv-totals').innerHTML=inventory.length?`Cost: <span style="color:var(--gold)">$${tc.toFixed(2)}</span> &nbsp;·&nbsp; Mkt: <span style="color:var(--gold)">$${tm.toFixed(2)}</span> &nbsp;·&nbsp; P&L: <span class="${tp>=0?'up':'dn'}">$${tp.toFixed(2)}</span>`:'';
 }
@@ -1433,6 +1448,35 @@ function invCoinSeriesChange(){
   if(!series) return;
   CV.filter(c=>c.s===series).forEach(c=>{const o=document.createElement('option');o.value=c.d;o.textContent=c.d;varSel.appendChild(o);});
 }
+// Silver oz content per coin for melt calculation
+const COIN_OZ={
+  'Morgan Dollar':0.7734,'Peace Dollar':0.7734,'Eisenhower Dollar':0.3161,
+  'Trade Dollar':0.7874,'Seated Liberty Dollar':0.7734,'Draped Bust Dollar':0.7734,
+  'WL Half':0.3617,'Franklin Half':0.3617,'Barber Half':0.3617,'Capped Bust Half':0.3617,
+  'Seated Liberty Half':0.3617,
+  'Kennedy Half':0.3617,// 1964 only; 1965-69 handled separately
+  'SL Quarter':0.1808,'Washington Quarter':0.1808,'Barber Quarter':0.1808,
+  'Seated Liberty Quarter':0.1808,
+  'Mercury Dime':0.0723,'Roosevelt Dime':0.0723,'Barber Dime':0.0723,
+  'Seated Liberty Dime':0.0723,'Capped Bust Dime':0.0723,
+  'War Nickel (35% Silver)':0.0563,'Jefferson Nickel':0,
+  'Buffalo Nickel':0,'Liberty Head Nickel':0,'Lincoln Cent':0,'Indian Head Cent':0,
+  'SBA Dollar':0,
+  'Silver Eagle':1.0,
+  'Gold Eagle 1oz':1.0,'Gold Eagle 1/2oz':0.5,'Gold Eagle 1/4oz':0.25,'Gold Eagle 1/10oz':0.1,
+  'Gold Buffalo 1oz':1.0,
+  'Gold $20 St. Gaudens':0.9677,'Gold $20 Liberty':0.9677,
+  'Gold $10 Indian':0.4839,'Gold $10 Liberty':0.4839,
+  'Gold $5 Indian':0.2419,'Gold $5 Liberty':0.2419,
+  'Gold $3 Princess':0.1452,'Gold $2.50 Indian':0.1210,'Gold $2.50 Liberty':0.1210,
+  'Gold $1 (Type 1)':0.0484,'Gold $1 (Type 3)':0.0484,
+};
+function getSpotMetalForSeries(series){
+  if(series.startsWith('Gold')) return 'XAU';
+  if(series==='Silver Eagle') return 'XAG';
+  const ozMap=COIN_OZ[series]||0;
+  return ozMap>0?'XAG':'COIN';
+}
 function lookupCoinFMV(){
   const series=$('inv-coin-series').value;
   const variety=$('inv-coin-variety').value;
@@ -1441,11 +1485,19 @@ function lookupCoinFMV(){
   const coin=CV.find(c=>c.s===series&&c.d===variety);
   if(!coin){alert('Coin not found.');return;}
   const fmv=coin[grade];
-  if(fmv==null){$('inv-fmv-display').textContent='FMV: N/A for this grade';return;}
-  $('inv-fmv-display').textContent=`FMV: $${fmv.toLocaleString()}`;
-  // Auto-fill description and cost if empty
+  const ozContent=COIN_OZ[series]||0;
+  const metalType=getSpotMetalForSeries(series);
+  const spotVal=spot[metalType]||0;
+  const meltVal=ozContent&&spotVal?(ozContent*spotVal).toFixed(2):null;
+  if(fmv==null){
+    $('inv-fmv-display').textContent=meltVal?`FMV: N/A | Melt: $${meltVal}`:'FMV: N/A for this grade';
+  } else {
+    $('inv-fmv-display').textContent=`FMV: $${fmv.toLocaleString()}${meltVal?' | Melt: $'+meltVal:''}`;
+  }
   if(!$('inv-desc').value) $('inv-desc').value=series+' '+variety+' '+grade;
-  $('inv-metal').value='COIN';
+  $('inv-metal').value=metalType;
+  // Store oz content in a hidden field for inventory record
+  $('inv-metal').dataset.ozContent=ozContent;
 }
 function prefillInventory(series,variety,coinData){
   showTab('inventory');
