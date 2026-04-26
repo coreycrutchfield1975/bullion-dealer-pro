@@ -578,6 +578,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div class="tab" onclick="showTab('platpal')">⚗️ PLAT/PAL</div>
     <div class="tab" onclick="showTab('premium')">🏪 PREMIUMS</div>
     <div class="tab" onclick="showTab('inventory')">📦 INVENTORY</div>
+    <div class="tab" onclick="showTab('coinvals')">💎 COIN VALUES</div>
     <div class="tab" onclick="showTab('keydate')">🗝 KEY DATES</div>
     <div class="tab" onclick="showTab('errors')">⚠️ ERRORS</div>
     <div class="tab" onclick="showTab('grading')">📋 GRADING</div>
@@ -915,17 +916,67 @@ tr:hover td{background:rgba(240,180,41,.025)}
   <!-- INVENTORY -->
   <div id="tab-inventory" class="section">
     <div class="sec-title">Inventory Tracker</div>
-    <div class="inv-form">
-      <select id="inv-metal" style="width:auto"><option value="XAU">Gold (XAU)</option><option value="XAG">Silver (XAG)</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="HG">Copper</option><option value="OTHER">Other</option></select>
+    <div class="inv-form" style="flex-wrap:wrap;gap:8px">
+      <select id="inv-metal" style="width:auto"><option value="XAU">Gold (XAU)</option><option value="XAG">Silver (XAG)</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="HG">Copper</option><option value="COIN">Coin (No Spot)</option><option value="OTHER">Other</option></select>
       <input id="inv-desc" placeholder="Description" style="width:180px">
-      <input id="inv-qty" type="number" placeholder="Qty (oz)" style="width:110px" min="0" step="0.001">
-      <input id="inv-cost" type="number" placeholder="Buy/oz" style="width:120px" min="0" step="0.01">
+      <input id="inv-qty" type="number" placeholder="Qty" style="width:80px" min="0" step="1" value="1">
+      <input id="inv-cost" type="number" placeholder="Buy Price ($)" style="width:120px" min="0" step="0.01">
       <input id="inv-date" type="date" style="width:148px">
+    </div>
+    <div class="inv-form" style="flex-wrap:wrap;gap:8px;margin-top:6px;align-items:center">
+      <span style="color:var(--muted);font-size:12px">📋 Coin Lookup (optional):</span>
+      <select id="inv-coin-series" onchange="invCoinSeriesChange()" style="min-width:160px">
+        <option value="">— Select Coin Series —</option>
+      </select>
+      <select id="inv-coin-variety" style="min-width:160px">
+        <option value="">— Select Variety —</option>
+      </select>
+      <select id="inv-coin-grade" style="min-width:130px">
+        <option value="">— Select Grade —</option>
+        <option value="G4">G-4 (Good)</option>
+        <option value="VG8">VG-8 (Very Good)</option>
+        <option value="F12">F-12 (Fine)</option>
+        <option value="VF20">VF-20 (V.Fine)</option>
+        <option value="EF40">EF-40 (Ex.Fine)</option>
+        <option value="AU50">AU-50 (About Unc)</option>
+        <option value="MS63">MS-63 (Choice)</option>
+        <option value="MS65">MS-65 (Gem)</option>
+      </select>
+      <button class="add-btn" style="background:var(--gold);color:#000;font-size:12px;padding:6px 12px" onclick="lookupCoinFMV()">LOOKUP FMV</button>
+      <span id="inv-fmv-display" style="color:var(--gold);font-size:13px;font-family:var(--mono)"></span>
       <button class="add-btn" onclick="addInv()">+ ADD</button>
       <button class="clr-btn" onclick="clearInv()">CLEAR ALL</button>
     </div>
-    <div class="tbl-wrap"><table><thead><tr><th>DATE</th><th>DESC</th><th>METAL</th><th>QTY</th><th>COST/OZ</th><th>BASIS</th><th>SPOT</th><th>MKT VAL</th><th>P&L</th><th>%</th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+    <div class="tbl-wrap"><table><thead><tr><th>DATE</th><th>DESC</th><th>METAL</th><th>QTY</th><th>COST</th><th>BASIS</th><th>GRADE</th><th>FMV</th><th>SPOT VAL</th><th>P&L</th><th>%</th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
     <div style="margin-top:16px;font-size:14px;font-family:var(--mono)" id="inv-totals"></div>
+  </div>
+
+  <!-- COIN VALUES -->
+  <div id="tab-coinvals" class="section">
+    <div class="sec-title">Coin Values Reference</div>
+    <div style="margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <select id="cv-series" onchange="renderCoinVals()" style="min-width:180px">
+        <option value="">— All Series —</option>
+      </select>
+      <select id="cv-grade" onchange="renderCoinVals()" style="min-width:120px">
+        <option value="">— All Grades —</option>
+        <option value="G4">G-4 (Good)</option>
+        <option value="VG8">VG-8 (Very Good)</option>
+        <option value="F12">F-12 (Fine)</option>
+        <option value="VF20">VF-20 (V.Fine)</option>
+        <option value="EF40">EF-40 (Ex.Fine)</option>
+        <option value="AU50">AU-50 (About Unc)</option>
+        <option value="MS63">MS-63 (Choice)</option>
+        <option value="MS65">MS-65 (Gem)</option>
+      </select>
+      <span style="font-size:12px;color:var(--muted)">Values are fair market retail estimates</span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="cv-table">
+        <thead><tr><th>SERIES</th><th>DATE/VARIETY</th><th>G-4</th><th>VG-8</th><th>F-12</th><th>VF-20</th><th>EF-40</th><th>AU-50</th><th>MS-63</th><th>MS-65</th><th></th></tr></thead>
+        <tbody id="cv-tbody"></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- KEY DATES -->
@@ -960,6 +1011,82 @@ tr:hover td{background:rgba(240,180,41,.025)}
 </div>
 
 <script>
+
+// ════════════════════ COIN VALUES DATA ════════════════════
+const CV=[
+  // Lincoln Cents
+  {s:'Lincoln Cent',d:'1909 VDB',G4:15,VG8:20,F12:25,VF20:30,EF40:45,AU50:65,MS63:120,MS65:300},
+  {s:'Lincoln Cent',d:'1909-S VDB',G4:700,VG8:900,F12:1100,VF20:1500,EF40:2000,AU50:2800,MS63:4500,MS65:12000},
+  {s:'Lincoln Cent',d:'1909-S',G4:80,VG8:110,F12:140,VF20:180,EF40:250,AU50:350,MS63:600,MS65:1800},
+  {s:'Lincoln Cent',d:'1914-D',G4:150,VG8:220,F12:300,VF20:450,EF40:700,AU50:1100,MS63:2500,MS65:8000},
+  {s:'Lincoln Cent',d:'1922 Plain',G4:500,VG8:700,F12:900,VF20:1400,EF40:2200,AU50:3500,MS63:8000,MS65:null},
+  {s:'Lincoln Cent',d:'1931-S',G4:80,VG8:100,F12:120,VF20:150,EF40:200,AU50:280,MS63:400,MS65:900},
+  {s:'Lincoln Cent',d:'1943 Steel',G4:0.5,VG8:0.75,F12:1,VF20:2,EF40:4,AU50:8,MS63:20,MS65:60},
+  {s:'Lincoln Cent',d:'1955 DDO',G4:900,VG8:1200,F12:1500,VF20:2000,EF40:2800,AU50:4000,MS63:7000,MS65:18000},
+  // Buffalo Nickels
+  {s:'Buffalo Nickel',d:'1913-S T2',G4:300,VG8:450,F12:700,VF20:1000,EF40:1800,AU50:3000,MS63:7000,MS65:25000},
+  {s:'Buffalo Nickel',d:'1916 DDO',G4:500,VG8:800,F12:1200,VF20:2000,EF40:3500,AU50:6000,MS63:12000,MS65:null},
+  {s:'Buffalo Nickel',d:'1918/7-D',G4:1000,VG8:1500,F12:2500,VF20:4000,EF40:7000,AU50:12000,MS63:null,MS65:null},
+  {s:'Buffalo Nickel',d:'1937-D 3-Leg',G4:400,VG8:600,F12:900,VF20:1400,EF40:2200,AU50:3500,MS63:6000,MS65:18000},
+  {s:'Buffalo Nickel',d:'Common Date',G4:1,VG8:2,F12:3,VF20:5,EF40:12,AU50:25,MS63:60,MS65:200},
+  // Mercury Dimes
+  {s:'Mercury Dime',d:'1916-D',G4:700,VG8:1000,F12:1500,VF20:2200,EF40:3500,AU50:5500,MS63:10000,MS65:30000},
+  {s:'Mercury Dime',d:'1921',G4:50,VG8:80,F12:120,VF20:200,EF40:350,AU50:600,MS63:1500,MS65:5000},
+  {s:'Mercury Dime',d:'1921-D',G4:45,VG8:70,F12:110,VF20:180,EF40:320,AU50:550,MS63:1400,MS65:4500},
+  {s:'Mercury Dime',d:'1942/41',G4:400,VG8:600,F12:900,VF20:1400,EF40:2200,AU50:3800,MS63:8000,MS65:null},
+  {s:'Mercury Dime',d:'Common Date',G4:3,VG8:4,F12:5,VF20:7,EF40:12,AU50:20,MS63:40,MS65:120},
+  // Standing Liberty Quarters
+  {s:'SL Quarter',d:'1916',G4:1500,VG8:2500,F12:4000,VF20:6000,EF40:9000,AU50:14000,MS63:25000,MS65:null},
+  {s:'SL Quarter',d:'1918/7-S',G4:500,VG8:800,F12:1400,VF20:2500,EF40:5000,AU50:9000,MS63:null,MS65:null},
+  {s:'SL Quarter',d:'1923-S',G4:150,VG8:250,F12:400,VF20:700,EF40:1400,AU50:2800,MS63:8000,MS65:null},
+  {s:'SL Quarter',d:'Common Date',G4:8,VG8:12,F12:18,VF20:30,EF40:60,AU50:120,MS63:250,MS65:800},
+  // Walking Liberty Halves
+  {s:'WL Half',d:'1916',G4:40,VG8:60,F12:90,VF20:140,EF40:250,AU50:450,MS63:900,MS65:3000},
+  {s:'WL Half',d:'1921',G4:200,VG8:300,F12:500,VF20:800,EF40:1500,AU50:3000,MS63:7000,MS65:null},
+  {s:'WL Half',d:'1921-D',G4:250,VG8:380,F12:600,VF20:950,EF40:1800,AU50:3500,MS63:8000,MS65:null},
+  {s:'WL Half',d:'Common Date',G4:14,VG8:18,F12:22,VF20:28,EF40:45,AU50:80,MS63:150,MS65:500},
+  // Morgan Dollars
+  {s:'Morgan Dollar',d:'1878 8TF',G4:35,VG8:45,F12:60,VF20:90,EF40:150,AU50:280,MS63:600,MS65:3000},
+  {s:'Morgan Dollar',d:'1879-S Rev 78',G4:40,VG8:55,F12:80,VF20:130,EF40:220,AU50:400,MS63:900,MS65:5000},
+  {s:'Morgan Dollar',d:'1893-S',G4:3000,VG8:5000,F12:9000,VF20:15000,EF40:28000,AU50:50000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1895 Proof',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:30000,MS65:80000},
+  {s:'Morgan Dollar',d:'1901',G4:60,VG8:100,F12:180,VF20:400,EF40:1200,AU50:4000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1903-O',G4:25,VG8:35,F12:50,VF20:80,EF40:140,AU50:280,MS63:600,MS65:2500},
+  {s:'Morgan Dollar',d:'Common Date',G4:22,VG8:25,F12:30,VF20:38,EF40:55,AU50:90,MS63:160,MS65:500},
+  // Peace Dollars
+  {s:'Peace Dollar',d:'1921',G4:120,VG8:160,F12:220,VF20:350,EF40:600,AU50:1100,MS63:2200,MS65:8000},
+  {s:'Peace Dollar',d:'1928',G4:150,VG8:200,F12:280,VF20:420,EF40:700,AU50:1200,MS63:2500,MS65:9000},
+  {s:'Peace Dollar',d:'1934-S',G4:40,VG8:60,F12:100,VF20:200,EF40:500,AU50:1500,MS63:6000,MS65:null},
+  {s:'Peace Dollar',d:'Common Date',G4:20,VG8:24,F12:28,VF20:35,EF40:50,AU50:80,MS63:140,MS65:400},
+  // Roosevelt Dimes
+  {s:'Roosevelt Dime',d:'1949-S',G4:4,VG8:5,F12:7,VF20:10,EF40:18,AU50:30,MS63:60,MS65:200},
+  {s:'Roosevelt Dime',d:'1950-S',G4:3,VG8:4,F12:6,VF20:9,EF40:16,AU50:28,MS63:55,MS65:180},
+  {s:'Roosevelt Dime',d:'Common (pre-65)',G4:2,VG8:3,F12:4,VF20:5,EF40:8,AU50:12,MS63:25,MS65:80},
+  // Washington Quarters
+  {s:'Washington Quarter',d:'1932-D',G4:100,VG8:150,F12:220,VF20:350,EF40:600,AU50:1200,MS63:3000,MS65:null},
+  {s:'Washington Quarter',d:'1932-S',G4:90,VG8:130,F12:200,VF20:320,EF40:550,AU50:1100,MS63:2800,MS65:null},
+  {s:'Washington Quarter',d:'Common (pre-65)',G4:5,VG8:6,F12:7,VF20:9,EF40:14,AU50:22,MS63:40,MS65:120},
+  // Kennedy Halves
+  {s:'Kennedy Half',d:'1964 (90% Silver)',G4:8,VG8:9,F12:10,VF20:12,EF40:16,AU50:22,MS63:35,MS65:100},
+  {s:'Kennedy Half',d:'1965-69 (40% Silver)',G4:3,VG8:3,F12:4,VF20:4,EF40:5,AU50:7,MS63:12,MS65:40},
+  // Barber Series
+  {s:'Barber Dime',d:'1894-S',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:null,MS65:null},
+  {s:'Barber Dime',d:'Common Date',G4:3,VG8:5,F12:8,VF20:18,EF40:50,AU50:120,MS63:280,MS65:900},
+  {s:'Barber Quarter',d:'Common Date',G4:7,VG8:12,F12:20,VF20:40,EF40:110,AU50:260,MS63:600,MS65:2000},
+  {s:'Barber Half',d:'Common Date',G4:12,VG8:20,F12:35,VF20:70,EF40:180,AU50:400,MS63:900,MS65:3000},
+  // Gold Coins
+  {s:'Gold $20 St. Gaudens',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:2200,AU50:2300,MS63:2600,MS65:4500},
+  {s:'Gold $20 St. Gaudens',d:'1927-D',G4:null,VG8:null,F12:null,VF20:null,EF40:15000,AU50:25000,MS63:60000,MS65:null},
+  {s:'Gold $20 Liberty',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:2100,AU50:2200,MS63:2500,MS65:4000},
+  {s:'Gold $10 Eagle',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:1100,AU50:1200,MS63:1400,MS65:2500},
+  {s:'Gold $5 Half Eagle',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:550,AU50:600,MS63:750,MS65:1500},
+  {s:'Gold $2.50 Quarter Eagle',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:300,AU50:330,MS63:450,MS65:900},
+  // Buffalo Nickels (common)
+  {s:'Jefferson Nickel',d:'1938-D',G4:1,VG8:1.5,F12:2,VF20:3,EF40:6,AU50:12,MS63:25,MS65:80},
+  {s:'Jefferson Nickel',d:'1950-D',G4:8,VG8:12,F12:18,VF20:28,EF40:45,AU50:80,MS63:150,MS65:500},
+  {s:'Jefferson Nickel',d:'War Nickel (35% Silver)',G4:1.5,VG8:2,F12:2.5,VF20:3,EF40:5,AU50:8,MS63:15,MS65:50},
+];
+
 // ════════════════════ DATA ════════════════════
 const SC=[
   {n:'Morgan Dollar',oz:.7734},{n:'Peace Dollar',oz:.7734},
@@ -1024,7 +1151,7 @@ const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0};
 let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
 
 // ════════════════════ TABS ════════════════════
-const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','keydate','errors','grading','account'];
+const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','coinvals','keydate','errors','grading','account'];
 function showTab(id){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',TABS[i]===id));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1098,22 +1225,95 @@ function renderPremiums(){
 }
 function addInv(){
   const metal=$('inv-metal').value,desc=$('inv-desc').value.trim()||metal;
-  const qty=+$('inv-qty').value||0,cost=+$('inv-cost').value||0;
+  const qty=+$('inv-qty').value||1,cost=+$('inv-cost').value||0;
   const date=$('inv-date').value||new Date().toISOString().slice(0,10);
-  if(!qty||!cost){alert('Enter qty and cost.');return;}
-  inventory.push({metal,desc,qty,cost,date});localStorage.setItem('bdp-inv',JSON.stringify(inventory));
-  $('inv-desc').value='';$('inv-qty').value='';$('inv-cost').value='';renderInventory();
+  if(!qty||!cost){alert('Enter qty and buy price.');return;}
+  // Capture coin grade + FMV if set
+  const grade=$('inv-coin-grade').value||'';
+  const fmvTxt=$('inv-fmv-display').textContent||'';
+  const fmv=fmvTxt?parseFloat(fmvTxt.replace('FMV: $','').replace(/,/g,''))||0:0;
+  inventory.push({metal,desc,qty,cost,date,grade,fmv});
+  localStorage.setItem('bdp-inv',JSON.stringify(inventory));
+  $('inv-desc').value='';$('inv-qty').value='1';$('inv-cost').value='';
+  $('inv-coin-series').value='';$('inv-coin-variety').innerHTML='<option value="">— Select Variety —</option>';
+  $('inv-coin-grade').value='';$('inv-fmv-display').textContent='';
+  renderInventory();
 }
 function clearInv(){if(!confirm('Clear all inventory?'))return;inventory=[];localStorage.setItem('bdp-inv','[]');renderInventory();}
 function renderInventory(){
+  initCoinValDropdowns();
   let tc=0,tm=0;
   $('inv-tbody').innerHTML=inventory.map(r=>{
-    const s=spot[r.metal]||0,b=r.qty*r.cost,mk=s*r.qty,pl=mk-b,pct=b?(pl/b*100).toFixed(1):0;
-    tc+=b;tm+=mk;
-    return`<tr><td>${r.date}</td><td>${r.desc}</td><td>${r.metal}</td><td>${r.qty}</td><td>$${r.cost.toFixed(2)}</td><td>$${b.toFixed(2)}</td><td>${s?'$'+s.toFixed(2):'—'}</td><td>${mk?'$'+mk.toFixed(2):'—'}</td><td class="${pl>=0?'up':'dn'}">${mk?'$'+pl.toFixed(2):'—'}</td><td class="${pl>=0?'up':'dn'}">${mk?pct+'%':'—'}</td></tr>`;
+    const s=spot[r.metal]||0;
+    const b=r.qty*r.cost;
+    // For COIN type, use stored FMV * qty as market value; else use spot
+    const mk=r.metal==='COIN'?(r.fmv?r.fmv*r.qty:0):(s*r.qty);
+    const pl=mk-b,pct=b?(pl/b*100).toFixed(1):0;
+    tc+=b;if(mk)tm+=mk;
+    const gradeCell=r.grade?`<td style="color:var(--gold);font-family:var(--mono)">${r.grade}</td>`:'<td>—</td>';
+    const fmvCell=r.fmv?`<td style="color:var(--gold);font-family:var(--mono)">$${r.fmv.toLocaleString()}</td>`:'<td style="color:var(--muted)">—</td>';
+    const spotCell=r.metal==='COIN'?'<td style="color:var(--muted)">COIN</td>':`<td>${s?'$'+s.toFixed(2):'—'}</td>`;
+    return`<tr><td>${r.date}</td><td>${r.desc}</td><td>${r.metal}</td><td>${r.qty}</td><td>$${r.cost.toFixed(2)}</td><td>$${b.toFixed(2)}</td>${gradeCell}${fmvCell}${spotCell}<td class="${pl>=0?'up':'dn'}">${mk?'$'+pl.toFixed(2):'—'}</td><td class="${pl>=0?'up':'dn'}">${mk?pct+'%':'—'}</td></tr>`;
   }).join('');
   const tp=tm-tc;$('inv-totals').innerHTML=inventory.length?`Cost: <span style="color:var(--gold)">$${tc.toFixed(2)}</span> &nbsp;·&nbsp; Mkt: <span style="color:var(--gold)">$${tm.toFixed(2)}</span> &nbsp;·&nbsp; P&L: <span class="${tp>=0?'up':'dn'}">$${tp.toFixed(2)}</span>`:'';
 }
+
+function initCoinValDropdowns(){
+  const series=[...new Set(CV.map(c=>c.s))];
+  const cvSel=$('cv-series');
+  if(cvSel.options.length<=1) series.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;cvSel.appendChild(o);});
+  const invSel=$('inv-coin-series');
+  if(invSel.options.length<=1) series.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;invSel.appendChild(o);});
+}
+function renderCoinVals(){
+  initCoinValDropdowns();
+  const series=$('cv-series').value;
+  const grade=$('cv-grade').value;
+  const grades=['G4','VG8','F12','VF20','EF40','AU50','MS63','MS65'];
+  const filtered=series?CV.filter(c=>c.s===series):CV;
+  $('cv-tbody').innerHTML=filtered.map(c=>{
+    const cells=grades.map(g=>{
+      if(grade && g!==grade) return '';
+      const v=c[g];
+      return`<td style="color:var(--gold);font-family:var(--mono)">${v!=null?'$'+v.toLocaleString():'—'}</td>`;
+    }).join('');
+    const addBtn=`<td><button onclick="prefillInventory('${c.s.replace(/'/g,"\'")}','${c.d.replace(/'/g,"\'")}',${JSON.stringify(c)})" style="background:var(--gold);color:#000;border:none;padding:3px 8px;font-size:11px;cursor:pointer;border-radius:3px">ADD</button></td>`;
+    return`<tr><td style="color:#fff;font-weight:700">${c.s}</td><td style="color:var(--muted)">${c.d}</td>${cells}${addBtn}</tr>`;
+  }).join('');
+}
+function invCoinSeriesChange(){
+  const series=$('inv-coin-series').value;
+  const varSel=$('inv-coin-variety');
+  varSel.innerHTML='<option value="">— Select Variety —</option>';
+  if(!series) return;
+  CV.filter(c=>c.s===series).forEach(c=>{const o=document.createElement('option');o.value=c.d;o.textContent=c.d;varSel.appendChild(o);});
+}
+function lookupCoinFMV(){
+  const series=$('inv-coin-series').value;
+  const variety=$('inv-coin-variety').value;
+  const grade=$('inv-coin-grade').value;
+  if(!series||!variety||!grade){alert('Select series, variety, and grade.');return;}
+  const coin=CV.find(c=>c.s===series&&c.d===variety);
+  if(!coin){alert('Coin not found.');return;}
+  const fmv=coin[grade];
+  if(fmv==null){$('inv-fmv-display').textContent='FMV: N/A for this grade';return;}
+  $('inv-fmv-display').textContent=`FMV: $${fmv.toLocaleString()}`;
+  // Auto-fill description and cost if empty
+  if(!$('inv-desc').value) $('inv-desc').value=series+' '+variety+' '+grade;
+  $('inv-metal').value='COIN';
+}
+function prefillInventory(series,variety,coinData){
+  showTab('inventory');
+  $('inv-metal').value='COIN';
+  $('inv-coin-series').value=series;
+  invCoinSeriesChange();
+  setTimeout(()=>{
+    $('inv-coin-variety').value=variety;
+  },50);
+  $('inv-desc').value=series+' '+variety;
+  $('inv-fmv-display').textContent='';
+}
+
 function renderKeyDates(){
   const sel=$('kd-select');
   // Populate dropdown options if not yet done
@@ -1163,7 +1363,7 @@ function adjustPad(){
 }
 window.addEventListener('load',adjustPad);window.addEventListener('resize',adjustPad);
 async function init(){
-  await loadAccount();renderPremiums();renderErrors();renderGrading();renderKeyDates();renderInventory();
+  await loadAccount();renderPremiums();renderErrors();renderGrading();renderKeyDates();renderInventory();renderCoinVals();
   await loadSpot();await loadNews();
   setInterval(loadSpot,5*60*1000);setInterval(loadNews,10*60*1000);
 }
