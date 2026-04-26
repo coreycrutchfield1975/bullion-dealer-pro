@@ -1,10 +1,14 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.bulliondealerpro.app",
-    "sha256_cert_fingerprints": [
-      "REPLACE_WITH_YOUR_SHA256_FINGERPRINT"
-    ]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.bulliondealerpro.app",
+      "sha256_cert_fingerprints": [
+        "D8:DD:1D:84:E0:B8:DF:32:46:9C:3A:27:DE:FF:0F:D0:9A:43:1D:3E:17:72:55:65:F1:86:96:F8:06:D0:CD:EE"
+      ]
+    }
   }
-}]
+]
