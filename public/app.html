@@ -582,6 +582,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div class="tab" onclick="showTab('keydate')">🗝 KEY DATES</div>
     <div class="tab" onclick="showTab('errors')">⚠️ ERRORS</div>
     <div class="tab" onclick="showTab('grading')">📋 GRADING</div>
+    <div class="tab" onclick="showTab('currency')">💱 CURRENCY</div>
     <div class="tab" onclick="showTab('account')">👤 ACCOUNT</div>
   </div>
 </div>
@@ -1000,6 +1001,23 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div class="tbl-wrap"><table class="grade-table"><thead><tr><th>GRADE</th><th>NAME</th><th>DESCRIPTION</th></tr></thead><tbody id="grade-tbody"></tbody></table></div>
   </div>
 
+  <!-- CURRENCY EXCHANGE -->
+  <div id="tab-currency" class="section">
+    <div class="sec-title">💱 World Currency Exchange Rates</div>
+    <div style="color:var(--muted);font-size:12px;margin-bottom:16px;font-family:var(--mono)">Rates vs. US Dollar (USD) — Live via open exchange</div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <input id="fx-search" type="text" placeholder="Search country or currency..." style="flex:1;min-width:200px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font);font-size:13px" oninput="filterFX()">
+      <input id="fx-amount" type="number" value="1" min="0.01" step="0.01" style="width:110px;background:var(--bg2);border:1px solid var(--border);color:var(--gold);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:14px;text-align:right" oninput="filterFX()">
+      <span style="color:var(--muted);font-size:13px">USD</span>
+      <button onclick="loadFX(true)" style="background:linear-gradient(135deg,#c8830a,#f0b429);color:#000;border:none;padding:8px 16px;border-radius:6px;font-family:var(--display);letter-spacing:1px;cursor:pointer;font-size:13px">↻ REFRESH</button>
+    </div>
+    <div id="fx-updated" style="color:var(--muted);font-size:11px;font-family:var(--mono);margin-bottom:12px"></div>
+    <div class="tbl-wrap">
+      <table id="fx-table"><thead><tr><th onclick="sortFX('flag')" style="cursor:pointer">FLAG</th><th onclick="sortFX('country')" style="cursor:pointer">COUNTRY ↕</th><th onclick="sortFX('code')" style="cursor:pointer">CODE ↕</th><th onclick="sortFX('rate')" style="cursor:pointer">RATE (per USD) ↕</th><th onclick="sortFX('usd')" style="cursor:pointer">USD VALUE ↕</th><th>1 USD =</th></tr></thead><tbody id="fx-tbody"></tbody></table>
+    </div>
+    <div id="fx-status" style="color:var(--muted);font-size:13px;padding:20px;text-align:center"></div>
+  </div>
+
   <!-- ACCOUNT -->
   <div id="tab-account" class="section">
     <div class="sec-title">Account</div>
@@ -1296,7 +1314,7 @@ const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0};
 let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
 
 // ════════════════════ TABS ════════════════════
-const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','coinvals','keydate','errors','grading','account'];
+const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','coinvals','keydate','errors','grading','currency','account'];
 function showTab(id){
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',TABS[i]===id));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1565,6 +1583,172 @@ async function init(){
   setInterval(loadSpot,5*60*1000);setInterval(loadNews,10*60*1000);
 }
 init();
+
+// ════════════════════ CURRENCY EXCHANGE ════════════════════
+const FX_CURRENCIES=[
+  {code:'EUR',country:'Eurozone',flag:'🇪🇺'},
+  {code:'GBP',country:'United Kingdom',flag:'🇬🇧'},
+  {code:'CAD',country:'Canada',flag:'🇨🇦'},
+  {code:'AUD',country:'Australia',flag:'🇦🇺'},
+  {code:'NZD',country:'New Zealand',flag:'🇳🇿'},
+  {code:'CHF',country:'Switzerland',flag:'🇨🇭'},
+  {code:'JPY',country:'Japan',flag:'🇯🇵'},
+  {code:'CNY',country:'China',flag:'🇨🇳'},
+  {code:'HKD',country:'Hong Kong',flag:'🇭🇰'},
+  {code:'SGD',country:'Singapore',flag:'🇸🇬'},
+  {code:'KRW',country:'South Korea',flag:'🇰🇷'},
+  {code:'INR',country:'India',flag:'🇮🇳'},
+  {code:'MXN',country:'Mexico',flag:'🇲🇽'},
+  {code:'BRL',country:'Brazil',flag:'🇧🇷'},
+  {code:'ARS',country:'Argentina',flag:'🇦🇷'},
+  {code:'CLP',country:'Chile',flag:'🇨🇱'},
+  {code:'COP',country:'Colombia',flag:'🇨🇴'},
+  {code:'PEN',country:'Peru',flag:'🇵🇪'},
+  {code:'SEK',country:'Sweden',flag:'🇸🇪'},
+  {code:'NOK',country:'Norway',flag:'🇳🇴'},
+  {code:'DKK',country:'Denmark',flag:'🇩🇰'},
+  {code:'PLN',country:'Poland',flag:'🇵🇱'},
+  {code:'CZK',country:'Czech Republic',flag:'🇨🇿'},
+  {code:'HUF',country:'Hungary',flag:'🇭🇺'},
+  {code:'RON',country:'Romania',flag:'🇷🇴'},
+  {code:'TRY',country:'Turkey',flag:'🇹🇷'},
+  {code:'RUB',country:'Russia',flag:'🇷🇺'},
+  {code:'UAH',country:'Ukraine',flag:'🇺🇦'},
+  {code:'ZAR',country:'South Africa',flag:'🇿🇦'},
+  {code:'NGN',country:'Nigeria',flag:'🇳🇬'},
+  {code:'EGP',country:'Egypt',flag:'🇪🇬'},
+  {code:'KES',country:'Kenya',flag:'🇰🇪'},
+  {code:'GHS',country:'Ghana',flag:'🇬🇭'},
+  {code:'MAD',country:'Morocco',flag:'🇲🇦'},
+  {code:'SAR',country:'Saudi Arabia',flag:'🇸🇦'},
+  {code:'AED',country:'UAE',flag:'🇦🇪'},
+  {code:'QAR',country:'Qatar',flag:'🇶🇦'},
+  {code:'KWD',country:'Kuwait',flag:'🇰🇼'},
+  {code:'BHD',country:'Bahrain',flag:'🇧🇭'},
+  {code:'OMR',country:'Oman',flag:'🇴🇲'},
+  {code:'ILS',country:'Israel',flag:'🇮🇱'},
+  {code:'THB',country:'Thailand',flag:'🇹🇭'},
+  {code:'MYR',country:'Malaysia',flag:'🇲🇾'},
+  {code:'IDR',country:'Indonesia',flag:'🇮🇩'},
+  {code:'PHP',country:'Philippines',flag:'🇵🇭'},
+  {code:'VND',country:'Vietnam',flag:'🇻🇳'},
+  {code:'TWD',country:'Taiwan',flag:'🇹🇼'},
+  {code:'PKR',country:'Pakistan',flag:'🇵🇰'},
+  {code:'BDT',country:'Bangladesh',flag:'🇧🇩'},
+  {code:'LKR',country:'Sri Lanka',flag:'🇱🇰'},
+  {code:'NPR',country:'Nepal',flag:'🇳🇵'},
+  {code:'MMK',country:'Myanmar',flag:'🇲🇲'},
+  {code:'KHR',country:'Cambodia',flag:'🇰🇭'},
+  {code:'CRC',country:'Costa Rica',flag:'🇨🇷'},
+  {code:'GTQ',country:'Guatemala',flag:'🇬🇹'},
+  {code:'HNL',country:'Honduras',flag:'🇭🇳'},
+  {code:'PAB',country:'Panama',flag:'🇵🇦'},
+  {code:'DOP',country:'Dominican Republic',flag:'🇩🇴'},
+  {code:'JMD',country:'Jamaica',flag:'🇯🇲'},
+  {code:'TTD',country:'Trinidad & Tobago',flag:'🇹🇹'},
+  {code:'BOB',country:'Bolivia',flag:'🇧🇴'},
+  {code:'PYG',country:'Paraguay',flag:'🇵🇾'},
+  {code:'UYU',country:'Uruguay',flag:'🇺🇾'},
+  {code:'VES',country:'Venezuela',flag:'🇻🇪'},
+  {code:'ISK',country:'Iceland',flag:'🇮🇸'},
+  {code:'HRK',country:'Croatia',flag:'🇭🇷'},
+  {code:'BGN',country:'Bulgaria',flag:'🇧🇬'},
+  {code:'RSD',country:'Serbia',flag:'🇷🇸'},
+  {code:'MKD',country:'North Macedonia',flag:'🇲🇰'},
+  {code:'ALL',country:'Albania',flag:'🇦🇱'},
+  {code:'GEL',country:'Georgia',flag:'🇬🇪'},
+  {code:'AMD',country:'Armenia',flag:'🇦🇲'},
+  {code:'AZN',country:'Azerbaijan',flag:'🇦🇿'},
+  {code:'KZT',country:'Kazakhstan',flag:'🇰🇿'},
+  {code:'UZS',country:'Uzbekistan',flag:'🇺🇿'},
+  {code:'GBP',country:'United Kingdom',flag:'🇬🇧'},
+  {code:'XAF',country:'Central Africa (CFA)',flag:'🌍'},
+  {code:'XOF',country:'West Africa (CFA)',flag:'🌍'},
+  {code:'XPF',country:'Pacific Franc',flag:'🌊'},
+  {code:'JOD',country:'Jordan',flag:'🇯🇴'},
+  {code:'LBP',country:'Lebanon',flag:'🇱🇧'},
+  {code:'IQD',country:'Iraq',flag:'🇮🇶'},
+  {code:'IRR',country:'Iran',flag:'🇮🇷'},
+  {code:'AFN',country:'Afghanistan',flag:'🇦🇫'},
+  {code:'MNT',country:'Mongolia',flag:'🇲🇳'},
+  {code:'KGS',country:'Kyrgyzstan',flag:'🇰🇬'},
+  {code:'TJS',country:'Tajikistan',flag:'🇹🇯'},
+  {code:'TMT',country:'Turkmenistan',flag:'🇹🇲'},
+  {code:'BYN',country:'Belarus',flag:'🇧🇾'},
+  {code:'MDL',country:'Moldova',flag:'🇲🇩'},
+  {code:'ETB',country:'Ethiopia',flag:'🇪🇹'},
+  {code:'TZS',country:'Tanzania',flag:'🇹🇿'},
+  {code:'UGX',country:'Uganda',flag:'🇺🇬'},
+  {code:'ZMW',country:'Zambia',flag:'🇿🇲'},
+  {code:'MZN',country:'Mozambique',flag:'🇲🇿'},
+  {code:'BWP',country:'Botswana',flag:'🇧🇼'},
+  {code:'NAD',country:'Namibia',flag:'🇳🇦'},
+  {code:'MUR',country:'Mauritius',flag:'🇲🇺'},
+  {code:'DZD',country:'Algeria',flag:'🇩🇿'},
+  {code:'TND',country:'Tunisia',flag:'🇹🇳'},
+  {code:'LYD',country:'Libya',flag:'🇱🇾'},
+  {code:'SDG',country:'Sudan',flag:'🇸🇩'},
+  {code:'SYP',country:'Syria',flag:'🇸🇾'},
+  {code:'YER',country:'Yemen',flag:'🇾🇪'},
+];
+let fxRates={},fxSortCol='country',fxSortDir=1,fxLoaded=false;
+
+async function loadFX(force=false){
+  if(fxLoaded&&!force)return;
+  $('fx-status').textContent='Loading exchange rates…';
+  $('fx-tbody').innerHTML='';
+  try{
+    const r=await fetch('/api/fx');
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    fxRates=d.rates||{};
+    const ts=d.timestamp?new Date(d.timestamp*1000).toLocaleString():'';
+    $('fx-updated').textContent=ts?`Last updated: ${ts}`:'';
+    $('fx-status').textContent='';
+    fxLoaded=true;
+    filterFX();
+  }catch(e){
+    $('fx-status').textContent='Could not load rates. Try refreshing.';
+    console.error(e);
+  }
+}
+function sortFX(col){
+  if(fxSortCol===col)fxSortDir*=-1;else{fxSortCol=col;fxSortDir=1;}
+  filterFX();
+}
+function filterFX(){
+  const q=($('fx-search').value||'').toLowerCase();
+  const amt=parseFloat($('fx-amount').value)||1;
+  let rows=FX_CURRENCIES.filter((c,i,arr)=>arr.findIndex(x=>x.code===c.code)===i); // dedupe
+  if(q) rows=rows.filter(c=>c.country.toLowerCase().includes(q)||c.code.toLowerCase().includes(q));
+  rows=rows.filter(c=>fxRates[c.code]);
+  rows.sort((a,b)=>{
+    let av,bv;
+    if(fxSortCol==='rate'){av=fxRates[a.code]||0;bv=fxRates[b.code]||0;}
+    else if(fxSortCol==='usd'){av=1/(fxRates[a.code]||1);bv=1/(fxRates[b.code]||1);}
+    else if(fxSortCol==='code'){av=a.code;bv=b.code;}
+    else{av=a.country;bv=b.country;}
+    if(typeof av==='string')return av.localeCompare(bv)*fxSortDir;
+    return(av-bv)*fxSortDir;
+  });
+  $('fx-tbody').innerHTML=rows.map(c=>{
+    const rate=fxRates[c.code];
+    if(!rate)return'';
+    const usdVal=(amt/rate);
+    const converted=(rate*amt);
+    return`<tr>
+      <td style="font-size:22px;text-align:center">${c.flag}</td>
+      <td style="font-weight:600">${c.country}</td>
+      <td style="font-family:var(--mono);color:var(--gold)">${c.code}</td>
+      <td style="font-family:var(--mono)">${rate>=1?rate.toLocaleString(undefined,{maximumFractionDigits:4}):rate.toFixed(6)}</td>
+      <td style="font-family:var(--mono);color:#aaa">$${usdVal.toFixed(4)}</td>
+      <td style="font-family:var(--mono);color:var(--gold);font-weight:700">${converted>=1?converted.toLocaleString(undefined,{maximumFractionDigits:2}):converted.toFixed(4)} ${c.code}</td>
+    </tr>`;
+  }).join('');
+  if(!rows.length&&q)$('fx-status').textContent='No currencies match your search.';
+  else $('fx-status').textContent='';
+}
+
 </script>
 </body>
 </html>

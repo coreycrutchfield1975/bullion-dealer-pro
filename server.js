@@ -273,6 +273,37 @@ app.get('/api/news', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+
+// ════════════════════════════════════════════════════════════════════════════════
+// CURRENCY EXCHANGE RATES PROXY
+// ════════════════════════════════════════════════════════════════════════════════
+let fxCache = { data: null, ts: 0 };
+app.get('/api/fx', auth, async (req, res) => {
+  try {
+    if (fxCache.data && Date.now() - fxCache.ts < 30 * 60 * 1000) {
+      return res.json(fxCache.data);
+    }
+    // Use exchangerate-api.com open endpoint (free, no key needed)
+    const r = await fetch('https://open.er-api.com/v6/latest/USD');
+    const d = await r.json();
+    if (!d || d.result === 'error') throw new Error('Exchange rate fetch failed');
+    fxCache.data = { rates: d.rates, timestamp: Math.floor(Date.now() / 1000) };
+    fxCache.ts = Date.now();
+    res.json(fxCache.data);
+  } catch (e) {
+    // Fallback: try frankfurter.app
+    try {
+      const r2 = await fetch('https://api.frankfurter.app/latest?from=USD');
+      const d2 = await r2.json();
+      fxCache.data = { rates: d2.rates, timestamp: Math.floor(Date.now() / 1000) };
+      fxCache.ts = Date.now();
+      res.json(fxCache.data);
+    } catch (e2) {
+      res.status(500).json({ error: 'Could not load exchange rates' });
+    }
+  }
+});
+
 // ════════════════════════════════════════════════════════════════════════════════
 // STRIPE
 // ════════════════════════════════════════════════════════════════════════════════
