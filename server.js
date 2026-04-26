@@ -204,50 +204,39 @@ app.post('/api/reset-password', async (req, res) => {
 // ════════════════════════════════════════════════════════════════════════════════
 // METALS PROXY
 // ════════════════════════════════════════════════════════════════════════════════
-// Metals cache — reduce API calls
+// Metals cache — 5 min TTL to avoid hammering Yahoo
 const metalsCache = {};
-const METALS_TTL = 5 * 60 * 1000; // 5 min
+const METALS_TTL = 5 * 60 * 1000;
+
+// Symbol map: our codes -> Yahoo Finance futures tickers
+const YAHOO_MAP = { XAU:'GC=F', XAG:'SI=F', XCU:'HG=F', XPT:'PL=F', XPD:'PA=F' };
 
 app.get('/api/metals/:sym', auth, async (req, res) => {
   const sym = req.params.sym.toUpperCase();
   const cached = metalsCache[sym];
   if (cached && Date.now() - cached.ts < METALS_TTL) return res.json(cached.data);
 
-  // Try goldapi.io first
-  if (GOLD_API_KEY) {
-    try {
-      const r = await fetch(`https://data-asg.goldapi.io/dbPeak/${sym}/USD`, {
-        headers: { 'x-access-token': GOLD_API_KEY, 'Content-Type': 'application/json' }
-      });
-      if (r.ok) {
-        const data = await r.json();
-        metalsCache[sym] = { data, ts: Date.now() };
-        return res.json(data);
-      }
-    } catch(e) { console.log('goldapi error:', e.message); }
-  }
+  const yticker = YAHOO_MAP[sym];
+  if (!yticker) return res.status(404).json({ error: 'Unknown symbol' });
 
-  // Fallback: metals-api via open rates (Metals.live free endpoint)
   try {
-    // Map our symbols to Yahoo Finance symbols for fallback
-    const yMap = { XAU:'GC=F', XAG:'SI=F', XCU:'HG=F', XPT:'PL=F', XPD:'PA=F' };
-    const yticker = yMap[sym];
-    if (!yticker) return res.status(404).json({ error: 'Unknown symbol' });
-    const yr = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${yticker}?interval=1m&range=1d`, {
-      headers: { 'User-Agent': 'Mozilla/5.0' }
-    });
-    if (!yr.ok) throw new Error('Yahoo failed');
+    const yr = await fetch(
+      `https://query1.finance.yahoo.com/v8/finance/chart/${yticker}?interval=1m&range=1d`,
+      { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } }
+    );
+    if (!yr.ok) throw new Error(`Yahoo ${yr.status}`);
     const yd = await yr.json();
     const meta = yd?.chart?.result?.[0]?.meta;
-    if (!meta) throw new Error('No meta');
+    if (!meta) throw new Error('No meta in response');
     const price = meta.regularMarketPrice || 0;
-    const prev = meta.chartPreviousClose || meta.previousClose || 0;
-    const ch = price - prev;
-    const data = { price, prev_close_price: prev, ch, symbol: sym };
+    const prev  = meta.chartPreviousClose || meta.previousClose || price;
+    const ch    = +(price - prev).toFixed(4);
+    const data  = { price, prev_close_price: prev, ch, symbol: sym };
     metalsCache[sym] = { data, ts: Date.now() };
+    console.log(`[metals] ${sym} = $${price}`);
     return res.json(data);
   } catch(e) {
-    console.log('Yahoo fallback error:', e.message);
+    console.log(`[metals] ERROR ${sym}:`, e.message);
     return res.status(500).json({ error: 'Price data unavailable' });
   }
 });
