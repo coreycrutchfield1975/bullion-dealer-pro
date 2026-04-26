@@ -16,7 +16,7 @@
   --silver:#d0d8e8;--heading:#ffffff;
   --font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace;
 }
-html,body{height:100%;overflow-x:hidden}
+html,body{min-height:100%;overflow-x:hidden}
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--bg2)}
@@ -436,6 +436,74 @@ tr:hover td{background:rgba(240,180,41,.025)}
 
 .up{color:var(--green)} .dn{color:var(--red)}
 @media(max-width:600px){.brand{font-size:16px}.nbtn{padding:5px 9px;font-size:11px}}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+
+  /* Logo banner — stack vertically on mobile */
+  #logo-banner{
+    flex-direction:column;
+    min-height:auto;
+    padding:10px 8px;
+    gap:6px;
+  }
+  .banner-dragon-img{
+    height:70px;
+  }
+  #banner-title{
+    font-size:clamp(24px,8vw,42px);
+    padding:4px 8px;
+    letter-spacing:0.08em;
+  }
+  #banner-watermark{
+    width:80%;
+  }
+
+  /* Nav bar */
+  #nav{padding:0 8px;height:34px;}
+  .brand{font-size:13px!important}
+  .nbtn{padding:4px 7px;font-size:10px!important}
+
+  /* Ticker */
+  #ticker-bar{height:28px;}
+
+  /* Spot pills — allow horizontal scroll */
+  #spot-bar{padding:6px 8px;}
+  .spot-pill{min-width:90px;padding:6px 10px;}
+  .spot-val{font-size:14px;}
+  .spot-lbl{font-size:9px;}
+
+  /* News bar */
+  #news-bar{height:26px;}
+
+  /* Tabs — scrollable */
+  .tabs{padding:6px 8px;gap:6px;}
+  .tab{padding:7px 12px;font-size:12px;}
+
+  /* Content padding */
+  #content{padding-left:8px;padding-right:8px;}
+
+  /* Cards */
+  .card{padding:16px 12px;}
+
+  /* Tables — horizontal scroll */
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+  /* Calc grid already handles 1 col at 520px */
+
+  /* Key dates table text */
+  table td, table th{font-size:12px;padding:6px 8px;}
+
+  /* Account section */
+  .acct-info{padding:18px 14px;}
+}
+
+@media(max-width:400px){
+  .banner-dragon-img{height:50px;}
+  #banner-title{font-size:22px;}
+  .spot-pill{min-width:80px;}
+}
+
 </style>
 </head>
 <body>
