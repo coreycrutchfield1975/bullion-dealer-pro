@@ -10,13 +10,14 @@
 :root{
   --gold:#f0b429;--gold2:#ffe566;--gold3:#c88a00;
   --bg:#03030a;--bg2:#080810;--bg3:#0f0f1c;--bg4:#161626;
-  --border:rgba(240,180,41,.15);--border2:rgba(240,180,41,.35);
-  --text:#e0d8c0;--muted:#5a5570;
-  --green:#00e676;--red:#ff4b6e;--orange:#ff9800;--blue:#40c4ff;
+  --border:rgba(240,180,41,.2);--border2:rgba(240,180,41,.45);
+  --text:#f0ece0;--muted:#9b96b8;
+  --green:#00ff88;--red:#ff4b6e;--orange:#ffb347;--blue:#40c4ff;
+  --silver:#d0d8e8;--heading:#ffffff;
   --font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace;
 }
 html,body{height:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:rgba(240,180,41,.3);border-radius:3px}
@@ -68,7 +69,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16
 .nav-right{display:flex;gap:6px;align-items:center}
 .nbtn{
   background:transparent;border:1px solid rgba(240,180,41,.2);
-  color:var(--muted);padding:6px 14px;border-radius:6px;
+  color:#b0accc;padding:6px 14px;border-radius:6px;
   font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:1.5px;
   cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;
   transition:all .2s;
@@ -88,8 +89,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16
 }
 .spot-pill::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;background:var(--gold);opacity:0;transition:opacity .2s}
 .spot-pill:hover{background:rgba(240,180,41,.04)} .spot-pill:hover::after{opacity:.3}
-.sp-sym{font-family:var(--display);font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:2px}
-.sp-price{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--gold)}
+.sp-sym{font-family:var(--display);font-size:12px;letter-spacing:2px;color:#b0accc;margin-bottom:2px}
+.sp-price{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--gold)}
 .sp-chg{font-size:10px;margin-top:1px}
 
 /* ══════════════════════════════
@@ -110,7 +111,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16
 }
 #news-track{flex:1;overflow:hidden}
 #news-inner{display:inline-flex;gap:60px;white-space:nowrap;animation:scrollL 90s linear infinite}
-#news-inner a{color:var(--muted);text-decoration:none;transition:color .2s}
+#news-inner a{color:#b0accc;text-decoration:none;transition:color .2s}
 #news-inner a:hover{color:var(--gold)}
 
 /* ══════════════════════════════
@@ -124,11 +125,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16
 }
 .tabs::-webkit-scrollbar{display:none}
 .tab{
-  padding:14px 16px;font-family:var(--display);font-size:14px;letter-spacing:1.5px;
+  padding:14px 16px;font-family:var(--display);font-size:15px;letter-spacing:1.5px;
   cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;
-  white-space:nowrap;color:var(--muted);transition:all .2s;
+  white-space:nowrap;color:#c8c4e0;transition:all .2s;
 }
-.tab:hover{color:var(--text)}
+.tab:hover{color:#ffffff}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 
 /* ══════════════════════════════
@@ -139,7 +140,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 .sec-title{
-  font-family:var(--display);font-size:13px;letter-spacing:4px;color:var(--gold);
+  font-family:var(--display);font-size:16px;letter-spacing:4px;color:var(--gold);
   margin-bottom:20px;padding-bottom:10px;
   border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:10px;
@@ -230,7 +231,7 @@ select.inp option{background:var(--bg3)}
    TABLES
 ══════════════════════════════ */
 .tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:15px}
 thead{background:var(--bg3)}
 th{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);padding:11px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
 td{padding:10px 12px;border-bottom:1px solid rgba(240,180,41,.05);font-family:var(--mono)}
@@ -358,8 +359,8 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div id="ticker-track"><div id="ticker-inner"><span>Loading market data…</span></div></div>
   </div>
   <div id="nav">
-    <div class="brand">
-      <span class="brand-gem"></span>BULLION DEALER PRO
+    <div class="brand" style="padding:4px 0">
+      <img src="https://media.base44.com/images/public/69eae2a3c39807325aed8509/a3845bcf6_generated_image.png" alt="Bullion Dealer Pro" style="height:42px;width:auto;object-fit:contain;display:block;">
     </div>
     <div class="nav-right">
       <a class="nbtn" href="https://apmex.com" target="_blank">APMEX ↗</a>
