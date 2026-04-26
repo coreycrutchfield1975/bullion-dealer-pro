@@ -59,7 +59,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
 @keyframes scrollL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* NAV */
-#nav{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:50px}
+#nav{display:flex;align-items:center;justify-content:flex-end;padding:0 16px;height:38px}
 .brand{font-family:var(--display);font-size:22px;letter-spacing:4px;color:var(--gold);display:flex;align-items:center;gap:10px;text-shadow:0 0 20px rgba(240,180,41,.3)}
 .brand-gem{
   width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold3));
@@ -75,6 +75,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
   transition:all .2s;
 }
 .nbtn:hover,.nbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.06)}
+
+/* LOGO BANNER */
+#logo-banner{
+  width:100%;background:#000;
+  border-bottom:1px solid rgba(240,180,41,.15);
+  display:flex;align-items:center;justify-content:center;
+  padding:6px 0;
+}
+#logo-img{
+  width:100%;max-width:100%;height:auto;
+  max-height:90px;object-fit:contain;display:block;
+}
 
 /* SPOT BAR */
 #spot-bar{
@@ -125,7 +137,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
 }
 .tabs::-webkit-scrollbar{display:none}
 .tab{
-  padding:14px 16px;font-family:var(--display);font-size:15px;letter-spacing:1.5px;
+  padding:14px 18px;font-family:var(--display);font-size:17px;letter-spacing:1.5px;
   cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;
   white-space:nowrap;color:#c8c4e0;transition:all .2s;
 }
@@ -358,11 +370,11 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div id="ticker-label">◈ LIVE</div>
     <div id="ticker-track"><div id="ticker-inner"><span>Loading market data…</span></div></div>
   </div>
+  <div id="logo-banner">
+    <img src="https://media.base44.com/images/public/69eae2a3c39807325aed8509/67a6f1198_generated_image.png" alt="Bullion Dealer Pro" id="logo-img">
+  </div>
   <div id="nav">
-    <div class="brand" style="padding:4px 0">
-      <img src="https://media.base44.com/images/public/69eae2a3c39807325aed8509/a3845bcf6_generated_image.png" alt="Bullion Dealer Pro" style="height:42px;width:auto;object-fit:contain;display:block;">
-    </div>
-    <div class="nav-right">
+    <div class="nav-right" style="margin-left:auto">
       <a class="nbtn" href="https://apmex.com" target="_blank">APMEX ↗</a>
       <a class="nbtn" href="https://kitco.com" target="_blank">KITCO ↗</a>
       <button class="nbtn" id="admin-btn" style="display:none" onclick="location.href='/admin-panel'">⚙ ADMIN</button>
