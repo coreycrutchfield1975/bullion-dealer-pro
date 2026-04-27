@@ -677,6 +677,16 @@ tr:hover td{background:rgba(240,180,41,.025)}
       <div class="res-item"><div class="res-lbl">🟠 SELL AT</div><div class="res-val sell-val" id="dc-sell">—</div></div>
       <div class="res-item"><div class="res-lbl">SPREAD</div><div class="res-val spread-val" id="dc-spread">—</div></div>
     </div>
+    <div id="dc-breakdown" style="display:none;margin-top:18px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="font-family:var(--display);letter-spacing:2px;font-size:12px;color:var(--gold);margin-bottom:12px">COIN MELT BREAKDOWN</div>
+      <div class="tbl-wrap" style="margin:0">
+        <table id="dc-breakdown-table">
+          <thead><tr><th>COIN</th><th>SILVER %</th><th>OZ AG</th><th>MELT VALUE</th><th>BUY AT</th><th>SELL AT</th></tr></thead>
+          <tbody id="dc-breakdown-tbody"></tbody>
+        </table>
+      </div>
+      <div id="dc-breakdown-note" style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:10px"></div>
+    </div>
   </div>
 
   <!-- SILVER -->
@@ -1354,13 +1364,85 @@ function buildTicker(){
 }
 
 // ════════════════════ CALCS ════════════════════
+// Melt breakdown data for silver coins (name, purity%, oz per coin)
+const DC_SILVER_COINS=[
+  {v:'morgan',   n:'Morgan Dollar',              pct:'90%', oz:0.7734},
+  {v:'peace',    n:'Peace Dollar',               pct:'90%', oz:0.7734},
+  {v:'wlhalf',   n:'Walking Liberty Half',       pct:'90%', oz:0.3617},
+  {v:'fhalf',    n:'Franklin Half Dollar',       pct:'90%', oz:0.3617},
+  {v:'kh64',     n:'Kennedy Half 1964',          pct:'90%', oz:0.3617},
+  {v:'kh40',     n:'Kennedy Half 1965–70',       pct:'40%', oz:0.1479},
+  {v:'ike',      n:'Eisenhower Dollar',          pct:'40%', oz:0.3161},
+  {v:'washq',    n:'Washington Quarter',         pct:'90%', oz:0.1808},
+  {v:'slq',      n:'Standing Liberty Quarter',   pct:'90%', oz:0.1808},
+  {v:'barberq',  n:'Barber Quarter',             pct:'90%', oz:0.1808},
+  {v:'roosd',    n:'Roosevelt Dime (pre-65)',    pct:'90%', oz:0.0723},
+  {v:'mercd',    n:'Mercury Dime',               pct:'90%', oz:0.0723},
+  {v:'barberd',  n:'Barber Dime',                pct:'90%', oz:0.0723},
+  {v:'barberh',  n:'Barber Half Dollar',         pct:'90%', oz:0.3617},
+  {v:'warn',     n:'War Nickel 1942–45',         pct:'35%', oz:0.0563},
+];
+const DC_SILVER_ROLLS=[
+  {v:'rdimes',   n:'Dimes Roll (50)',            pct:'90%', oz:3.575,  coins:50, coinName:'Roosevelt/Mercury/Barber Dime'},
+  {v:'rqtrs',    n:'Quarters Roll (40)',         pct:'90%', oz:7.234,  coins:40, coinName:'90% Quarter'},
+  {v:'rhalfwl',  n:'WL/Franklin Halves (20)',   pct:'90%', oz:7.234,  coins:20, coinName:'Walking Liberty/Franklin Half'},
+  {v:'rhalfk64', n:'Kennedy Halves 1964 (20)',  pct:'90%', oz:7.234,  coins:20, coinName:'Kennedy Half 1964'},
+  {v:'rhalfk40', n:'Kennedy Halves 1965–70 (20)',pct:'40%',oz:2.958,  coins:20, coinName:'Kennedy Half 40%'},
+  {v:'rmorgan',  n:'Morgan/Peace Roll (20)',     pct:'90%', oz:15.468, coins:20, coinName:'Morgan/Peace Dollar'},
+  {v:'rike',     n:'Eisenhower Roll (20)',       pct:'40%', oz:6.322,  coins:20, coinName:'Eisenhower Dollar'},
+  {v:'rwarn',    n:'War Nickels Roll (40)',      pct:'35%', oz:2.252,  coins:40, coinName:'War Nickel'},
+];
+
 function calcDeal(){
   const sel=$('dc-item'),opt=sel.options[sel.selectedIndex];
   const oz=+opt.dataset.oz||0,metal=opt.dataset.metal||'XAG',sp=spot[metal]||0,m=sp*oz;
   const bp=+$('dc-buy-pct').value||0,sp2=+$('dc-sell-pct').value||0;
+  const val=opt.value;
   $('dc-spot-disp').textContent=sp?'$'+sp.toFixed(2)+' / oz':'Loading…';
-  $('dc-melt').textContent=m?'$'+m.toFixed(2):'—';$('dc-buy').textContent=m?'$'+(m*(1-bp/100)).toFixed(2):'—';
-  $('dc-sell').textContent=m?'$'+(m*(1+sp2/100)).toFixed(2):'—';$('dc-spread').textContent=m?'$'+(m*(1+sp2/100)-m*(1-bp/100)).toFixed(2):'—';
+  $('dc-melt').textContent=m?'$'+m.toFixed(2):'—';
+  $('dc-buy').textContent=m?'$'+(m*(1-bp/100)).toFixed(2):'—';
+  $('dc-sell').textContent=m?'$'+(m*(1+sp2/100)).toFixed(2):'—';
+  $('dc-spread').textContent=m?'$'+(m*(1+sp2/100)-m*(1-bp/100)).toFixed(2):'—';
+
+  // Show coin melt breakdown for silver items
+  const coinData=DC_SILVER_COINS.find(c=>c.v===val);
+  const rollData=DC_SILVER_ROLLS.find(r=>r.v===val);
+  const bd=$('dc-breakdown'),tbody=$('dc-breakdown-tbody'),note=$('dc-breakdown-note');
+
+  if(coinData&&sp){
+    bd.style.display='block';
+    const melt=sp*coinData.oz;
+    tbody.innerHTML=`<tr>
+      <td style="font-weight:600">${coinData.n}</td>
+      <td style="font-family:var(--mono);color:var(--gold)">${coinData.pct} Silver</td>
+      <td style="font-family:var(--mono)">${coinData.oz} oz</td>
+      <td style="font-family:var(--mono);color:var(--blue)">$${melt.toFixed(4)}</td>
+      <td style="font-family:var(--mono);color:var(--green)">$${(melt*(1-bp/100)).toFixed(4)}</td>
+      <td style="font-family:var(--mono);color:var(--orange)">$${(melt*(1+sp2/100)).toFixed(4)}</td>
+    </tr>`;
+    // Show all same-type coins for comparison
+    const sameOz=DC_SILVER_COINS.filter(c=>c.oz===coinData.oz&&c.v!==coinData.v);
+    if(sameOz.length){
+      note.textContent='Same oz content: '+sameOz.map(c=>c.n).join(', ')+' — same melt value applies.';
+    } else {
+      note.textContent='Spot: $'+sp.toFixed(2)+'/oz × '+coinData.oz+' oz = $'+melt.toFixed(4)+' melt per coin';
+    }
+  } else if(rollData&&sp){
+    bd.style.display='block';
+    const rollMelt=sp*rollData.oz;
+    const perCoinMelt=rollMelt/rollData.coins;
+    tbody.innerHTML=`<tr>
+      <td style="font-weight:600">${rollData.n}</td>
+      <td style="font-family:var(--mono);color:var(--gold)">${rollData.pct} Silver</td>
+      <td style="font-family:var(--mono)">${rollData.oz} oz total</td>
+      <td style="font-family:var(--mono);color:var(--blue)">$${rollMelt.toFixed(2)} roll<br><span style="font-size:11px;color:#aaa">$${perCoinMelt.toFixed(4)}/coin</span></td>
+      <td style="font-family:var(--mono);color:var(--green)">$${(rollMelt*(1-bp/100)).toFixed(2)}</td>
+      <td style="font-family:var(--mono);color:var(--orange)">$${(rollMelt*(1+sp2/100)).toFixed(2)}</td>
+    </tr>`;
+    note.textContent=rollData.coins+' × '+rollData.coinName+' · '+rollData.oz+' oz Ag total · $'+perCoinMelt.toFixed(4)+' melt per coin';
+  } else {
+    bd.style.display='none';
+  }
 }
 function renderSilver(){
   const bp=+$('sv-buy').value||0,s2=+$('sv-sell').value||0,s=spot.XAG;
