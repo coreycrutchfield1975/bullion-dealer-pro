@@ -84,15 +84,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
 #tab-bar{
   position:sticky;top:0;z-index:150;
   background:var(--bg);
-  overflow:hidden;
 }
-#tab-bar .tabs{
-  overflow-x:auto;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
-  flex-wrap:nowrap;
-}
-#tab-bar .tabs::-webkit-scrollbar{display:none;}
 #logo-banner{
   width:100%;background:#000;
   border-bottom:2px solid rgba(240,180,41,.4);
@@ -231,9 +223,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
 ══════════════════════════════ */
 .tabs{
   display:flex;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
   background:var(--bg2);
   border-bottom:1px solid var(--border);
   padding:0 4px;
+  flex-wrap:nowrap;
 }
 .tabs::-webkit-scrollbar{display:none}
 .tab{
@@ -464,15 +458,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
   #tab-bar{
   position:sticky;top:0;z-index:150;
   background:var(--bg);
-  overflow:hidden;
 }
-#tab-bar .tabs{
-  overflow-x:auto;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
-  flex-wrap:nowrap;
-}
-#tab-bar .tabs::-webkit-scrollbar{display:none;}
 #logo-banner{
     flex-direction:column;
     min-height:auto;
@@ -509,10 +495,10 @@ tr:hover td{background:rgba(240,180,41,.025)}
   #news-bar{height:26px;}
 
   /* Tab bar fixed on mobile */
-  #tab-bar{position:fixed!important;left:0;right:0;z-index:9999;background:var(--bg2);border-bottom:1px solid rgba(240,180,41,.3);}
-  .tabs{padding:6px 8px;gap:6px;}
+  #tab-bar{position:fixed!important;left:0;right:0;z-index:9999;background:var(--bg2);border-bottom:1px solid rgba(240,180,41,.3);overflow:visible;}
+  .tabs{padding:6px 8px;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
   #content{padding-top:280px!important;}
-  .tab{padding:7px 12px;font-size:12px;}
+  .tab{padding:7px 12px;font-size:12px;flex-shrink:0;}
 
   /* Content padding */
   #content{padding-left:8px;padding-right:8px;}
