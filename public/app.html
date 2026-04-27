@@ -528,6 +528,18 @@ tr:hover td{background:rgba(240,180,41,.025)}
 </head>
 <body>
 
+
+<div id="upgrade-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#111;border:1px solid rgba(240,180,41,0.4);border-radius:16px;padding:40px 32px;max-width:420px;width:90%;text-align:center;box-shadow:0 0 40px rgba(240,180,41,0.15);">
+    <div style="font-size:48px;margin-bottom:12px;">&#128274;</div>
+    <h2 style="font-family:var(--display);color:var(--gold);letter-spacing:3px;font-size:22px;margin-bottom:8px;">PRO FEATURE</h2>
+    <p style="color:#aaa;font-size:14px;line-height:1.6;margin-bottom:24px;">This feature is included in Bullion Dealer Pro.<br>Upgrade to unlock all calculators, reference guides, inventory tracker, currency exchange, and more.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <a href="/pricing" style="background:linear-gradient(135deg,#c9a84c,#f0b429);color:#000;padding:14px 28px;border-radius:8px;font-family:var(--display);font-size:18px;letter-spacing:2px;text-decoration:none;display:block;">UPGRADE &mdash; $19/MO</a>
+      <button onclick="document.getElementById('upgrade-modal').style.display='none'" style="background:transparent;border:1px solid #333;color:#666;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">Maybe Later</button>
+    </div>
+  </div>
+</div>
 <div id="paywall">
   <div class="pw-box">
     <h2>TRIAL ENDED</h2>
@@ -579,16 +591,16 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div class="tab" onclick="showTab('calc')">⚡ DEAL CALC</div>
     <div class="tab" onclick="showTab('silver')">🪙 SILVER</div>
     <div class="tab" onclick="showTab('pennies')">🟤 PENNIES</div>
-    <div class="tab" onclick="showTab('gold-k')">🥇 GOLD KARATS</div>
-    <div class="tab" onclick="showTab('goldback')">💛 GOLDBACKS</div>
+    <div class="tab" onclick="showTab('gold-k')" data-pro="1">🥇 GOLD KARATS</div>
+    <div class="tab" onclick="showTab('goldback')" data-pro="1">💛 GOLDBACKS</div>
     <div class="tab" onclick="showTab('platpal')">⚗️ PLAT/PAL</div>
-    <div class="tab" onclick="showTab('premium')">🏪 PREMIUMS</div>
-    <div class="tab" onclick="showTab('inventory')">📦 INVENTORY</div>
-    <div class="tab" onclick="showTab('coinvals')">💎 COIN VALUES</div>
-    <div class="tab" onclick="showTab('keydate')">🗝 KEY DATES</div>
-    <div class="tab" onclick="showTab('errors')">⚠️ ERRORS</div>
-    <div class="tab" onclick="showTab('grading')">📋 GRADING</div>
-    <div class="tab" onclick="showTab('currency')">💱 CURRENCY</div>
+    <div class="tab" onclick="showTab('premium')" data-pro="1">🏪 PREMIUMS</div>
+    <div class="tab" onclick="showTab('inventory')" data-pro="1">📦 INVENTORY</div>
+    <div class="tab" onclick="showTab('coinvals')" data-pro="1">💎 COIN VALUES</div>
+    <div class="tab" onclick="showTab('keydate')" data-pro="1">🗝 KEY DATES</div>
+    <div class="tab" onclick="showTab('errors')" data-pro="1">⚠️ ERRORS</div>
+    <div class="tab" onclick="showTab('grading')" data-pro="1">📋 GRADING</div>
+    <div class="tab" onclick="showTab('currency')" data-pro="1">💱 CURRENCY</div>
     <div class="tab" onclick="showTab('account')">👤 ACCOUNT</div>
   </div>
 </div>
@@ -1321,7 +1333,14 @@ let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
 
 // ════════════════════ TABS ════════════════════
 const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','coinvals','keydate','errors','grading','currency','account'];
+const PRO_TABS = ['gold-k','goldback','premium','inventory','coinvals','keydate','errors','grading','currency'];
+var window_isPro = false;
+
 function showTab(id){
+  if(PRO_TABS.includes(id) && !window_isPro){
+    document.getElementById('upgrade-modal').style.display='flex';
+    return;
+  }
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',TABS[i]===id));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('tab-'+id);
@@ -1553,15 +1572,31 @@ async function loadAccount(){
   try{
     const r=await fetch('/api/me');if(!r.ok){window.location.href='/login';return;}
     const u=await r.json();
+    window_isPro = u.isPro === true;
+    if(!window_isPro){
+      document.querySelectorAll('.tab[data-pro="1"]').forEach(t=>{
+        t.setAttribute('data-original-text', t.textContent.trim());
+        t.textContent = '🔒 ' + t.textContent.trim();
+        t.style.opacity = '0.55';
+      });
+    }
     if(u.plan==='admin')$('admin-btn').style.display='inline-flex';
+    const planLabel = u.plan==='free' ? 'FREE' : u.plan.toUpperCase();
     $('acct-card').innerHTML=`
       <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:10px">ACCOUNT</div>
       <div style="font-family:var(--mono);font-size:18px;color:var(--gold);margin-bottom:14px">${u.email}</div>
-      <span style="background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.35);padding:5px 16px;border-radius:20px;font-family:var(--display);font-size:14px;letter-spacing:2px;color:var(--gold)">${u.plan.toUpperCase()}</span>
+      <span style="background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.35);padding:5px 16px;border-radius:20px;font-family:var(--display);font-size:14px;letter-spacing:2px;color:var(--gold)">${planLabel}</span>
       ${u.plan==='trial'?`<div style="margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--muted)">Trial ends: ${new Date(u.trialEnd).toLocaleDateString()}</div>`:''}
-      ${u.plan==='trial'?`<div style="margin-top:20px"><a href="/pricing" style="background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;padding:12px 28px;border-radius:8px;font-family:var(--display);font-size:18px;letter-spacing:2px;text-decoration:none">UPGRADE NOW</a></div>`:''}`;
-    if(u.plan==='trial'&&new Date(u.trialEnd)<new Date())$('paywall').classList.add('show');
-    if(!['admin','monthly','annual','trial'].includes(u.plan))$('paywall').classList.add('show');
+      ${(u.plan==='trial'||u.plan==='free')?`<div style="margin-top:20px"><a href="/pricing" style="background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;padding:12px 28px;border-radius:8px;font-family:var(--display);font-size:18px;letter-spacing:2px;text-decoration:none">UPGRADE NOW</a></div>`:''}`;
+    if(u.plan==='trial'&&new Date(u.trialEnd)<new Date()){
+      // expired trial = free tier, don't show hard paywall
+      window_isPro = false;
+    }
+    if(u.plan==='free'){
+      $('paywall').classList.remove('show');
+    } else if(!['admin','monthly','annual','trial'].includes(u.plan)){
+      $('paywall').classList.add('show');
+    }
   }catch{window.location.href='/login';}
 }
 async function redeemPromo(){

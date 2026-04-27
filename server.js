@@ -36,7 +36,7 @@ const rssParser = new Parser();
 const userSchema = new mongoose.Schema({
   email:           { type: String, unique: true, lowercase: true, trim: true },
   passwordHash:    String,
-  plan:            { type: String, enum: ['trial','monthly','annual','admin'], default: 'trial' },
+  plan:            { type: String, enum: ['free','trial','monthly','annual','admin'], default: 'trial' },
   trialEnd:        Date,
   stripeCustomerId:String,
   stripeSubId:     String,
@@ -89,7 +89,12 @@ function activeAuth(req, res, next) {
   auth(req, res, () => {
     const { plan, trialEnd } = req.user;
     if (plan === 'admin' || plan === 'monthly' || plan === 'annual') return next();
+    if (plan === 'free') return next(); // free tier gets basic access
     if (plan === 'trial' && new Date(trialEnd) > new Date()) return next();
+    if (plan === 'trial' && new Date(trialEnd) <= new Date()) {
+      // expired trial downgrades to free
+      return next();
+    }
     res.status(403).json({ error: 'Subscription required' });
   });
 }
@@ -177,6 +182,14 @@ app.get('/api/me', auth, async (req, res) => {
   const user = await User.findById(req.user.id).select('-passwordHash -resetToken');
   const userData = user.toObject();
   userData.testMode = TEST_MODE;
+  // isPro: true if on paid plan, admin, or active trial
+  const now = new Date();
+  userData.isPro = (
+    userData.plan === 'monthly' ||
+    userData.plan === 'annual' ||
+    userData.plan === 'admin' ||
+    (userData.plan === 'trial' && new Date(userData.trialEnd) > now)
+  );
   res.json(userData);
 });
 
