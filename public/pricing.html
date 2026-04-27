@@ -5,68 +5,120 @@
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
-<link rel="apple-touch-icon" href="/favicon-192.png"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="apple-touch-icon" href="/favicon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pricing · Bullion Dealer Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--gold:#f0b429;--bg:#050508;--bg2:#0b0b12;--bg3:#12121e;--border:rgba(240,180,41,.18);--text:#d4cbb8;--muted:#6b6580;--green:#00e676;--font:'Rajdhani',sans-serif;--display:'Orbitron',sans-serif}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:52px 24px 60px;text-align:center;
   background-image:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,180,41,.08) 0%,transparent 60%)}
 .brand{font-family:var(--display);font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:12px}
-h1{font-family:var(--display);font-size:clamp(24px,4vw,40px);font-weight:900;color:var(--text);letter-spacing:3px;margin-bottom:10px}
-.sub{color:var(--muted);font-size:15px;letter-spacing:1px;margin-bottom:52px}
-.plans{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
-.plan{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:36px 28px;width:300px;position:relative;overflow:hidden;transition:border-color .2s}
-.plan::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(240,180,41,.3),transparent)}
-.plan.featured{border-color:var(--gold);box-shadow:0 0 40px rgba(240,180,41,.1)}
-.plan.featured::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.badge{position:absolute;top:-1px;right:20px;background:var(--gold);color:#000;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:0 0 10px 10px}
-.plan-name{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px}
-.plan-price{font-size:52px;font-weight:700;color:var(--gold);font-family:'Share Tech Mono',monospace;line-height:1}
-.plan-per{font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:28px;letter-spacing:1px}
-.plan-btn{display:block;width:100%;background:linear-gradient(135deg,var(--gold),#c88a00);color:#000;border:none;padding:14px;border-radius:8px;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:opacity .2s}
-.plan-btn:hover{opacity:.85}
-.feats{margin-top:24px;text-align:left;font-size:14px;color:var(--muted);line-height:2}
-.feats .ok{color:var(--green)}
-a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;text-decoration:none;letter-spacing:1px}
+h1{font-family:var(--display);font-size:clamp(22px,4vw,38px);font-weight:900;color:var(--text);letter-spacing:3px;margin-bottom:10px}
+.sub{color:var(--muted);font-size:15px;letter-spacing:0.5px;margin-bottom:40px;line-height:1.6}
+/* Free tier banner */
+.free-tier{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 28px;max-width:660px;width:100%;margin-bottom:36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.free-tier-left{text-align:left;}
+.free-tier-label{font-family:var(--display);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:4px;}
+.free-tier-title{font-family:var(--display);font-size:16px;color:var(--text);letter-spacing:2px;}
+.free-tier-desc{font-size:13px;color:var(--muted);margin-top:4px;}
+.free-feats{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+.free-feat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;}
+.free-feat span{color:var(--gold);}
+.free-btn{background:transparent;border:1px solid var(--border);color:var(--gold);padding:10px 22px;border-radius:8px;font-family:var(--display);font-size:12px;letter-spacing:2px;cursor:pointer;white-space:nowrap;text-decoration:none;transition:border-color .2s;}
+.free-btn:hover{border-color:var(--gold);}
+/* Plans */
+.plans-label{font-family:var(--display);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:20px;}
+.plans{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:700px;width:100%;}
+.plan{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:36px 28px;width:300px;position:relative;overflow:hidden;transition:border-color .2s;}
+.plan::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(240,180,41,.3),transparent);}
+.plan.featured{border-color:var(--gold);box-shadow:0 0 40px rgba(240,180,41,.1);}
+.plan.featured::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.badge{position:absolute;top:-1px;right:20px;background:var(--gold);color:#000;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:0 0 10px 10px;}
+.plan-name{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px;}
+.plan-price{font-size:52px;font-weight:700;color:var(--gold);font-family:'Share Tech Mono',monospace;line-height:1;}
+.plan-per{font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:28px;letter-spacing:1px;}
+.plan-btn{display:block;width:100%;background:linear-gradient(135deg,var(--gold),#c88a00);color:#000;border:none;padding:14px;border-radius:8px;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:opacity .2s;}
+.plan-btn:hover{opacity:.85;}
+.feats{margin-top:24px;text-align:left;font-size:14px;color:var(--muted);line-height:2.1;}
+.feats .ok{color:var(--green);}
+.trial-note{font-size:12px;color:var(--muted);margin-top:12px;letter-spacing:0.5px;}
+.trial-note strong{color:var(--gold);}
+a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;text-decoration:none;letter-spacing:1px;}
+#test-banner{display:none;background:#1a0a00;border:2px solid #ff6600;color:#ff9933;font-family:'Share Tech Mono',monospace;font-size:13px;text-align:center;padding:10px;letter-spacing:1px;margin-bottom:20px;border-radius:8px;max-width:660px;width:100%;}
+#test-card{display:none;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.3);border-radius:8px;padding:12px 20px;margin-top:-16px;margin-bottom:20px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#ff9933;line-height:1.8;max-width:660px;width:100%;}
 </style>
 </head>
 <body>
-  <div class="brand">◆ BULLION DEALER PRO</div>
-  <h1>SIMPLE PRICING</h1>
-  <div class="sub">Start with a 14-day free trial · No credit card required</div>
-  <div id="test-banner">⚠ TEST MODE ACTIVE — Use card 4242 4242 4242 4242 · No real charges</div>
+  <div class="brand">&#9670; BULLION DEALER PRO</div>
+  <h1>CHOOSE YOUR PLAN</h1>
+  <div class="sub">Start free &mdash; upgrade anytime when you need more.<br>No credit card required to get started.</div>
+
+  <div id="test-banner">&#9888; TEST MODE ACTIVE &mdash; Use card 4242 4242 4242 4242 &middot; No real charges</div>
   <div id="test-card">
     Test Card: 4242 4242 4242 4242<br>
     Expiry: any future date (e.g. 12/29)<br>
     CVC: any 3 digits (e.g. 123)<br>
     ZIP: any 5 digits (e.g. 12345)
   </div>
+
+  <!-- Free Tier -->
+  <div class="free-tier">
+    <div class="free-tier-left">
+      <div class="free-tier-label">ALWAYS FREE</div>
+      <div class="free-tier-title">FREE TIER</div>
+      <div class="free-feats">
+        <div class="free-feat"><span>&#10003;</span> Live Spot Prices</div>
+        <div class="free-feat"><span>&#10003;</span> Deal Calculator</div>
+        <div class="free-feat"><span>&#10003;</span> Silver Melt</div>
+        <div class="free-feat"><span>&#10003;</span> Pennies Melt</div>
+        <div class="free-feat"><span>&#10003;</span> Plat &amp; Palladium</div>
+      </div>
+    </div>
+    <a href="/register" class="free-btn">GET STARTED FREE</a>
+  </div>
+
+  <div class="plans-label">&#8595; UNLOCK EVERYTHING WITH PRO</div>
+
   <div class="plans">
     <div class="plan">
       <div class="plan-name">MONTHLY</div>
       <div class="plan-price">$19</div>
       <div class="plan-per">per month</div>
-      <button class="plan-btn" onclick="checkout('monthly')">GET STARTED</button>
-      <div class="feats"><span class="ok">✓</span> Live spot prices<br><span class="ok">✓</span> All calculators<br><span class="ok">✓</span> Inventory tracker<br><span class="ok">✓</span> Key dates & errors<br><span class="ok">✓</span> Cancel anytime</div>
+      <button class="plan-btn" onclick="checkout('monthly')">UPGRADE TO PRO</button>
+      <div class="feats">
+        <span class="ok">&#10003;</span> Everything in Free<br>
+        <span class="ok">&#10003;</span> Gold Karat Calculator<br>
+        <span class="ok">&#10003;</span> Goldback Pricing &amp; Retailers<br>
+        <span class="ok">&#10003;</span> Inventory Tracker<br>
+        <span class="ok">&#10003;</span> Coin Values Reference<br>
+        <span class="ok">&#10003;</span> Key Dates Guide<br>
+        <span class="ok">&#10003;</span> Mint Error Guide<br>
+        <span class="ok">&#10003;</span> Coin Grading Scale<br>
+        <span class="ok">&#10003;</span> Currency Exchange<br>
+        <span class="ok">&#10003;</span> Cancel anytime
+      </div>
+      <div class="trial-note">&#127381; Includes a <strong>14-day free Pro trial</strong></div>
     </div>
     <div class="plan featured">
       <div class="badge">BEST VALUE</div>
       <div class="plan-name">ANNUAL</div>
       <div class="plan-price">$149</div>
-      <div class="plan-per">per year · save $79</div>
-      <button class="plan-btn" onclick="checkout('annual')">GET STARTED</button>
-      <div class="feats"><span class="ok">✓</span> Everything in Monthly<br><span class="ok">✓</span> 2 months free<br><span class="ok">✓</span> Priority support</div>
+      <div class="plan-per">per year &middot; save $79</div>
+      <button class="plan-btn" onclick="checkout('annual')">UPGRADE TO PRO</button>
+      <div class="feats">
+        <span class="ok">&#10003;</span> Everything in Monthly<br>
+        <span class="ok">&#10003;</span> 2 months free<br>
+        <span class="ok">&#10003;</span> Priority support
+      </div>
+      <div class="trial-note">&#127381; Includes a <strong>14-day free Pro trial</strong></div>
     </div>
   </div>
-  <a class="back" href="/">← Back to home</a>
-<style>
-#test-banner{display:none;background:#1a0a00;border:2px solid #ff6600;color:#ff9933;font-family:'Share Tech Mono',monospace;font-size:13px;text-align:center;padding:10px;letter-spacing:1px;margin-bottom:20px;border-radius:8px;}
-#test-card{display:none;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.3);border-radius:8px;padding:12px 20px;margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#ff9933;line-height:1.8;}
-</style>
+
+  <a class="back" href="/">&#8592; Back to home</a>
+
 <script>
-// Check if test mode is active
 fetch('/api/me').then(r=>r.json()).then(u=>{
   if(u.testMode){
     document.getElementById('test-banner').style.display='block';
