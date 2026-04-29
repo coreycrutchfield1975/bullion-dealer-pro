@@ -434,6 +434,7 @@ app.get('/api/admin/promos', adminAuth, async (req, res) => {
 // ════════════════════════════════════════════════════════════════════════════════
 // STATIC FILES
 // ════════════════════════════════════════════════════════════════════════════════
+app.get('/privacy', (req, res) => res.sendFile(path.join(__dirname, 'public', 'privacy.html')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Page routes
