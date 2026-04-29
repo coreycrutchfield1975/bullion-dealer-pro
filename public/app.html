@@ -1538,6 +1538,29 @@ function _cvIsError(d){return d.includes('DDO')||d.includes('DDR')||d.includes('
 
 function renderCoinVals(){
   initCoinValDropdowns();
+  // ── Live spot melt floor: never show a silver coin below melt value ──
+  const liveAg = (spot && spot.XAG) ? spot.XAG : 0;
+  const liveAu = (spot && spot.XAU) ? spot.XAU : 0;
+  function cvMeltFloor(c, gradeKey){
+    const v = c[gradeKey];
+    if(v == null) return null;
+    // Silver content oz for this series
+    const agOz = (COIN_OZ[c.s] || 0);
+    let auOz = 0;
+    if(c.s.startsWith('Gold ') || c.s.startsWith('Silver Eagle')) {
+      // Gold Eagles / Buffalos use gold oz; Silver Eagle uses silver
+      if(c.s === 'Silver Eagle') { /* agOz already = 1.0 */ }
+      else {
+        const gmap = {'Gold Eagle 1oz':1,'Gold Eagle 1/2oz':0.5,'Gold Eagle 1/4oz':0.25,'Gold Eagle 1/10oz':0.1,'Gold Buffalo 1oz':1,'Gold $20 St. Gaudens':0.9677,'Gold $20 Liberty':0.9677,'Gold $10 Liberty':0.4838,'Gold $10 Indian':0.4838,'Gold $5 Liberty':0.2419,'Gold $5 Indian':0.2419,'Gold $2.50 Liberty':0.1209,'Gold $2.50 Indian':0.1209,'Gold $3 Princess':0.1452,'Gold $1 (Type 1)':0.04837,'Gold $1 (Type 3)':0.04837};
+        auOz = gmap[c.s] || 0;
+      }
+    }
+    const melt = (agOz * liveAg) + (auOz * liveAu);
+    // Apply grade-based premium over melt: G4=5%, VG8=8%, F12=12%, VF20=18%, EF40=32%, AU50=55%, MS63=120%, MS65=350%
+    const premiums = {G4:0.05,VG8:0.08,F12:0.12,VF20:0.18,EF40:0.32,AU50:0.55,MS63:1.2,MS65:3.5};
+    const floor = melt > 0 ? Math.ceil(melt * (1 + (premiums[gradeKey]||0))) : 0;
+    return Math.max(v, floor);
+  }
   const series=$('cv-series').value;
   const grade=$('cv-grade').value;
   const searchEl=document.getElementById('cv-search');
@@ -1581,10 +1604,12 @@ function renderCoinVals(){
     const rowBg=isKey?'background:rgba(200,50,50,0.08)':'';
     const cells=grades.map(g=>{
       if(grade && g!==grade) return '';
-      const v=c[g];
+      const raw=c[g];
+      const v=cvMeltFloor(c,g);
+      const bumped=(raw!=null && v!=null && v>raw);
       const col=v!=null&&v>=1000?'#ffd700':'var(--gold)';
       const fw=v!=null&&v>=1000?'bold':'normal';
-      const disp=v!=null?'$'+v.toLocaleString():'<span style="color:#444">\u2014</span>';
+      const disp=v!=null?'$'+v.toLocaleString()+(bumped?'<sup title="Live melt floor applied" style="font-size:8px;color:#aaa">⚡</sup>':''):'<span style="color:#444">—</span>';
       return'<td style="color:'+col+';font-family:var(--mono);text-align:right;font-weight:'+fw+'">'+disp+'</td>';
     }).join('');
     const jc=JSON.stringify(c).replace(/'/g,"\'");
