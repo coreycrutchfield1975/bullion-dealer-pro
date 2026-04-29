@@ -251,6 +251,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17
   border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:10px;
 }
+.cv-premium-badge{background:linear-gradient(90deg,#b8860b,#ffd700);color:#000;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;vertical-align:middle;margin-left:8px}
 .sec-title::before{
   content:'';width:4px;height:16px;border-radius:2px;
   background:linear-gradient(to bottom,var(--gold2),var(--gold3));
@@ -522,6 +523,34 @@ tr:hover td{background:rgba(240,180,41,.025)}
   .banner-dragon-img{height:50px;}
   #banner-title{font-size:22px;}
   .spot-pill{min-width:80px;}
+}
+
+/* ===== COIN VALUES TAB RESPONSIVE ===== */
+/* Desktop: filters in one row */
+#tab-coinvals .cv-filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* Tablet (≤768px): stack filter row, full-width search */
+@media(max-width:768px){
+  #tab-coinvals #cv-search{font-size:13px;padding:8px 12px;}
+  #tab-coinvals select,#tab-coinvals input[type=number]{
+    flex:1 1 140px;min-width:120px;
+  }
+  #cv-count{display:block;width:100%;margin-top:4px;}
+  /* Coin values table — reduce font slightly */
+  #cv-table td,#cv-table th{font-size:11px;padding:5px 6px;}
+}
+
+/* Phone (≤520px): everything stacks, hide less-critical grade columns */
+@media(max-width:520px){
+  #tab-coinvals #cv-search{font-size:12px;}
+  #tab-coinvals select,#tab-coinvals input[type=number]{width:100%;box-sizing:border-box;}
+  /* On very small screens hide F-12, VF-20, EF-40 columns to keep table scannable */
+  #cv-table th:nth-child(5),#cv-table td:nth-child(5),
+  #cv-table th:nth-child(6),#cv-table td:nth-child(6),
+  #cv-table th:nth-child(7),#cv-table td:nth-child(7){display:none;}
+  #cv-table td,#cv-table th{font-size:11px;padding:5px 4px;}
+  /* Make ADD button smaller */
+  #cv-table button{padding:2px 6px!important;font-size:10px!important;}
 }
 
 </style>
@@ -972,7 +1001,14 @@ tr:hover td{background:rgba(240,180,41,.025)}
 
   <!-- COIN VALUES -->
   <div id="tab-coinvals" class="section">
-    <div class="sec-title">Coin Values Reference</div>
+    <div class="sec-title">Coin Values Reference <span class="cv-premium-badge">⭐ PREMIUM</span></div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">PCGS-sourced graded retail values · Updated April 2026</p>
+    <!-- Search + Filters -->
+    <div style="margin-bottom:10px">
+      <input type="text" id="cv-search" placeholder="🔍 Search series or date (e.g. Morgan, 1921, DDO)..."
+        oninput="renderCoinVals()"
+        style="width:100%;box-sizing:border-box;padding:9px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:14px;font-family:var(--font)"/>
+    </div>
     <div style="margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <select id="cv-series" onchange="renderCoinVals()" style="min-width:180px">
         <option value="">— All Series —</option>
@@ -988,14 +1024,30 @@ tr:hover td{background:rgba(240,180,41,.025)}
         <option value="MS63">MS-63 (Choice)</option>
         <option value="MS65">MS-65 (Gem)</option>
       </select>
-      <span style="font-size:12px;color:var(--muted)">Values are fair market retail estimates</span>
+      <span style="font-size:12px;color:var(--muted)">Min $:</span>
+      <input type="number" id="cv-minval" placeholder="0" oninput="renderCoinVals()"
+        style="width:80px;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px"/>
+      <span id="cv-count" style="font-size:12px;color:var(--muted);margin-left:4px"></span>
     </div>
     <div class="tbl-wrap">
       <table id="cv-table">
-        <thead><tr><th>SERIES</th><th>DATE/VARIETY</th><th>G-4</th><th>VG-8</th><th>F-12</th><th>VF-20</th><th>EF-40</th><th>AU-50</th><th>MS-63</th><th>MS-65</th><th></th></tr></thead>
+        <thead><tr>
+          <th onclick="cvSortBy('s')" style="cursor:pointer">SERIES ⇅</th>
+          <th onclick="cvSortBy('d')" style="cursor:pointer">DATE/VARIETY ⇅</th>
+          <th onclick="cvSortBy('G4')" style="cursor:pointer;text-align:right">G-4 ⇅</th>
+          <th onclick="cvSortBy('VG8')" style="cursor:pointer;text-align:right">VG-8 ⇅</th>
+          <th onclick="cvSortBy('F12')" style="cursor:pointer;text-align:right">F-12 ⇅</th>
+          <th onclick="cvSortBy('VF20')" style="cursor:pointer;text-align:right">VF-20 ⇅</th>
+          <th onclick="cvSortBy('EF40')" style="cursor:pointer;text-align:right">EF-40 ⇅</th>
+          <th onclick="cvSortBy('AU50')" style="cursor:pointer;text-align:right">AU-50 ⇅</th>
+          <th onclick="cvSortBy('MS63')" style="cursor:pointer;text-align:right">MS-63 ⇅</th>
+          <th onclick="cvSortBy('MS65')" style="cursor:pointer;text-align:right">MS-65 ⇅</th>
+          <th></th>
+        </tr></thead>
         <tbody id="cv-tbody"></tbody>
       </table>
     </div>
+    <p style="font-size:11px;color:#555;margin-top:12px;font-style:italic">⚠️ Retail estimates only. Actual values vary by grade, certification, and market. Verify high-value coins with a professional.</p>
   </div>
 
   <!-- KEY DATES -->
@@ -1468,20 +1520,76 @@ function initCoinValDropdowns(){
   const invSel=$('inv-coin-series');
   if(invSel.options.length<=1) series.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;invSel.appendChild(o);});
 }
+// CV sort state
+let _cvSortKey=null,_cvSortAsc=true;
+function cvSortBy(k){if(_cvSortKey===k)_cvSortAsc=!_cvSortAsc;else{_cvSortKey=k;_cvSortAsc=true;}renderCoinVals();}
+
+const CV_KEY_DATES=['1909-S VDB','1914-D','1931-S','1922 Plain','1877','1909-S',
+  '1916-D','1921','1921-D','1916','1918/7-S','1923-S','1932-D','1932-S',
+  '1889-CC','1893-S','1895 Proof','1885-CC','1921 High Relief','1928','1934-S',
+  '1907 High Relief','1927-D','1913 (Specimen)','1885','1886','1912-S',
+  '1913-S T2','1916 DDO','1918/7-D','1926-S','1937-D 3-Leg','1870-S',
+  '1885 (Proof only)','1894-S','1901-S','1895-O'];
+function _cvIsKey(d){return CV_KEY_DATES.includes(d);}
+function _cvIsError(d){return d.includes('DDO')||d.includes('DDR')||d.includes('Error')||
+  (d.includes('/')&&!d.includes('/oz'))||d.includes('Overdate');}
+
 function renderCoinVals(){
   initCoinValDropdowns();
   const series=$('cv-series').value;
   const grade=$('cv-grade').value;
+  const searchEl=document.getElementById('cv-search');
+  const q=searchEl?searchEl.value.toLowerCase().trim():'';
+  const minEl=document.getElementById('cv-minval');
+  const minVal=minEl?parseFloat(minEl.value)||0:0;
   const grades=['G4','VG8','F12','VF20','EF40','AU50','MS63','MS65'];
-  const filtered=series?CV.filter(c=>c.s===series):CV;
+
+  let filtered=CV.filter(c=>{
+    if(series && c.s!==series) return false;
+    if(q && !c.s.toLowerCase().includes(q) && !c.d.toLowerCase().includes(q)) return false;
+    if(grade){
+      const gi=grades.indexOf(grade);
+      let has=false;
+      for(let i=gi;i<grades.length;i++){if(c[grades[i]]!=null){has=true;break;}}
+      if(!has) return false;
+    }
+    if(minVal>0){
+      const mx=Math.max(...grades.map(g=>c[g]||0));
+      if(mx<minVal) return false;
+    }
+    return true;
+  });
+
+  if(_cvSortKey){
+    filtered.sort((a,b)=>{
+      const av=typeof a[_cvSortKey]==='string'?a[_cvSortKey]:(a[_cvSortKey]||-1);
+      const bv=typeof b[_cvSortKey]==='string'?b[_cvSortKey]:(b[_cvSortKey]||-1);
+      return _cvSortAsc?(av<bv?-1:av>bv?1:0):(av<bv?1:av>bv?-1:0);
+    });
+  }
+
+  const cntEl=document.getElementById('cv-count');
+  if(cntEl) cntEl.textContent='Showing '+filtered.length+' of '+CV.length+' coins';
+
   $('cv-tbody').innerHTML=filtered.map(c=>{
+    const isKey=_cvIsKey(c.d);
+    const isErr=_cvIsError(c.d);
+    const badge=isKey?'<span style="display:inline-block;background:#c00;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">KEY</span>':
+      (isErr?'<span style="display:inline-block;background:#a05000;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">ERR</span>':'');
+    const rowBg=isKey?'background:rgba(200,50,50,0.08)':'';
     const cells=grades.map(g=>{
       if(grade && g!==grade) return '';
       const v=c[g];
-      return`<td style="color:var(--gold);font-family:var(--mono)">${v!=null?'$'+v.toLocaleString():'—'}</td>`;
+      const col=v!=null&&v>=1000?'#ffd700':'var(--gold)';
+      const fw=v!=null&&v>=1000?'bold':'normal';
+      const disp=v!=null?'$'+v.toLocaleString():'<span style="color:#444">\u2014</span>';
+      return'<td style="color:'+col+';font-family:var(--mono);text-align:right;font-weight:'+fw+'">'+disp+'</td>';
     }).join('');
-    const addBtn=`<td><button onclick="prefillInventory('${c.s.replace(/'/g,"\'")}','${c.d.replace(/'/g,"\'")}',${JSON.stringify(c)})" style="background:var(--gold);color:#000;border:none;padding:3px 8px;font-size:11px;cursor:pointer;border-radius:3px">ADD</button></td>`;
-    return`<tr><td style="color:#fff;font-weight:700">${c.s}</td><td style="color:var(--muted)">${c.d}</td>${cells}${addBtn}</tr>`;
+    const jc=JSON.stringify(c).replace(/'/g,"\'");
+    const ds=c.d.replace(/\\/g,'\\\\').replace(/'/g,"\'");
+    const ss=c.s.replace(/\\/g,'\\\\').replace(/'/g,"\'");
+    const addBtn='<td><button onclick="prefillInventory(\''+ss+'\',\''+ds+'\','+jc+')" style="background:var(--gold);color:#000;border:none;padding:3px 8px;font-size:11px;cursor:pointer;border-radius:3px">ADD</button></td>';
+    return'<tr style="'+rowBg+'"><td style="color:#aaa;font-size:12px">'+c.s+'</td><td style="color:#eee;font-weight:500">'+c.d+badge+'</td>'+cells+addBtn+'</tr>';
   }).join('');
 }
 function invCoinSeriesChange(){
