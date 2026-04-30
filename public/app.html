@@ -781,8 +781,12 @@ tr:hover td{background:rgba(240,180,41,.025)}
 
   <!-- GOLDBACKS -->
   <div id="tab-goldback" class="section">
-    <div class="sec-title">Goldbacks — Live Melt Value</div>
-    <div class="tbl-wrap"><table><thead><tr><th>DENOMINATION</th><th>GOLD OZ</th><th>MELT VALUE</th></tr></thead><tbody id="gb-tbody"></tbody></table></div>
+    <div class="sec-title">Goldbacks — Official Exchange Rate</div>
+    <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:10px;letter-spacing:1px">
+      📡 Official exchange rates from <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold);text-decoration:none">goldback.com</a> — updated daily at 10 AM MST
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>DENOMINATION</th><th>GOLD OZ</th><th>OFFICIAL RATE</th></tr></thead><tbody id="gb-tbody"></tbody></table></div>
+    <div id="gb-updated" style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:8px;letter-spacing:1px"></div>
 
     <!-- RETAILER PRICING -->
     <div class="sec-title" style="margin-top:32px">📦 Where to Buy Goldbacks — Retailer Prices</div>
@@ -1372,7 +1376,17 @@ const SR=[
   {n:'Eisenhower Roll (20)',q:20,oz:6.322},{n:'War Nickels Roll (40)',q:40,oz:2.252},
 ];
 const GK=[{k:'24K',p:1},{k:'22K',p:.9167},{k:'21K',p:.875},{k:'18K',p:.75},{k:'14K',p:.5833},{k:'12K',p:.5},{k:'10K',p:.4167},{k:'9K',p:.375}];
-const GB=[{d:'1 Goldback',oz:.000999},{d:'5 Goldback',oz:.004995},{d:'10 Goldback',oz:.00999},{d:'25 Goldback',oz:.02498},{d:'50 Goldback',oz:.04995},{d:'100 Goldback',oz:.0999}];
+const GB=[
+  {d:'¼ Goldback', oz:1/4000, mul:0.25},
+  {d:'½ Goldback', oz:1/2000, mul:0.5},
+  {d:'1 Goldback',  oz:1/1000, mul:1},
+  {d:'2 Goldback',  oz:1/500,  mul:2},
+  {d:'5 Goldback',  oz:1/200,  mul:5},
+  {d:'10 Goldback', oz:1/100,  mul:10},
+  {d:'25 Goldback', oz:1/40,   mul:25},
+  {d:'50 Goldback', oz:1/20,   mul:50},
+  {d:'100 Goldback',oz:1/10,   mul:100}
+];
 const PQ=[1,10,100,500,1000,2500,5000];
 const DL=[
   {n:'APMEX',i:[{item:'Silver Eagles',low:'12%',avg:'15%',high:'18%'},{item:'Silver Maples',low:'10%',avg:'12%',high:'15%'},{item:'90% Junk Silver',low:'3%',avg:'5%',high:'6%'},{item:'Gold Eagles',low:'4%',avg:'5%',high:'6%'},{item:'Gold Buffalos',low:'4%',avg:'5.5%',high:'7%'},{item:'Platinum Eagles',low:'6%',avg:'8%',high:'10%'}]},
@@ -1519,7 +1533,22 @@ function renderGoldKarats(){
   $('gk-tbody').innerHTML=GK.map(g=>{const m=s*g.p;return`<tr><td>${g.k}</td><td>${(g.p*100).toFixed(2)}%</td><td>${m?'$'+m.toFixed(2):'—'}</td><td class="up">${m?'$'+(m*(1-bp/100)).toFixed(2):'—'}</td><td style="color:var(--orange)">${m?'$'+(m*(1+s2/100)).toFixed(2):'—'}</td></tr>`;}).join('');
 }
 function renderGoldbacks(){
-  const s=spot.XAU;$('gb-tbody').innerHTML=GB.map(g=>{const m=s*g.oz;return`<tr><td>${g.d}</td><td>${g.oz}</td><td>${m?'$'+m.toFixed(4):'—'}</td></tr>`;}).join('');
+  // Fetch official Goldback exchange rate
+  fetch('/api/goldback-rate').then(r=>r.json()).then(data=>{
+    if(data.rates && data.rates.length){
+      $('gb-tbody').innerHTML = data.rates.map(g=>`<tr><td>${g.label}</td><td>${(g.oz).toFixed(6)} oz</td><td style="color:var(--gold);font-family:var(--mono);font-weight:700">$${g.rate.toFixed(4)}</td></tr>`).join('');
+      if(data.updated) $('gb-updated').textContent='Last updated: '+new Date(data.updated).toLocaleString()+' · Source: goldback.com';
+    } else {
+      // Fallback to melt-based calc if scrape fails
+      const s=spot.XAU;
+      $('gb-tbody').innerHTML=GB.map(g=>{const m=s*(g.oz);return`<tr><td>${g.d}</td><td>${g.oz.toFixed(6)} oz</td><td style="font-family:var(--mono);">${m?'$'+m.toFixed(4):'—'}</td></tr>`;}).join('');
+      $('gb-updated').textContent='⚠ Could not reach goldback.com — showing gold melt estimate';
+    }
+  }).catch(()=>{
+    const s=spot.XAU;
+    $('gb-tbody').innerHTML=GB.map(g=>{const m=s*(g.oz);return`<tr><td>${g.d}</td><td>${g.oz.toFixed(6)} oz</td><td>${m?'$'+m.toFixed(4):'—'}</td></tr>`;}).join('');
+    $('gb-updated').textContent='⚠ Could not reach goldback.com — showing gold melt estimate';
+  });
 }
 function renderPlatPal(){
   ['xpt','xpd'].forEach(m=>{

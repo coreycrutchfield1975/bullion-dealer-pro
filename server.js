@@ -352,6 +352,61 @@ app.post('/api/create-checkout', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+
+// Goldback exchange rate proxy
+const goldbackCache = { data: null, ts: 0 };
+app.get('/api/goldback-rate', async (req, res) => {
+  try {
+    if (goldbackCache.data && Date.now() - goldbackCache.ts < 30 * 60 * 1000)
+      return res.json(goldbackCache.data);
+    const r = await fetch('https://www.goldback.com/exchange-rates/', {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
+    });
+    const html = await r.text();
+    // Extract rates - goldback.com lists them as "$9.46" pattern near denomination labels
+    const rates = {};
+    const denoms = [
+      { key: '1/4', label: '¼ Goldback', oz: 1/4000 },
+      { key: '1/2', label: '½ Goldback', oz: 1/2000 },
+      { key: '1',   label: '1 Goldback',  oz: 1/1000 },
+      { key: '2',   label: '2 Goldback',  oz: 1/500  },
+      { key: '5',   label: '5 Goldback',  oz: 1/200  },
+      { key: '10',  label: '10 Goldback', oz: 1/100  },
+      { key: '25',  label: '25 Goldback', oz: 1/40   },
+      { key: '50',  label: '50 Goldback', oz: 1/20   },
+      { key: '100', label: '100 Goldback',oz: 1/10   }
+    ];
+    // Try to find the 1 Goldback base rate — pattern: "1 : $X.XX" or similar
+    const match1 = html.match(/1\s*[Gg]oldback[^$]*\$\s*([\d.]+)/);
+    const matchBase = html.match(/\$\s*([\d.]+)\s*[—\-–]\s*Contains\s*1\/1000/);
+    let base = null;
+    if (matchBase) base = parseFloat(matchBase[1]);
+    else if (match1) base = parseFloat(match1[1]);
+    // Also try pattern like "9.46" near "1/1000"
+    if (!base) {
+      const m = html.match(/1\/1000[^$]*\$\s*([\d.]+)/);
+      if (m) base = parseFloat(m[1]);
+    }
+    if (base && base > 1) {
+      const data = denoms.map(d => ({
+        label: d.label,
+        oz: d.oz,
+        rate: +(base * parseFloat(d.key.includes('/') ? eval(d.key) : d.key)).toFixed(4)
+      }));
+      // fix quarter and half manually
+      data[0].rate = +(base * 0.25).toFixed(4);
+      data[1].rate = +(base * 0.5).toFixed(4);
+      goldbackCache.data = { base, rates: data, updated: new Date().toISOString() };
+      goldbackCache.ts = Date.now();
+      return res.json(goldbackCache.data);
+    }
+    throw new Error('Could not parse rate from goldback.com');
+  } catch(e) {
+    console.log('[goldback-rate] error:', e.message);
+    // Fallback: return null so client knows to show static
+    return res.json({ base: null, rates: null, error: e.message });
+  }
+});
 app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   let event;
   try {
