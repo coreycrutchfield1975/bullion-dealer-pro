@@ -341,7 +341,7 @@ app.post('/api/create-checkout', auth, async (req, res) => {
       payment_method_types: ['card'],
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${APP_URL}/app?success=1`,
+      success_url: `${APP_URL}/?success=1`,
       cancel_url:  `${APP_URL}/pricing`
     };
     if (trialDaysLeft > 0) {
@@ -493,7 +493,7 @@ app.get('/privacy', (req, res) => res.sendFile(path.join(__dirname, 'public', 'p
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Page routes
-app.get('/', (req, res) => res.redirect('/app'));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'app.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
 app.get('/pricing', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pricing.html')));
