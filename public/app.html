@@ -1113,7 +1113,76 @@ tr:hover td{background:rgba(240,180,41,.025)}
 
   <!-- GRADING -->
   <div id="tab-grading" class="section">
-    <div class="sec-title">Sheldon Coin Grading Scale</div>
+    <div class="sec-title">Coin Grading Reference</div>
+
+    <!-- GRADING LOOKUP TOOL -->
+    <div class="card" style="margin-bottom:24px">
+      <div style="font-family:var(--display);font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:6px">🔍 PHOTO GRADING LOOKUP</div>
+      <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:16px;letter-spacing:1px">Select a coin series to view grading photos from PCGS &amp; NGC</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+        <select id="grade-lookup-series" style="flex:1;min-width:220px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;font-family:var(--font);font-size:14px">
+          <option value="">— Select a Coin Series —</option>
+          <optgroup label="CENTS">
+            <option value="lincoln-cents-wheat|1069">Lincoln Cent (Wheat)</option>
+            <option value="lincoln-cents-memorial|1070">Lincoln Cent (Memorial)</option>
+            <option value="indian-head-cents|1041">Indian Head Cent</option>
+            <option value="flying-eagle-cents|1037">Flying Eagle Cent</option>
+            <option value="large-cents|1001">Large Cent (1793–1857)</option>
+          </optgroup>
+          <optgroup label="NICKELS">
+            <option value="jefferson-nickels|1093">Jefferson Nickel</option>
+            <option value="buffalo-nickels|1085">Buffalo Nickel</option>
+            <option value="liberty-head-nickels|1083">Liberty Head (V) Nickel</option>
+            <option value="shield-nickels|1081">Shield Nickel</option>
+          </optgroup>
+          <optgroup label="DIMES">
+            <option value="roosevelt-dimes|1107">Roosevelt Dime</option>
+            <option value="mercury-dimes|1103">Mercury Dime</option>
+            <option value="barber-dimes|1099">Barber Dime</option>
+            <option value="seated-liberty-dimes|1097">Seated Liberty Dime</option>
+          </optgroup>
+          <optgroup label="QUARTERS">
+            <option value="washington-quarters|1121">Washington Quarter</option>
+            <option value="standing-liberty-quarters|1117">Standing Liberty Quarter</option>
+            <option value="barber-quarters|1113">Barber Quarter</option>
+            <option value="seated-liberty-quarters|1111">Seated Liberty Quarter</option>
+          </optgroup>
+          <optgroup label="HALF DOLLARS">
+            <option value="kennedy-half-dollars|1135">Kennedy Half Dollar</option>
+            <option value="franklin-half-dollars|1133">Franklin Half Dollar</option>
+            <option value="walking-liberty-halves|1131">Walking Liberty Half</option>
+            <option value="barber-halves|1127">Barber Half Dollar</option>
+            <option value="seated-liberty-halves|1125">Seated Liberty Half</option>
+          </optgroup>
+          <optgroup label="DOLLARS">
+            <option value="morgan-dollars|1151">Morgan Dollar</option>
+            <option value="peace-dollars|1153">Peace Dollar</option>
+            <option value="eisenhower-dollars|1155">Eisenhower Dollar</option>
+            <option value="seated-liberty-dollars|1143">Seated Liberty Dollar</option>
+            <option value="trade-dollars|1147">Trade Dollar</option>
+            <option value="bust-dollars|1137">Bust Dollar</option>
+          </optgroup>
+          <optgroup label="GOLD">
+            <option value="saint-gaudens-double-eagles|8963">Saint-Gaudens Double Eagle</option>
+            <option value="liberty-head-double-eagles|8927">Liberty Head Double Eagle</option>
+            <option value="american-gold-eagle|9238">American Gold Eagle</option>
+            <option value="indian-head-eagles|8903">Indian Head Eagle ($10)</option>
+            <option value="liberty-head-half-eagles|8845">Liberty Head Half Eagle ($5)</option>
+          </optgroup>
+          <optgroup label="SILVER DOLLARS / COMMEMORATIVE">
+            <option value="american-silver-eagle|9221">American Silver Eagle</option>
+            <option value="early-commemoratives|9001">Early Commemoratives</option>
+          </optgroup>
+        </select>
+        <button onclick="openGradingLookup('pcgs')" style="background:linear-gradient(135deg,#1a3a5c,#2a5a8c);color:#fff;border:1px solid rgba(42,90,140,.8);padding:10px 18px;border-radius:8px;font-family:var(--display);letter-spacing:1.5px;cursor:pointer;font-size:14px;white-space:nowrap">📸 PCGS PHOTOGRADE</button>
+        <button onclick="openGradingLookup('ngc')" style="background:linear-gradient(135deg,#1a3a1a,#2a6a2a);color:#fff;border:1px solid rgba(42,106,42,.8);padding:10px 18px;border-radius:8px;font-family:var(--display);letter-spacing:1.5px;cursor:pointer;font-size:14px;white-space:nowrap">🔬 NGC GUIDE</button>
+        <button onclick="openGradingLookup('coinfacts')" style="background:linear-gradient(135deg,#c8830a,#f0b429);color:#000;border:none;padding:10px 18px;border-radius:8px;font-family:var(--display);letter-spacing:1.5px;cursor:pointer;font-size:14px;white-space:nowrap">💎 PCGS COINFACTS</button>
+      </div>
+      <div id="grade-lookup-info" style="font-size:12px;color:var(--muted);font-family:var(--mono);min-height:18px"></div>
+    </div>
+
+    <!-- SHELDON SCALE TABLE -->
+    <div class="sec-title" style="margin-top:4px">Sheldon Grading Scale</div>
     <div class="tbl-wrap"><table class="grade-table"><thead><tr><th>GRADE</th><th>NAME</th><th>DESCRIPTION</th></tr></thead><tbody id="grade-tbody"></tbody></table></div>
   </div>
 
@@ -2026,6 +2095,37 @@ function filterFX(){
   }).join('');
   if(!rows.length&&q)$('fx-status').textContent='No currencies match your search.';
   else $('fx-status').textContent='';
+}
+
+function openGradingLookup(source) {
+  const sel = document.getElementById('grade-lookup-series');
+  const val = sel.value;
+  const info = document.getElementById('grade-lookup-info');
+  if (!val) {
+    info.textContent = '⚠ Please select a coin series first.';
+    info.style.color = 'var(--red)';
+    return;
+  }
+  const [slug, pcgsId] = val.split('|');
+  const label = sel.options[sel.selectedIndex].text;
+  info.style.color = 'var(--muted)';
+
+  if (source === 'pcgs') {
+    // PCGS Photograde — opens the tool, user selects series there
+    window.open('https://www.pcgs.com/photograde', '_blank');
+    info.textContent = '↗ Opened PCGS Photograde — select "' + label + '" from the menu on their site.';
+  } else if (source === 'ngc') {
+    // NGC Coin Grading Guide
+    window.open('https://www.ngccoin.com/coin-grading/', '_blank');
+    info.textContent = '↗ Opened NGC Grading Guide — browse to "' + label + '" on their site.';
+  } else if (source === 'coinfacts') {
+    // PCGS CoinFacts — supports deep links by series ID
+    const url = pcgsId
+      ? `https://www.pcgs.com/coinfacts/series/${slug}-${pcgsId}`
+      : `https://www.pcgs.com/coinfacts`;
+    window.open(url, '_blank');
+    info.textContent = '↗ Opened PCGS CoinFacts for ' + label + ' — includes photos, history & values.';
+  }
 }
 
 </script>
