@@ -1415,7 +1415,7 @@ const GR=[
 ];
 
 // ════════════════════ STATE ════════════════════
-const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0};
+const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0,ZN:0};
 let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
 
 // ════════════════════ TABS ════════════════════
@@ -1446,6 +1446,7 @@ async function loadSpot(){
   function set(sym,data,pid,cid){if(!data)return;spot[sym]=data.price||0;$(pid).textContent=fmt(spot[sym]);$(cid).innerHTML=chg(data.ch,data.prev_close_price);}
   set('XAU',xau,'sp-xau','sc-xau');set('XAG',xag,'sp-xag','sc-xag');
   if(xcu){spot.HG=xcu.price||0;$('sp-hg').textContent=fmt(spot.HG,3);$('sc-hg').innerHTML=chg(xcu.ch,xcu.prev_close_price);}
+  fetch('/api/metals/ZN').then(r=>r.json()).then(d=>{if(d.price)spot.ZN=d.price;}).catch(()=>{spot.ZN=1.30;});
   set('XPT',xpt,'sp-xpt','sc-xpt');set('XPD',xpd,'sp-xpd','sc-xpd');
   if(xau){$('m-xau').textContent=fmt(spot.XAU);$('m-xau-g').innerHTML=fmt(spot.XAU/31.1035)+'<span>per gram</span>';$('m-xau-dwt').innerHTML=fmt(spot.XAU/20)+'<span>per DWT</span>';$('m-xau-kg').innerHTML=fmt(spot.XAU*32.1507,0)+'<span>per kg</span>';}
   if(xag){$('m-xag').textContent=fmt(spot.XAG);$('m-xag-g').innerHTML=fmt(spot.XAG/31.1035,3)+'<span>per gram</span>';$('m-xag-dwt').innerHTML=fmt(spot.XAG/20,3)+'<span>per DWT</span>';$('m-face').innerHTML=fmt(spot.XAG*.715)+'<span>per $1 face</span>';}
