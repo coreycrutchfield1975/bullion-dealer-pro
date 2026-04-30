@@ -735,6 +735,39 @@ tr:hover td{background:rgba(240,180,41,.025)}
   <!-- PENNIES -->
   <div id="tab-pennies" class="section">
     <div class="sec-title">Copper Pennies — Pre-1982 — 95% Cu</div>
+
+    <!-- Custom penny calculator -->
+    <div style="background:var(--surface,#111);border:1px solid var(--gold3);border-radius:10px;padding:18px 20px;margin-bottom:22px;max-width:420px">
+      <div style="font-family:var(--display);font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:14px">⚙ PENNY MELT CALCULATOR</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <label style="font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap">NUMBER OF PENNIES</label>
+        <input id="penny-calc-input" type="number" min="1" step="1" placeholder="e.g. 100"
+          style="flex:1;background:#1a1a2e;border:1px solid var(--gold3);border-radius:6px;color:var(--gold2);font-family:var(--mono);font-size:16px;padding:8px 12px;outline:none;width:100%"
+          oninput="calcPennies()">
+      </div>
+      <div id="penny-calc-result" style="display:none;border-top:1px solid #333;padding-top:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">MELT VALUE</div>
+            <div id="pc-melt" style="font-size:22px;color:var(--gold);font-family:var(--mono);font-weight:700">—</div>
+          </div>
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">FACE VALUE</div>
+            <div id="pc-face" style="font-size:22px;color:var(--text);font-family:var(--mono);font-weight:700">—</div>
+          </div>
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">TOTAL GRAMS</div>
+            <div id="pc-grams" style="font-size:22px;color:var(--text);font-family:var(--mono)">—</div>
+          </div>
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">vs FACE</div>
+            <div id="pc-vs" style="font-size:22px;font-family:var(--mono);font-weight:700">—</div>
+          </div>
+        </div>
+        <div id="pc-ratio" style="margin-top:10px;font-size:12px;color:var(--muted);font-family:var(--mono);text-align:center;letter-spacing:1px"></div>
+      </div>
+    </div>
+
     <div class="tbl-wrap"><table><thead><tr><th>QTY</th><th>FACE</th><th>GRAMS</th><th>LBS</th><th>Cu MELT</th><th>vs FACE</th></tr></thead><tbody id="penny-tbody"></tbody></table></div>
     <div style="margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)">COMEX HG · 3.11g × 95% Cu per coin · Pre-1982 pennies only</div>
   </div>
@@ -1447,6 +1480,31 @@ function renderSilverRolls(){
 }
 function renderPennies(){
   const g=spot.HG/31.1035,m1=g*3.11*.95;
+  // Custom penny calculator
+  window.calcPennies = function(){
+    const input = document.getElementById('penny-calc-input');
+    const result = document.getElementById('penny-calc-result');
+    const qty = parseInt(input.value);
+    if(!qty || qty < 1){ result.style.display='none'; return; }
+    const g = spot.HG ? spot.HG/31.1035 : null;
+    const meltPerPenny = g ? g*3.11*0.95 : null;
+    const face = qty * 0.01;
+    const grams = qty * 3.11;
+    const melt = meltPerPenny ? meltPerPenny * qty : null;
+    const diff = melt ? melt - face : null;
+    const ratio = melt ? ((melt/face)*100).toFixed(1) : null;
+    document.getElementById('pc-melt').textContent = melt ? '$'+melt.toFixed(4) : 'No data';
+    document.getElementById('pc-face').textContent = '$'+face.toFixed(2);
+    document.getElementById('pc-grams').textContent = grams.toFixed(2)+'g';
+    const vsEl = document.getElementById('pc-vs');
+    if(diff !== null){
+      vsEl.textContent = (diff>=0?'+':'') + '$'+Math.abs(diff).toFixed(4);
+      vsEl.style.color = diff>=0 ? '#4caf50' : '#f44336';
+    }
+    if(ratio) document.getElementById('pc-ratio').textContent = 'Melt is '+ratio+'% of face value · $'+( meltPerPenny ? meltPerPenny.toFixed(5) : '—' )+' per coin';
+    result.style.display='block';
+  };
+
   $('penny-tbody').innerHTML=PQ.map(q=>{const face=q*.01,gr=q*3.11,lbs=(gr/453.592).toFixed(3),m=m1*q,d=m-face;return`<tr><td>${q.toLocaleString()}</td><td>$${face.toFixed(2)}</td><td>${gr.toFixed(1)}</td><td>${lbs}</td><td>${m?'$'+m.toFixed(3):'—'}</td><td class="${d>=0?'up':'dn'}">${m?(d>=0?'+':'')+('$'+Math.abs(d).toFixed(3)):'—'}</td></tr>`;}).join('');
 }
 function renderGoldKarats(){
