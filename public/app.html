@@ -736,7 +736,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
   <div id="tab-pennies" class="section">
     <div class="sec-title">Copper Pennies — Pre-1982 — 95% Cu</div>
     <div class="tbl-wrap"><table><thead><tr><th>QTY</th><th>FACE</th><th>GRAMS</th><th>LBS</th><th>Cu MELT</th><th>vs FACE</th></tr></thead><tbody id="penny-tbody"></tbody></table></div>
-    <div style="margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)">COMEX HG · 2.5g × 95% Cu per coin</div>
+    <div style="margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)">COMEX HG · 3.11g × 95% Cu per coin · Pre-1982 pennies only</div>
   </div>
 
   <!-- GOLD KARATS -->
@@ -1416,7 +1416,7 @@ async function loadSpot(){
   set('XPT',xpt,'sp-xpt','sc-xpt');set('XPD',xpd,'sp-xpd','sc-xpd');
   if(xau){$('m-xau').textContent=fmt(spot.XAU);$('m-xau-g').innerHTML=fmt(spot.XAU/31.1035)+'<span>per gram</span>';$('m-xau-dwt').innerHTML=fmt(spot.XAU/20)+'<span>per DWT</span>';$('m-xau-kg').innerHTML=fmt(spot.XAU*32.1507,0)+'<span>per kg</span>';}
   if(xag){$('m-xag').textContent=fmt(spot.XAG);$('m-xag-g').innerHTML=fmt(spot.XAG/31.1035,3)+'<span>per gram</span>';$('m-xag-dwt').innerHTML=fmt(spot.XAG/20,3)+'<span>per DWT</span>';$('m-face').innerHTML=fmt(spot.XAG*.715)+'<span>per $1 face</span>';}
-  if(xcu){$('m-hg').textContent=fmt(spot.HG,3);$('m-hg-g').innerHTML=fmt(spot.HG/31.1035,4)+'<span>per gram</span>';$('m-hg-lb').innerHTML=fmt(spot.HG/14.5833,3)+'<span>per pound</span>';$('m-hg-penny').innerHTML=fmt((spot.HG/31.1035)*2.5*.95,4)+'<span>per penny melt</span>';}
+  if(xcu){$('m-hg').textContent=fmt(spot.HG,3);$('m-hg-g').innerHTML=fmt(spot.HG/31.1035,4)+'<span>per gram</span>';$('m-hg-lb').innerHTML=fmt(spot.HG/14.5833,3)+'<span>per pound</span>';$('m-hg-penny').innerHTML=fmt((spot.HG/31.1035)*3.11*.95,4)+'<span>per penny melt (pre-1982)</span>';}
   if(xpt){$('m-xpt').textContent=fmt(spot.XPT);$('m-xpt-g').innerHTML=fmt(spot.XPT/31.1035)+'<span>per gram</span>';}
   if(xpd){$('m-xpd').textContent=fmt(spot.XPD);$('m-xpd-g').innerHTML=fmt(spot.XPD/31.1035)+'<span>per gram</span>';}
   if(spot.XAU&&spot.XAG){const r=(spot.XAU/spot.XAG).toFixed(1);$('sp-ratio').textContent=r;$('m-ratio').textContent=r;}
@@ -1446,8 +1446,8 @@ function renderSilverRolls(){
   $('svr-tbody').innerHTML=SR.map(r=>{const m=s*r.oz;return`<tr><td>${r.n}</td><td>${r.q}</td><td>${r.oz}</td><td>${m?'$'+m.toFixed(2):'—'}</td><td class="up">${m?'$'+(m*(1-bp/100)).toFixed(2):'—'}</td><td style="color:var(--orange)">${m?'$'+(m*(1+s2/100)).toFixed(2):'—'}</td></tr>`;}).join('');
 }
 function renderPennies(){
-  const g=spot.HG/31.1035,m1=g*2.5*.95;
-  $('penny-tbody').innerHTML=PQ.map(q=>{const face=q*.01,gr=q*2.5,lbs=(gr/453.592).toFixed(3),m=m1*q,d=m-face;return`<tr><td>${q.toLocaleString()}</td><td>$${face.toFixed(2)}</td><td>${gr.toFixed(1)}</td><td>${lbs}</td><td>${m?'$'+m.toFixed(3):'—'}</td><td class="${d>=0?'up':'dn'}">${m?(d>=0?'+':'')+('$'+Math.abs(d).toFixed(3)):'—'}</td></tr>`;}).join('');
+  const g=spot.HG/31.1035,m1=g*3.11*.95;
+  $('penny-tbody').innerHTML=PQ.map(q=>{const face=q*.01,gr=q*3.11,lbs=(gr/453.592).toFixed(3),m=m1*q,d=m-face;return`<tr><td>${q.toLocaleString()}</td><td>$${face.toFixed(2)}</td><td>${gr.toFixed(1)}</td><td>${lbs}</td><td>${m?'$'+m.toFixed(3):'—'}</td><td class="${d>=0?'up':'dn'}">${m?(d>=0?'+':'')+('$'+Math.abs(d).toFixed(3)):'—'}</td></tr>`;}).join('');
 }
 function renderGoldKarats(){
   const bp=+$('gk-buy').value||0,s2=+$('gk-sell').value||0,s=spot.XAU;
