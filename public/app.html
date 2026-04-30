@@ -496,8 +496,8 @@ tr:hover td{background:rgba(240,180,41,.025)}
   #news-bar{height:26px;}
 
   /* Tab bar fixed on mobile */
-  #tab-bar{position:fixed!important;left:0;right:0;z-index:9999;background:var(--bg2);border-bottom:1px solid rgba(240,180,41,.3);overflow:visible;}
-  .tabs{padding:6px 8px;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
+  #tab-bar{position:fixed!important;left:0;right:0;z-index:9999;background:var(--bg2);border-bottom:1px solid rgba(240,180,41,.3);overflow:hidden;}
+  .tabs{padding:6px 8px;gap:6px;overflow-x:scroll;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;max-width:100%;width:100%;}
   #content{padding-top:280px!important;}
   .tab{padding:7px 12px;font-size:12px;flex-shrink:0;}
 
