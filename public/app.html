@@ -1449,7 +1449,7 @@ async function loadSpot(){
   set('XPT',xpt,'sp-xpt','sc-xpt');set('XPD',xpd,'sp-xpd','sc-xpd');
   if(xau){$('m-xau').textContent=fmt(spot.XAU);$('m-xau-g').innerHTML=fmt(spot.XAU/31.1035)+'<span>per gram</span>';$('m-xau-dwt').innerHTML=fmt(spot.XAU/20)+'<span>per DWT</span>';$('m-xau-kg').innerHTML=fmt(spot.XAU*32.1507,0)+'<span>per kg</span>';}
   if(xag){$('m-xag').textContent=fmt(spot.XAG);$('m-xag-g').innerHTML=fmt(spot.XAG/31.1035,3)+'<span>per gram</span>';$('m-xag-dwt').innerHTML=fmt(spot.XAG/20,3)+'<span>per DWT</span>';$('m-face').innerHTML=fmt(spot.XAG*.715)+'<span>per $1 face</span>';}
-  if(xcu){$('m-hg').textContent=fmt(spot.HG,3);$('m-hg-g').innerHTML=fmt(spot.HG/31.1035,4)+'<span>per gram</span>';$('m-hg-lb').innerHTML=fmt(spot.HG/14.5833,3)+'<span>per pound</span>';$('m-hg-penny').innerHTML=fmt((spot.HG/31.1035)*3.11*.95,4)+'<span>per penny melt (pre-1982)</span>';}
+  if(xcu){$('m-hg').textContent=fmt(spot.HG,3);$('m-hg-g').innerHTML=fmt(spot.HG/453.592,5)+'<span>per gram</span>';$('m-hg-lb').innerHTML=fmt(spot.HG,3)+'<span>per pound</span>';$('m-hg-penny').innerHTML=fmt((spot.HG/453.592)*3.11*.95,4)+'<span>per penny melt (pre-1982)</span>';}
   if(xpt){$('m-xpt').textContent=fmt(spot.XPT);$('m-xpt-g').innerHTML=fmt(spot.XPT/31.1035)+'<span>per gram</span>';}
   if(xpd){$('m-xpd').textContent=fmt(spot.XPD);$('m-xpd-g').innerHTML=fmt(spot.XPD/31.1035)+'<span>per gram</span>';}
   if(spot.XAU&&spot.XAG){const r=(spot.XAU/spot.XAG).toFixed(1);$('sp-ratio').textContent=r;$('m-ratio').textContent=r;}
@@ -1479,14 +1479,14 @@ function renderSilverRolls(){
   $('svr-tbody').innerHTML=SR.map(r=>{const m=s*r.oz;return`<tr><td>${r.n}</td><td>${r.q}</td><td>${r.oz}</td><td>${m?'$'+m.toFixed(2):'—'}</td><td class="up">${m?'$'+(m*(1-bp/100)).toFixed(2):'—'}</td><td style="color:var(--orange)">${m?'$'+(m*(1+s2/100)).toFixed(2):'—'}</td></tr>`;}).join('');
 }
 function renderPennies(){
-  const g=spot.HG/31.1035,m1=g*3.11*.95;
+  const g=spot.HG/453.592,m1=g*3.11*.95;
   // Custom penny calculator
   window.calcPennies = function(){
     const input = document.getElementById('penny-calc-input');
     const result = document.getElementById('penny-calc-result');
     const qty = parseInt(input.value);
     if(!qty || qty < 1){ result.style.display='none'; return; }
-    const g = spot.HG ? spot.HG/31.1035 : null;
+    const g = spot.HG ? spot.HG/453.592 : null;
     const meltPerPenny = g ? g*3.11*0.95 : null;
     const face = qty * 0.01;
     const grams = qty * 3.11;
