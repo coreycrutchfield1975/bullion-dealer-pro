@@ -629,7 +629,8 @@ tr:hover td{background:rgba(240,180,41,.025)}
       <a class="nbtn" href="https://apmex.com" target="_blank">APMEX ↗</a>
       <a class="nbtn" href="https://kitco.com" target="_blank">KITCO ↗</a>
       <button class="nbtn" id="admin-btn" style="display:none" onclick="location.href='/admin-panel'">⚙ ADMIN</button>
-      <button class="nbtn" onclick="doLogout()">LOGOUT</button>
+      <a class="nbtn" href="/" style="color:#aaa;">⌂ WEBSITE</a>
+      <button class="nbtn" onclick="doLogout()" style="color:#e07070;border-color:#5a2a2a;">⏻ LOGOUT</button>
     </div>
   </div>
   <div id="spot-bar">
@@ -1997,7 +1998,7 @@ async function redeemPromo(){
 async function loadNews(){
   try{const r=await fetch('/api/news'),items=await r.json();if(!items.length)return;const h=items.map(i=>`<a href="${i.link}" target="_blank">${i.title}</a>`).join('&emsp;·&emsp;');$('news-inner').innerHTML=h+'&emsp;&emsp;'+h;}catch{}
 }
-async function doLogout(){await fetch('/api/logout',{method:'POST'});window.location.href='/login';}
+async function doLogout(){await fetch('/api/logout',{method:'POST'});window.location.href='/';}
 function refreshAll(){loadSpot();loadNews();}
 function adjustPad(){
   const h=document.getElementById('header').offsetHeight;
