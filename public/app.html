@@ -562,6 +562,30 @@ tr:hover td{background:rgba(240,180,41,.025)}
   #cv-table button{padding:2px 6px!important;font-size:10px!important;}
 }
 
+
+/* ── TRADING SHEET ── */
+#tab-trading table thead th{background:linear-gradient(135deg,#1a1508,#111);color:var(--gold);font-size:11px;letter-spacing:2px;}
+#tab-trading .ts-input{background:transparent;border:none;border-bottom:1px solid #333;color:var(--text);font-family:var(--mono);font-size:14px;width:100%;padding:3px 4px;outline:none;}
+#tab-trading .ts-input:focus{border-bottom-color:var(--gold);}
+#tab-trading .ts-buy{color:#4ddb7a;font-family:var(--mono);font-weight:700;}
+#tab-trading .ts-sell{color:#e07070;font-family:var(--mono);font-weight:700;}
+#tab-trading .ts-buy .ts-input{color:#4ddb7a;}
+#tab-trading .ts-sell .ts-input{color:#e07070;}
+#tab-trading .ts-dollar{color:#ff8c00;font-size:13px;user-select:none;}
+#tab-trading .ts-del{background:transparent;border:1px solid #333;color:#666;padding:3px 8px;border-radius:4px;cursor:pointer;font-size:12px;}
+#tab-trading .ts-del:hover{border-color:#e05555;color:#e05555;}
+#tab-trading tbody tr:hover{background:#1a1a1a;}
+#tab-trading tbody td{padding:10px 12px;vertical-align:middle;}
+@media print{
+  #tab-trading .tbl-wrap{overflow:visible!important;}
+  #tab-trading button,#tab-trading .ts-del,#ts-tv-btn{display:none!important;}
+  #tab-trading .ts-input{border:none!important;font-size:13px!important;}
+  #tab-trading thead th{background:#f9f6ee!important;color:#7a5c1a!important;}
+  #tab-trading tbody td{color:#111!important;}
+  #tab-trading .ts-buy .ts-input{color:#1a6a3a!important;}
+  #tab-trading .ts-sell .ts-input{color:#8b1a1a!important;}
+  @page{size:landscape;margin:0.5in;}
+}
 </style>
 </head>
 <body>
@@ -639,6 +663,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div class="tab" onclick="showTab('errors')" data-pro="1">⚠️ ERRORS</div>
     <div class="tab" onclick="showTab('grading')" data-pro="1">📋 GRADING</div>
     <div class="tab" onclick="showTab('currency')" data-pro="1">💱 CURRENCY</div>
+    <div class="tab" onclick="showTab('trading')" data-pro="1">🖨 TRADING SHEET</div>
     <div class="tab" onclick="showTab('account')">👤 ACCOUNT</div>
   </div></div>
 </div>
@@ -1203,6 +1228,45 @@ tr:hover td{background:rgba(240,180,41,.025)}
     <div id="fx-status" style="color:var(--muted);font-size:13px;padding:20px;text-align:center"></div>
   </div>
 
+  <!-- TRADING SHEET -->
+  <div id="tab-trading" class="section">
+    <div class="sec-title">🖨 Trading Sheet <span class="cv-premium-badge">⭐ PREMIUM</span></div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 16px;font-family:var(--mono)">Build your own buy/sell trading sheet · Printable · TV display mode</p>
+
+    <!-- Toolbar -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;">
+      <button onclick="tsAddRow()" style="background:linear-gradient(135deg,#c8830a,#f0b429);color:#000;border:none;padding:9px 18px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer;font-weight:700">+ ADD ITEM</button>
+      <button onclick="tsPrint()" style="background:var(--bg2);color:var(--gold);border:1px solid var(--gold);padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">🖨 PRINT</button>
+      <button onclick="tsSave()" style="background:var(--bg2);color:#4ddb7a;border:1px solid #4ddb7a;padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">💾 SAVE</button>
+      <button onclick="tsLoad()" style="background:var(--bg2);color:var(--silver);border:1px solid var(--border);padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">📂 LOAD</button>
+      <button onclick="tsClear()" style="background:var(--bg2);color:#e05555;border:1px solid #e05555;padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">🗑 CLEAR</button>
+      <button id="ts-tv-btn" onclick="tsTVMode()" style="background:var(--bg2);color:#b0b8c1;border:1px solid var(--border);padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">📺 TV MODE</button>
+      <span id="ts-save-status" style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-left:4px"></span>
+    </div>
+
+    <!-- Table -->
+    <div class="tbl-wrap" id="ts-table-wrap">
+      <table id="ts-table">
+        <thead>
+          <tr>
+            <th style="width:180px">ITEM / NAME</th>
+            <th style="width:100px">WEIGHT</th>
+            <th style="width:80px">UNIT</th>
+            <th style="width:120px">SPOT PRICE</th>
+            <th style="width:130px">BUY PRICE</th>
+            <th style="width:130px">SELL PRICE</th>
+            <th style="width:150px">NOTES</th>
+            <th style="width:50px"></th>
+          </tr>
+        </thead>
+        <tbody id="ts-tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted);font-family:var(--mono)" id="ts-footer">
+      Spot: <span id="ts-spot-gold">—</span> Au &nbsp;|&nbsp; <span id="ts-spot-silver">—</span> Ag &nbsp;|&nbsp; Auto-saved to browser storage
+    </div>
+  </div>
+
   <!-- ACCOUNT -->
   <div id="tab-account" class="section">
     <div class="sec-title">Account</div>
@@ -1512,7 +1576,7 @@ let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
 
 // ════════════════════ TABS ════════════════════
 const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','coinvals','keydate','errors','grading','currency','account'];
-const PRO_TABS = ['gold-k','goldback','premium','inventory','coinvals','keydate','errors','grading','currency'];
+const PRO_TABS = ['gold-k','goldback','premium','inventory','coinvals','keydate','errors','grading','currency','trading'];
 var window_isPro = false;
 
 function showTab(id){
@@ -1524,6 +1588,7 @@ function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   const el=document.getElementById('tab-'+id);
   if(el)el.classList.add('active');
+  if(id==='trading'){ tsLoadFromStorage(); tsSyncSpot(); }
 }
 
 // ════════════════════ HELPERS ════════════════════
@@ -2143,6 +2208,247 @@ function openGradingLookup(source) {
     info.textContent = '↗ Opened PCGS CoinFacts for ' + label + ' — includes photos, history & values.';
   }
 }
+
+
+// ══════════════════════════════════════════════════════════════
+// TRADING SHEET
+// ══════════════════════════════════════════════════════════════
+let tsRows = [];
+let tsTVWindow = null;
+const TS_KEY = 'bdp_trading_sheet';
+
+function tsInit() {
+  tsLoadFromStorage();
+  tsSyncSpot();
+}
+
+function tsSyncSpot() {
+  // Pull from existing spot prices already loaded on the page
+  const g = document.getElementById('ts-spot-gold');
+  const s = document.getElementById('ts-spot-silver');
+  if (g && window.prices && prices.XAU) g.textContent = '$' + prices.XAU.toFixed(2);
+  if (s && window.prices && prices.XAG) s.textContent = '$' + prices.XAG.toFixed(2);
+}
+
+function tsRender() {
+  const tbody = document.getElementById('ts-tbody');
+  if (!tbody) return;
+  if (tsRows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:32px;font-style:italic">No items yet — click + ADD ITEM to get started</td></tr>';
+    return;
+  }
+  tbody.innerHTML = tsRows.map((r, i) => `
+    <tr>
+      <td><input class="ts-input" value="${r.name||''}" placeholder="Item name" onchange="tsUpdate(${i},'name',this.value)"></td>
+      <td><input class="ts-input" value="${r.weight||''}" placeholder="e.g. 1.0" onchange="tsUpdate(${i},'weight',this.value)" style="width:70px"></td>
+      <td>
+        <select class="ts-input" onchange="tsUpdate(${i},'unit',this.value)" style="width:70px;background:var(--bg2);border:none;border-bottom:1px solid #333;color:var(--text)">
+          ${['oz','g','troy oz','lb','kg'].map(u=>`<option value="${u}" ${r.unit===u?'selected':''}>${u}</option>`).join('')}
+        </select>
+      </td>
+      <td><span class="ts-dollar">$</span><input class="ts-input" value="${r.spot||''}" placeholder="—" onchange="tsUpdate(${i},'spot',this.value)" style="width:80px"></td>
+      <td class="ts-buy"><span class="ts-dollar">$</span><input class="ts-input" value="${r.buy||''}" placeholder="0.00" onchange="tsUpdate(${i},'buy',this.value)" style="width:85px"></td>
+      <td class="ts-sell"><span class="ts-dollar">$</span><input class="ts-input" value="${r.sell||''}" placeholder="0.00" onchange="tsUpdate(${i},'sell',this.value)" style="width:85px"></td>
+      <td><input class="ts-input" value="${r.notes||''}" placeholder="Notes…" onchange="tsUpdate(${i},'notes',this.value)"></td>
+      <td><button class="ts-del" onclick="tsDeleteRow(${i})">✕</button></td>
+    </tr>
+  `).join('');
+  tsSyncSpot();
+}
+
+function tsAddRow() {
+  tsRows.push({ name:'', weight:'', unit:'oz', spot:'', buy:'', sell:'', notes:'' });
+  tsRender();
+  tsAutoSave();
+}
+
+function tsUpdate(i, field, val) {
+  tsRows[i][field] = val;
+  tsAutoSave();
+  if (tsTVWindow && !tsTVWindow.closed) tsBroadcast();
+}
+
+function tsDeleteRow(i) {
+  tsRows.splice(i, 1);
+  tsRender();
+  tsAutoSave();
+  if (tsTVWindow && !tsTVWindow.closed) tsBroadcast();
+}
+
+function tsAutoSave() {
+  try {
+    localStorage.setItem(TS_KEY, JSON.stringify(tsRows));
+    const el = document.getElementById('ts-save-status');
+    if (el) { el.textContent = '✓ Auto-saved'; setTimeout(() => el.textContent='', 2000); }
+  } catch(e) {}
+}
+
+function tsSave() {
+  try {
+    localStorage.setItem(TS_KEY, JSON.stringify(tsRows));
+    const el = document.getElementById('ts-save-status');
+    if (el) el.textContent = '✓ Saved!';
+    setTimeout(() => { if(el) el.textContent=''; }, 2500);
+  } catch(e) { alert('Could not save — storage full?'); }
+}
+
+function tsLoad() {
+  tsLoadFromStorage();
+  tsRender();
+}
+
+function tsLoadFromStorage() {
+  try {
+    const raw = localStorage.getItem(TS_KEY);
+    if (raw) tsRows = JSON.parse(raw);
+    else tsRows = [];
+  } catch(e) { tsRows = []; }
+  tsRender();
+}
+
+function tsClear() {
+  if (!confirm('Clear all trading sheet rows?')) return;
+  tsRows = [];
+  localStorage.removeItem(TS_KEY);
+  tsRender();
+  if (tsTVWindow && !tsTVWindow.closed) tsBroadcast();
+}
+
+function tsPrint() {
+  showTab('trading');
+  setTimeout(() => window.print(), 200);
+}
+
+// ── TV MODE ─────────────────────────────────────────────────────
+function tsTVMode() {
+  if (tsTVWindow && !tsTVWindow.closed) { tsTVWindow.focus(); return; }
+
+  // Build TV page on the fly as a data URL
+  const gold = (window.prices && prices.XAU) ? '$' + prices.XAU.toFixed(2) : '—';
+  const silver = (window.prices && prices.XAG) ? '$' + prices.XAG.toFixed(2) : '—';
+  const rows = tsRows;
+
+  const rowsHTML = rows.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:#555;padding:40px;font-style:italic">No items on sheet yet</td></tr>'
+    : rows.map(r => `
+      <tr>
+        <td>${r.name||'—'}</td>
+        <td>${r.weight||'—'} ${r.unit||'oz'}</td>
+        <td>${r.spot ? '$'+r.spot : '—'}</td>
+        <td class="buy">${r.buy ? '$'+r.buy : '—'}</td>
+        <td class="sell">${r.sell ? '$'+r.sell : '—'}</td>
+        <td>${r.notes||''}</td>
+      </tr>`).join('');
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+  const tvHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Trading Sheet — TV Display</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#c9a84c;--lightgold:#e8c97e;--dark:#0a0a0a;--panel:#111;--border:#222;--silver:#b0b8c1;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:var(--dark);color:#fff;font-family:'Rajdhani',sans-serif;overflow:hidden;}
+  body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);pointer-events:none;z-index:9999;}
+  .header{padding:18px 48px 14px;border-bottom:3px solid var(--gold);background:linear-gradient(180deg,#0a0a00,#111);display:flex;align-items:center;justify-content:space-between;}
+  .header-title{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);letter-spacing:3px;}
+  .header-sub{font-family:'Rajdhani',sans-serif;font-size:14px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+  .spot-bar{display:flex;gap:48px;align-items:center;}
+  .spot-item{text-align:center;}
+  .spot-label{font-size:11px;letter-spacing:3px;color:#888;font-family:'Rajdhani',sans-serif;text-transform:uppercase;}
+  .spot-val{font-family:'Share Tech Mono',monospace;font-size:28px;letter-spacing:1px;}
+  .spot-gold{color:var(--lightgold);text-shadow:0 0 20px rgba(232,201,126,.5);}
+  .spot-silver{color:var(--silver);text-shadow:0 0 16px rgba(176,184,193,.4);}
+  .datetime{text-align:right;}
+  .live-date{font-family:'Share Tech Mono',monospace;font-size:16px;color:#aaa;letter-spacing:1px;}
+  .live-time{font-family:'Orbitron',monospace;font-size:26px;color:#fff;letter-spacing:2px;margin-top:4px;}
+  .content{padding:24px 48px;}
+  table{width:100%;border-collapse:collapse;}
+  thead tr{background:linear-gradient(135deg,#1a1508,#111);}
+  thead th{padding:14px 20px;text-align:left;font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);border-bottom:2px solid var(--gold);}
+  tbody tr{border-bottom:1px solid #1e1e1e;transition:background .2s;}
+  tbody tr:nth-child(even){background:#0d0d0d;}
+  tbody td{padding:16px 20px;font-size:22px;font-family:'Rajdhani',sans-serif;color:#ddd;}
+  tbody td.buy{color:#4ddb7a;font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;}
+  tbody td.sell{color:#e07070;font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;}
+  tbody td:first-child{font-size:24px;font-weight:700;color:#fff;}
+  .footer{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;padding:8px 48px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#555;font-family:'Share Tech Mono',monospace;}
+  @keyframes pulse-gold{0%,100%{text-shadow:0 0 20px rgba(232,201,126,.3);}50%{text-shadow:0 0 40px rgba(232,201,126,.7);}}
+  .spot-gold{animation:pulse-gold 3s ease-in-out infinite;}
+</style>
+</head><body>
+<div class="header">
+  <div>
+    <div class="header-title">BULLION DEALER PRO</div>
+    <div class="header-sub">Live Trading Sheet</div>
+  </div>
+  <div class="spot-bar">
+    <div class="spot-item"><div class="spot-label">Gold / oz</div><div class="spot-val spot-gold">${gold}</div></div>
+    <div class="spot-item"><div class="spot-label">Silver / oz</div><div class="spot-val spot-silver">${silver}</div></div>
+  </div>
+  <div class="datetime">
+    <div class="live-date">${dateStr}</div>
+    <div class="live-time" id="tv-time">${timeStr}</div>
+  </div>
+</div>
+<div class="content">
+  <table><thead><tr><th>ITEM</th><th>WEIGHT</th><th>SPOT</th><th>WE BUY</th><th>WE SELL</th><th>NOTES</th></tr></thead>
+  <tbody>${rowsHTML}</tbody></table>
+</div>
+<div class="footer">
+  <span>Spot Prices & Dealer Tools · bulliondealerpro.com</span>
+  <span id="tv-updated">Last updated: ${timeStr}</span>
+</div>
+<script>
+  // Live clock
+  function tick(){
+    const n=new Date();
+    document.getElementById('tv-time').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  }
+  setInterval(tick,1000);
+  // Fullscreen
+  try{document.documentElement.requestFullscreen();}catch(e){}
+  // Listen for updates from parent window
+  window.addEventListener('message',function(e){
+    if(e.data&&e.data.type==='ts-update'){
+      document.querySelector('tbody').innerHTML=e.data.html;
+      document.getElementById('tv-updated').textContent='Last updated: '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    }
+  });
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([tvHTML], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  tsTVWindow = window.open(url, '_blank', 'noopener');
+
+  const btn = document.getElementById('ts-tv-btn');
+  if (btn) { btn.textContent = '📺 TV OPEN ↗'; btn.style.color='#4ddb7a'; btn.style.borderColor='#4ddb7a'; }
+
+  const checker = setInterval(() => {
+    if (!tsTVWindow || tsTVWindow.closed) {
+      clearInterval(checker);
+      tsTVWindow = null;
+      if (btn) { btn.textContent='📺 TV MODE'; btn.style.color=''; btn.style.borderColor=''; }
+    }
+  }, 1000);
+}
+
+function tsBroadcast() {
+  if (!tsTVWindow || tsTVWindow.closed) return;
+  const rows = tsRows;
+  const rowsHTML = rows.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:#555;padding:40px;font-style:italic">No items on sheet yet</td></tr>'
+    : rows.map(r => `<tr><td>${r.name||'—'}</td><td>${r.weight||'—'} ${r.unit||'oz'}</td><td>${r.spot?'$'+r.spot:'—'}</td><td class="buy">${r.buy?'$'+r.buy:'—'}</td><td class="sell">${r.sell?'$'+r.sell:'—'}</td><td>${r.notes||''}</td></tr>`).join('');
+  try { tsTVWindow.postMessage({type:'ts-update', html:rowsHTML}, '*'); } catch(e){}
+}
+
+// Auto-load on tab open
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem(TS_KEY)) tsLoadFromStorage();
+});
 
 </script>
 
