@@ -785,7 +785,7 @@ tr:hover td{background:rgba(240,180,41,.025)}
   <div id="tab-gold-k" class="section">
     <div class="sec-title">Gold Karat Calculator</div>
     <div class="pct-row" style="max-width:360px"><div class="pct-group"><label class="lbl">BUY %</label><input type="number" id="gk-buy" value="15" min="0" max="99" oninput="renderGoldKarats()"></div><div class="pct-group"><label class="lbl">SELL %</label><input type="number" id="gk-sell" value="15" min="0" max="99" oninput="renderGoldKarats()"></div></div>
-    <div class="tbl-wrap"><table><thead><tr><th>KARAT</th><th>PURITY</th><th>MELT /OZ</th><th>BUY /OZ</th><th>SELL /OZ</th></tr></thead><tbody id="gk-tbody"></tbody></table></div>
+    <div class="tbl-wrap"><table><thead><tr><th>KARAT</th><th>PURITY</th><th>MELT /OZ</th><th>MELT /GRAM</th><th>BUY /OZ</th><th>BUY /GRAM</th><th>SELL /OZ</th><th>SELL /GRAM</th></tr></thead><tbody id="gk-tbody"></tbody></table></div>
   </div>
 
   <!-- GOLDBACKS -->
@@ -1608,7 +1608,23 @@ function renderPennies(){
 }
 function renderGoldKarats(){
   const bp=+$('gk-buy').value||0,s2=+$('gk-sell').value||0,s=spot.XAU;
-  $('gk-tbody').innerHTML=GK.map(g=>{const m=s*g.p;return`<tr><td>${g.k}</td><td>${(g.p*100).toFixed(2)}%</td><td>${m?'$'+m.toFixed(2):'—'}</td><td class="up">${m?'$'+(m*(1-bp/100)).toFixed(2):'—'}</td><td style="color:var(--orange)">${m?'$'+(m*(1+s2/100)).toFixed(2):'—'}</td></tr>`;}).join('');
+  const OZperG=31.1035;
+  $('gk-tbody').innerHTML=GK.map(g=>{
+    const m=s*g.p;
+    const mg=m/OZperG;
+    const buy=m*(1-bp/100);
+    const sell=m*(1+s2/100);
+    return`<tr>
+      <td><strong>${g.k}</strong></td>
+      <td>${(g.p*100).toFixed(2)}%</td>
+      <td>${m?'$'+m.toFixed(2):'—'}</td>
+      <td style="color:var(--muted);font-size:12px">${mg?'$'+mg.toFixed(3):'—'}</td>
+      <td class="up">${m?'$'+buy.toFixed(2):'—'}</td>
+      <td class="up" style="font-size:12px">${m?'$'+(buy/OZperG).toFixed(3):'—'}</td>
+      <td style="color:var(--orange)">${m?'$'+sell.toFixed(2):'—'}</td>
+      <td style="color:var(--orange);font-size:12px">${m?'$'+(sell/OZperG).toFixed(3):'—'}</td>
+    </tr>`;
+  }).join('');
 }
 function renderGoldbacks(){
   // Fetch official Goldback exchange rate
