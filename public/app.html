@@ -85,6 +85,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .tab.active.ta{color:#dc2626;border-bottom-color:#ef4444;background:#fff5f5}
 [data-theme="dark"] .tab.active.ta{color:#f87171;border-bottom-color:#ef4444;background:rgba(239,68,68,.1)}
 .ticon{font-size:17px;line-height:1}
+.tnm{background:linear-gradient(135deg,#2c1654 0%,#4a1942 100%)}
+.tnm.active,.tnm:hover{background:linear-gradient(135deg,#4a1942,#7b2d8b)!important}
 /* CONTENT */
 #content{padding-top:160px}
 .section{display:none;max-width:1100px;margin:0 auto;padding:24px 20px 60px;animation:fadeIn .25s ease}
@@ -303,10 +305,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- TAB NAV -->
 <div id="tab-bar">
   <div class="tabs">
-    <button class="tab tg active" onclick="showTab('gold')"><span class="ticon">🥇</span><div>Gold<span class="tsub">Karats · Goldbacks · Grading</span></div></button>
+    <button class="tab tg active" onclick="showTab('gold')"><span class="ticon">🥇</span><div>Gold<span class="tsub">Karats · Goldbacks</span></div></button>
     <button class="tab ts2" onclick="showTab('silver')"><span class="ticon">🪙</span><div>Silver Bullion<span class="tsub">Spot · Calc · Premiums</span></div></button>
-    <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Constitutional<span class="tsub">90% Silver · Key Dates</span></div></button>
-    <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Melt · Key Dates · Errors</span></div></button>
+    <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Constitutional<span class="tsub">90% Silver Melt</span></div></button>
+    <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Melt Calculator</span></div></button>
+    <button class="tab tnm" onclick="showTab('numismatic')"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
     <button class="tab tfx" onclick="showTab('fx')" data-pro="1"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
     <button class="tab ttv" onclick="showTab('trading')" data-pro="1"><span class="ticon">📺</span><div>Trading Sheet<span class="tsub">TV Display Mode</span></div></button>
     <button class="tab ta" onclick="showTab('admin')"><span class="ticon">🔐</span><div>Admin<span class="tsub">Account · Inventory</span></div></button>
@@ -324,9 +327,6 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <div class="sub-nav">
     <button class="seg active" onclick="goldSec('karat',this)">⚖️ Karat Calc</button>
     <button class="seg" onclick="goldSec('goldback',this)">💛 Goldbacks</button>
-    <button class="seg" onclick="goldSec('grading',this)">🏅 Grading</button>
-    <button class="seg" onclick="goldSec('keydate',this)">🔑 Key Dates</button>
-    <button class="seg" onclick="goldSec('errors',this)">⚠️ Errors</button>
     <button class="seg" onclick="goldSec('coinvals',this)">💎 Coin Values</button>
   </div>
 
@@ -533,9 +533,6 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   </div>
   <div class="sub-nav">
     <button class="seg active" onclick="constSec('calc',this)">🧮 Melt Calc</button>
-    <button class="seg" onclick="constSec('keydate',this)">🔑 Key Dates</button>
-    <button class="seg" onclick="constSec('grading',this)">🏅 Grading</button>
-    <button class="seg" onclick="constSec('errors',this)">⚠️ Errors</button>
   </div>
 
   <div id="cs-calc">
@@ -579,9 +576,6 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   </div>
   <div class="sub-nav">
     <button class="seg active" onclick="pennySec('calc',this)">🧮 Melt Calc</button>
-    <button class="seg" onclick="pennySec('keydate',this)">🔑 Key Dates</button>
-    <button class="seg" onclick="pennySec('errors',this)">⚠️ Errors</button>
-    <button class="seg" onclick="pennySec('grading',this)">🏅 Grading</button>
     <button class="seg" onclick="pennySec('coinvals',this)">💎 Coin Values</button>
   </div>
 
@@ -636,6 +630,151 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         <select class="ig-select" id="penny-cv-series" onchange="renderPennyCoinVals()" style="min-width:190px"><option value="">All Penny Series</option><option value="Indian Head Cent">Indian Head Cent</option><option value="Lincoln Cent">Lincoln Cent</option></select>
       </div>
       <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Series</th><th>Date</th><th>G4</th><th>VG8</th><th>F12</th><th>VF20</th><th>EF40</th><th>AU50</th><th>MS63</th><th>MS65</th></tr></thead><tbody id="penny-cv-tbody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════ NUMISMATIC GUIDE TAB ═══════════════════ -->
+<div id="tab-numismatic" class="section">
+  <div class="sec-hero" style="background:linear-gradient(135deg,#1a0a2e 0%,#2c1654 50%,#4a1942 100%)">
+    <div>
+      <div class="sh-title">📚 Numismatic Guide</div>
+      <div class="sh-sub">Key Dates · Coin Grading · Mint Error Reference — All series in one place</div>
+      <div class="sh-chips">
+        <span class="sh-chip">🔑 Key Dates</span>
+        <span class="sh-chip">🏅 Grading</span>
+        <span class="sh-chip">⚠️ Errors</span>
+        <span class="sh-chip">🔍 Searchable</span>
+      </div>
+    </div>
+    <div class="price-box"><div class="pb-label">Reference</div><div class="pb-price" style="font-size:20px">📖</div><div class="pb-chg">All Series</div></div>
+  </div>
+
+  <div class="sub-nav">
+    <button class="seg active" onclick="numSec('keydate',this)">🔑 Key Dates</button>
+    <button class="seg" onclick="numSec('grading',this)">🏅 Grading</button>
+    <button class="seg" onclick="numSec('errors',this)">⚠️ Errors</button>
+  </div>
+
+  <!-- KEY DATES SECTION -->
+  <div id="nm-keydate">
+    <div class="card" style="margin-bottom:13px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:160px"><div class="ig-label">Search Date / Series</div><input type="text" class="ig-input" id="nm-kd-search" placeholder="e.g. 1916, Morgan, Lincoln…" oninput="renderAllKeyDates()"></div>
+        <div style="min-width:180px"><div class="ig-label">Filter by Series</div>
+          <select class="ig-select" id="nm-kd-series" onchange="renderAllKeyDates()">
+            <option value="">All Series</option>
+            <option value="Indian Head">Indian Head Cent</option>
+            <option value="Lincoln Cent">Lincoln Cent</option>
+            <option value="Buffalo Nickel">Buffalo Nickel</option>
+            <option value="Mercury Dime">Mercury Dime</option>
+            <option value="Standing Liberty">Standing Liberty Quarter</option>
+            <option value="Walking Liberty">Walking Liberty Half</option>
+            <option value="Morgan">Morgan Dollar</option>
+            <option value="Peace">Peace Dollar</option>
+            <option value="Saint-Gaudens">Saint-Gaudens $20</option>
+            <option value="Gold">Gold Coins</option>
+          </select>
+        </div>
+        <div><div class="ig-label">Rarity Filter</div>
+          <select class="ig-select" id="nm-kd-rarity" onchange="renderAllKeyDates()">
+            <option value="">All Rarities</option>
+            <option value="Key Date">Key Date</option>
+            <option value="Semi-Key">Semi-Key</option>
+            <option value="Major Rarity">Major Rarity</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔑 Key Dates & Rarities — All Series</div>
+      <div class="tbl-wrap">
+        <table class="dtable">
+          <thead><tr><th>Date</th><th>Series</th><th>Notes</th><th>Rarity</th><th>Est. Value</th></tr></thead>
+          <tbody id="nm-kd-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRADING SECTION -->
+  <div id="nm-grading" style="display:none">
+    <div class="card" style="margin-bottom:13px">
+      <div class="card-title">🔍 Photo Grading Lookup</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+        <div style="flex:1;min-width:160px"><div class="ig-label">Coin Type</div>
+          <select class="ig-select" id="nm-grade-type">
+            <option value="cent">Lincoln Cent</option>
+            <option value="nickel">Buffalo Nickel</option>
+            <option value="dime">Mercury Dime</option>
+            <option value="quarter">Standing Liberty Quarter</option>
+            <option value="half">Walking Liberty Half</option>
+            <option value="dollar">Morgan Dollar</option>
+            <option value="gold">Gold Eagle</option>
+          </select>
+        </div>
+        <div style="min-width:120px"><div class="ig-label">Grade</div>
+          <select class="ig-select" id="nm-grade-val">
+            <option>AG-3</option><option>G-4</option><option>G-6</option>
+            <option>VG-8</option><option>VG-10</option><option>F-12</option>
+            <option>F-15</option><option>VF-20</option><option>VF-25</option>
+            <option>VF-30</option><option>VF-35</option><option>EF-40</option>
+            <option>EF-45</option><option>AU-50</option><option>AU-55</option>
+            <option selected>AU-58</option><option>MS-60</option><option>MS-61</option>
+            <option>MS-62</option><option>MS-63</option><option>MS-64</option>
+            <option>MS-65</option><option>MS-66</option><option>MS-67</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px" onclick="openGradingLookup('pcgs')">PCGS Photograde</button>
+          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('ngc')">NGC Guide</button>
+          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('coinfacts')">PCGS CoinFacts</button>
+        </div>
+      </div>
+      <div id="nm-grading-info" style="color:var(--muted);font-size:12px;padding:6px 0"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏅 Sheldon Grading Scale — Full Reference</div>
+      <div class="tbl-wrap">
+        <table class="dtable">
+          <thead><tr><th>Grade</th><th>Name</th><th>Description</th></tr></thead>
+          <tbody id="nm-grade-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERRORS SECTION -->
+  <div id="nm-errors" style="display:none">
+    <div class="card" style="margin-bottom:13px">
+      <div class="card-title">⚠️ Mint Error Type Reference</div>
+      <div class="err-grid" id="nm-errors-grid"></div>
+    </div>
+    <div class="card" style="margin-bottom:13px">
+      <div class="card-title">🔎 Notable Coin Errors & Values</div>
+      <div class="tbl-wrap">
+        <table class="dtable">
+          <thead><tr><th>Error</th><th>Year(s)</th><th>Series</th><th>Description</th><th>Est. Value</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700">1955 DDO</td><td>1955</td><td>Lincoln Cent</td><td>Dramatic doubled die obverse on date &amp; lettering</td><td class="green-col">$500–$1,500+</td></tr>
+            <tr><td style="font-weight:700">1969-S DDO</td><td>1969-S</td><td>Lincoln Cent</td><td>Extremely rare — counterfeits common, verify carefully</td><td class="green-col">$10,000+</td></tr>
+            <tr><td style="font-weight:700">1972 DDO</td><td>1972</td><td>Lincoln Cent</td><td>Strong doubling on date &amp; motto</td><td class="green-col">$100–$500+</td></tr>
+            <tr><td style="font-weight:700">1943 Copper</td><td>1943</td><td>Lincoln Cent</td><td>Struck on copper planchet during wartime steel year</td><td class="green-col">$100,000+</td></tr>
+            <tr><td style="font-weight:700">1944 Steel</td><td>1944</td><td>Lincoln Cent</td><td>Struck on leftover 1943 steel planchet</td><td class="green-col">$75,000+</td></tr>
+            <tr><td style="font-weight:700">1922 Plain</td><td>1922</td><td>Lincoln Cent</td><td>Weak/missing D mintmark — worn reverse die</td><td class="green-col">$500–$2,500+</td></tr>
+            <tr><td style="font-weight:700">1992 Close AM</td><td>1992</td><td>Lincoln Cent</td><td>Close AM reverse — business strike rarity</td><td class="green-col">$300–$800</td></tr>
+            <tr><td style="font-weight:700">1916 DDO</td><td>1916</td><td>Mercury Dime</td><td>Doubled die obverse — extremely sought after</td><td class="green-col">$1,000–$5,000+</td></tr>
+            <tr><td style="font-weight:700">1942/1 DDO</td><td>1942</td><td>Mercury Dime</td><td>Overdate — 42 struck over 41 die</td><td class="green-col">$500–$3,000+</td></tr>
+            <tr><td style="font-weight:700">1918/7-D</td><td>1918</td><td>Buffalo Nickel</td><td>Overdate — rare in all grades</td><td class="green-col">$500–$5,000+</td></tr>
+            <tr><td style="font-weight:700">1937-D 3-Leg</td><td>1937-D</td><td>Buffalo Nickel</td><td>Missing front leg on buffalo — die polishing error</td><td class="green-col">$500–$3,000+</td></tr>
+            <tr><td style="font-weight:700">1916 DDO</td><td>1916</td><td>SL Quarter</td><td>Doubled die obverse, very rare</td><td class="green-col">$3,000–$20,000+</td></tr>
+            <tr><td style="font-weight:700">1934 DDO</td><td>1934</td><td>Peace Dollar</td><td>Doubled die obverse — scarce variety</td><td class="green-col">$200–$800+</td></tr>
+            <tr><td style="font-weight:700">Off-Center 50%+</td><td>Various</td><td>All Series</td><td>50%+ off-center with full date visible</td><td class="green-col">$50–$500+</td></tr>
+            <tr><td style="font-weight:700">Broadstrike</td><td>Various</td><td>All Series</td><td>Struck without collar — coin spreads beyond normal diameter</td><td class="green-col">$25–$200+</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -799,16 +938,89 @@ function showTab(id){
   const tBtn=document.querySelector('.tab[onclick="showTab(\''+id+'\')"]');
   if(tBtn)tBtn.classList.add('active');
   if(id==='fx')loadFX();
-  if(id==='gold'){renderGoldback();renderGrading();renderKeyDates();renderErrors('errors-grid');}
-  if(id==='const'){renderConstKeyDates();renderErrors('const-errors-grid');}
-  if(id==='pennies'){renderPennyKeyDates();renderErrors('penny-errors-grid');renderGrading();}
+  if(id==='gold'){renderGoldback();renderCoinVals();}
+  if(id==='const'){/* melt only */}
+  if(id==='pennies'){renderPennyCoinVals();}
+  if(id==='numismatic'){renderAllKeyDates();}
   if(id==='trading'){tsLoadFromStorage();tsSyncSpot();}
   if(id==='admin')renderInventory();
 }
-function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='grading')renderGrading();if(s==='keydate')renderKeyDates();if(s==='errors')renderErrors('errors-grid');if(s==='goldback')renderGoldback();}
+function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','rolls','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
 function constSec(s,btn){['calc','keydate','grading','errors'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 function pennySec(s,btn){['calc','keydate','errors','grading','coinvals'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderPennyCoinVals();}
+function numSec(s,btn){['keydate','grading','errors'].forEach(k=>{const e=$('nm-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-numismatic .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='errors')renderErrors('nm-errors-grid');if(s==='grading')renderNmGrading();if(s==='keydate')renderAllKeyDates();}
+function renderNmGrading(){const grades=[['PO-1','Poor','Barely identifiable, heavily worn'],['FR-2','Fair','Extremely worn, some design visible'],['AG-3','About Good','Very heavily worn, outline visible'],['G-4','Good','Heavily worn, major design clear'],['G-6','Good+','Slightly more detail than G-4'],['VG-8','Very Good','Well worn, main features clear'],['VG-10','Very Good+','More detail than VG-8'],['F-12','Fine','Moderate to considerable even wear'],['F-15','Fine+','More detail than F-12'],['VF-20','Very Fine','Moderate wear on high points'],['VF-25','Very Fine+','Slightly less wear than VF-30'],['VF-30','Choice Very Fine','Light wear on high points'],['VF-35','Choice VF+','Very light wear on highest points'],['EF-40','Extremely Fine','Light wear throughout'],['EF-45','Choice EF','Slight wear on highest points'],['AU-50','About Uncirculated','Slight wear on high points, half luster'],['AU-55','Choice AU','Slight wear, most luster'],['AU-58','Very Choice AU','Minimal wear, nearly full luster'],['MS-60','Mint State','No wear, many contact marks'],['MS-61','MS61','No wear, noticeable marks'],['MS-62','MS62','No wear, some distracting marks'],['MS-63','Choice BU','No wear, some noticeable marks'],['MS-64','Choice BU+','No wear, few marks'],['MS-65','Gem BU','No wear, strong luster, minor marks'],['MS-66','Gem BU+','No wear, superior luster, very minor marks'],['MS-67','Superb Gem','Virtually perfect, exceptional'],['MS-68','Superb Gem+','Nearly perfect coin'],['MS-69','MS69','Nearly perfect, only tiny imperfections'],['MS-70','Perfect','Absolutely perfect coin']];const tb=document.getElementById('nm-grade-tbody');if(tb)tb.innerHTML=grades.map(([g,n,d])=>`<tr><td style="font-weight:700;color:var(--gold)">${g}</td><td>${n}</td><td>${d}</td></tr>`).join('');}
+function renderAllKeyDates(){
+  const allKD=[
+    // Indian Head Cents
+    {date:'1877',series:'Indian Head',notes:'Lowest mintage Indian Head cent',rarity:'Key Date',value:'$500–$2,000+'},
+    {date:'1909-S',series:'Indian Head',notes:'Last year San Francisco Indian Head',rarity:'Key Date',value:'$250–$1,000+'},
+    {date:'1864-L',series:'Indian Head',notes:'Designer initial L on ribbon',rarity:'Semi-Key',value:'$100–$400+'},
+    // Lincoln Cents
+    {date:'1909-S VDB',series:'Lincoln Cent',notes:'Lowest mintage major Lincoln variety',rarity:'Key Date',value:'$700–$2,500+'},
+    {date:'1909-S',series:'Lincoln Cent',notes:'First year San Francisco Lincoln',rarity:'Key Date',value:'$100–$500+'},
+    {date:'1914-D',series:'Lincoln Cent',notes:'Scarce Denver mint issue',rarity:'Key Date',value:'$200–$1,500+'},
+    {date:'1922 Plain',series:'Lincoln Cent',notes:'Missing D mintmark variety',rarity:'Key Date',value:'$500–$2,500+'},
+    {date:'1931-S',series:'Lincoln Cent',notes:'Low mintage Depression era cent',rarity:'Key Date',value:'$75–$300+'},
+    {date:'1955 DDO',series:'Lincoln Cent',notes:'Dramatic doubled die obverse',rarity:'Major Rarity',value:'$500–$1,500+'},
+    {date:'1943 Copper',series:'Lincoln Cent',notes:'Struck on wrong planchet — extremely rare',rarity:'Major Rarity',value:'$100,000+'},
+    // Buffalo Nickels
+    {date:'1913-S T2',series:'Buffalo Nickel',notes:'Type 2 flat ground first year SF',rarity:'Key Date',value:'$200–$1,000+'},
+    {date:'1916 DDO',series:'Buffalo Nickel',notes:'Doubled die obverse variety',rarity:'Semi-Key',value:'$300–$2,000+'},
+    {date:'1918/7-D',series:'Buffalo Nickel',notes:'Overdate — rare in all grades',rarity:'Key Date',value:'$500–$5,000+'},
+    {date:'1921-S',series:'Buffalo Nickel',notes:'Low mintage San Francisco issue',rarity:'Key Date',value:'$100–$800+'},
+    {date:'1926-S',series:'Buffalo Nickel',notes:'Scarce late series SF nickel',rarity:'Key Date',value:'$150–$1,000+'},
+    {date:'1937-D 3-Leg',series:'Buffalo Nickel',notes:'Missing buffalo front leg — die error',rarity:'Semi-Key',value:'$500–$3,000+'},
+    // Mercury Dimes
+    {date:'1916-D',series:'Mercury Dime',notes:'Lowest mintage Mercury dime — key date',rarity:'Key Date',value:'$800–$5,000+'},
+    {date:'1921',series:'Mercury Dime',notes:'Low mintage post-WWI year',rarity:'Key Date',value:'$50–$400+'},
+    {date:'1921-D',series:'Mercury Dime',notes:'Denver low mintage',rarity:'Key Date',value:'$75–$500+'},
+    {date:'1942/1',series:'Mercury Dime',notes:'Overdate — Philly mint',rarity:'Major Rarity',value:'$500–$3,000+'},
+    {date:'1942/1-D',series:'Mercury Dime',notes:'Overdate — Denver mint',rarity:'Major Rarity',value:'$700–$5,000+'},
+    // Standing Liberty Quarters
+    {date:'1916',series:'Standing Liberty',notes:'First year — very low mintage',rarity:'Key Date',value:'$3,000–$20,000+'},
+    {date:'1918/7-S',series:'Standing Liberty',notes:'Overdate — rare San Francisco variety',rarity:'Major Rarity',value:'$2,000–$15,000+'},
+    {date:'1921',series:'Standing Liberty',notes:'Low mintage post-WWI quarter',rarity:'Key Date',value:'$300–$2,000+'},
+    {date:'1923-S',series:'Standing Liberty',notes:'Scarce San Francisco issue',rarity:'Key Date',value:'$200–$1,500+'},
+    {date:'1927-S',series:'Standing Liberty',notes:'Low mintage San Francisco quarter',rarity:'Key Date',value:'$150–$1,000+'},
+    // Walking Liberty Halves
+    {date:'1916',series:'Walking Liberty',notes:'First year — scarce Philly issue',rarity:'Semi-Key',value:'$100–$600+'},
+    {date:'1916-S Obv',series:'Walking Liberty',notes:'Mintmark on obverse — first year only',rarity:'Semi-Key',value:'$100–$800+'},
+    {date:'1921',series:'Walking Liberty',notes:'Key date low mintage half',rarity:'Key Date',value:'$200–$1,500+'},
+    {date:'1921-D',series:'Walking Liberty',notes:'Denver key date',rarity:'Key Date',value:'$200–$1,500+'},
+    {date:'1921-S',series:'Walking Liberty',notes:'SF key date',rarity:'Key Date',value:'$250–$2,000+'},
+    {date:'1938-D',series:'Walking Liberty',notes:'Low mintage final year Denver',rarity:'Semi-Key',value:'$50–$400+'},
+    // Morgan Dollars
+    {date:'1893-S',series:'Morgan',notes:'Rarest business strike Morgan',rarity:'Key Date',value:'$5,000–$100,000+'},
+    {date:'1895',series:'Morgan',notes:'Proof only — no business strikes known',rarity:'Major Rarity',value:'$50,000+'},
+    {date:'1889-CC',series:'Morgan',notes:'Rare Carson City Morgan',rarity:'Key Date',value:'$1,000–$10,000+'},
+    {date:'1879-CC',series:'Morgan',notes:'Scarce first year Carson City',rarity:'Semi-Key',value:'$500–$5,000+'},
+    {date:'1921',series:'Morgan',notes:'Final year — common but historically significant',rarity:'Semi-Key',value:'$25–$75+'},
+    // Peace Dollars
+    {date:'1921',series:'Peace',notes:'First year high relief — scarce',rarity:'Key Date',value:'$100–$700+'},
+    {date:'1928',series:'Peace',notes:'Lowest mintage Philadelphia Peace dollar',rarity:'Key Date',value:'$200–$1,500+'},
+    {date:'1934-S',series:'Peace',notes:'Scarce San Francisco issue',rarity:'Semi-Key',value:'$75–$500+'},
+    {date:'1935-S',series:'Peace',notes:'Final year San Francisco Peace dollar',rarity:'Semi-Key',value:'$50–$300+'},
+    // Saint-Gaudens
+    {date:'1907 HR',series:'Saint-Gaudens',notes:'First year Ultra High Relief — rare',rarity:'Major Rarity',value:'$15,000–$50,000+'},
+    {date:'1927-D',series:'Saint-Gaudens',notes:'Very rare Denver gold double eagle',rarity:'Key Date',value:'$10,000–$50,000+'},
+    {date:'1933',series:'Saint-Gaudens',notes:'Recalled by govt — illegal to own most',rarity:'Major Rarity',value:'$millions'},
+  ];
+  const search=(document.getElementById('nm-kd-search')||{}).value||'';
+  const series=(document.getElementById('nm-kd-series')||{}).value||'';
+  const rarity=(document.getElementById('nm-kd-rarity')||{}).value||'';
+  const filtered=allKD.filter(r=>{
+    const s=search.toLowerCase();
+    const matchSearch=!s||(r.date+r.series+r.notes).toLowerCase().includes(s);
+    const matchSeries=!series||r.series.includes(series);
+    const matchRarity=!rarity||r.rarity===rarity;
+    return matchSearch&&matchSeries&&matchRarity;
+  });
+  const rarityColor={['Key Date']:'var(--red)',['Semi-Key']:'var(--gold)',['Major Rarity']:'#c084fc'};
+  const tb=document.getElementById('nm-kd-tbody');
+  if(tb)tb.innerHTML=filtered.length?filtered.map(r=>`<tr><td style="font-weight:700">${r.date}</td><td>${r.series}</td><td>${r.notes}</td><td><span style="color:${rarityColor[r.rarity]||'var(--text)'};font-weight:600">${r.rarity}</span></td><td class="green-col">${r.value}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No results found</td></tr>';
+}
 function dealType(t,btn){document.querySelectorAll('#ss-calc .seg-group .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 let goldWUnit='g';
 function goldUnit(u,btn){goldWUnit=u;document.querySelectorAll('.calc-hdr .seg-group .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');calcGold();}
@@ -1287,163 +1499,21 @@ function renderCoinVals(){
   $('cv-status').textContent=rows.length>200?`Showing 200 of ${rows.length} — refine search`:'';
 }
 function openGradingLookup(source) {
-  const sel = document.getElementById('grade-lookup-series');
-  const val = sel.value;
-  const info = document.getElementById('grade-lookup-info');
-  if (!val) {
-    info.textContent = '⚠ Please select a coin series first.';
-    info.style.color = 'var(--red)';
-    return;
-  }
-  const [slug, pcgsId] = val.split('|');
-  const label = sel.options[sel.selectedIndex].text;
-  info.style.color = 'var(--muted)';
-
-  if (source === 'pcgs') {
-    // PCGS Photograde — opens the tool, user selects series there
-    window.open('https://www.pcgs.com/photograde', '_blank');
-    info.textContent = '↗ Opened PCGS Photograde — select "' + label + '" from the menu on their site.';
-  } else if (source === 'ngc') {
-    // NGC Coin Grading Guide
-    window.open('https://www.ngccoin.com/coin-grading/', '_blank');
-    info.textContent = '↗ Opened NGC Grading Guide — browse to "' + label + '" on their site.';
-  } else if (source === 'coinfacts') {
-    // PCGS CoinFacts — supports deep links by series ID
-    const url = pcgsId
-      ? `https://www.pcgs.com/coinfacts/series/${slug}-${pcgsId}`
-      : `https://www.pcgs.com/coinfacts`;
-    window.open(url, '_blank');
-    info.textContent = '↗ Opened PCGS CoinFacts for ' + label + ' — includes photos, history & values.';
-  }
-}
-
-
-
-const FX_CURRENCIES=[
-  {code:'EUR',country:'Eurozone',flag:'🇪🇺'},
-  {code:'GBP',country:'United Kingdom',flag:'🇬🇧'},
-  {code:'CAD',country:'Canada',flag:'🇨🇦'},
-  {code:'AUD',country:'Australia',flag:'🇦🇺'},
-  {code:'NZD',country:'New Zealand',flag:'🇳🇿'},
-  {code:'CHF',country:'Switzerland',flag:'🇨🇭'},
-  {code:'JPY',country:'Japan',flag:'🇯🇵'},
-  {code:'CNY',country:'China',flag:'🇨🇳'},
-  {code:'HKD',country:'Hong Kong',flag:'🇭🇰'},
-  {code:'SGD',country:'Singapore',flag:'🇸🇬'},
-  {code:'KRW',country:'South Korea',flag:'🇰🇷'},
-  {code:'INR',country:'India',flag:'🇮🇳'},
-  {code:'MXN',country:'Mexico',flag:'🇲🇽'},
-  {code:'BRL',country:'Brazil',flag:'🇧🇷'},
-  {code:'ARS',country:'Argentina',flag:'🇦🇷'},
-  {code:'CLP',country:'Chile',flag:'🇨🇱'},
-  {code:'COP',country:'Colombia',flag:'🇨🇴'},
-  {code:'PEN',country:'Peru',flag:'🇵🇪'},
-  {code:'SEK',country:'Sweden',flag:'🇸🇪'},
-  {code:'NOK',country:'Norway',flag:'🇳🇴'},
-  {code:'DKK',country:'Denmark',flag:'🇩🇰'},
-  {code:'PLN',country:'Poland',flag:'🇵🇱'},
-  {code:'CZK',country:'Czech Republic',flag:'🇨🇿'},
-  {code:'HUF',country:'Hungary',flag:'🇭🇺'},
-  {code:'RON',country:'Romania',flag:'🇷🇴'},
-  {code:'TRY',country:'Turkey',flag:'🇹🇷'},
-  {code:'RUB',country:'Russia',flag:'🇷🇺'},
-  {code:'UAH',country:'Ukraine',flag:'🇺🇦'},
-  {code:'ZAR',country:'South Africa',flag:'🇿🇦'},
-  {code:'NGN',country:'Nigeria',flag:'🇳🇬'},
-  {code:'EGP',country:'Egypt',flag:'🇪🇬'},
-  {code:'KES',country:'Kenya',flag:'🇰🇪'},
-  {code:'GHS',country:'Ghana',flag:'🇬🇭'},
-  {code:'MAD',country:'Morocco',flag:'🇲🇦'},
-  {code:'SAR',country:'Saudi Arabia',flag:'🇸🇦'},
-  {code:'AED',country:'UAE',flag:'🇦🇪'},
-  {code:'QAR',country:'Qatar',flag:'🇶🇦'},
-  {code:'KWD',country:'Kuwait',flag:'🇰🇼'},
-  {code:'BHD',country:'Bahrain',flag:'🇧🇭'},
-  {code:'OMR',country:'Oman',flag:'🇴🇲'},
-  {code:'ILS',country:'Israel',flag:'🇮🇱'},
-  {code:'THB',country:'Thailand',flag:'🇹🇭'},
-  {code:'MYR',country:'Malaysia',flag:'🇲🇾'},
-  {code:'IDR',country:'Indonesia',flag:'🇮🇩'},
-  {code:'PHP',country:'Philippines',flag:'🇵🇭'},
-  {code:'VND',country:'Vietnam',flag:'🇻🇳'},
-  {code:'TWD',country:'Taiwan',flag:'🇹🇼'},
-  {code:'PKR',country:'Pakistan',flag:'🇵🇰'},
-  {code:'BDT',country:'Bangladesh',flag:'🇧🇩'},
-  {code:'LKR',country:'Sri Lanka',flag:'🇱🇰'},
-  {code:'NPR',country:'Nepal',flag:'🇳🇵'},
-  {code:'MMK',country:'Myanmar',flag:'🇲🇲'},
-  {code:'KHR',country:'Cambodia',flag:'🇰🇭'},
-  {code:'CRC',country:'Costa Rica',flag:'🇨🇷'},
-  {code:'GTQ',country:'Guatemala',flag:'🇬🇹'},
-  {code:'HNL',country:'Honduras',flag:'🇭🇳'},
-  {code:'PAB',country:'Panama',flag:'🇵🇦'},
-  {code:'DOP',country:'Dominican Republic',flag:'🇩🇴'},
-  {code:'JMD',country:'Jamaica',flag:'🇯🇲'},
-  {code:'TTD',country:'Trinidad & Tobago',flag:'🇹🇹'},
-  {code:'BOB',country:'Bolivia',flag:'🇧🇴'},
-  {code:'PYG',country:'Paraguay',flag:'🇵🇾'},
-  {code:'UYU',country:'Uruguay',flag:'🇺🇾'},
-  {code:'VES',country:'Venezuela',flag:'🇻🇪'},
-  {code:'ISK',country:'Iceland',flag:'🇮🇸'},
-  {code:'HRK',country:'Croatia',flag:'🇭🇷'},
-  {code:'BGN',country:'Bulgaria',flag:'🇧🇬'},
-  {code:'RSD',country:'Serbia',flag:'🇷🇸'},
-  {code:'MKD',country:'North Macedonia',flag:'🇲🇰'},
-  {code:'ALL',country:'Albania',flag:'🇦🇱'},
-  {code:'GEL',country:'Georgia',flag:'🇬🇪'},
-  {code:'AMD',country:'Armenia',flag:'🇦🇲'},
-  {code:'AZN',country:'Azerbaijan',flag:'🇦🇿'},
-  {code:'KZT',country:'Kazakhstan',flag:'🇰🇿'},
-  {code:'UZS',country:'Uzbekistan',flag:'🇺🇿'},
-  {code:'GBP',country:'United Kingdom',flag:'🇬🇧'},
-  {code:'XAF',country:'Central Africa (CFA)',flag:'🌍'},
-  {code:'XOF',country:'West Africa (CFA)',flag:'🌍'},
-  {code:'XPF',country:'Pacific Franc',flag:'🌊'},
-  {code:'JOD',country:'Jordan',flag:'🇯🇴'},
-  {code:'LBP',country:'Lebanon',flag:'🇱🇧'},
-  {code:'IQD',country:'Iraq',flag:'🇮🇶'},
-  {code:'IRR',country:'Iran',flag:'🇮🇷'},
-  {code:'AFN',country:'Afghanistan',flag:'🇦🇫'},
-  {code:'MNT',country:'Mongolia',flag:'🇲🇳'},
-  {code:'KGS',country:'Kyrgyzstan',flag:'🇰🇬'},
-  {code:'TJS',country:'Tajikistan',flag:'🇹🇯'},
-  {code:'TMT',country:'Turkmenistan',flag:'🇹🇲'},
-  {code:'BYN',country:'Belarus',flag:'🇧🇾'},
-  {code:'MDL',country:'Moldova',flag:'🇲🇩'},
-  {code:'ETB',country:'Ethiopia',flag:'🇪🇹'},
-  {code:'TZS',country:'Tanzania',flag:'🇹🇿'},
-  {code:'UGX',country:'Uganda',flag:'🇺🇬'},
-  {code:'ZMW',country:'Zambia',flag:'🇿🇲'},
-  {code:'MZN',country:'Mozambique',flag:'🇲🇿'},
-  {code:'BWP',country:'Botswana',flag:'🇧🇼'},
-  {code:'NAD',country:'Namibia',flag:'🇳🇦'},
-  {code:'MUR',country:'Mauritius',flag:'🇲🇺'},
-  {code:'DZD',country:'Algeria',flag:'🇩🇿'},
-  {code:'TND',country:'Tunisia',flag:'🇹🇳'},
-  {code:'LYD',country:'Libya',flag:'🇱🇾'},
-  {code:'SDG',country:'Sudan',flag:'🇸🇩'},
-  {code:'SYP',country:'Syria',flag:'🇸🇾'},
-  {code:'YER',country:'Yemen',flag:'🇾🇪'},
-];
-let fxRates={},fxSortCol='country',fxSortDir=1,fxLoaded=false;
-
-async function loadFX(force=false){
-  if(fxLoaded&&!force)return;
-  $('fx-status').textContent='Loading exchange rates…';
-  $('fx-tbody').innerHTML='';
-  try{
-    const r=await fetch('/api/fx');
-    const d=await r.json();
-    if(d.error)throw new Error(d.error);
-    fxRates=d.rates||{};
-    const ts=d.timestamp?new Date(d.timestamp*1000).toLocaleString():'';
-    $('fx-updated').textContent=ts?`Last updated: ${ts}`:'';
-    $('fx-status').textContent='';
-    fxLoaded=true;
-    filterFX();
-  }catch(e){
-    $('fx-status').textContent='Could not load rates. Try refreshing.';
-    console.error(e);
+  const typeEl = document.getElementById('nm-grade-type') || document.getElementById('gs-grade-type');
+  const gradeEl = document.getElementById('nm-grade-val') || document.getElementById('gs-grade-val');
+  const infoEl = document.getElementById('nm-grading-info') || document.getElementById('grading-info');
+  const coinType = typeEl ? typeEl.value : 'cent';
+  const grade = gradeEl ? gradeEl.value : 'AU-58';
+  const label = `${coinType} in ${grade}`;
+  if(source==='pcgs'){
+    window.open('https://www.pcgs.com/photograde','_blank');
+    if(infoEl) infoEl.textContent = '↗ Opened PCGS Photograde — browse to ' + label;
+  } else if(source==='ngc'){
+    window.open('https://www.ngccoin.com/coin-grading/','_blank');
+    if(infoEl) infoEl.textContent = '↗ Opened NGC Grading Guide — browse to ' + label;
+  } else if(source==='coinfacts'){
+    window.open('https://www.pcgs.com/coinfacts','_blank');
+    if(infoEl) infoEl.textContent = '↗ Opened PCGS CoinFacts — search for ' + label;
   }
 }
 function sortFX(col){
@@ -1800,8 +1870,8 @@ function renderInventory(){
 async function init(){
   await loadAccount();
   adjustPad();
-  renderGrading();renderErrors();renderKeyDates();renderCoinVals();
-  renderPennyKeyDates();renderErrors('penny-errors-grid');
+  renderCoinVals();
+  renderAllKeyDates();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
   buildFXDropdown();
   await loadSpot();
