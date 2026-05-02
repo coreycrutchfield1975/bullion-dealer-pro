@@ -375,62 +375,13 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div class="card" style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7">💡 Goldback prices fluctuate daily with gold spot. Always verify at <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold)">goldback.com</a> before purchasing.</div>
   </div>
 
-  <div id="gs-grading" style="display:none">
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">🔍 Photo Grading Lookup</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
-        <div style="flex:1;min-width:180px"><div class="ig-label">Select Coin Series</div>
-        <select class="ig-select" id="grade-lookup-series">
-          <option value="">— Choose a series —</option>
-          <option value="lincoln-cents|2829">Lincoln Cents</option>
-          <option value="indian-head-cents|2789">Indian Head Cents</option>
-          <option value="buffalo-nickels|2856">Buffalo Nickels</option>
-          <option value="mercury-dimes|2882">Mercury Dimes</option>
-          <option value="roosevelt-dimes|2889">Roosevelt Dimes</option>
-          <option value="washington-quarters|2891">Washington Quarters</option>
-          <option value="standing-liberty-quarters|2881">Standing Liberty Quarters</option>
-          <option value="walking-liberty-halves|2849">Walking Liberty Halves</option>
-          <option value="franklin-halves|2836">Franklin Halves</option>
-          <option value="kennedy-halves|2848">Kennedy Halves</option>
-          <option value="morgan-dollars|2863">Morgan Dollars</option>
-          <option value="peace-dollars|2872">Peace Dollars</option>
-          <option value="saint-gaudens-double-eagles|2803">Saint-Gaudens $20</option>
-          <option value="american-gold-eagles|2799">American Gold Eagles</option>
-          <option value="american-silver-eagles|2877">American Silver Eagles</option>
-        </select></div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px" onclick="openGradingLookup('pcgs')">PCGS Photograde</button>
-        <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('ngc')">NGC Guide</button>
-        <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('coinfacts')">PCGS CoinFacts</button>
-      </div>
-      <div id="grade-lookup-info" style="margin-top:9px;font-size:12px;color:var(--muted)"></div>
-    </div>
-    <div class="card"><div class="card-title">📋 Sheldon Scale Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Grade</th><th>Name</th><th>Description</th></tr></thead><tbody id="grade-tbody"></tbody></table></div></div>
-  </div>
+  
 
-  <div id="gs-keydate" style="display:none">
-    <div class="card"><div class="card-title">🔑 Key Date Reference</div>
-      <div style="margin-bottom:12px"><select class="ig-select" id="kd-select" onchange="renderKeyDates()" style="max-width:280px"><option value="">All Series</option><option value="Lincoln Cent">Lincoln Cent</option><option value="Indian Head Cent">Indian Head Cent</option><option value="Buffalo Nickel">Buffalo Nickel</option><option value="Mercury Dime">Mercury Dime</option><option value="SL Quarter">Standing Liberty Quarter</option><option value="WL Half">Walking Liberty Half</option><option value="Morgan Dollar">Morgan Dollar</option><option value="Peace Dollar">Peace Dollar</option><option value="St. Gaudens $20">Saint-Gaudens $20</option></select></div>
-      <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Series</th><th>Date</th><th>Rarity</th><th>Est. Value</th></tr></thead><tbody id="kd-tbody"></tbody></table></div>
-    </div>
-  </div>
+  
 
-  <div id="gs-errors" style="display:none">
-    <div class="card"><div class="card-title">⚠️ Mint Error Reference</div><div class="err-grid" id="errors-grid"></div></div>
-  </div>
+  
 
-  <div id="gs-coinvals" style="display:none">
-    <div class="card"><div class="card-title">💎 Coin Values Database <span class="premium-badge">PRO</span></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px">
-        <input type="text" class="ig-input" id="cv-search" placeholder="Search date or series…" style="flex:1;min-width:140px" oninput="renderCoinVals()">
-        <select class="ig-select" id="cv-series" onchange="renderCoinVals()" style="min-width:180px"><option value="">All Series</option></select>
-        <input type="number" class="ig-input" id="cv-max" placeholder="Max $" style="width:100px" oninput="renderCoinVals()">
-      </div>
-      <div class="tbl-wrap"><table class="dtable" id="cv-table"><thead><tr><th>Series</th><th>Date</th><th>G4</th><th>VG8</th><th>F12</th><th>VF20</th><th>EF40</th><th>AU50</th><th>MS63</th><th>MS65</th><th></th></tr></thead><tbody id="cv-tbody"></tbody></table></div>
-      <div id="cv-status" style="color:var(--muted);font-size:12px;text-align:center;padding:10px"></div>
-    </div>
-  </div>
+  
 </div>
 
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
@@ -557,15 +508,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div class="card"><div class="card-title">⚡ 90% Silver Quick Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Coin</th><th>Silver oz</th><th>Melt Value</th><th>$100 Face Melt</th></tr></thead><tbody id="const-ref-tbody"></tbody></table></div></div>
   </div>
 
-  <div id="cs-keydate" style="display:none">
-    <div class="card"><div class="card-title">🔑 Constitutional Silver Key Dates</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Series</th><th>Date</th><th>Rarity</th><th>Est. Value</th></tr></thead><tbody id="const-kd-tbody"></tbody></table></div></div>
-  </div>
-  <div id="cs-grading" style="display:none">
-    <div class="card"><div class="card-title">🏅 Sheldon Scale Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Grade</th><th>Name</th><th>Description</th></tr></thead><tbody id="const-grade-tbody"></tbody></table></div></div>
-  </div>
-  <div id="cs-errors" style="display:none">
-    <div class="card"><div class="card-title">⚠️ Mint Error Reference</div><div class="err-grid" id="const-errors-grid"></div></div>
-  </div>
+  
+  
+  
 </div>
 
 <!-- ═══════════════════ PENNIES TAB ═══════════════════ -->
@@ -601,51 +546,27 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div class="card"><div class="card-title">⚡ Penny Melt Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Type</th><th>Years</th><th>Composition</th><th>Melt Each</th><th>% of Face</th></tr></thead><tbody id="penny-ref-tbody"></tbody></table></div></div>
   </div>
 
-  <div id="ps-keydate" style="display:none">
-    <div class="card"><div class="card-title">🔑 Penny Key Dates & Rarities</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Date</th><th>Series</th><th>Notes</th><th>Rarity</th><th>Est. Value</th></tr></thead><tbody id="penny-kd-tbody"></tbody></table></div></div>
-  </div>
+  
 
-  <div id="ps-errors" style="display:none">
-    <div class="card" style="margin-bottom:13px"><div class="card-title">⚠️ Penny Error Types</div><div class="err-grid" id="penny-errors-grid"></div></div>
-    <div class="card"><div class="card-title">🔎 Notable Penny Errors & Values</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Error</th><th>Year(s)</th><th>Description</th><th>Est. Value</th></tr></thead><tbody>
-      <tr><td style="font-weight:700">1955 DDO</td><td>1955</td><td>Dramatic doubled die obverse on date & lettering</td><td class="green-col">$500–$1,500+</td></tr>
-      <tr><td style="font-weight:700">1972 DDO</td><td>1972</td><td>Strong doubling on date, strong candidate for attribution</td><td class="green-col">$100–$500+</td></tr>
-      <tr><td style="font-weight:700">1969-S DDO</td><td>1969-S</td><td>Extremely rare — counterfeits common, verify carefully</td><td class="green-col">$10,000+</td></tr>
-      <tr><td style="font-weight:700">1943 Copper</td><td>1943</td><td>Struck on copper planchet during wartime steel year</td><td class="green-col">$100,000+</td></tr>
-      <tr><td style="font-weight:700">1944 Steel</td><td>1944</td><td>Struck on leftover 1943 steel planchet</td><td class="green-col">$75,000+</td></tr>
-      <tr><td style="font-weight:700">1922 Plain</td><td>1922</td><td>Weak/missing D mintmark — worn reverse die</td><td class="green-col">$500–$2,500+</td></tr>
-      <tr><td style="font-weight:700">1992 Close AM</td><td>1992</td><td>Close AM reverse — business strike rarity</td><td class="green-col">$300–$800</td></tr>
-      <tr><td style="font-weight:700">Off-Center Strike</td><td>Various</td><td>50%+ off-center with full date is most valuable</td><td class="green-col">$20–$200+</td></tr>
-    </tbody></table></div></div>
-  </div>
+  
 
-  <div id="ps-grading" style="display:none">
-    <div class="card"><div class="card-title">🏅 Penny Grading Guide</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Grade</th><th>Name</th><th>Description</th></tr></thead><tbody id="penny-grade-tbody"></tbody></table></div></div>
-  </div>
+  
 
-  <div id="ps-coinvals" style="display:none">
-    <div class="card"><div class="card-title">💎 Penny Coin Values <span class="premium-badge">PRO</span></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        <input type="text" class="ig-input" id="penny-cv-search" placeholder="Search date…" style="flex:1;min-width:120px" oninput="renderPennyCoinVals()">
-        <select class="ig-select" id="penny-cv-series" onchange="renderPennyCoinVals()" style="min-width:190px"><option value="">All Penny Series</option><option value="Indian Head Cent">Indian Head Cent</option><option value="Lincoln Cent">Lincoln Cent</option></select>
-      </div>
-      <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Series</th><th>Date</th><th>G4</th><th>VG8</th><th>F12</th><th>VF20</th><th>EF40</th><th>AU50</th><th>MS63</th><th>MS65</th></tr></thead><tbody id="penny-cv-tbody"></tbody></table></div>
-    </div>
-  </div>
+  
 </div>
 
 
 <!-- ═══════════════════ NUMISMATIC GUIDE TAB ═══════════════════ -->
 <div id="tab-numismatic" class="section">
-  <div class="sec-hero" style="background:linear-gradient(135deg,#1a0a2e 0%,#2c1654 50%,#4a1942 100%)">
+  <div class="sec-hero" style="background:linear-gradient(135deg,#1a0a2e 0%,#2c1654 50%,#4a1942 100%);color:#fff">
     <div>
-      <div class="sh-title">📚 Numismatic Guide</div>
-      <div class="sh-sub">Key Dates · Coin Grading · Mint Error Reference — All series in one place</div>
+      <div class="sh-title" style="color:#fff">📚 Numismatic Guide</div>
+      <div class="sh-sub" style="color:rgba(255,255,255,0.85)">Key Dates · Grading · Errors · Coin Values — All series in one place</div>
       <div class="sh-chips">
         <span class="sh-chip">🔑 Key Dates</span>
         <span class="sh-chip">🏅 Grading</span>
         <span class="sh-chip">⚠️ Errors</span>
-        <span class="sh-chip">🔍 Searchable</span>
+        <span class="sh-chip">💎 Coin Values</span>
       </div>
     </div>
     <div class="price-box"><div class="pb-label">Reference</div><div class="pb-price" style="font-size:20px">📖</div><div class="pb-chg">All Series</div></div>
@@ -655,6 +576,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="seg active" onclick="numSec('keydate',this)">🔑 Key Dates</button>
     <button class="seg" onclick="numSec('grading',this)">🏅 Grading</button>
     <button class="seg" onclick="numSec('errors',this)">⚠️ Errors</button>
+    <button class="seg" onclick="numSec('coinvals',this)">💎 Coin Values</button>
   </div>
 
   <!-- KEY DATES SECTION -->
@@ -777,6 +699,35 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       </div>
     </div>
   </div>
+  <!-- COIN VALUES SECTION -->
+  <div id="nm-coinvals" style="display:none">
+    <div class="card">
+      <div class="card-title">💎 Coin Values <span class="premium-badge">PRO</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <input type="text" class="ig-input" id="nm-cv-search" placeholder="Search date…" style="flex:1;min-width:120px" oninput="renderNmCoinVals()">
+        <select class="ig-select" id="nm-cv-series" onchange="renderNmCoinVals()" style="min-width:200px">
+          <option value="">All Series</option>
+          <option value="Indian Head Cent">Indian Head Cent</option>
+          <option value="Lincoln Cent">Lincoln Cent</option>
+          <option value="Buffalo Nickel">Buffalo Nickel</option>
+          <option value="Mercury Dime">Mercury Dime</option>
+          <option value="Standing Liberty Quarter">Standing Liberty Quarter</option>
+          <option value="Walking Liberty Half">Walking Liberty Half</option>
+          <option value="Morgan Dollar">Morgan Dollar</option>
+          <option value="Peace Dollar">Peace Dollar</option>
+          <option value="Saint-Gaudens">Saint-Gaudens $20</option>
+        </select>
+      </div>
+      <div class="tbl-wrap">
+        <table class="dtable">
+          <thead><tr><th>Series</th><th>Date</th><th>G4</th><th>VG8</th><th>F12</th><th>VF20</th><th>EF40</th><th>AU50</th><th>MS63</th><th>MS65</th></tr></thead>
+          <tbody id="nm-cv-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
 </div>
 
 <!-- ═══════════════════ CURRENCY TAB ═══════════════════ -->
@@ -947,10 +898,34 @@ function showTab(id){
 }
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','rolls','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
-function constSec(s,btn){['calc','keydate','grading','errors'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
-function pennySec(s,btn){['calc','keydate','errors','grading','coinvals'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderPennyCoinVals();}
-function numSec(s,btn){['keydate','grading','errors'].forEach(k=>{const e=$('nm-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-numismatic .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='errors')renderErrors('nm-errors-grid');if(s==='grading')renderNmGrading();if(s==='keydate')renderAllKeyDates();}
+function constSec(s,btn){['calc'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function pennySec(s,btn){['calc'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function numSec(s,btn){['keydate','grading','errors','coinvals'].forEach(k=>{const e=$('nm-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-numismatic .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='errors')renderErrors('nm-errors-grid');if(s==='grading')renderNmGrading();if(s==='keydate')renderAllKeyDates();if(s==='coinvals')renderNmCoinVals();}
 function renderNmGrading(){const grades=[['PO-1','Poor','Barely identifiable, heavily worn'],['FR-2','Fair','Extremely worn, some design visible'],['AG-3','About Good','Very heavily worn, outline visible'],['G-4','Good','Heavily worn, major design clear'],['G-6','Good+','Slightly more detail than G-4'],['VG-8','Very Good','Well worn, main features clear'],['VG-10','Very Good+','More detail than VG-8'],['F-12','Fine','Moderate to considerable even wear'],['F-15','Fine+','More detail than F-12'],['VF-20','Very Fine','Moderate wear on high points'],['VF-25','Very Fine+','Slightly less wear than VF-30'],['VF-30','Choice Very Fine','Light wear on high points'],['VF-35','Choice VF+','Very light wear on highest points'],['EF-40','Extremely Fine','Light wear throughout'],['EF-45','Choice EF','Slight wear on highest points'],['AU-50','About Uncirculated','Slight wear on high points, half luster'],['AU-55','Choice AU','Slight wear, most luster'],['AU-58','Very Choice AU','Minimal wear, nearly full luster'],['MS-60','Mint State','No wear, many contact marks'],['MS-61','MS61','No wear, noticeable marks'],['MS-62','MS62','No wear, some distracting marks'],['MS-63','Choice BU','No wear, some noticeable marks'],['MS-64','Choice BU+','No wear, few marks'],['MS-65','Gem BU','No wear, strong luster, minor marks'],['MS-66','Gem BU+','No wear, superior luster, very minor marks'],['MS-67','Superb Gem','Virtually perfect, exceptional'],['MS-68','Superb Gem+','Nearly perfect coin'],['MS-69','MS69','Nearly perfect, only tiny imperfections'],['MS-70','Perfect','Absolutely perfect coin']];const tb=document.getElementById('nm-grade-tbody');if(tb)tb.innerHTML=grades.map(([g,n,d])=>`<tr><td style="font-weight:700;color:var(--gold)">${g}</td><td>${n}</td><td>${d}</td></tr>`).join('');}
+
+function renderNmCoinVals(){
+  // Check subscription
+  if(typeof userPlan !== 'undefined' && userPlan==='free'){
+    const tb=document.getElementById('nm-cv-tbody');
+    if(tb)tb.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--muted)">💎 Coin Values require a Pro subscription. <a href="/pricing.html" style="color:var(--gold)">Upgrade here</a></td></tr>';
+    return;
+  }
+  const allCV=typeof COIN_VALUES!=='undefined'?COIN_VALUES:[];
+  const pennyCV=typeof PENNY_COIN_VALUES!=='undefined'?PENNY_COIN_VALUES:[];
+  const combined=[...allCV,...pennyCV];
+  const search=(document.getElementById('nm-cv-search')||{}).value||'';
+  const series=(document.getElementById('nm-cv-series')||{}).value||'';
+  const filtered=combined.filter(r=>{
+    const s=search.toLowerCase();
+    const matchSearch=!s||(r.series+r.date).toLowerCase().includes(s);
+    const matchSeries=!series||r.series===series;
+    return matchSearch&&matchSeries;
+  });
+  const tb=document.getElementById('nm-cv-tbody');
+  if(!tb)return;
+  if(!combined.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">Coin value data loading...</td></tr>';return;}
+  tb.innerHTML=filtered.length?filtered.map(r=>`<tr><td>${r.series}</td><td style="font-weight:700">${r.date}</td><td>${r.g4||'—'}</td><td>${r.vg8||'—'}</td><td>${r.f12||'—'}</td><td>${r.vf20||'—'}</td><td>${r.ef40||'—'}</td><td>${r.au50||'—'}</td><td>${r.ms63||'—'}</td><td class="green-col">${r.ms65||'—'}</td></tr>`).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">No results found</td></tr>';
+}
 function renderAllKeyDates(){
   const allKD=[
     // Indian Head Cents
