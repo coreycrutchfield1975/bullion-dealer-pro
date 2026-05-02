@@ -1792,8 +1792,17 @@ async function loadAccount(){
     const u=await r.json();window_isPro=u.isPro===true;
     if(!window_isPro){
       document.querySelectorAll('.tab[data-pro="1"]').forEach(t=>{
-        t.style.opacity='0.55';
-        const ic=t.querySelector('.ticon');if(ic&&!ic.textContent.includes('🔒'))ic.textContent='🔒';
+        t.style.opacity='0.6';
+        const ic=t.querySelector('.ticon');
+        if(ic&&!ic.querySelector('.pro-lock')){
+          const lock=document.createElement('span');
+          lock.className='pro-lock';
+          lock.textContent='🔒';
+          lock.style.cssText='position:absolute;top:-4px;right:-4px;font-size:9px;line-height:1';
+          ic.style.position='relative';
+          ic.style.display='inline-block';
+          ic.appendChild(lock);
+        }
       });
     }
     if(u.plan==='admin')$('admin-btn').style.display='inline-flex';
