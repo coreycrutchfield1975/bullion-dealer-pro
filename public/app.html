@@ -42,7 +42,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;gap:12px}
 .logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text);text-decoration:none;flex-shrink:0;max-width:220px}
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
-.spot-strip{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;justify-content:center;max-width:580px}
+.spot-strip{display:none}
 .spot-strip::-webkit-scrollbar{display:none}
 .ss-item{display:flex;align-items:center;gap:5px;padding:0 11px;border-right:1px solid var(--border);font-size:11px;font-weight:600;white-space:nowrap}
 .ss-item:last-child{border-right:none}
@@ -56,6 +56,36 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .btn-danger{background:transparent;border:1px solid rgba(220,38,38,.3);color:var(--red);padding:6px 13px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-danger:hover{background:var(--red2)}
 /* NEWS */
+/* ── SPOT TICKER BAR ── */
+#spot-ticker-bar{display:flex;align-items:center;height:32px;overflow:hidden;background:var(--bg2);border-bottom:1px solid var(--border);border-top:1px solid var(--border)}
+.stb-label{padding:0 10px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:1.5px;white-space:nowrap;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;flex-shrink:0}
+.stb-track{flex:1;overflow:hidden;position:relative}
+.stb-inner{display:flex;align-items:center;gap:0;white-space:nowrap;animation:tickerScroll 30s linear infinite}
+.stb-inner:hover{animation-play-state:paused}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.stb-item{display:inline-flex;align-items:center;gap:6px;padding:0 18px;border-right:1px solid var(--border);font-size:12px;height:32px;flex-shrink:0}
+.stb-sym{font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+.stb-gold{background:rgba(217,119,6,0.08)}
+.stb-gold .stb-sym{color:#d97706}
+.stb-silver{background:rgba(148,163,184,0.08)}
+.stb-silver .stb-sym{color:#94a3b8}
+.stb-other .stb-sym{color:var(--muted)}
+[data-theme="dark"] .stb-gold{background:rgba(217,119,6,0.15)}
+[data-theme="dark"] .stb-silver{background:rgba(148,163,184,0.12)}
+/* ── SPOTLIGHT CARDS ── */
+.spotlight-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:4px}
+@media(max-width:480px){.spotlight-row{grid-template-columns:1fr}}
+.spot-card{border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.spot-card-gold{background:linear-gradient(135deg,#78350f,#b45309,#d97706);color:#fff}
+.spot-card-silver{background:linear-gradient(135deg,#334155,#475569,#64748b);color:#fff}
+.sc-icon{font-size:38px;line-height:1;flex-shrink:0}
+.sc-body{flex:1}
+.sc-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.8;margin-bottom:2px}
+.sc-price{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1.1}
+.sc-chg{font-size:13px;margin-top:4px;opacity:0.9}
+.sc-meta{text-align:right;flex-shrink:0}
+.sc-gram{font-size:12px;opacity:0.75;margin-bottom:3px}
+/* ── NEWS BAR ── */
 #news-bar{height:27px;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--border);background:var(--bg2);font-size:11px}
 #news-label{padding:0 10px;color:var(--blue2);font-size:9px;font-weight:700;letter-spacing:1.5px;white-space:nowrap;border-right:1px solid var(--border);flex-shrink:0}
 #news-track{flex:1;overflow:hidden}
@@ -283,19 +313,32 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <a class="logo" href="#">
       <img src="/dragon-logo.png" alt="Bullion Dealer Pro" style="height:38px;width:auto;object-fit:contain;border-radius:6px">
     </a>
-    <div class="spot-strip">
-      <div class="ss-item"><span class="ss-sym">Au</span><span id="hdr-au">—</span></div>
-      <div class="ss-item"><span class="ss-sym">Ag</span><span id="hdr-ag">—</span></div>
-      <div class="ss-item"><span class="ss-sym">Pt</span><span id="hdr-pt">—</span></div>
-      <div class="ss-item"><span class="ss-sym">Pd</span><span id="hdr-pd">—</span></div>
-      <div class="ss-item"><span class="ss-sym">Cu</span><span id="hdr-cu">—</span></div>
-    </div>
     <div class="hdr-right">
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">🌙</button>
       <button id="admin-btn" style="display:none" class="btn-outline" onclick="window.location='/admin.html'">⚙ Admin</button>
       <button class="btn-danger" onclick="doLogout()">⏻ Logout</button>
     </div>
   </div>
+  <!-- SPOT PRICE TICKER ROW -->
+  <div id="spot-ticker-bar">
+    <div class="stb-label">⬡ SPOT</div>
+    <div class="stb-track">
+      <div class="stb-inner" id="stb-inner">
+        <span class="stb-item stb-gold"><span class="stb-sym">Gold</span><span id="tkr-au">—</span></span>
+        <span class="stb-item stb-silver"><span class="stb-sym">Silver</span><span id="tkr-ag">—</span></span>
+        <span class="stb-item stb-other"><span class="stb-sym">Platinum</span><span id="tkr-pt">—</span></span>
+        <span class="stb-item stb-other"><span class="stb-sym">Palladium</span><span id="tkr-pd">—</span></span>
+        <span class="stb-item stb-other"><span class="stb-sym">Copper</span><span id="tkr-cu">—</span></span>
+        <!-- duplicate for seamless loop -->
+        <span class="stb-item stb-gold"><span class="stb-sym">Gold</span><span id="tkr-au2">—</span></span>
+        <span class="stb-item stb-silver"><span class="stb-sym">Silver</span><span id="tkr-ag2">—</span></span>
+        <span class="stb-item stb-other"><span class="stb-sym">Platinum</span><span id="tkr-pt2">—</span></span>
+        <span class="stb-item stb-other"><span class="stb-sym">Palladium</span><span id="tkr-pd2">—</span></span>
+        <span class="stb-item stb-other"><span class="stb-sym">Copper</span><span id="tkr-cu2">—</span></span>
+      </div>
+    </div>
+  </div>
+  <!-- NEWS TICKER ROW -->
   <div id="news-bar">
     <div id="news-label">◈ NEWS</div>
     <div id="news-track"><div id="news-inner"><span style="color:var(--muted)">Loading…</span></div></div>
@@ -320,9 +363,35 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- ═══════════════════ GOLD TAB ═══════════════════ -->
 <div id="tab-gold" class="section active">
-  <div class="sec-hero hero-gold">
-    <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Live spot · Karat calculator · Goldback exchange rates</div><div class="sh-chips"><span class="sh-chip">⚖️ Karat Calc</span><span class="sh-chip">💛 Goldbacks</span></div></div>
-    <div class="price-box"><div class="pb-label">Gold Spot</div><div class="pb-price" id="gold-hero-price">—</div><div class="pb-chg" id="gold-hero-chg">Loading…</div></div>
+  <!-- SPOTLIGHT: Gold + Silver prominent cards -->
+  <div class="spotlight-row">
+    <div class="spot-card spot-card-gold">
+      <div class="sc-icon">🥇</div>
+      <div class="sc-body">
+        <div class="sc-label">Gold Spot</div>
+        <div class="sc-price" id="gold-hero-price">—</div>
+        <div class="sc-chg" id="gold-hero-chg"><span style="color:var(--muted);font-size:12px">Loading…</span></div>
+      </div>
+      <div class="sc-meta">
+        <div class="sc-gram" id="gold-per-gram">— / g</div>
+        <div class="sc-gram" id="gold-per-dwt">— / dwt</div>
+      </div>
+    </div>
+    <div class="spot-card spot-card-silver">
+      <div class="sc-icon">🪙</div>
+      <div class="sc-body">
+        <div class="sc-label">Silver Spot</div>
+        <div class="sc-price" id="silver-spotlight-price">—</div>
+        <div class="sc-chg" id="silver-spotlight-chg"><span style="color:var(--muted);font-size:12px">Loading…</span></div>
+      </div>
+      <div class="sc-meta">
+        <div class="sc-gram" id="silver-per-gram">— / g</div>
+        <div class="sc-gram" id="silver-per-oz">— / oz</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec-hero hero-gold" style="margin-top:12px">
+    <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Karat calculator · Goldback exchange rates</div><div class="sh-chips"><span class="sh-chip">⚖️ Karat Calc</span><span class="sh-chip">💛 Goldbacks</span></div></div>
   </div>
   <div class="sub-nav">
     <button class="seg active" onclick="goldSec('karat',this)">⚖️ Karat Calc</button>
@@ -847,13 +916,25 @@ const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0,ZN:0};
 let window_isPro=false;
 
 async function fm(sym){try{const r=await fetch('/api/metals/'+sym);return r.ok?r.json():null}catch{return null}}
+function fmtSpotChange(d){
+  if(!d||d.change==null)return '';
+  const arr=d.change>=0?'▲':'▼';
+  const cls=d.change>=0?'up':'dn';
+  return '<span class="'+cls+'">'+arr+Math.abs(d.changePercent||0).toFixed(2)+'%</span>';
+}
+function setTicker(ids,d,perLb=false){
+  const p=d.price;
+  const label=perLb?'$'+p.toFixed(2)+'/lb':'$'+p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const chg=fmtSpotChange(d);
+  ids.forEach(id=>{const e=$(id);if(e)e.innerHTML=label+' '+chg;});
+}
 async function loadSpot(){
   const [au,ag,cu,pt,pd]=await Promise.all([fm('GC=F'),fm('SI=F'),fm('HG=F'),fm('PL=F'),fm('PA=F')]);
-  if(au?.price){spot.XAU=au.price;setHdr('hdr-au',au);}
-  if(ag?.price){spot.XAG=ag.price;setHdr('hdr-ag',ag);}
-  if(cu?.price){spot.HG=cu.price;setHdr('hdr-cu',cu,true);}
-  if(pt?.price){spot.XPT=pt.price;setHdr('hdr-pt',pt);}
-  if(pd?.price){spot.XPD=pd.price;setHdr('hdr-pd',pd);}
+  if(au?.price){spot.XAU=au.price;spot._au=au;setHdr('hdr-au',au);setTicker(['tkr-au','tkr-au2'],au);}
+  if(ag?.price){spot.XAG=ag.price;spot._ag=ag;setHdr('hdr-ag',ag);setTicker(['tkr-ag','tkr-ag2'],ag);}
+  if(cu?.price){spot.HG=cu.price;setHdr('hdr-cu',cu,true);setTicker(['tkr-cu','tkr-cu2'],cu,true);}
+  if(pt?.price){spot.XPT=pt.price;setHdr('hdr-pt',pt);setTicker(['tkr-pt','tkr-pt2'],pt);}
+  if(pd?.price){spot.XPD=pd.price;setHdr('hdr-pd',pd);setTicker(['tkr-pd','tkr-pd2'],pd);}
   fetch('/api/metals/ZN=F').then(r=>r.json()).then(d=>{if(d?.price)spot.ZN=d.price;}).catch(()=>{spot.ZN=1.30;});
   updateHeroPrices();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
@@ -869,8 +950,40 @@ function setHdr(id,d,perLb=false){
   el.innerHTML=label+' <span class="'+cls+'">'+arr+Math.abs(d.changePercent||0).toFixed(2)+'%</span>';
 }
 function updateHeroPrices(){
-  if(spot.XAU){$('gold-hero-price').textContent='$'+spot.XAU.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});$('gold-hero-chg').textContent='Live spot';}
-  if(spot.XAG){const ag='$'+spot.XAG.toFixed(2);['silver-hero-price','const-hero-price'].forEach(id=>{const e=$(id);if(e)e.textContent=ag;});}
+  if(spot.XAU){
+    const auFmt='$'+spot.XAU.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    $('gold-hero-price').textContent=auFmt;
+    const ghcEl=$('gold-hero-chg');
+    if(ghcEl){
+      if(spot._au&&spot._au.change!=null){
+        const arr=spot._au.change>=0?'▲':'▼';
+        const cls=spot._au.change>=0?'up':'dn';
+        const diff='$'+Math.abs(spot._au.change).toFixed(2);
+        ghcEl.innerHTML='<span class="'+cls+'">'+arr+diff+' ('+Math.abs(spot._au.changePercent||0).toFixed(2)+'%)</span>';
+      } else {ghcEl.textContent='Live spot';}
+    }
+    // spotlight extras
+    const gPerG=(spot.XAU/31.1035).toFixed(2);
+    const gPerDwt=(spot.XAU/20).toFixed(2);
+    const gpg=$('gold-per-gram');if(gpg)gpg.textContent='$'+gPerG+' / g';
+    const dpg=$('gold-per-dwt');if(dpg)dpg.textContent='$'+gPerDwt+' / dwt';
+  }
+  if(spot.XAG){
+    const agFmt='$'+spot.XAG.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    ['silver-hero-price','const-hero-price','silver-spotlight-price'].forEach(id=>{const e=$(id);if(e)e.textContent=agFmt;});
+    const ssc=$('silver-spotlight-chg');
+    if(ssc){
+      if(spot._ag&&spot._ag.change!=null){
+        const arr2=spot._ag.change>=0?'▲':'▼';
+        const cls2=spot._ag.change>=0?'up':'dn';
+        const diff2='$'+Math.abs(spot._ag.change).toFixed(4);
+        ssc.innerHTML='<span class="'+cls2+'">'+arr2+diff2+' ('+Math.abs(spot._ag.changePercent||0).toFixed(2)+'%)</span>';
+      } else {ssc.innerHTML='<span style="opacity:0.8;font-size:12px">Live spot</span>';}
+    }
+    const sPerG=(spot.XAG/31.1035).toFixed(4);
+    const spg=$('silver-per-gram');if(spg)spg.textContent='$'+sPerG+' / g';
+    const spo=$('silver-per-oz');if(spo)spo.textContent='$'+spot.XAG.toFixed(2)+' / oz';
+  }
   if(spot.HG&&spot.ZN){
     const m=(spot.HG*0.00220462262*3.11*0.95)+(spot.ZN*0.00220462262*3.11*0.05);
     const e=$('penny-hero-melt');if(e)e.textContent='$'+m.toFixed(4);
