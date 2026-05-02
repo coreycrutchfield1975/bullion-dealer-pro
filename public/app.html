@@ -309,7 +309,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="tab ts2" onclick="showTab('silver')"><span class="ticon">🪙</span><div>Silver Bullion<span class="tsub">Spot · Calc · Premiums</span></div></button>
     <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Constitutional<span class="tsub">90% Silver Melt</span></div></button>
     <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Melt Calculator</span></div></button>
-    <button class="tab tnm" onclick="showTab('numismatic')"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
+    <button class="tab tnm" onclick="showTab('numismatic')" data-pro="1"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
     <button class="tab tfx" onclick="showTab('fx')" data-pro="1"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
     <button class="tab ttv" onclick="showTab('trading')" data-pro="1"><span class="ticon">📺</span><div>Trading Sheet<span class="tsub">TV Display Mode</span></div></button>
     <button class="tab ta" onclick="showTab('admin')"><span class="ticon">🔐</span><div>Admin<span class="tsub">Account · Inventory</span></div></button>
@@ -878,7 +878,7 @@ function updateHeroPrices(){
 }
 
 // ═══ TABS ═══
-const PRO_TABS=['const','fx','trading'];
+const PRO_TABS=['const','fx','trading','numismatic'];
 function showTab(id){
   if(PRO_TABS.includes(id)&&!window_isPro){$('paywall').classList.add('show');return;}
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
