@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+<link rel="apple-touch-icon" href="/favicon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bullion Dealer Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#f0b429;--gold2:#ffe566;--gold3:#c88a00;
+  --bg:#03030a;--bg2:#080810;--bg3:#0f0f1c;--bg4:#161626;
+  --border:rgba(240,180,41,.2);--border2:rgba(240,180,41,.45);
+  --text:#f0ece0;--muted:#9b96b8;
+  --green:#00ff88;--red:#ff4b6e;--orange:#ffb347;--blue:#40c4ff;
+  --silver:#d0d8e8;--heading:#ffffff;
+  --font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace;
+}
+html,body{min-height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:rgba(240,180,41,.3);border-radius:3px}
+
+/* ══════════════════════════════
+   HEADER
+══════════════════════════════ */
+#header{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  background:rgba(3,3,10,.85);
+  backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);
+}
+/* shimmer top line */
+#header::before{
+  content:'';display:block;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);
+  background-size:200% 100%;
+  animation:shimmer 4s linear infinite;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* TICKER */
+#ticker-bar{
+  height:30px;display:flex;align-items:center;
+  border-bottom:1px solid rgba(240,180,41,.1);
+  font-family:var(--mono);font-size:11px;
+  background:rgba(240,180,41,.03);overflow:hidden;
+}
+#ticker-label{
+  padding:0 14px;color:var(--gold);letter-spacing:3px;font-size:9px;
+  border-right:1px solid var(--border);white-space:nowrap;
+}
+#ticker-track{flex:1;overflow:hidden}
+#ticker-inner{display:inline-flex;gap:40px;white-space:nowrap;animation:scrollL 50s linear infinite}
+#ticker-inner .ts{color:var(--gold);font-weight:700;margin-right:5px}
+#ticker-inner .tv{color:var(--text)}
+#ticker-inner .up{color:var(--green)} #ticker-inner .dn{color:var(--red)}
+@keyframes scrollL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* NAV */
+#nav{display:flex;align-items:center;justify-content:flex-end;padding:0 16px;height:38px}
+.brand{font-family:var(--display);font-size:22px;letter-spacing:4px;color:var(--gold);display:flex;align-items:center;gap:10px;text-shadow:0 0 20px rgba(240,180,41,.3)}
+.brand-gem{
+  width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold3));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:inline-block;
+}
+.nav-right{display:flex;gap:6px;align-items:center}
+.nbtn{
+  background:transparent;border:1px solid rgba(240,180,41,.2);
+  color:#b0accc;padding:6px 14px;border-radius:6px;
+  font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:1.5px;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+  transition:all .2s;
+}
+.nbtn:hover,.nbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.06)}
+
+/* LOGO BANNER */
+#tab-bar{
+  position:sticky;top:0;z-index:150;
+  background:var(--bg);
+}
+#logo-banner{
+  width:100%;background:#000;
+  border-bottom:2px solid rgba(240,180,41,.4);
+  padding:0 16px;margin:0;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+  min-height:140px;
+}
+#banner-watermark{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:50%;max-width:500px;height:auto;
+  pointer-events:none;
+  mix-blend-mode:lighten;
+  filter:sepia(1) saturate(6) hue-rotate(5deg) brightness(1.8);
+  animation:wmBreathe 4s ease-in-out infinite;
+}
+@keyframes wmBreathe{
+  0%,100%{opacity:.07}
+  50%{opacity:.22}
+}
+.banner-dragon-img{
+  height:140px;width:auto;object-fit:contain;
+  flex-shrink:0;display:block;border:none;
+  mix-blend-mode:lighten;position:relative;z-index:2;
+}
+.banner-dragon-img.flip{transform:scaleX(-1);}
+#banner-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(32px,5vw,72px);
+  letter-spacing:0.12em;line-height:1;
+  padding:0 30px;flex:1;text-align:center;
+  position:relative;z-index:2;
+}
+#banner-title .letter{
+  display:inline-block;
+  background:linear-gradient(180deg,#fff8dc 0%,#f0b429 30%,#c8830a 60%,#f0b429 80%,#fff8dc 100%);
+  background-size:100% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:letterShimmer 3s ease-in-out infinite,letterPulse 4s ease-in-out infinite;
+}
+#banner-title .letter:nth-child(1){animation-delay:.00s,.00s}
+#banner-title .letter:nth-child(2){animation-delay:.08s,.08s}
+#banner-title .letter:nth-child(3){animation-delay:.16s,.16s}
+#banner-title .letter:nth-child(4){animation-delay:.24s,.24s}
+#banner-title .letter:nth-child(5){animation-delay:.32s,.32s}
+#banner-title .letter:nth-child(6){animation-delay:.40s,.40s}
+#banner-title .letter:nth-child(7){animation-delay:.48s,.48s}
+#banner-title .letter:nth-child(8){animation-delay:.56s,.56s}
+#banner-title .letter:nth-child(9){animation-delay:.64s,.64s}
+#banner-title .letter:nth-child(10){animation-delay:.72s,.72s}
+#banner-title .letter:nth-child(11){animation-delay:.80s,.80s}
+#banner-title .letter:nth-child(12){animation-delay:.88s,.88s}
+#banner-title .letter:nth-child(13){animation-delay:.96s,.96s}
+#banner-title .letter:nth-child(14){animation-delay:1.04s,1.04s}
+#banner-title .letter:nth-child(15){animation-delay:1.12s,1.12s}
+#banner-title .letter:nth-child(16){animation-delay:1.20s,1.20s}
+@keyframes letterShimmer{
+  0%{background-position:0% 100%}
+  50%{background-position:0% 0%}
+  100%{background-position:0% 100%}
+}
+@keyframes letterPulse{
+  0%,100%{transform:translateY(0px) scale(1);filter:drop-shadow(0 0 4px rgba(240,180,41,.4))}
+  50%{transform:translateY(-4px) scale(1.06);filter:drop-shadow(0 0 16px rgba(255,220,80,.95)) drop-shadow(0 0 30px rgba(240,180,41,.6))}
+}
+.word-space{display:inline-block;width:0.3em;}
+
+/* GOLDBACK RETAILER CARDS */
+.gb-retailers{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.gb-retailer-card{border:1px solid rgba(240,180,41,.25);border-radius:8px;overflow:hidden;background:rgba(240,180,41,.03);}
+.gb-ret-header{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;
+  background:rgba(240,180,41,.05);transition:background .2s;user-select:none;
+}
+.gb-ret-header:hover{background:rgba(240,180,41,.12);}
+.gb-ret-name{font-family:var(--display);font-size:15px;letter-spacing:1px;color:#f0b429;flex:1;}
+.gb-ret-tag{font-family:var(--mono);font-size:12px;color:#ffe066;background:rgba(240,180,41,.12);padding:2px 8px;border-radius:4px;}
+.gb-ret-arrow{color:#f0b429;font-size:12px;transition:transform .3s;}
+.gb-retailer-card.open .gb-ret-arrow{transform:rotate(180deg);}
+.gb-ret-body{display:none;padding:14px 16px;}
+.gb-retailer-card.open .gb-ret-body{display:block;}
+.gb-price-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px;}
+.gb-price-tbl th{background:rgba(240,180,41,.12);color:#f0b429;font-family:var(--display);letter-spacing:1px;font-size:11px;padding:6px 10px;text-align:left;border-bottom:1px solid rgba(240,180,41,.2);}
+.gb-price-tbl td{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:#ddd;font-family:var(--mono);}
+.gb-price-tbl tr:last-child td{border-bottom:none;}
+.gb-price-tbl tr:hover td{background:rgba(240,180,41,.05);}
+.gb-shop-btn{
+  display:inline-block;margin-top:4px;padding:8px 18px;
+  background:linear-gradient(135deg,#c8830a,#f0b429);
+  color:#000;font-family:var(--display);font-size:13px;letter-spacing:1px;
+  border-radius:5px;text-decoration:none;transition:opacity .2s;
+}
+.gb-shop-btn:hover{opacity:.85;}
+
+/* SPOT BAR */
+#spot-bar{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  border-top:1px solid var(--border);
+}
+#spot-bar::-webkit-scrollbar{display:none}
+.spot-pill{
+  flex:1;min-width:100px;display:flex;flex-direction:column;align-items:center;
+  padding:8px 16px;border-right:1px solid var(--border);
+  cursor:default;transition:background .2s;position:relative;overflow:hidden;
+}
+.spot-pill::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;background:var(--gold);opacity:0;transition:opacity .2s}
+.spot-pill:hover{background:rgba(240,180,41,.04)} .spot-pill:hover::after{opacity:.3}
+.sp-sym{font-family:var(--display);font-size:12px;letter-spacing:2px;color:#b0accc;margin-bottom:2px}
+.sp-price{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--gold)}
+.sp-chg{font-size:10px;margin-top:1px}
+
+/* ══════════════════════════════
+   CONTENT
+══════════════════════════════ */
+#content{padding-top:150px} /* adjusted by JS */
+
+/* NEWS BAR */
+#news-bar{
+  height:30px;display:flex;align-items:center;overflow:hidden;
+  border-bottom:1px solid var(--border);
+  background:rgba(179,136,255,.03);font-size:12px;
+}
+#news-label{
+  padding:0 14px;color:#b388ff;font-family:var(--display);
+  font-size:11px;letter-spacing:2px;white-space:nowrap;
+  border-right:1px solid rgba(179,136,255,.2);
+}
+#news-track{flex:1;overflow:hidden}
+#news-inner{display:inline-flex;gap:60px;white-space:nowrap;animation:scrollL 90s linear infinite}
+#news-inner a{color:#b0accc;text-decoration:none;transition:color .2s}
+#news-inner a:hover{color:var(--gold)}
+
+/* ══════════════════════════════
+   TABS
+══════════════════════════════ */
+.tabs{
+  display:flex;overflow-x:auto;scrollbar-width:thin;scrollbar-color:rgba(240,180,41,.4) transparent;
+  -webkit-overflow-scrolling:touch;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  padding:0 4px;
+  flex-wrap:nowrap;
+}
+.tabs::-webkit-scrollbar{height:3px;}
+.tabs::-webkit-scrollbar-thumb{background:rgba(240,180,41,.4);border-radius:2px;}
+.tabs::-webkit-scrollbar-track{background:transparent;}
+/* Fade indicator on right to hint more tabs */
+.tab-wrap{position:relative;}
+.tab-wrap::after{
+  content:'';position:absolute;right:0;top:0;bottom:3px;width:48px;
+  background:linear-gradient(to right,transparent,var(--bg2));
+  pointer-events:none;z-index:10;
+}
+.tab{
+  padding:14px 18px;font-family:var(--display);font-size:17px;letter-spacing:1.5px;white-space:nowrap;flex-shrink:0;
+  cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;
+  white-space:nowrap;color:#c8c4e0;transition:all .2s;
+}
+.tab:hover{color:#ffffff}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* ══════════════════════════════
+   SECTIONS
+══════════════════════════════ */
+.section{display:none;padding:28px 20px 60px;max-width:1280px;margin:0 auto;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-title{
+  font-family:var(--display);font-size:16px;letter-spacing:4px;color:var(--gold);
+  margin-bottom:20px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.cv-premium-badge{background:linear-gradient(90deg,#b8860b,#ffd700);color:#000;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;vertical-align:middle;margin-left:8px}
+.sec-title::before{
+  content:'';width:4px;height:16px;border-radius:2px;
+  background:linear-gradient(to bottom,var(--gold2),var(--gold3));
+  display:inline-block;
+}
+
+/* ══════════════════════════════
+   METAL CARDS
+══════════════════════════════ */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+.metal-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+  position:relative;overflow:hidden;
+  transition:border-color .25s,transform .25s,box-shadow .25s;
+}
+.metal-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:120px;
+  background:linear-gradient(180deg,rgba(240,180,41,.07) 0%,transparent 100%);
+  pointer-events:none;
+}
+.metal-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent 10%,var(--gold) 50%,transparent 90%);
+  opacity:.5;
+}
+.metal-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(240,180,41,.08)}
+.m-sym{font-family:var(--display);font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:10px}
+.m-price{font-family:var(--mono);font-size:36px;color:var(--gold);letter-spacing:-1px;text-shadow:0 0 30px rgba(240,180,41,.2)}
+.m-unit{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:4px}
+.m-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap}
+.m-sub{font-family:var(--mono);font-size:12px;color:var(--text)}
+.m-sub span{color:var(--muted);font-size:10px;display:block;letter-spacing:1px;font-family:var(--font)}
+
+/* ══════════════════════════════
+   CARD GENERIC
+══════════════════════════════ */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px}
+.card h3{font-family:var(--display);font-size:12px;letter-spacing:2px;color:var(--muted);margin-bottom:16px}
+
+/* ══════════════════════════════
+   INPUTS
+══════════════════════════════ */
+label.lbl{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:7px}
+select.inp,input.inp{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  color:var(--text);padding:12px 14px;border-radius:9px;
+  font-size:14px;font-family:var(--font);outline:none;
+  transition:all .2s;appearance:none;
+}
+select.inp:focus,input.inp:focus{border-color:var(--gold);background:rgba(240,180,41,.04);box-shadow:0 0 0 3px rgba(240,180,41,.07)}
+select.inp option{background:var(--bg3)}
+
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+@media(max-width:520px){.calc-grid{grid-template-columns:1fr}}
+
+.pct-row{display:flex;gap:14px;margin-bottom:18px}
+.pct-group{flex:1}
+.pct-group input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  color:var(--gold);padding:12px;border-radius:9px;
+  font-size:20px;font-family:var(--mono);outline:none;
+  text-align:center;transition:all .2s;
+}
+.pct-group input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,180,41,.07)}
+
+/* RESULT BOX */
+.result-box{
+  background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);
+  border:1px solid var(--border2);border-radius:14px;
+  padding:22px;display:flex;justify-content:space-around;flex-wrap:wrap;gap:16px;
+  box-shadow:inset 0 1px 0 rgba(240,180,41,.1),0 8px 32px rgba(0,0,0,.3);
+}
+.res-item{text-align:center;min-width:90px}
+.res-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px}
+.res-val{font-family:var(--mono);font-size:26px;font-weight:700}
+.melt-val{color:var(--blue)} .buy-val{color:var(--green)} .sell-val{color:var(--orange)} .spread-val{color:var(--muted)}
+
+/* ══════════════════════════════
+   TABLES
+══════════════════════════════ */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+thead{background:var(--bg3)}
+th{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);padding:11px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid rgba(240,180,41,.05);font-family:var(--mono)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(240,180,41,.025)}
+
+/* ══════════════════════════════
+   INVENTORY
+══════════════════════════════ */
+.inv-form{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:flex-end}
+.inv-form select,.inv-form input{
+  background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:10px 12px;border-radius:8px;font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;
+}
+.inv-form select:focus,.inv-form input:focus{border-color:var(--gold)}
+.add-btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;
+  border:none;padding:11px 22px;border-radius:8px;
+  font-family:var(--display);font-size:16px;letter-spacing:1.5px;
+  cursor:pointer;white-space:nowrap;transition:opacity .2s;box-shadow:0 4px 16px rgba(240,180,41,.25);
+}
+.add-btn:hover{opacity:.85}
+.clr-btn{background:transparent;border:1px solid rgba(255,75,110,.35);color:var(--red);padding:11px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--font);transition:all .2s}
+.clr-btn:hover{background:rgba(255,75,110,.08)}
+
+/* ══════════════════════════════
+   PROMO
+══════════════════════════════ */
+.promo-wrap{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.promo-wrap input{
+  background:var(--bg3);border:1px solid var(--border);color:var(--gold);
+  padding:13px 18px;border-radius:9px;font-size:16px;font-family:var(--mono);
+  letter-spacing:3px;outline:none;flex:1;min-width:180px;transition:border-color .2s;
+}
+.promo-wrap input:focus{border-color:var(--gold)}
+.promo-btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;
+  border:none;padding:13px 24px;border-radius:9px;
+  font-family:var(--display);font-size:18px;letter-spacing:2px;cursor:pointer;white-space:nowrap;
+}
+.promo-msg{margin-top:10px;font-size:14px;font-family:var(--mono)}
+.ok{color:var(--green)} .err{color:var(--red)}
+
+/* ══════════════════════════════
+   PAYWALL
+══════════════════════════════ */
+#paywall{display:none;position:fixed;inset:0;z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(16px);background:rgba(0,0,0,.85)}
+#paywall.show{display:flex}
+.pw-box{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border:1px solid var(--gold);border-radius:20px;
+  padding:56px 44px;max-width:440px;width:100%;text-align:center;
+  box-shadow:0 0 100px rgba(240,180,41,.12),0 40px 80px rgba(0,0,0,.6);
+}
+.pw-box h2{font-family:var(--display);font-size:40px;color:var(--gold);letter-spacing:4px;margin-bottom:14px}
+.pw-box p{color:var(--muted);margin-bottom:32px;line-height:1.7;font-size:15px}
+.pw-btn{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-family:var(--display);font-size:20px;letter-spacing:2px;padding:16px 36px;border-radius:12px;text-decoration:none;margin-bottom:18px;box-shadow:0 8px 30px rgba(240,180,41,.3)}
+.pw-link{color:var(--muted);font-size:13px} .pw-link a{color:var(--gold)}
+
+/* ══════════════════════════════
+   BADGES / KEY DATES / ERRORS
+══════════════════════════════ */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-family:var(--mono);font-size:9px;letter-spacing:2px;font-weight:700}
+.badge-rare{background:rgba(255,75,110,.15);color:var(--red);border:1px solid rgba(255,75,110,.35)}
+.badge-scarce{background:rgba(255,152,0,.12);color:var(--orange);border:1px solid rgba(255,152,0,.3)}
+.badge-common{background:rgba(90,85,112,.2);color:var(--muted);border:1px solid var(--border)}
+
+.kd-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:13px 18px;border-radius:9px;font-size:15px;font-family:var(--font);
+  outline:none;margin-bottom:20px;transition:border-color .2s;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f0b429' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;
+}
+.kd-select:focus{border-color:var(--gold)}
+.kd-select option{background:var(--bg2);color:var(--text);}
+.kd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.kd-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;transition:border-color .2s,transform .2s;
+}
+.kd-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.kd-coin{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.kd-years{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.kd-value{font-family:var(--mono);font-size:13px;color:var(--gold);margin-top:8px}
+
+.err-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:20px;transition:border-color .2s,transform .2s;
+}
+.err-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.err-type{font-family:var(--display);font-size:13px;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.err-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* DEALER */
+.dealer-section{margin-bottom:28px}
+.dealer-name{font-family:var(--display);font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+
+/* GRADE */
+.grade-table td:first-child{color:var(--gold);width:70px;font-family:var(--mono)}
+.grade-table td:nth-child(2){color:var(--text);width:160px;font-weight:700}
+.grade-table td:nth-child(3){color:var(--muted);font-size:13px;font-family:var(--font)}
+
+/* ACCT */
+.acct-info{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border2);border-radius:16px;padding:30px;max-width:520px}
+
+.up{color:var(--green)} .dn{color:var(--red)}
+@media(max-width:1024px){.brand{font-size:16px}.nbtn{padding:5px 9px;font-size:11px}}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:1024px){
+
+  /* Hide dragons on mobile — text + watermark only */
+  .banner-dragon-img{display:none!important;}
+
+
+  /* Logo banner — stack vertically on mobile */
+  #tab-bar{
+  position:sticky;top:0;z-index:150;
+  background:var(--bg);
+}
+#logo-banner{
+    flex-direction:column;
+    min-height:auto;
+    padding:10px 8px;
+    gap:6px;
+  }
+  .banner-dragon-img{
+    height:70px;
+  }
+  #banner-title{
+    font-size:clamp(24px,8vw,42px);
+    padding:4px 8px;
+    letter-spacing:0.08em;
+  }
+  #banner-watermark{
+    width:80%;
+  }
+
+  /* Nav bar */
+  #nav{padding:0 8px;height:34px;}
+  .brand{font-size:13px!important}
+  .nbtn{padding:4px 7px;font-size:10px!important}
+
+  /* Ticker */
+  #ticker-bar{height:28px;}
+
+  /* Spot pills — allow horizontal scroll */
+  #spot-bar{padding:6px 8px;}
+  .spot-pill{min-width:90px;padding:6px 10px;}
+  .spot-val{font-size:14px;}
+  .spot-lbl{font-size:9px;}
+
+  /* News bar */
+  #news-bar{height:26px;}
+
+  /* Tab bar fixed on mobile */
+  #tab-bar{position:fixed!important;left:0;right:0;z-index:9999;background:var(--bg2);border-bottom:1px solid rgba(240,180,41,.3);overflow:hidden;}
+  .tabs{padding:6px 8px;gap:6px;overflow-x:scroll;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;max-width:100%;width:100%;}
+  #content{padding-top:280px!important;}
+  .tab{padding:7px 12px;font-size:12px;flex-shrink:0;}
+
+  /* Content padding */
+  #content{padding-left:8px;padding-right:8px;}
+
+  /* Cards */
+  .card{padding:16px 12px;}
+
+  /* Tables — horizontal scroll */
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+  /* Calc grid already handles 1 col at 520px */
+
+  /* Key dates table text */
+  table td, table th{font-size:12px;padding:6px 8px;}
+
+  /* Account section */
+  .acct-info{padding:18px 14px;}
+}
+
+@media(max-width:400px){
+  .banner-dragon-img{height:50px;}
+  #banner-title{font-size:22px;}
+  .spot-pill{min-width:80px;}
+}
+
+/* ===== COIN VALUES TAB RESPONSIVE ===== */
+/* Desktop: filters in one row */
+#tab-coinvals .cv-filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* Tablet (≤768px): stack filter row, full-width search */
+@media(max-width:768px){
+  #tab-coinvals #cv-search{font-size:13px;padding:8px 12px;}
+  #tab-coinvals select,#tab-coinvals input[type=number]{
+    flex:1 1 140px;min-width:120px;
+  }
+  #cv-count{display:block;width:100%;margin-top:4px;}
+  /* Coin values table — reduce font slightly */
+  #cv-table td,#cv-table th{font-size:11px;padding:5px 6px;}
+}
+
+/* Phone (≤520px): everything stacks, hide less-critical grade columns */
+@media(max-width:520px){
+  #tab-coinvals #cv-search{font-size:12px;}
+  #tab-coinvals select,#tab-coinvals input[type=number]{width:100%;box-sizing:border-box;}
+  /* On very small screens hide F-12, VF-20, EF-40 columns to keep table scannable */
+  #cv-table th:nth-child(5),#cv-table td:nth-child(5),
+  #cv-table th:nth-child(6),#cv-table td:nth-child(6),
+  #cv-table th:nth-child(7),#cv-table td:nth-child(7){display:none;}
+  #cv-table td,#cv-table th{font-size:11px;padding:5px 4px;}
+  /* Make ADD button smaller */
+  #cv-table button{padding:2px 6px!important;font-size:10px!important;}
+}
+
+
+/* ── TRADING SHEET ── */
+#tab-trading table thead th{background:linear-gradient(135deg,#1a1508,#111);color:var(--gold);font-size:11px;letter-spacing:2px;}
+#tab-trading .ts-input{background:transparent;border:none;border-bottom:1px solid #333;color:var(--text);font-family:var(--mono);font-size:14px;width:100%;padding:3px 4px;outline:none;}
+#tab-trading .ts-input:focus{border-bottom-color:var(--gold);}
+#tab-trading .ts-buy{color:#4ddb7a;font-family:var(--mono);font-weight:700;}
+#tab-trading .ts-sell{color:#e07070;font-family:var(--mono);font-weight:700;}
+#tab-trading .ts-buy .ts-input{color:#4ddb7a;}
+#tab-trading .ts-sell .ts-input{color:#e07070;}
+#tab-trading .ts-dollar{color:#ff8c00;font-size:13px;user-select:none;}
+#tab-trading .ts-del{background:transparent;border:1px solid #333;color:#666;padding:3px 8px;border-radius:4px;cursor:pointer;font-size:12px;}
+#tab-trading .ts-del:hover{border-color:#e05555;color:#e05555;}
+#tab-trading tbody tr:hover{background:#1a1a1a;}
+#tab-trading tbody td{padding:10px 12px;vertical-align:middle;}
+@media print{
+  #tab-trading .tbl-wrap{overflow:visible!important;}
+  #tab-trading button,#tab-trading .ts-del,#ts-tv-btn{display:none!important;}
+  #tab-trading .ts-input{border:none!important;font-size:13px!important;}
+  #tab-trading thead th{background:#f9f6ee!important;color:#7a5c1a!important;}
+  #tab-trading tbody td{color:#111!important;}
+  #tab-trading .ts-buy .ts-input{color:#1a6a3a!important;}
+  #tab-trading .ts-sell .ts-input{color:#8b1a1a!important;}
+  @page{size:landscape;margin:0.5in;}
+}
+</style>
+</head>
+<body>
+
+
+<div id="upgrade-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#111;border:1px solid rgba(240,180,41,0.4);border-radius:16px;padding:40px 32px;max-width:420px;width:90%;text-align:center;box-shadow:0 0 40px rgba(240,180,41,0.15);">
+    <div style="font-size:48px;margin-bottom:12px;">&#128274;</div>
+    <h2 style="font-family:var(--display);color:var(--gold);letter-spacing:3px;font-size:22px;margin-bottom:8px;">PRO FEATURE</h2>
+    <p style="color:#aaa;font-size:14px;line-height:1.6;margin-bottom:24px;">This feature is included in Bullion Dealer Pro.<br>Upgrade to unlock all calculators, reference guides, inventory tracker, currency exchange, and more.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <a href="/pricing" style="background:linear-gradient(135deg,#c9a84c,#f0b429);color:#000;padding:14px 28px;border-radius:8px;font-family:var(--display);font-size:18px;letter-spacing:2px;text-decoration:none;display:block;">UPGRADE &mdash; $19/MO</a>
+      <button onclick="document.getElementById('upgrade-modal').style.display='none'" style="background:transparent;border:1px solid #333;color:#666;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">Maybe Later</button>
+    </div>
+  </div>
+</div>
+<div id="paywall">
+  <div class="pw-box">
+    <h2>TRIAL ENDED</h2>
+    <p>Your 14-day free trial has ended.<br>Subscribe to keep full access.</p>
+    <a href="/pricing" class="pw-btn">VIEW PLANS</a>
+    <div class="pw-link"><a href="/login">Already subscribed? Log in</a></div>
+  </div>
+</div>
+
+<div id="header">
+  <div id="ticker-bar">
+    <div id="ticker-label">◈ LIVE</div>
+    <div id="ticker-track"><div id="ticker-inner"><span>Loading market data…</span></div></div>
+  </div>
+  <div id="logo-banner">
+    <img class="banner-dragon-img" src="https://media.base44.com/images/public/69eae2a3c39807325aed8509/7d36e61b2_generated_image.png" alt="Dragon Left"/>
+    <img id="banner-watermark" src="https://media.base44.com/images/public/69eae2a3c39807325aed8509/dce7434be_generated_image.png" alt=""/>
+    <span id="banner-title">
+      <span class="letter">B</span><span class="letter">U</span><span class="letter">L</span><span class="letter">L</span><span class="letter">I</span><span class="letter">O</span><span class="letter">N</span><span class="word-space"></span><span class="letter">D</span><span class="letter">E</span><span class="letter">A</span><span class="letter">L</span><span class="letter">E</span><span class="letter">R</span><span class="word-space"></span><span class="letter">P</span><span class="letter">R</span><span class="letter">O</span>
+    </span>
+    <img class="banner-dragon-img flip" src="https://media.base44.com/images/public/69eae2a3c39807325aed8509/7d36e61b2_generated_image.png" alt="Dragon Right"/>
+  </div>
+  <div id="nav">
+    <div class="nav-right" style="margin-left:auto">
+      <a class="nbtn" href="https://apmex.com" target="_blank">APMEX ↗</a>
+      <a class="nbtn" href="https://kitco.com" target="_blank">KITCO ↗</a>
+      <button class="nbtn" id="admin-btn" style="display:none" onclick="location.href='/admin-panel'">⚙ ADMIN</button>
+      <a class="nbtn" href="/" style="color:#aaa;">⌂ WEBSITE</a>
+      <button class="nbtn" onclick="doLogout()" style="color:#e07070;border-color:#5a2a2a;">⏻ LOGOUT</button>
+    </div>
+  </div>
+  <div id="spot-bar">
+    <div class="spot-pill"><div class="sp-sym">GOLD</div><div class="sp-price" id="sp-xau">—</div><div class="sp-chg" id="sc-xau"></div></div>
+    <div class="spot-pill"><div class="sp-sym">SILVER</div><div class="sp-price" id="sp-xag">—</div><div class="sp-chg" id="sc-xag"></div></div>
+    <div class="spot-pill"><div class="sp-sym">COPPER</div><div class="sp-price" id="sp-hg">—</div><div class="sp-chg" id="sc-hg"></div></div>
+    <div class="spot-pill"><div class="sp-sym">PLATINUM</div><div class="sp-price" id="sp-xpt">—</div><div class="sp-chg" id="sc-xpt"></div></div>
+    <div class="spot-pill"><div class="sp-sym">PALLADIUM</div><div class="sp-price" id="sp-xpd">—</div><div class="sp-chg" id="sc-xpd"></div></div>
+    <div class="spot-pill"><div class="sp-sym">AU:AG</div><div class="sp-price" id="sp-ratio">—</div><div class="sp-chg" style="font-size:9px;color:var(--muted)">RATIO</div></div>
+  </div>
+</div>
+
+<div id="tab-bar">
+  <div id="news-bar">
+    <div id="news-label">◈ MARKET NEWS</div>
+    <div id="news-track"><div id="news-inner"><span>Loading…</span></div></div>
+  </div>
+
+  <div class="tab-wrap"><div class="tabs">
+    <div class="tab active"  onclick="showTab('spot')">📊 SPOT</div>
+    <div class="tab" onclick="showTab('calc')">⚡ DEAL CALC</div>
+    <div class="tab" onclick="showTab('silver')">🪙 SILVER</div>
+    <div class="tab" onclick="showTab('pennies')">🟤 PENNIES</div>
+    <div class="tab" onclick="showTab('gold-k')" data-pro="1">🥇 GOLD KARATS</div>
+    <div class="tab" onclick="showTab('goldback')" data-pro="1">💛 GOLDBACKS</div>
+    <div class="tab" onclick="showTab('platpal')">⚗️ PLAT/PAL</div>
+    <div class="tab" onclick="showTab('premium')" data-pro="1">🏪 PREMIUMS</div>
+    <div class="tab" onclick="showTab('inventory')" data-pro="1">📦 INVENTORY</div>
+    <div class="tab" onclick="showTab('coinvals')" data-pro="1">💎 COIN VALUES</div>
+    <div class="tab" onclick="showTab('keydate')" data-pro="1">🗝 KEY DATES</div>
+    <div class="tab" onclick="showTab('errors')" data-pro="1">⚠️ ERRORS</div>
+    <div class="tab" onclick="showTab('grading')" data-pro="1">📋 GRADING</div>
+    <div class="tab" onclick="showTab('currency')" data-pro="1">💱 CURRENCY</div>
+    <div class="tab" onclick="showTab('trading')" data-pro="1">🖨 TRADING SHEET</div>
+    <div class="tab" onclick="showTab('account')">👤 ACCOUNT</div>
+  </div></div>
+</div>
+
+<div id="content">
+
+  <!-- SPOT -->
+  <div id="tab-spot" class="section active">
+    <div class="sec-title">Live Spot Prices</div>
+    <div class="grid g3">
+      <div class="metal-card"><div class="m-sym">GOLD · XAU</div><div class="m-price" id="m-xau">—</div><div class="m-unit">per troy oz</div><div class="m-row"><div class="m-sub" id="m-xau-g">—<span>per gram</span></div><div class="m-sub" id="m-xau-dwt">—<span>per DWT</span></div><div class="m-sub" id="m-xau-kg">—<span>per kg</span></div></div></div>
+      <div class="metal-card"><div class="m-sym">SILVER · XAG</div><div class="m-price" id="m-xag">—</div><div class="m-unit">per troy oz</div><div class="m-row"><div class="m-sub" id="m-xag-g">—<span>per gram</span></div><div class="m-sub" id="m-xag-dwt">—<span>per DWT</span></div><div class="m-sub" id="m-face">—<span>per $1 face (90%)</span></div></div></div>
+      <div class="metal-card"><div class="m-sym">COPPER · HG</div><div class="m-price" id="m-hg">—</div><div class="m-unit">per troy oz</div><div class="m-row"><div class="m-sub" id="m-hg-g">—<span>per gram</span></div><div class="m-sub" id="m-hg-lb">—<span>per pound</span></div><div class="m-sub" id="m-hg-penny">—<span>per penny melt</span></div></div></div>
+      <div class="metal-card"><div class="m-sym">PLATINUM · XPT</div><div class="m-price" id="m-xpt">—</div><div class="m-unit">per troy oz</div><div class="m-row"><div class="m-sub" id="m-xpt-g">—<span>per gram</span></div></div></div>
+      <div class="metal-card"><div class="m-sym">PALLADIUM · XPD</div><div class="m-price" id="m-xpd">—</div><div class="m-unit">per troy oz</div><div class="m-row"><div class="m-sub" id="m-xpd-g">—<span>per gram</span></div></div></div>
+      <div class="metal-card"><div class="m-sym">GOLD : SILVER RATIO</div><div class="m-price" id="m-ratio">—</div><div class="m-unit">oz Gold per oz Silver</div></div>
+    </div>
+  </div>
+
+  <!-- DEAL CALC -->
+  <div id="tab-calc" class="section">
+    <div class="sec-title">Deal Calculator</div>
+    <div class="calc-grid">
+      <div><label class="lbl">SELECT ITEM</label>
+        <select class="inp" id="dc-item" onchange="calcDeal()">
+          <optgroup label="── Silver Coins ──">
+            <option value="morgan" data-oz="0.7734">Morgan Dollar</option>
+            <option value="peace" data-oz="0.7734">Peace Dollar</option>
+            <option value="wlhalf" data-oz="0.3617">Walking Liberty Half</option>
+            <option value="fhalf" data-oz="0.3617">Franklin Half Dollar</option>
+            <option value="kh64" data-oz="0.3617">Kennedy Half 1964 (90%)</option>
+            <option value="kh40" data-oz="0.1479">Kennedy Half 1965–70 (40%)</option>
+            <option value="ike" data-oz="0.3161">Eisenhower Dollar (40%)</option>
+            <option value="washq" data-oz="0.1808">Washington Quarter</option>
+            <option value="slq" data-oz="0.1808">Standing Liberty Quarter</option>
+            <option value="barberq" data-oz="0.1808">Barber Quarter</option>
+            <option value="roosd" data-oz="0.0723">Roosevelt Dime (pre-65)</option>
+            <option value="mercd" data-oz="0.0723">Mercury Dime</option>
+            <option value="barberd" data-oz="0.0723">Barber Dime</option>
+            <option value="barberh" data-oz="0.3617">Barber Half Dollar</option>
+            <option value="warn" data-oz="0.0563">War Nickel 1942–45 (35%)</option>
+          </optgroup>
+          <optgroup label="── Silver Rolls ──">
+            <option value="rdimes" data-oz="3.575">Dimes Roll (50)</option>
+            <option value="rqtrs" data-oz="7.234">Quarters Roll (40)</option>
+            <option value="rhalfwl" data-oz="7.234">Halves WL/Franklin (20)</option>
+            <option value="rhalfk64" data-oz="7.234">Kennedy Halves 1964 (20)</option>
+            <option value="rhalfk40" data-oz="2.958">Kennedy Halves 1965–70 (20)</option>
+            <option value="rmorgan" data-oz="15.468">Morgan/Peace Roll (20)</option>
+            <option value="rike" data-oz="6.322">Eisenhower Roll (20)</option>
+            <option value="rwarn" data-oz="2.252">War Nickels Roll (40)</option>
+          </optgroup>
+          <optgroup label="── Gold Karats ──">
+            <option value="g24" data-oz="1"      data-metal="XAU">24K Gold /oz</option>
+            <option value="g22" data-oz="0.9167" data-metal="XAU">22K Gold /oz</option>
+            <option value="g21" data-oz="0.875"  data-metal="XAU">21K Gold /oz</option>
+            <option value="g18" data-oz="0.75"   data-metal="XAU">18K Gold /oz</option>
+            <option value="g14" data-oz="0.5833" data-metal="XAU">14K Gold /oz</option>
+            <option value="g12" data-oz="0.5"    data-metal="XAU">12K Gold /oz</option>
+            <option value="g10" data-oz="0.4167" data-metal="XAU">10K Gold /oz</option>
+            <option value="g9"  data-oz="0.375"  data-metal="XAU">9K Gold /oz</option>
+          </optgroup>
+          <optgroup label="── Goldbacks ──">
+            <option value="gb1"   data-oz="0.000999" data-metal="XAU">1 Goldback</option>
+            <option value="gb5"   data-oz="0.004995" data-metal="XAU">5 Goldback</option>
+            <option value="gb10"  data-oz="0.00999"  data-metal="XAU">10 Goldback</option>
+            <option value="gb25"  data-oz="0.02498"  data-metal="XAU">25 Goldback</option>
+            <option value="gb50"  data-oz="0.04995"  data-metal="XAU">50 Goldback</option>
+            <option value="gb100" data-oz="0.0999"   data-metal="XAU">100 Goldback</option>
+          </optgroup>
+          <optgroup label="── Plat / Pal ──">
+            <option value="xpt" data-oz="1" data-metal="XPT">Platinum /oz</option>
+            <option value="xpd" data-oz="1" data-metal="XPD">Palladium /oz</option>
+          </optgroup>
+        </select>
+      </div>
+      <div><label class="lbl">SPOT PRICE</label>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-family:var(--mono);color:var(--gold);font-size:20px" id="dc-spot-disp">—</div>
+      </div>
+    </div>
+    <div class="pct-row">
+      <div class="pct-group"><label class="lbl">BUY BELOW MELT (%)</label><input type="number" id="dc-buy-pct" value="10" min="0" max="99" step="0.5" oninput="calcDeal()"></div>
+      <div class="pct-group"><label class="lbl">SELL ABOVE MELT (%)</label><input type="number" id="dc-sell-pct" value="15" min="0" max="99" step="0.5" oninput="calcDeal()"></div>
+    </div>
+    <div class="result-box">
+      <div class="res-item"><div class="res-lbl">MELT VALUE</div><div class="res-val melt-val" id="dc-melt">—</div></div>
+      <div class="res-item"><div class="res-lbl">🟢 BUY AT</div><div class="res-val buy-val" id="dc-buy">—</div></div>
+      <div class="res-item"><div class="res-lbl">🟠 SELL AT</div><div class="res-val sell-val" id="dc-sell">—</div></div>
+      <div class="res-item"><div class="res-lbl">SPREAD</div><div class="res-val spread-val" id="dc-spread">—</div></div>
+    </div>
+  </div>
+
+  <!-- SILVER -->
+  <div id="tab-silver" class="section">
+    <div class="sec-title">Constitutional Silver — Coins</div>
+    <div class="pct-row" style="max-width:360px"><div class="pct-group"><label class="lbl">BUY %</label><input type="number" id="sv-buy" value="10" min="0" max="99" oninput="renderSilver()"></div><div class="pct-group"><label class="lbl">SELL %</label><input type="number" id="sv-sell" value="15" min="0" max="99" oninput="renderSilver()"></div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>COIN</th><th>OZ AG</th><th>MELT</th><th>BUY</th><th>SELL</th></tr></thead><tbody id="sv-tbody"></tbody></table></div>
+    <div class="sec-title" style="margin-top:32px">Constitutional Silver — Rolls</div>
+    <div class="pct-row" style="max-width:360px"><div class="pct-group"><label class="lbl">BUY %</label><input type="number" id="svr-buy" value="15" min="0" max="99" oninput="renderSilverRolls()"></div><div class="pct-group"><label class="lbl">SELL %</label><input type="number" id="svr-sell" value="15" min="0" max="99" oninput="renderSilverRolls()"></div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>ROLL TYPE</th><th>QTY</th><th>OZ AG</th><th>MELT</th><th>BUY</th><th>SELL</th></tr></thead><tbody id="svr-tbody"></tbody></table></div>
+  </div>
+
+  <!-- PENNIES -->
+  <div id="tab-pennies" class="section">
+    <div class="sec-title">Copper Pennies — Pre-1982 — 95% Cu</div>
+
+    <!-- Custom penny calculator -->
+    <div style="background:var(--surface,#111);border:1px solid var(--gold3);border-radius:10px;padding:18px 20px;margin-bottom:22px;max-width:420px">
+      <div style="font-family:var(--display);font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:14px">⚙ PENNY MELT CALCULATOR</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <label style="font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap">NUMBER OF PENNIES</label>
+        <input id="penny-calc-input" type="number" min="1" step="1" placeholder="e.g. 100"
+          style="flex:1;background:#1a1a2e;border:1px solid var(--gold3);border-radius:6px;color:var(--gold2);font-family:var(--mono);font-size:16px;padding:8px 12px;outline:none;width:100%"
+          oninput="calcPennies()">
+      </div>
+      <div id="penny-calc-result" style="display:none;border-top:1px solid #333;padding-top:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">MELT VALUE</div>
+            <div id="pc-melt" style="font-size:22px;color:var(--gold);font-family:var(--mono);font-weight:700">—</div>
+          </div>
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">FACE VALUE</div>
+            <div id="pc-face" style="font-size:22px;color:var(--text);font-family:var(--mono);font-weight:700">—</div>
+          </div>
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">TOTAL GRAMS</div>
+            <div id="pc-grams" style="font-size:22px;color:var(--text);font-family:var(--mono)">—</div>
+          </div>
+          <div style="background:#0d0d1a;border-radius:6px;padding:10px 14px">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px">vs FACE</div>
+            <div id="pc-vs" style="font-size:22px;font-family:var(--mono);font-weight:700">—</div>
+          </div>
+        </div>
+        <div id="pc-ratio" style="margin-top:10px;font-size:12px;color:var(--muted);font-family:var(--mono);text-align:center;letter-spacing:1px"></div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap"><table><thead><tr><th>QTY</th><th>FACE</th><th>GRAMS</th><th>LBS</th><th>Cu MELT</th><th>vs FACE</th></tr></thead><tbody id="penny-tbody"></tbody></table></div>
+    <div style="margin-top:14px;font-size:12px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)">COMEX HG (Cu) + Zinc · 3.11g · 95% Cu / 5% Zn · Pre-1982 pennies only</div>
+  </div>
+
+  <!-- GOLD KARATS -->
+  <div id="tab-gold-k" class="section">
+    <div class="sec-title">Gold Karat Calculator</div>
+    <div class="pct-row" style="max-width:360px"><div class="pct-group"><label class="lbl">BUY %</label><input type="number" id="gk-buy" value="15" min="0" max="99" oninput="renderGoldKarats()"></div><div class="pct-group"><label class="lbl">SELL %</label><input type="number" id="gk-sell" value="15" min="0" max="99" oninput="renderGoldKarats()"></div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>KARAT</th><th>PURITY</th><th>MELT /OZ</th><th>MELT /GRAM</th><th>BUY /OZ</th><th>BUY /GRAM</th><th>SELL /OZ</th><th>SELL /GRAM</th></tr></thead><tbody id="gk-tbody"></tbody></table></div>
+  </div>
+
+  <!-- GOLDBACKS -->
+  <div id="tab-goldback" class="section">
+    <div class="sec-title">Goldbacks — Official Exchange Rate</div>
+    <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:10px;letter-spacing:1px">
+      📡 Official exchange rates from <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold);text-decoration:none">goldback.com</a> — updated daily at 10 AM MST
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>DENOMINATION</th><th>GOLD OZ</th><th>OFFICIAL RATE</th></tr></thead><tbody id="gb-tbody"></tbody></table></div>
+    <div id="gb-updated" style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:8px;letter-spacing:1px"></div>
+
+    <!-- RETAILER PRICING -->
+    <div class="sec-title" style="margin-top:32px">📦 Where to Buy Goldbacks — Retailer Prices</div>
+    <p style="font-size:12px;color:#888;margin:4px 0 16px">Prices shown are approximate per-note retail. Click a retailer to shop. Updated periodically.</p>
+
+    <div class="gb-retailers">
+      <!-- Each retailer card -->
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">🏆 APMEX</span>
+          <span class="gb-ret-tag">From ~$9.28 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$4.66</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$9.28</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$46.40</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$92.80</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$232.00</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$464.00</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <a href="https://www.apmex.com/category/19605/goldbacks" target="_blank" class="gb-shop-btn">Shop APMEX ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">🥈 SD Bullion</span>
+          <span class="gb-ret-tag">From ~$9.57 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$4.80</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$9.57</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$47.85</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$95.70</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$239.25</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$478.50</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <a href="https://sdbullion.com/gold/foil-notes" target="_blank" class="gb-shop-btn">Shop SD Bullion ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">💰 JM Bullion</span>
+          <span class="gb-ret-tag">From ~$9.21 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$4.58</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$9.21</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$46.05</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$92.10</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$230.25</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$460.50</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <a href="https://www.jmbullion.com/gold/gold-notes/goldbacks/" target="_blank" class="gb-shop-btn">Shop JM Bullion ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">⚡ Defy The Grid</span>
+          <span class="gb-ret-tag">From ~$4.82 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$2.45</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$4.82</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$24.10</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$48.20</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$120.50</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$241.00</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:11px;color:#f0b429;margin:6px 0">⚠️ DTG prices are closer to spot — verify current rates on their site.</p>
+          <a href="https://defythegrid.com" target="_blank" class="gb-shop-btn">Shop Defy The Grid ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">💵 Money Metals Exchange</span>
+          <span class="gb-ret-tag">From ~$9.35 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$4.70</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$9.35</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$46.75</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$93.50</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$233.75</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$467.50</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <a href="https://www.moneymetals.com/goldbacks" target="_blank" class="gb-shop-btn">Shop Money Metals ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">🏛️ Finest Known</span>
+          <span class="gb-ret-tag">From ~$9.20 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$4.60</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$9.20</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$46.00</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$92.00</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$230.27</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$460.54</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <a href="https://finestknown.com/goldbacks-for-sale/" target="_blank" class="gb-shop-btn">Shop Finest Known ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">🏔️ Alpine Gold Exchange</span>
+          <span class="gb-ret-tag">From ~$4.76 / 1 GB</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX PRICE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>½ Goldback</td><td>~$2.40</td><td>1/2000 oz</td></tr>
+              <tr><td>1 Goldback</td><td>~$4.76</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$23.80</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$47.60</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$119.00</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$238.00</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:11px;color:#f0b429;margin:6px 0">⚠️ Alpine prices near spot — verify current rates on their site.</p>
+          <a href="https://alpinegold.com" target="_blank" class="gb-shop-btn">Shop Alpine Gold ↗</a>
+        </div>
+      </div>
+
+      <div class="gb-retailer-card">
+        <div class="gb-ret-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="gb-ret-name">🏧 GoldATM</span>
+          <span class="gb-ret-tag">Vending machine rates vary</span>
+          <span class="gb-ret-arrow">▼</span>
+        </div>
+        <div class="gb-ret-body">
+          <p style="font-size:13px;color:#ccc;margin:0 0 10px">GoldATM operates physical gold vending machines that dispense Goldbacks. Prices vary by machine location and current gold spot price — typically 10–20% above spot.</p>
+          <table class="gb-price-tbl">
+            <thead><tr><th>DENOMINATION</th><th>APPROX RANGE</th><th>GOLD OZ</th></tr></thead>
+            <tbody>
+              <tr><td>1 Goldback</td><td>~$9.50 – $11.00</td><td>1/1000 oz</td></tr>
+              <tr><td>5 Goldback</td><td>~$47.50 – $55.00</td><td>1/200 oz</td></tr>
+              <tr><td>10 Goldback</td><td>~$95.00 – $110.00</td><td>1/100 oz</td></tr>
+              <tr><td>25 Goldback</td><td>~$237 – $275</td><td>1/40 oz</td></tr>
+              <tr><td>50 Goldback</td><td>~$475 – $550</td><td>1/20 oz</td></tr>
+            </tbody>
+          </table>
+          <a href="https://goldatm.com" target="_blank" class="gb-shop-btn">Find GoldATM Locations ↗</a>
+        </div>
+      </div>
+
+    </div><!-- end .gb-retailers -->
+
+    <div style="margin-top:16px;padding:10px 14px;background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.2);border-radius:6px;font-size:11px;color:#888;">
+      💡 <strong style="color:#f0b429">Note:</strong> Goldback prices fluctuate daily with gold spot prices. The official exchange rate is updated every morning at 10 AM MST at <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:#f0b429">goldback.com/exchange-rates</a>. Prices above are approximate and may not reflect current rates — always verify before purchasing.
+    </div>
+  </div>
+
+  <!-- PLAT/PAL -->
+  <div id="tab-platpal" class="section">
+    <div class="sec-title">Platinum & Palladium</div>
+    <div class="grid g2">
+      <div class="card"><h3>PLATINUM (XPT)</h3>
+        <div class="pct-row"><div class="pct-group"><label class="lbl">BUY %</label><input type="number" id="xpt-buy" value="15" min="0" max="99" oninput="renderPlatPal()"></div><div class="pct-group"><label class="lbl">SELL %</label><input type="number" id="xpt-sell" value="15" min="0" max="99" oninput="renderPlatPal()"></div></div>
+        <div class="result-box" id="xpt-res">—</div></div>
+      <div class="card"><h3>PALLADIUM (XPD)</h3>
+        <div class="pct-row"><div class="pct-group"><label class="lbl">BUY %</label><input type="number" id="xpd-buy" value="15" min="0" max="99" oninput="renderPlatPal()"></div><div class="pct-group"><label class="lbl">SELL %</label><input type="number" id="xpd-sell" value="15" min="0" max="99" oninput="renderPlatPal()"></div></div>
+        <div class="result-box" id="xpd-res">—</div></div>
+    </div>
+  </div>
+
+  <!-- PREMIUMS -->
+  <div id="tab-premium" class="section">
+    <div class="sec-title">Dealer Premium Reference</div>
+    <div id="premium-content"></div>
+  </div>
+
+  <!-- INVENTORY -->
+  <div id="tab-inventory" class="section">
+    <div class="sec-title">Inventory Tracker</div>
+    <div class="inv-form" style="flex-wrap:wrap;gap:8px">
+      <select id="inv-metal" style="width:auto"><option value="XAU">Gold (XAU)</option><option value="XAG">Silver (XAG)</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="HG">Copper</option><option value="COIN">Coin (No Spot)</option><option value="OTHER">Other</option></select>
+      <input id="inv-desc" placeholder="Description" style="width:180px">
+      <input id="inv-qty" type="number" placeholder="Qty" style="width:80px" min="0" step="1" value="1">
+      <input id="inv-cost" type="number" placeholder="Buy Price ($)" style="width:120px" min="0" step="0.01">
+      <input id="inv-date" type="date" style="width:148px">
+    </div>
+    <div class="inv-form" style="flex-wrap:wrap;gap:8px;margin-top:6px;align-items:center">
+      <span style="color:var(--muted);font-size:12px">📋 Coin Lookup (optional):</span>
+      <select id="inv-coin-series" onchange="invCoinSeriesChange()" style="min-width:160px">
+        <option value="">— Select Coin Series —</option>
+      </select>
+      <select id="inv-coin-variety" style="min-width:160px">
+        <option value="">— Select Variety —</option>
+      </select>
+      <select id="inv-coin-grade" style="min-width:130px">
+        <option value="">— Select Grade —</option>
+        <option value="G4">G-4 (Good)</option>
+        <option value="VG8">VG-8 (Very Good)</option>
+        <option value="F12">F-12 (Fine)</option>
+        <option value="VF20">VF-20 (V.Fine)</option>
+        <option value="EF40">EF-40 (Ex.Fine)</option>
+        <option value="AU50">AU-50 (About Unc)</option>
+        <option value="MS63">MS-63 (Choice)</option>
+        <option value="MS65">MS-65 (Gem)</option>
+      </select>
+      <button class="add-btn" style="background:var(--gold);color:#000;font-size:12px;padding:6px 12px" onclick="lookupCoinFMV()">LOOKUP FMV</button>
+      <span id="inv-fmv-display" style="color:var(--gold);font-size:13px;font-family:var(--mono)"></span>
+      <button class="add-btn" onclick="addInv()">+ ADD</button>
+      <button class="clr-btn" onclick="clearInv()">CLEAR ALL</button>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>DATE</th><th>DESC</th><th>METAL</th><th>QTY</th><th>COST</th><th>BASIS</th><th>GRADE</th><th>FMV</th><th>MELT VAL</th><th>P&L</th><th>%</th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+    <div style="margin-top:16px;font-size:14px;font-family:var(--mono)" id="inv-totals"></div>
+  </div>
+
+  <!-- COIN VALUES -->
+  <div id="tab-coinvals" class="section">
+    <div class="sec-title">Coin Values Reference <span class="cv-premium-badge">⭐ PREMIUM</span></div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px">PCGS-sourced graded retail values · Updated April 2026</p>
+    <!-- Search + Filters -->
+    <div style="margin-bottom:10px">
+      <input type="text" id="cv-search" placeholder="🔍 Search series or date (e.g. Morgan, 1921, DDO)..."
+        oninput="renderCoinVals()"
+        style="width:100%;box-sizing:border-box;padding:9px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:14px;font-family:var(--font)"/>
+    </div>
+    <div style="margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <select id="cv-series" onchange="renderCoinVals()" style="min-width:180px">
+        <option value="">— All Series —</option>
+      </select>
+      <select id="cv-grade" onchange="renderCoinVals()" style="min-width:120px">
+        <option value="">— All Grades —</option>
+        <option value="G4">G-4 (Good)</option>
+        <option value="VG8">VG-8 (Very Good)</option>
+        <option value="F12">F-12 (Fine)</option>
+        <option value="VF20">VF-20 (V.Fine)</option>
+        <option value="EF40">EF-40 (Ex.Fine)</option>
+        <option value="AU50">AU-50 (About Unc)</option>
+        <option value="MS63">MS-63 (Choice)</option>
+        <option value="MS65">MS-65 (Gem)</option>
+      </select>
+      <span style="font-size:12px;color:var(--muted)">Min $:</span>
+      <input type="number" id="cv-minval" placeholder="0" oninput="renderCoinVals()"
+        style="width:80px;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px"/>
+      <span id="cv-count" style="font-size:12px;color:var(--muted);margin-left:4px"></span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="cv-table">
+        <thead><tr>
+          <th onclick="cvSortBy('s')" style="cursor:pointer">SERIES ⇅</th>
+          <th onclick="cvSortBy('d')" style="cursor:pointer">DATE/VARIETY ⇅</th>
+          <th onclick="cvSortBy('G4')" style="cursor:pointer;text-align:right">G-4 ⇅</th>
+          <th onclick="cvSortBy('VG8')" style="cursor:pointer;text-align:right">VG-8 ⇅</th>
+          <th onclick="cvSortBy('F12')" style="cursor:pointer;text-align:right">F-12 ⇅</th>
+          <th onclick="cvSortBy('VF20')" style="cursor:pointer;text-align:right">VF-20 ⇅</th>
+          <th onclick="cvSortBy('EF40')" style="cursor:pointer;text-align:right">EF-40 ⇅</th>
+          <th onclick="cvSortBy('AU50')" style="cursor:pointer;text-align:right">AU-50 ⇅</th>
+          <th onclick="cvSortBy('MS63')" style="cursor:pointer;text-align:right">MS-63 ⇅</th>
+          <th onclick="cvSortBy('MS65')" style="cursor:pointer;text-align:right">MS-65 ⇅</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="cv-tbody"></tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:#555;margin-top:12px;font-style:italic">⚠️ Retail estimates only. Actual values vary by grade, certification, and market. Verify high-value coins with a professional.</p>
+  </div>
+
+  <!-- KEY DATES -->
+  <div id="tab-keydate" class="section">
+    <div class="sec-title">Key Date Coins</div>
+    <select class="kd-select" id="kd-select" onchange="renderKeyDates()">
+      <option value="">— Show All Coins & Currency —</option>
+    </select>
+    <div class="kd-grid" id="kd-grid"></div>
+  </div>
+
+  <!-- ERRORS -->
+  <div id="tab-errors" class="section">
+    <div class="sec-title">Mint Error Reference</div>
+    <div class="grid g2" id="errors-grid"></div>
+  </div>
+
+  <!-- GRADING -->
+  <div id="tab-grading" class="section">
+    <div class="sec-title">Coin Grading Reference</div>
+
+    <!-- GRADING LOOKUP TOOL -->
+    <div class="card" style="margin-bottom:24px">
+      <div style="font-family:var(--display);font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:6px">🔍 PHOTO GRADING LOOKUP</div>
+      <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:16px;letter-spacing:1px">Select a coin series to view grading photos from PCGS &amp; NGC</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+        <select id="grade-lookup-series" style="flex:1;min-width:220px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;font-family:var(--font);font-size:14px">
+          <option value="">— Select a Coin Series —</option>
+          <optgroup label="CENTS">
+            <option value="lincoln-cents-wheat|1069">Lincoln Cent (Wheat)</option>
+            <option value="lincoln-cents-memorial|1070">Lincoln Cent (Memorial)</option>
+            <option value="indian-head-cents|1041">Indian Head Cent</option>
+            <option value="flying-eagle-cents|1037">Flying Eagle Cent</option>
+            <option value="large-cents|1001">Large Cent (1793–1857)</option>
+          </optgroup>
+          <optgroup label="NICKELS">
+            <option value="jefferson-nickels|1093">Jefferson Nickel</option>
+            <option value="buffalo-nickels|1085">Buffalo Nickel</option>
+            <option value="liberty-head-nickels|1083">Liberty Head (V) Nickel</option>
+            <option value="shield-nickels|1081">Shield Nickel</option>
+          </optgroup>
+          <optgroup label="DIMES">
+            <option value="roosevelt-dimes|1107">Roosevelt Dime</option>
+            <option value="mercury-dimes|1103">Mercury Dime</option>
+            <option value="barber-dimes|1099">Barber Dime</option>
+            <option value="seated-liberty-dimes|1097">Seated Liberty Dime</option>
+          </optgroup>
+          <optgroup label="QUARTERS">
+            <option value="washington-quarters|1121">Washington Quarter</option>
+            <option value="standing-liberty-quarters|1117">Standing Liberty Quarter</option>
+            <option value="barber-quarters|1113">Barber Quarter</option>
+            <option value="seated-liberty-quarters|1111">Seated Liberty Quarter</option>
+          </optgroup>
+          <optgroup label="HALF DOLLARS">
+            <option value="kennedy-half-dollars|1135">Kennedy Half Dollar</option>
+            <option value="franklin-half-dollars|1133">Franklin Half Dollar</option>
+            <option value="walking-liberty-halves|1131">Walking Liberty Half</option>
+            <option value="barber-halves|1127">Barber Half Dollar</option>
+            <option value="seated-liberty-halves|1125">Seated Liberty Half</option>
+          </optgroup>
+          <optgroup label="DOLLARS">
+            <option value="morgan-dollars|1151">Morgan Dollar</option>
+            <option value="peace-dollars|1153">Peace Dollar</option>
+            <option value="eisenhower-dollars|1155">Eisenhower Dollar</option>
+            <option value="seated-liberty-dollars|1143">Seated Liberty Dollar</option>
+            <option value="trade-dollars|1147">Trade Dollar</option>
+            <option value="bust-dollars|1137">Bust Dollar</option>
+          </optgroup>
+          <optgroup label="GOLD">
+            <option value="saint-gaudens-double-eagles|8963">Saint-Gaudens Double Eagle</option>
+            <option value="liberty-head-double-eagles|8927">Liberty Head Double Eagle</option>
+            <option value="american-gold-eagle|9238">American Gold Eagle</option>
+            <option value="indian-head-eagles|8903">Indian Head Eagle ($10)</option>
+            <option value="liberty-head-half-eagles|8845">Liberty Head Half Eagle ($5)</option>
+          </optgroup>
+          <optgroup label="SILVER DOLLARS / COMMEMORATIVE">
+            <option value="american-silver-eagle|9221">American Silver Eagle</option>
+            <option value="early-commemoratives|9001">Early Commemoratives</option>
+          </optgroup>
+        </select>
+        <button onclick="openGradingLookup('pcgs')" style="background:linear-gradient(135deg,#1a3a5c,#2a5a8c);color:#fff;border:1px solid rgba(42,90,140,.8);padding:10px 18px;border-radius:8px;font-family:var(--display);letter-spacing:1.5px;cursor:pointer;font-size:14px;white-space:nowrap">📸 PCGS PHOTOGRADE</button>
+        <button onclick="openGradingLookup('ngc')" style="background:linear-gradient(135deg,#1a3a1a,#2a6a2a);color:#fff;border:1px solid rgba(42,106,42,.8);padding:10px 18px;border-radius:8px;font-family:var(--display);letter-spacing:1.5px;cursor:pointer;font-size:14px;white-space:nowrap">🔬 NGC GUIDE</button>
+        <button onclick="openGradingLookup('coinfacts')" style="background:linear-gradient(135deg,#c8830a,#f0b429);color:#000;border:none;padding:10px 18px;border-radius:8px;font-family:var(--display);letter-spacing:1.5px;cursor:pointer;font-size:14px;white-space:nowrap">💎 PCGS COINFACTS</button>
+      </div>
+      <div id="grade-lookup-info" style="font-size:12px;color:var(--muted);font-family:var(--mono);min-height:18px"></div>
+    </div>
+
+    <!-- SHELDON SCALE TABLE -->
+    <div class="sec-title" style="margin-top:4px">Sheldon Grading Scale</div>
+    <div class="tbl-wrap"><table class="grade-table"><thead><tr><th>GRADE</th><th>NAME</th><th>DESCRIPTION</th></tr></thead><tbody id="grade-tbody"></tbody></table></div>
+  </div>
+
+  <!-- CURRENCY EXCHANGE -->
+  <div id="tab-currency" class="section">
+    <div class="sec-title">💱 World Currency Exchange Rates</div>
+    <div style="color:var(--muted);font-size:12px;margin-bottom:16px;font-family:var(--mono)">Rates vs. US Dollar (USD) — Live via open exchange</div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <input id="fx-search" type="text" placeholder="Search country or currency..." style="flex:1;min-width:200px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font);font-size:13px" oninput="filterFX()">
+      <input id="fx-amount" type="number" value="1" min="0.01" step="0.01" style="width:110px;background:var(--bg2);border:1px solid var(--border);color:var(--gold);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:14px;text-align:right" oninput="filterFX()">
+      <span style="color:var(--muted);font-size:13px">USD</span>
+      <button onclick="loadFX(true)" style="background:linear-gradient(135deg,#c8830a,#f0b429);color:#000;border:none;padding:8px 16px;border-radius:6px;font-family:var(--display);letter-spacing:1px;cursor:pointer;font-size:13px">↻ REFRESH</button>
+    </div>
+    <div id="fx-updated" style="color:var(--muted);font-size:11px;font-family:var(--mono);margin-bottom:12px"></div>
+    <div class="tbl-wrap">
+      <table id="fx-table"><thead><tr><th onclick="sortFX('flag')" style="cursor:pointer">FLAG</th><th onclick="sortFX('country')" style="cursor:pointer">COUNTRY ↕</th><th onclick="sortFX('code')" style="cursor:pointer">CODE ↕</th><th onclick="sortFX('rate')" style="cursor:pointer">RATE (per USD) ↕</th><th onclick="sortFX('usd')" style="cursor:pointer">USD VALUE ↕</th><th>1 USD =</th></tr></thead><tbody id="fx-tbody"></tbody></table>
+    </div>
+    <div id="fx-status" style="color:var(--muted);font-size:13px;padding:20px;text-align:center"></div>
+  </div>
+
+  <!-- TRADING SHEET -->
+  <div id="tab-trading" class="section">
+    <div class="sec-title">🖨 Trading Sheet <span class="cv-premium-badge">⭐ PREMIUM</span></div>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 16px;font-family:var(--mono)">Build your own buy/sell trading sheet · Printable · TV display mode</p>
+
+    <!-- Toolbar -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;">
+      <button onclick="tsAddRow()" style="background:linear-gradient(135deg,#c8830a,#f0b429);color:#000;border:none;padding:9px 18px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer;font-weight:700">+ ADD ITEM</button>
+      <button onclick="tsPrint()" style="background:var(--bg2);color:var(--gold);border:1px solid var(--gold);padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">🖨 PRINT</button>
+      <button onclick="tsSave()" style="background:var(--bg2);color:#4ddb7a;border:1px solid #4ddb7a;padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">💾 SAVE</button>
+      <button onclick="tsLoad()" style="background:var(--bg2);color:var(--silver);border:1px solid var(--border);padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">📂 LOAD</button>
+      <button onclick="tsClear()" style="background:var(--bg2);color:#e05555;border:1px solid #e05555;padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">🗑 CLEAR</button>
+      <button id="ts-tv-btn" onclick="tsTVMode()" style="background:var(--bg2);color:#b0b8c1;border:1px solid var(--border);padding:8px 16px;border-radius:6px;font-family:var(--display);font-size:12px;letter-spacing:1px;cursor:pointer">📺 TV MODE</button>
+      <span id="ts-save-status" style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-left:4px"></span>
+    </div>
+
+    <!-- Table -->
+    <div class="tbl-wrap" id="ts-table-wrap">
+      <table id="ts-table">
+        <thead>
+          <tr>
+            <th style="width:180px">ITEM / NAME</th>
+            <th style="width:100px">WEIGHT</th>
+            <th style="width:80px">UNIT</th>
+            <th style="width:120px">SPOT PRICE</th>
+            <th style="width:130px">BUY PRICE</th>
+            <th style="width:130px">SELL PRICE</th>
+            <th style="width:150px">NOTES</th>
+            <th style="width:50px"></th>
+          </tr>
+        </thead>
+        <tbody id="ts-tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted);font-family:var(--mono)" id="ts-footer">
+      Spot: <span id="ts-spot-gold">—</span> Au &nbsp;|&nbsp; <span id="ts-spot-silver">—</span> Ag &nbsp;|&nbsp; Auto-saved to browser storage
+    </div>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div id="tab-account" class="section">
+    <div class="sec-title">Account</div>
+    <div class="acct-info" id="acct-card">Loading…</div>
+    <div class="sec-title" style="margin-top:32px">Redeem Gift Code</div>
+    <div class="promo-wrap"><input type="text" id="promo-input" placeholder="ENTER CODE" maxlength="20"><button class="promo-btn" onclick="redeemPromo()">REDEEM</button></div>
+    <div id="promo-msg" class="promo-msg"></div>
+  </div>
+</div>
+
+<script>
+
+// ════════════════════ COIN VALUES DATA ════════════════════
+// Updated April 2026 — silver $74.17/oz, gold ~$3300/oz
+// Silver melt floors: Morgan/Peace=$57.36, Half=$26.83, Quarter=$13.42, Dime=$5.37, Eagle=$74.17
+const CV=[
+  // ── INDIAN HEAD CENT (1859–1909) ──
+  {s:'Indian Head Cent',d:'1859',G4:18,VG8:28,F12:45,VF20:80,EF40:160,AU50:280,MS63:500,MS65:1800},
+  {s:'Indian Head Cent',d:'1864 Bronze',G4:12,VG8:20,F12:32,VF20:65,EF40:120,AU50:220,MS63:450,MS65:1400},
+  {s:'Indian Head Cent',d:'1877',G4:850,VG8:1200,F12:1700,VF20:2400,EF40:3600,AU50:5500,MS63:10000,MS65:32000},
+  {s:'Indian Head Cent',d:'1908-S',G4:75,VG8:110,F12:160,VF20:250,EF40:400,AU50:620,MS63:1100,MS65:3800},
+  {s:'Indian Head Cent',d:'1909-S',G4:380,VG8:560,F12:800,VF20:1150,EF40:1700,AU50:2700,MS63:4800,MS65:15000},
+  {s:'Indian Head Cent',d:'Common Date',G4:3,VG8:5,F12:8,VF20:16,EF40:35,AU50:65,MS63:130,MS65:450},
+  // ── LINCOLN CENT WHEAT (1909–1958) ──
+  {s:'Lincoln Cent',d:'1909 VDB',G4:18,VG8:24,F12:30,VF20:38,EF40:55,AU50:80,MS63:145,MS65:380},
+  {s:'Lincoln Cent',d:'1909-S VDB',G4:850,VG8:1100,F12:1350,VF20:1800,EF40:2400,AU50:3400,MS63:5500,MS65:15000},
+  {s:'Lincoln Cent',d:'1909-S',G4:100,VG8:135,F12:170,VF20:220,EF40:300,AU50:430,MS63:750,MS65:2200},
+  {s:'Lincoln Cent',d:'1910-S',G4:8,VG8:12,F12:18,VF20:32,EF40:70,AU50:135,MS63:270,MS65:950},
+  {s:'Lincoln Cent',d:'1911-D',G4:12,VG8:18,F12:28,VF20:55,EF40:120,AU50:220,MS63:450,MS65:1600},
+  {s:'Lincoln Cent',d:'1911-S',G4:28,VG8:42,F12:68,VF20:120,EF40:220,AU50:380,MS63:750,MS65:2500},
+  {s:'Lincoln Cent',d:'1914-D',G4:200,VG8:290,F12:390,VF20:580,EF40:900,AU50:1400,MS63:3200,MS65:11000},
+  {s:'Lincoln Cent',d:'1914-S',G4:16,VG8:24,F12:40,VF20:75,EF40:160,AU50:290,MS63:580,MS65:2000},
+  {s:'Lincoln Cent',d:'1922 Plain',G4:650,VG8:900,F12:1150,VF20:1800,EF40:2800,AU50:4500,MS63:10000,MS65:null},
+  {s:'Lincoln Cent',d:'1924-D',G4:28,VG8:42,F12:68,VF20:120,EF40:230,AU50:410,MS63:820,MS65:2800},
+  {s:'Lincoln Cent',d:'1926-S',G4:12,VG8:18,F12:28,VF20:55,EF40:120,AU50:230,MS63:500,MS65:1900},
+  {s:'Lincoln Cent',d:'1931-S',G4:100,VG8:125,F12:150,VF20:185,EF40:250,AU50:350,MS63:500,MS65:1100},
+  {s:'Lincoln Cent',d:'1933-D',G4:7,VG8:11,F12:17,VF20:30,EF40:68,AU50:130,MS63:260,MS65:900},
+  {s:'Lincoln Cent',d:'1943 Steel',G4:0.75,VG8:1,F12:1.5,VF20:3,EF40:5,AU50:10,MS63:28,MS65:80},
+  {s:'Lincoln Cent',d:'1943-D Steel',G4:0.75,VG8:1,F12:1.5,VF20:3,EF40:6,AU50:12,MS63:32,MS65:100},
+  {s:'Lincoln Cent',d:'1943-S Steel',G4:1,VG8:1.5,F12:2,VF20:4,EF40:8,AU50:15,MS63:38,MS65:130},
+  {s:'Lincoln Cent',d:'1944 Steel (Error)',G4:40000,VG8:65000,F12:100000,VF20:null,EF40:null,AU50:null,MS63:null,MS65:null},
+  {s:'Lincoln Cent',d:'1955 DDO',G4:1200,VG8:1600,F12:2000,VF20:2700,EF40:3800,AU50:5500,MS63:9000,MS65:24000},
+  {s:'Lincoln Cent',d:'1969-S DDO',G4:20000,VG8:32000,F12:45000,VF20:null,EF40:null,AU50:null,MS63:null,MS65:null},
+  {s:'Lincoln Cent',d:'1972 DDO',G4:140,VG8:200,F12:270,VF20:400,EF40:650,AU50:1050,MS63:2000,MS65:6500},
+  {s:'Lincoln Cent',d:'Common Date (wheat)',G4:0.1,VG8:0.2,F12:0.35,VF20:0.75,EF40:1.5,AU50:3,MS63:7,MS65:28},
+  // ── LIBERTY HEAD NICKEL (1883–1913) ──
+  {s:'Liberty Head Nickel',d:'1885',G4:280,VG8:390,F12:520,VF20:750,EF40:1100,AU50:1600,MS63:3200,MS65:11000},
+  {s:'Liberty Head Nickel',d:'1886',G4:210,VG8:300,F12:420,VF20:600,EF40:950,AU50:1450,MS63:2800,MS65:9500},
+  {s:'Liberty Head Nickel',d:'1912-S',G4:160,VG8:240,F12:340,VF20:500,EF40:800,AU50:1300,MS63:2600,MS65:8500},
+  {s:'Liberty Head Nickel',d:'Common Date',G4:3,VG8:5,F12:8,VF20:16,EF40:38,AU50:80,MS63:170,MS65:580},
+  // ── BUFFALO NICKEL (1913–1938) ──
+  {s:'Buffalo Nickel',d:'1913-P T1',G4:22,VG8:30,F12:42,VF20:65,EF40:115,AU50:210,MS63:420,MS65:1400},
+  {s:'Buffalo Nickel',d:'1913-S T1',G4:55,VG8:85,F12:130,VF20:200,EF40:350,AU50:640,MS63:1250,MS65:4800},
+  {s:'Buffalo Nickel',d:'1913-S T2',G4:420,VG8:630,F12:1000,VF20:1400,EF40:2500,AU50:4200,MS63:9500,MS65:34000},
+  {s:'Buffalo Nickel',d:'1916 DDO',G4:700,VG8:1100,F12:1700,VF20:2800,EF40:4800,AU50:8500,MS63:17000,MS65:null},
+  {s:'Buffalo Nickel',d:'1918/7-D',G4:1400,VG8:2100,F12:3500,VF20:5500,EF40:9500,AU50:17000,MS63:null,MS65:null},
+  {s:'Buffalo Nickel',d:'1921-S',G4:28,VG8:42,F12:70,VF20:125,EF40:280,AU50:560,MS63:1250,MS65:4800},
+  {s:'Buffalo Nickel',d:'1926-S',G4:55,VG8:90,F12:145,VF20:260,EF40:560,AU50:1250,MS63:3500,MS65:null},
+  {s:'Buffalo Nickel',d:'1937-D 3-Leg',G4:560,VG8:840,F12:1250,VF20:1950,EF40:3100,AU50:4800,MS63:8200,MS65:25000},
+  {s:'Buffalo Nickel',d:'Common Date',G4:2,VG8:3,F12:5,VF20:8,EF40:18,AU50:38,MS63:85,MS65:290},
+  // ── JEFFERSON NICKEL (1938–present) ──
+  {s:'Jefferson Nickel',d:'1938-D',G4:1.5,VG8:2,F12:3,VF20:5,EF40:9,AU50:18,MS63:36,MS65:110},
+  {s:'Jefferson Nickel',d:'1939-D',G4:5,VG8:8,F12:12,VF20:22,EF40:50,AU50:100,MS63:210,MS65:700},
+  {s:'Jefferson Nickel',d:'1942-D',G4:1.5,VG8:2.5,F12:4,VF20:7,EF40:17,AU50:35,MS63:75,MS65:260},
+  {s:'Jefferson Nickel',d:'War Nickel (35% Silver)',G4:4,VG8:4.5,F12:5.5,VF20:7,EF40:10,AU50:15,MS63:30,MS65:95},
+  {s:'Jefferson Nickel',d:'1950-D',G4:12,VG8:18,F12:26,VF20:40,EF40:65,AU50:115,MS63:220,MS65:720},
+  {s:'Jefferson Nickel',d:'Common Date',G4:0.15,VG8:0.25,F12:0.5,VF20:0.75,EF40:1.5,AU50:3,MS63:7,MS65:28},
+  // ── BARBER DIME (1892–1916) ──
+  {s:'Barber Dime',d:'1895-O',G4:110,VG8:175,F12:300,VF20:540,EF40:1100,AU50:2100,MS63:5500,MS65:null},
+  {s:'Barber Dime',d:'1896-S',G4:85,VG8:135,F12:220,VF20:420,EF40:850,AU50:1700,MS63:4200,MS65:null},
+  {s:'Barber Dime',d:'1901-S',G4:70,VG8:110,F12:180,VF20:350,EF40:700,AU50:1400,MS63:3500,MS65:null},
+  {s:'Barber Dime',d:'1903-S',G4:55,VG8:90,F12:155,VF20:290,EF40:600,AU50:1200,MS63:3100,MS65:null},
+  {s:'Barber Dime',d:'1894-S',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:null,MS65:null},
+  {s:'Barber Dime',d:'Common Date',G4:6,VG8:8,F12:10,VF20:18,EF40:40,AU50:95,MS63:220,MS65:730},
+  // ── MERCURY DIME (1916–1945) ──
+  {s:'Mercury Dime',d:'1916-D',G4:950,VG8:1350,F12:2000,VF20:3000,EF40:4800,AU50:7500,MS63:14000,MS65:42000},
+  {s:'Mercury Dime',d:'1921',G4:72,VG8:115,F12:168,VF20:280,EF40:490,AU50:840,MS63:2100,MS65:7000},
+  {s:'Mercury Dime',d:'1921-D',G4:64,VG8:98,F12:155,VF20:255,EF40:450,AU50:775,MS63:1950,MS65:6200},
+  {s:'Mercury Dime',d:'1926-S',G4:18,VG8:30,F12:52,VF20:100,EF40:260,AU50:580,MS63:1700,MS65:null},
+  {s:'Mercury Dime',d:'1931-D',G4:10,VG8:16,F12:24,VF20:46,EF40:100,AU50:215,MS63:490,MS65:1700},
+  {s:'Mercury Dime',d:'1942/41',G4:560,VG8:840,F12:1250,VF20:1950,EF40:3100,AU50:5300,MS63:11000,MS65:null},
+  {s:'Mercury Dime',d:'1942/41-D',G4:490,VG8:760,F12:1100,VF20:1700,EF40:2800,AU50:4800,MS63:9500,MS65:null},
+  {s:'Mercury Dime',d:'Common Date',G4:6,VG8:6.5,F12:7,VF20:8,EF40:12,AU50:20,MS63:42,MS65:130},
+  // ── ROOSEVELT DIME (1946–1964 silver) ──
+  {s:'Roosevelt Dime',d:'1946',G4:5.5,VG8:6,F12:7,VF20:9,EF40:13,AU50:19,MS63:36,MS65:115},
+  {s:'Roosevelt Dime',d:'1949-S',G4:7,VG8:9,F12:13,VF20:18,EF40:30,AU50:52,MS63:105,MS65:360},
+  {s:'Roosevelt Dime',d:'1950-S',G4:6,VG8:8,F12:11,VF20:16,EF40:27,AU50:46,MS63:95,MS65:320},
+  {s:'Roosevelt Dime',d:'1955',G4:5.5,VG8:7,F12:9,VF20:12,EF40:20,AU50:34,MS63:70,MS65:225},
+  {s:'Roosevelt Dime',d:'Common (pre-65 silver)',G4:6,VG8:6.5,F12:7.5,VF20:9,EF40:14,AU50:22,MS63:48,MS65:160},
+  // ── BARBER QUARTER (1892–1916) ──
+  {s:'Barber Quarter',d:'1896-S',G4:700,VG8:1100,F12:2000,VF20:3500,EF40:7000,AU50:13000,MS63:null,MS65:null},
+  {s:'Barber Quarter',d:'1901-S',G4:2800,VG8:5000,F12:8500,VF20:15000,EF40:null,AU50:null,MS63:null,MS65:null},
+  {s:'Barber Quarter',d:'1913-S',G4:280,VG8:450,F12:780,VF20:1400,EF40:3100,AU50:6500,MS63:null,MS65:null},
+  {s:'Barber Quarter',d:'Common Date',G4:15,VG8:22,F12:36,VF20:68,EF40:175,AU50:390,MS63:900,MS65:3100},
+  // ── STANDING LIBERTY QUARTER (1916–1930) ──
+  {s:'SL Quarter',d:'1916',G4:2200,VG8:3600,F12:5800,VF20:8500,EF40:13000,AU50:20000,MS63:36000,MS65:null},
+  {s:'SL Quarter',d:'1917 T1',G4:25,VG8:35,F12:56,VF20:95,EF40:185,AU50:330,MS63:760,MS65:2750},
+  {s:'SL Quarter',d:'1918/7-S',G4:700,VG8:1100,F12:2000,VF20:3500,EF40:7000,AU50:13000,MS63:null,MS65:null},
+  {s:'SL Quarter',d:'1921',G4:120,VG8:195,F12:330,VF20:600,EF40:1350,AU50:3000,MS63:8800,MS65:null},
+  {s:'SL Quarter',d:'1923-S',G4:225,VG8:370,F12:605,VF20:1050,EF40:2100,AU50:4200,MS63:12000,MS65:null},
+  {s:'SL Quarter',d:'1927-S',G4:80,VG8:125,F12:215,VF20:425,EF40:1050,AU50:2700,MS63:null,MS65:null},
+  {s:'SL Quarter',d:'Common Date',G4:15,VG8:21,F12:30,VF20:50,EF40:95,AU50:190,MS63:390,MS65:1250},
+  // ── WASHINGTON QUARTER (1932–1964 silver) ──
+  {s:'Washington Quarter',d:'1932-D',G4:145,VG8:215,F12:315,VF20:500,EF40:860,AU50:1700,MS63:4200,MS65:null},
+  {s:'Washington Quarter',d:'1932-S',G4:130,VG8:190,F12:285,VF20:460,EF40:790,AU50:1575,MS63:4000,MS65:null},
+  {s:'Washington Quarter',d:'1936-D',G4:15,VG8:22,F12:30,VF20:50,EF40:105,AU50:210,MS63:480,MS65:1900},
+  {s:'Washington Quarter',d:'1937',G4:14,VG8:20,F12:28,VF20:45,EF40:65,AU50:115,MS63:250,MS65:1000},
+  {s:'Washington Quarter',d:'1940-D',G4:14,VG8:20,F12:27,VF20:42,EF40:60,AU50:95,MS63:210,MS65:780},
+  {s:'Washington Quarter',d:'Common (pre-65)',G4:14,VG8:15,F12:17,VF20:20,EF40:28,AU50:44,MS63:80,MS65:240},
+  // ── BARBER HALF (1892–1915) ──
+  {s:'Barber Half',d:'1892-O Micro O',G4:90,VG8:150,F12:240,VF20:450,EF40:1050,AU50:2300,MS63:6000,MS65:null},
+  {s:'Barber Half',d:'1904-S',G4:65,VG8:105,F12:180,VF20:380,EF40:900,AU50:2000,MS63:5200,MS65:null},
+  {s:'Barber Half',d:'1914',G4:40,VG8:64,F12:110,VF20:215,EF40:530,AU50:1200,MS63:3100,MS65:null},
+  {s:'Barber Half',d:'Common Date',G4:28,VG8:38,F12:60,VF20:115,EF40:280,AU50:620,MS63:1400,MS65:4600},
+  // ── WALKING LIBERTY HALF (1916–1947) ──
+  {s:'WL Half',d:'1916',G4:65,VG8:95,F12:140,VF20:220,EF40:385,AU50:680,MS63:1400,MS65:4800},
+  {s:'WL Half',d:'1916-D Obv',G4:80,VG8:125,F12:190,VF20:310,EF40:580,AU50:1050,MS63:2400,MS65:8500},
+  {s:'WL Half',d:'1917-D Obv',G4:34,VG8:52,F12:80,VF20:145,EF40:310,AU50:620,MS63:1400,MS65:5400},
+  {s:'WL Half',d:'1919-D',G4:40,VG8:64,F12:110,VF20:205,EF40:440,AU50:940,MS63:2400,MS65:null},
+  {s:'WL Half',d:'1921',G4:310,VG8:465,F12:770,VF20:1200,EF40:2300,AU50:4600,MS63:10500,MS65:null},
+  {s:'WL Half',d:'1921-D',G4:390,VG8:580,F12:920,VF20:1450,EF40:2750,AU50:5500,MS63:12000,MS65:null},
+  {s:'WL Half',d:'1938-D',G4:185,VG8:280,F12:400,VF20:580,EF40:920,AU50:1450,MS63:2800,MS65:7800},
+  {s:'WL Half',d:'Common Date',G4:28,VG8:30,F12:33,VF20:40,EF40:55,AU50:90,MS63:170,MS65:560},
+  // ── FRANKLIN HALF (1948–1963) ──
+  {s:'Franklin Half',d:'1948',G4:27,VG8:28,F12:30,VF20:34,EF40:44,AU50:60,MS63:115,MS65:580},
+  {s:'Franklin Half',d:'1949',G4:28,VG8:30,F12:34,VF20:42,EF40:62,AU50:95,MS63:195,MS65:1000},
+  {s:'Franklin Half',d:'1949-S',G4:27,VG8:29,F12:32,VF20:38,EF40:52,AU50:78,MS63:155,MS65:780},
+  {s:'Franklin Half',d:'1955',G4:42,VG8:52,F12:64,VF20:82,EF40:115,AU50:185,MS63:370,MS65:1450},
+  {s:'Franklin Half',d:'1962 FBL',G4:27,VG8:28,F12:30,VF20:34,EF40:44,AU50:60,MS63:130,MS65:1100},
+  {s:'Franklin Half',d:'Common Date',G4:27,VG8:28,F12:29,VF20:32,EF40:40,AU50:55,MS63:95,MS65:480},
+  // ── KENNEDY HALF (1964–present) ──
+  {s:'Kennedy Half',d:'1964 (90% Silver)',G4:27,VG8:28,F12:30,VF20:34,EF40:42,AU50:58,MS63:95,MS65:290},
+  {s:'Kennedy Half',d:'1965-69 (40% Silver)',G4:12,VG8:13,F12:14,VF20:16,EF40:20,AU50:28,MS63:52,MS65:165},
+  {s:'Kennedy Half',d:'1970-D (40% Silver)',G4:22,VG8:26,F12:30,VF20:38,EF40:52,AU50:72,MS63:130,MS65:420},
+  {s:'Kennedy Half',d:'Common Clad',G4:0.5,VG8:0.5,F12:0.75,VF20:1,EF40:1.5,AU50:2.5,MS63:6,MS65:22},
+  // ── MORGAN DOLLAR (1878–1921) ──
+  {s:'Morgan Dollar',d:'1878 8TF',G4:75,VG8:88,F12:105,VF20:150,EF40:230,AU50:420,MS63:920,MS65:4600},
+  {s:'Morgan Dollar',d:'1878 7TF Rev 78',G4:65,VG8:78,F12:95,VF20:132,EF40:205,AU50:370,MS63:780,MS65:3900},
+  {s:'Morgan Dollar',d:'1879-S Rev 78',G4:70,VG8:90,F12:125,VF20:200,EF40:340,AU50:610,MS63:1350,MS65:7500},
+  {s:'Morgan Dollar',d:'1880-S',G4:62,VG8:66,F12:72,VF20:90,EF40:135,AU50:220,MS63:430,MS65:1900},
+  {s:'Morgan Dollar',d:'1881-S',G4:62,VG8:66,F12:72,VF20:88,EF40:130,AU50:215,MS63:410,MS65:1600},
+  {s:'Morgan Dollar',d:'1884-O',G4:60,VG8:64,F12:70,VF20:86,EF40:125,AU50:200,MS63:380,MS65:1450},
+  {s:'Morgan Dollar',d:'1885-O',G4:60,VG8:64,F12:70,VF20:86,EF40:125,AU50:200,MS63:380,MS65:1450},
+  {s:'Morgan Dollar',d:'1879-CC',G4:175,VG8:350,F12:800,VF20:2000,EF40:5500,AU50:12000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1880-CC',G4:185,VG8:230,F12:290,VF20:510,EF40:950,AU50:1800,MS63:3500,MS65:null},
+  {s:'Morgan Dollar',d:'1881-CC',G4:360,VG8:375,F12:500,VF20:700,EF40:1100,AU50:1800,MS63:3600,MS65:null},
+  {s:'Morgan Dollar',d:'1885-CC',G4:530,VG8:545,F12:580,VF20:625,EF40:690,AU50:790,MS63:950,MS65:null},
+  {s:'Morgan Dollar',d:'1889-CC',G4:1050,VG8:1800,F12:3100,VF20:5800,EF40:12000,AU50:28000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1893-S',G4:4400,VG8:6800,F12:12500,VF20:21000,EF40:40000,AU50:75000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1894',G4:730,VG8:1150,F12:2000,VF20:3400,EF40:6300,AU50:11500,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1895 Proof',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:58000,MS65:115000},
+  {s:'Morgan Dollar',d:'1895-O',G4:320,VG8:530,F12:920,VF20:1850,EF40:4600,AU50:15000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1895-S',G4:440,VG8:690,F12:1150,VF20:2150,EF40:4600,AU50:11000,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1901',G4:90,VG8:155,F12:275,VF20:615,EF40:1850,AU50:6200,MS63:null,MS65:null},
+  {s:'Morgan Dollar',d:'1903-O',G4:62,VG8:68,F12:80,VF20:128,EF40:215,AU50:430,MS63:920,MS65:3800},
+  {s:'Morgan Dollar',d:'1921',G4:60,VG8:64,F12:70,VF20:78,EF40:108,AU50:160,MS63:290,MS65:900},
+  {s:'Morgan Dollar',d:'Common Date',G4:60,VG8:64,F12:70,VF20:80,EF40:115,AU50:175,MS63:280,MS65:880},
+  // ── PEACE DOLLAR (1921–1935) ──
+  {s:'Peace Dollar',d:'1921',G4:195,VG8:250,F12:345,VF20:540,EF40:925,AU50:1700,MS63:3400,MS65:13000},
+  {s:'Peace Dollar',d:'1924-S',G4:62,VG8:78,F12:110,VF20:175,EF40:420,AU50:980,MS63:3200,MS65:null},
+  {s:'Peace Dollar',d:'1925-S',G4:60,VG8:72,F12:100,VF20:165,EF40:375,AU50:900,MS63:2900,MS65:null},
+  {s:'Peace Dollar',d:'1927-D',G4:65,VG8:82,F12:125,VF20:215,EF40:510,AU50:1300,MS63:4800,MS65:null},
+  {s:'Peace Dollar',d:'1927-S',G4:65,VG8:82,F12:125,VF20:215,EF40:510,AU50:1300,MS63:4800,MS65:null},
+  {s:'Peace Dollar',d:'1928',G4:235,VG8:315,F12:440,VF20:650,EF40:1100,AU50:1900,MS63:4000,MS65:14500},
+  {s:'Peace Dollar',d:'1934-D',G4:62,VG8:78,F12:110,VF20:175,EF40:420,AU50:980,MS63:3200,MS65:null},
+  {s:'Peace Dollar',d:'1934-S',G4:78,VG8:115,F12:185,VF20:360,EF40:850,AU50:2600,MS63:10000,MS65:null},
+  {s:'Peace Dollar',d:'1935-S',G4:62,VG8:78,F12:110,VF20:175,EF40:420,AU50:980,MS63:3500,MS65:null},
+  {s:'Peace Dollar',d:'Common Date',G4:60,VG8:64,F12:68,VF20:78,EF40:105,AU50:160,MS63:265,MS65:800},
+  // ── EISENHOWER DOLLAR (1971–1978) ──
+  {s:'Eisenhower Dollar',d:'1971',G4:2,VG8:2.5,F12:3,VF20:4,EF40:6,AU50:9,MS63:18,MS65:58},
+  {s:'Eisenhower Dollar',d:'1971-S Silver',G4:22,VG8:24,F12:27,VF20:32,EF40:40,AU50:55,MS63:90,MS65:300},
+  {s:'Eisenhower Dollar',d:'1972 T3',G4:4,VG8:6,F12:8,VF20:11,EF40:18,AU50:30,MS63:65,MS65:290},
+  {s:'Eisenhower Dollar',d:'Common Clad',G4:2,VG8:2.5,F12:3,VF20:4,EF40:6,AU50:9,MS63:15,MS65:52},
+  // ── SUSAN B. ANTHONY DOLLAR ──
+  {s:'SBA Dollar',d:'1979-P Wide Rim',G4:14,VG8:20,F12:26,VF20:36,EF40:58,AU50:95,MS63:190,MS65:580},
+  {s:'SBA Dollar',d:'1981-S Type 2',G4:72,VG8:100,F12:130,VF20:175,EF40:230,AU50:320,MS63:580,MS65:null},
+  {s:'SBA Dollar',d:'Common Date',G4:1,VG8:1,F12:1.5,VF20:2,EF40:3,AU50:4,MS63:9,MS65:30},
+  // ── GOLD COINAGE ──
+  {s:'Gold $1 (Type 1)',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:265,AU50:315,MS63:530,MS65:1400},
+  {s:'Gold $1 (Type 3)',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:280,AU50:330,MS63:570,MS65:1550},
+  {s:'Gold $2.50 Liberty',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:430,AU50:485,MS63:770,MS65:1850},
+  {s:'Gold $2.50 Indian',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:460,AU50:520,MS63:840,MS65:2150},
+  {s:'Gold $3 Princess',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:2750,AU50:3350,MS63:5300,MS65:14500},
+  {s:'Gold $5 Liberty',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:780,AU50:850,MS63:1100,MS65:2200},
+  {s:'Gold $5 Indian',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:810,AU50:900,MS63:1175,MS65:2500},
+  {s:'Gold $10 Liberty',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:1650,AU50:1760,MS63:2100,MS65:3800},
+  {s:'Gold $10 Indian',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:1725,AU50:1850,MS63:2200,MS65:4100},
+  {s:'Gold $20 Liberty',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:3250,AU50:3400,MS63:3900,MS65:6200},
+  {s:'Gold $20 St. Gaudens',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:3400,AU50:3550,MS63:4050,MS65:7000},
+  {s:'Gold $20 St. Gaudens',d:'1907 High Relief',G4:null,VG8:null,F12:null,VF20:null,EF40:18500,AU50:28000,MS63:47000,MS65:null},
+  {s:'Gold $20 St. Gaudens',d:'1927-D',G4:null,VG8:null,F12:null,VF20:null,EF40:23000,AU50:40000,MS63:95000,MS65:null},
+  // ── SILVER AMERICAN EAGLE (1986–present) ──
+  {s:'Silver Eagle',d:'1986 (First Year)',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:115,MS65:180},
+  {s:'Silver Eagle',d:'1994',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:100,MS65:160},
+  {s:'Silver Eagle',d:'1995-W Proof',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:5800,MS65:9500},
+  {s:'Silver Eagle',d:'1996',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:130,MS65:210},
+  {s:'Silver Eagle',d:'2011-S Burnished',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:165,MS65:320},
+  {s:'Silver Eagle',d:'Common Date (BU)',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:93,MS65:115},
+  // ── GOLD AMERICAN EAGLE ──
+  {s:'Gold Eagle 1oz',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:3700,MS65:4000},
+  {s:'Gold Eagle 1/2oz',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:1925,MS65:2075},
+  {s:'Gold Eagle 1/4oz',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:1000,MS65:1110},
+  {s:'Gold Eagle 1/10oz',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:430,MS65:495},
+  // ── GOLD BUFFALO ──
+  {s:'Gold Buffalo 1oz',d:'Common Date',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:3775,MS65:4075},
+  // ── COMMEMORATIVE SILVER ──
+  {s:'Commemorative Half',d:'1892 Columbian',G4:28,VG8:38,F12:50,VF20:72,EF40:115,AU50:185,MS63:370,MS65:1200},
+  {s:'Commemorative Half',d:'1893 Isabella Quarter',G4:95,VG8:140,F12:220,VF20:345,EF40:620,AU50:1075,MS63:2350,MS65:7600},
+  {s:'Commemorative Half',d:'1921 Alabama',G4:95,VG8:140,F12:220,VF20:345,EF40:590,AU50:1025,MS63:2200,MS65:6900},
+  {s:'Commemorative Half',d:'1921 Missouri',G4:125,VG8:190,F12:285,VF20:440,EF40:780,AU50:1400,MS63:3100,MS65:null},
+  {s:'Commemorative Half',d:'1936 Albany',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:380,MS65:1225},
+  {s:'Commemorative Half',d:'1936 Cleveland',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:310,MS65:1000},
+  {s:'Commemorative Half',d:'Common Classic',G4:40,VG8:56,F12:80,VF20:120,EF40:185,AU50:300,MS63:570,MS65:1900},
+  // ── PROOF & MINT SETS ──
+  {s:'Proof Set',d:'1936 (6-coin)',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:5400,MS65:null},
+  {s:'Proof Set',d:'1950 (5-coin)',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:600,MS65:null},
+  {s:'Proof Set',d:'1955 (5-coin)',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:280,MS65:null},
+  {s:'Proof Set',d:'Common (1960s)',G4:null,VG8:null,F12:null,VF20:null,EF40:null,AU50:null,MS63:25,MS65:null},
+  // ── SEATED LIBERTY SERIES ──
+  {s:'Seated Liberty Dime',d:'1871-CC',G4:300,VG8:480,F12:840,VF20:1525,EF40:3400,AU50:6800,MS63:null,MS65:null},
+  {s:'Seated Liberty Dime',d:'Common Date',G4:28,VG8:44,F12:70,VF20:132,EF40:320,AU50:720,MS63:1600,MS65:6200},
+  {s:'Seated Liberty Quarter',d:'1871-CC',G4:610,VG8:1050,F12:1825,VF20:3800,EF40:8400,AU50:null,MS63:null,MS65:null},
+  {s:'Seated Liberty Quarter',d:'Common Date',G4:36,VG8:58,F12:100,VF20:195,EF40:440,AU50:940,MS63:2200,MS65:7800},
+  {s:'Seated Liberty Half',d:'Common Date',G4:42,VG8:68,F12:115,VF20:225,EF40:520,AU50:1100,MS63:2550,MS65:9500},
+  {s:'Seated Liberty Dollar',d:'Common Date',G4:195,VG8:285,F12:440,VF20:780,EF40:1700,AU50:3400,MS63:7800,MS65:null},
+  // ── TRADE DOLLAR (1873–1885) ──
+  {s:'Trade Dollar',d:'1878-CC',G4:195,VG8:285,F12:440,VF20:780,EF40:1700,AU50:3400,MS63:7800,MS65:null},
+  {s:'Trade Dollar',d:'Common Date',G4:125,VG8:190,F12:285,VF20:510,EF40:1100,AU50:2350,MS63:6200,MS65:null},
+  // ── DRAPED BUST / CAPPED BUST ──
+  {s:'Capped Bust Half',d:'1807–1836 Common',G4:78,VG8:125,F12:205,VF20:345,EF40:700,AU50:1400,MS63:3900,MS65:null},
+  {s:'Capped Bust Dime',d:'Common Date',G4:50,VG8:80,F12:128,VF20:245,EF40:560,AU50:1200,MS63:2800,MS65:null},
+  {s:'Draped Bust Dollar',d:'1798 Common',G4:2300,VG8:3800,F12:6100,VF20:10500,EF40:21000,AU50:null,MS63:null,MS65:null},
+];
+
+// ════════════════════ DATA ════════════════════
+const SC=[
+  {n:'Morgan Dollar',oz:.7734},{n:'Peace Dollar',oz:.7734},
+  {n:'Walking Liberty Half',oz:.3617},{n:'Franklin Half',oz:.3617},
+  {n:'Kennedy Half 1964',oz:.3617},{n:'Kennedy Half 1965–70',oz:.1479},
+  {n:'Eisenhower Dollar',oz:.3161},{n:'Washington Quarter',oz:.1808},
+  {n:'Standing Liberty Quarter',oz:.1808},{n:'Barber Quarter',oz:.1808},
+  {n:'Roosevelt Dime (pre-65)',oz:.0723},{n:'Mercury Dime',oz:.0723},
+  {n:'Barber Dime',oz:.0723},{n:'Barber Half',oz:.3617},{n:'War Nickel',oz:.0563},
+];
+const SR=[
+  {n:'Dimes Roll (50)',q:50,oz:3.575},{n:'Quarters Roll (40)',q:40,oz:7.234},
+  {n:'Halves WL/Franklin (20)',q:20,oz:7.234},{n:'Kennedy Halves 1964 (20)',q:20,oz:7.234},
+  {n:'Kennedy Halves 1965–70 (20)',q:20,oz:2.958},{n:'Morgan/Peace Roll (20)',q:20,oz:15.468},
+  {n:'Eisenhower Roll (20)',q:20,oz:6.322},{n:'War Nickels Roll (40)',q:40,oz:2.252},
+];
+const GK=[{k:'24K',p:1},{k:'22K',p:.9167},{k:'21K',p:.875},{k:'18K',p:.75},{k:'14K',p:.5833},{k:'12K',p:.5},{k:'10K',p:.4167},{k:'9K',p:.375}];
+const GB=[
+  {d:'¼ Goldback', oz:1/4000, mul:0.25},
+  {d:'½ Goldback', oz:1/2000, mul:0.5},
+  {d:'1 Goldback',  oz:1/1000, mul:1},
+  {d:'2 Goldback',  oz:1/500,  mul:2},
+  {d:'5 Goldback',  oz:1/200,  mul:5},
+  {d:'10 Goldback', oz:1/100,  mul:10},
+  {d:'25 Goldback', oz:1/40,   mul:25},
+  {d:'50 Goldback', oz:1/20,   mul:50},
+  {d:'100 Goldback',oz:1/10,   mul:100}
+];
+const PQ=[1,10,100,500,1000,2500,5000];
+const DL=[
+  {n:'APMEX',i:[{item:'Silver Eagles',low:'12%',avg:'15%',high:'18%'},{item:'Silver Maples',low:'10%',avg:'12%',high:'15%'},{item:'90% Junk Silver',low:'3%',avg:'5%',high:'6%'},{item:'Gold Eagles',low:'4%',avg:'5%',high:'6%'},{item:'Gold Buffalos',low:'4%',avg:'5.5%',high:'7%'},{item:'Platinum Eagles',low:'6%',avg:'8%',high:'10%'}]},
+  {n:'JM Bullion',i:[{item:'Silver Eagles',low:'11%',avg:'14%',high:'17%'},{item:'Silver Rounds',low:'3%',avg:'5%',high:'6%'},{item:'90% Junk Silver',low:'2%',avg:'3.5%',high:'5%'},{item:'Gold Eagles',low:'3%',avg:'4%',high:'5%'},{item:'Gold Bars (1oz)',low:'2%',avg:'3%',high:'4%'},{item:'Palladium Bars',low:'5%',avg:'7%',high:'9%'}]},
+  {n:'SD Bullion',i:[{item:'Silver Eagles',low:'10%',avg:'13%',high:'16%'},{item:'Silver Rounds',low:'2%',avg:'3.5%',high:'5%'},{item:'Silver Bars (10oz)',low:'2%',avg:'3%',high:'4%'},{item:'Gold Eagles',low:'3%',avg:'4%',high:'5%'},{item:'Gold Bars (1oz)',low:'2%',avg:'2.5%',high:'3%'},{item:'Platinum Bars',low:'5%',avg:'7%',high:'9%'}]},
+];
+const KD=[
+  {c:'Lincoln Cent',y:'1909-S VDB',r:'rare',v:'$700–$1,800+'},{c:'Lincoln Cent',y:'1914-D',r:'rare',v:'$150–$500+'},{c:'Lincoln Cent',y:'1922 Plain',r:'rare',v:'$500–$2,500+'},{c:'Lincoln Cent',y:'1931-S',r:'scarce',v:'$80–$200'},
+  {c:'Buffalo Nickel',y:'1913-S T2',r:'rare',v:'$300–$1,500+'},{c:'Buffalo Nickel',y:'1916 DDO',r:'rare',v:'$500–$3,000+'},{c:'Buffalo Nickel',y:'1918/7-D',r:'rare',v:'$1,000–$5,000+'},
+  {c:'Mercury Dime',y:'1916-D',r:'rare',v:'$700–$2,000+'},{c:'Mercury Dime',y:'1921',r:'scarce',v:'$50–$200'},{c:'Mercury Dime',y:'1942/41',r:'rare',v:'$400–$1,500+'},
+  {c:'SL Quarter',y:'1916',r:'rare',v:'$1,500–$5,000+'},{c:'SL Quarter',y:'1918/7-S',r:'rare',v:'$500–$3,000+'},
+  {c:'WL Half',y:'1921',r:'rare',v:'$200–$800+'},{c:'WL Half',y:'1921-D',r:'rare',v:'$250–$1,000+'},
+  {c:'Morgan Dollar',y:'1893-S',r:'rare',v:'$3,000–$30,000+'},{c:'Morgan Dollar',y:'1895',r:'rare',v:'$30,000+'},{c:'Morgan Dollar',y:'1901',r:'scarce',v:'$200–$1,000+'},
+  {c:'Peace Dollar',y:'1921',r:'scarce',v:'$120–$600'},{c:'Peace Dollar',y:'1928',r:'scarce',v:'$150–$700'},
+  {c:'St. Gaudens $20',y:'1907 High Relief',r:'rare',v:'$10,000–$40,000+'},{c:'St. Gaudens $20',y:'1927-D',r:'rare',v:'$15,000–$60,000+'},
+];
+const ME=[
+  {t:'Double Die Obverse (DDO)',d:'Hub doubled during die creation. Shows doubling on lettering/date. Most valuable Lincoln cent error.'},
+  {t:'Off-Center Strike',d:'Planchet misaligned — part of design missing. 50% off-center with full date = most valuable.'},
+  {t:'Clipped Planchet',d:'Blank disc incorrectly cut leaving curved or straight clip. Reduces coin weight.'},
+  {t:'Die Cap / Brockage',d:'Coin sticks to die and strikes next coin, leaving incuse mirror image. Very dramatic.'},
+  {t:'Wrong Planchet',d:'Struck on planchet for different denomination or country. E.g. Cent on a Dime blank.'},
+  {t:'Lamination Error',d:'Metal separates into layers due to impurities or improper alloy. Flakes or missing chunks.'},
+  {t:'Struck Through',d:'Foreign material caught between die and planchet. Weak or missing design area results.'},
+  {t:'Repunched Mintmark',d:'Mintmark punched multiple times at different positions. Visible doubling of mintmark.'},
+  {t:'Die Crack / Cud',d:'Cracked die leaves raised jagged lines. Cud = broke-off piece creates blank lump at rim.'},
+  {t:'Mule Error',d:'Wrong obverse + reverse die combination. Extremely rare and very valuable.'},
+  {t:'Rotated Die',d:'Reverse die rotated from normal orientation. 180° rotation most obvious. Detectable by holding coin vertically.'},
+  {t:'Proof in Mint Set',d:'Wrong-finish coin ends up in wrong packaging. A collector curiosity.'},
+];
+const GR=[
+  {g:'P-1',n:'Poor',d:'Barely identifiable. Date may be readable.'},{g:'FR-2',n:'Fair',d:'Heavily worn, all design clear but flat.'},
+  {g:'AG-3',n:'About Good',d:'Very heavily worn, design outlined.'},{g:'G-4/6',n:'Good',d:'Major design elements clear, legends worn.'},
+  {g:'VG-8/10',n:'Very Good',d:'Design clear, some detail visible.'},{g:'F-12/15',n:'Fine',d:'Moderate wear, all major features sharp.'},
+  {g:'VF-20/35',n:'Very Fine',d:'Light wear on high points.'},{g:'EF-40/45',n:'Extremely Fine',d:'Slight wear on high points only.'},
+  {g:'AU-50/58',n:'About Uncirculated',d:'Trace wear on highest points.'},{g:'MS-60',n:'Mint State Basal',d:'No wear, many heavy marks.'},
+  {g:'MS-63',n:'Choice Uncirculated',d:'No wear, several noticeable marks.'},{g:'MS-65',n:'Gem Uncirculated',d:'No wear, minor marks, strong luster.'},
+  {g:'MS-67',n:'Superb Gem',d:'Minimal marks, exceptional luster.'},{g:'MS-69',n:'Near Perfect',d:'Virtually perfect. Extremely rare.'},
+  {g:'MS-70',n:'Perfect Uncirculated',d:'Perfect in every way. Top grade.'},{g:'PR-70',n:'Perfect Proof',d:'Perfect proof. Cameo contrast.'},
+];
+
+// ════════════════════ STATE ════════════════════
+const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0,ZN:0};
+let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
+
+// ════════════════════ TABS ════════════════════
+const TABS=['spot','calc','silver','pennies','gold-k','goldback','platpal','premium','inventory','coinvals','keydate','errors','grading','currency','account'];
+const PRO_TABS = ['gold-k','goldback','premium','inventory','coinvals','keydate','errors','grading','currency','trading'];
+var window_isPro = false;
+
+function showTab(id){
+  if(PRO_TABS.includes(id) && !window_isPro){
+    document.getElementById('upgrade-modal').style.display='flex';
+    return;
+  }
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',TABS[i]===id));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('tab-'+id);
+  if(el)el.classList.add('active');
+  if(id==='trading'){ tsLoadFromStorage(); tsSyncSpot(); }
+}
+
+// ════════════════════ HELPERS ════════════════════
+const $=id=>document.getElementById(id);
+const fmt=(n,d=2)=>n?'$'+n.toFixed(d):'—';
+function chg(c,p){if(!c||!p)return'';const pc=(c/p*100).toFixed(2),cl=c>=0?'up':'dn',s=c>=0?'▲':'▼';return`<span class="${cl}">${s}${Math.abs(pc)}%</span>`}
+
+// ════════════════════ SPOT ════════════════════
+async function fm(sym){try{const r=await fetch('/api/metals/'+sym);return r.ok?r.json():null}catch{return null}}
+async function loadSpot(){
+  const[xau,xag,xcu,xpt,xpd]=await Promise.all(['XAU','XAG','XCU','XPT','XPD'].map(fm));
+  function set(sym,data,pid,cid){if(!data)return;spot[sym]=data.price||0;$(pid).textContent=fmt(spot[sym]);$(cid).innerHTML=chg(data.ch,data.prev_close_price);}
+  set('XAU',xau,'sp-xau','sc-xau');set('XAG',xag,'sp-xag','sc-xag');
+  if(xcu){spot.HG=xcu.price||0;$('sp-hg').textContent=fmt(spot.HG,3);$('sc-hg').innerHTML=chg(xcu.ch,xcu.prev_close_price);}
+  fetch('/api/metals/ZN').then(r=>r.json()).then(d=>{if(d.price)spot.ZN=d.price;}).catch(()=>{spot.ZN=1.30;});
+  set('XPT',xpt,'sp-xpt','sc-xpt');set('XPD',xpd,'sp-xpd','sc-xpd');
+  if(xau){$('m-xau').textContent=fmt(spot.XAU);$('m-xau-g').innerHTML=fmt(spot.XAU/31.1035)+'<span>per gram</span>';$('m-xau-dwt').innerHTML=fmt(spot.XAU/20)+'<span>per DWT</span>';$('m-xau-kg').innerHTML=fmt(spot.XAU*32.1507,0)+'<span>per kg</span>';}
+  if(xag){$('m-xag').textContent=fmt(spot.XAG);$('m-xag-g').innerHTML=fmt(spot.XAG/31.1035,3)+'<span>per gram</span>';$('m-xag-dwt').innerHTML=fmt(spot.XAG/20,3)+'<span>per DWT</span>';$('m-face').innerHTML=fmt(spot.XAG*.715)+'<span>per $1 face</span>';}
+  if(xcu){$('m-hg').textContent=fmt(spot.HG,3);$('m-hg-g').innerHTML=fmt(spot.HG/453.592,5)+'<span>per gram</span>';$('m-hg-lb').innerHTML=fmt(spot.HG,3)+'<span>per pound</span>';$('m-hg-penny').innerHTML=fmt((spot.HG/453.592)*3.11*.95 + ((spot.ZN||1.30)/453.592)*3.11*.05, 4)+'<span>per penny melt (pre-1982)</span>';}
+  if(xpt){$('m-xpt').textContent=fmt(spot.XPT);$('m-xpt-g').innerHTML=fmt(spot.XPT/31.1035)+'<span>per gram</span>';}
+  if(xpd){$('m-xpd').textContent=fmt(spot.XPD);$('m-xpd-g').innerHTML=fmt(spot.XPD/31.1035)+'<span>per gram</span>';}
+  if(spot.XAU&&spot.XAG){const r=(spot.XAU/spot.XAG).toFixed(1);$('sp-ratio').textContent=r;$('m-ratio').textContent=r;}
+  buildTicker();calcDeal();renderSilver();renderSilverRolls();renderPennies();renderGoldKarats();renderGoldbacks();renderPlatPal();renderInventory();
+}
+
+function buildTicker(){
+  const seg=[['XAU','GOLD'],['XAG','SILVER'],['HG','COPPER'],['XPT','PLATINUM'],['XPD','PALLADIUM']].map(([s,l])=>`<span class="ts">${l}</span><span class="tv">${spot[s]?'$'+spot[s].toFixed(2):'—'}</span>`).join('');
+  $('ticker-inner').innerHTML=seg+'&emsp;&emsp;'+seg;
+}
+
+// ════════════════════ CALCS ════════════════════
+function calcDeal(){
+  const sel=$('dc-item'),opt=sel.options[sel.selectedIndex];
+  const oz=+opt.dataset.oz||0,metal=opt.dataset.metal||'XAG',sp=spot[metal]||0,m=sp*oz;
+  const bp=+$('dc-buy-pct').value||0,sp2=+$('dc-sell-pct').value||0;
+  $('dc-spot-disp').textContent=sp?'$'+sp.toFixed(2)+' / oz':'Loading…';
+  $('dc-melt').textContent=m?'$'+m.toFixed(2):'—';$('dc-buy').textContent=m?'$'+(m*(1-bp/100)).toFixed(2):'—';
+  $('dc-sell').textContent=m?'$'+(m*(1+sp2/100)).toFixed(2):'—';$('dc-spread').textContent=m?'$'+(m*(1+sp2/100)-m*(1-bp/100)).toFixed(2):'—';
+}
+function renderSilver(){
+  const bp=+$('sv-buy').value||0,s2=+$('sv-sell').value||0,s=spot.XAG;
+  $('sv-tbody').innerHTML=SC.map(c=>{const m=s*c.oz;return`<tr><td>${c.n}</td><td>${c.oz}</td><td>${m?'$'+m.toFixed(2):'—'}</td><td class="up">${m?'$'+(m*(1-bp/100)).toFixed(2):'—'}</td><td style="color:var(--orange)">${m?'$'+(m*(1+s2/100)).toFixed(2):'—'}</td></tr>`;}).join('');
+}
+function renderSilverRolls(){
+  const bp=+$('svr-buy').value||0,s2=+$('svr-sell').value||0,s=spot.XAG;
+  $('svr-tbody').innerHTML=SR.map(r=>{const m=s*r.oz;return`<tr><td>${r.n}</td><td>${r.q}</td><td>${r.oz}</td><td>${m?'$'+m.toFixed(2):'—'}</td><td class="up">${m?'$'+(m*(1-bp/100)).toFixed(2):'—'}</td><td style="color:var(--orange)">${m?'$'+(m*(1+s2/100)).toFixed(2):'—'}</td></tr>`;}).join('');
+}
+function renderPennies(){
+  const cuPerG=spot.HG/453.592;
+  // Pre-1982 penny: 3.11g total, 95% Cu + 5% Zn
+  // Zinc ~$1.30/lb approx - use HG zinc if available, fallback to 1.30
+  const znPerG=(spot.ZN||1.30)/453.592;
+  const m1=(cuPerG*3.11*0.95)+(znPerG*3.11*0.05);
+  // Custom penny calculator
+  window.calcPennies = function(){
+    const input = document.getElementById('penny-calc-input');
+    const result = document.getElementById('penny-calc-result');
+    const qty = parseInt(input.value);
+    if(!qty || qty < 1){ result.style.display='none'; return; }
+    const cuPerG = spot.HG ? spot.HG/453.592 : null;
+    const znPerG = (spot.ZN||1.30)/453.592;
+    // Pre-1982 penny: 3.11g, 95% Cu + 5% Zn
+    const meltPerPenny = cuPerG ? (cuPerG*3.11*0.95)+(znPerG*3.11*0.05) : null;
+    const face = qty * 0.01;
+    const grams = qty * 3.11;
+    const melt = meltPerPenny ? meltPerPenny * qty : null;
+    const diff = melt ? melt - face : null;
+    const ratio = melt ? ((melt/face)*100).toFixed(1) : null;
+    document.getElementById('pc-melt').textContent = melt ? '$'+melt.toFixed(4) : 'No data';
+    document.getElementById('pc-face').textContent = '$'+face.toFixed(2);
+    document.getElementById('pc-grams').textContent = grams.toFixed(2)+'g';
+    const vsEl = document.getElementById('pc-vs');
+    if(diff !== null){
+      vsEl.textContent = (diff>=0?'+':'') + '$'+Math.abs(diff).toFixed(4);
+      vsEl.style.color = diff>=0 ? '#4caf50' : '#f44336';
+    }
+    if(ratio) document.getElementById('pc-ratio').textContent = 'Melt is '+ratio+'% of face value · $'+( meltPerPenny ? meltPerPenny.toFixed(5) : '—' )+' per coin';
+    result.style.display='block';
+  };
+
+  $('penny-tbody').innerHTML=PQ.map(q=>{const face=q*.01,gr=q*3.11,lbs=(gr/453.592).toFixed(3),m=m1*q,d=m-face;return`<tr><td>${q.toLocaleString()}</td><td>$${face.toFixed(2)}</td><td>${gr.toFixed(1)}</td><td>${lbs}</td><td>${m?'$'+m.toFixed(3):'—'}</td><td class="${d>=0?'up':'dn'}">${m?(d>=0?'+':'')+('$'+Math.abs(d).toFixed(3)):'—'}</td></tr>`;}).join('');
+}
+function renderGoldKarats(){
+  const bp=+$('gk-buy').value||0,s2=+$('gk-sell').value||0,s=spot.XAU;
+  const OZperG=31.1035;
+  $('gk-tbody').innerHTML=GK.map(g=>{
+    const m=s*g.p;
+    const mg=m/OZperG;
+    const buy=m*(1-bp/100);
+    const sell=m*(1+s2/100);
+    return`<tr>
+      <td><strong>${g.k}</strong></td>
+      <td>${(g.p*100).toFixed(2)}%</td>
+      <td>${m?'$'+m.toFixed(2):'—'}</td>
+      <td style="color:var(--muted);font-size:12px">${mg?'$'+mg.toFixed(3):'—'}</td>
+      <td class="up">${m?'$'+buy.toFixed(2):'—'}</td>
+      <td class="up" style="font-size:12px">${m?'$'+(buy/OZperG).toFixed(3):'—'}</td>
+      <td style="color:var(--orange)">${m?'$'+sell.toFixed(2):'—'}</td>
+      <td style="color:var(--orange);font-size:12px">${m?'$'+(sell/OZperG).toFixed(3):'—'}</td>
+    </tr>`;
+  }).join('');
+}
+function renderGoldbacks(){
+  // Fetch official Goldback exchange rate
+  fetch('/api/goldback-rate').then(r=>r.json()).then(data=>{
+    if(data.rates && data.rates.length){
+      $('gb-tbody').innerHTML = data.rates.map(g=>`<tr><td>${g.label}</td><td>${(g.oz).toFixed(6)} oz</td><td style="color:var(--gold);font-family:var(--mono);font-weight:700">$${g.rate.toFixed(4)}</td></tr>`).join('');
+      if(data.updated) $('gb-updated').textContent='Last updated: '+new Date(data.updated).toLocaleString()+' · Source: goldback.com';
+    } else {
+      // Fallback to melt-based calc if scrape fails
+      const s=spot.XAU;
+      $('gb-tbody').innerHTML=GB.map(g=>{const m=s*(g.oz);return`<tr><td>${g.d}</td><td>${g.oz.toFixed(6)} oz</td><td style="font-family:var(--mono);">${m?'$'+m.toFixed(4):'—'}</td></tr>`;}).join('');
+      $('gb-updated').textContent='⚠ Could not reach goldback.com — showing gold melt estimate';
+    }
+  }).catch(()=>{
+    const s=spot.XAU;
+    $('gb-tbody').innerHTML=GB.map(g=>{const m=s*(g.oz);return`<tr><td>${g.d}</td><td>${g.oz.toFixed(6)} oz</td><td>${m?'$'+m.toFixed(4):'—'}</td></tr>`;}).join('');
+    $('gb-updated').textContent='⚠ Could not reach goldback.com — showing gold melt estimate';
+  });
+}
+function renderPlatPal(){
+  ['xpt','xpd'].forEach(m=>{
+    const bp=+$(m+'-buy').value||0,s2=+$(m+'-sell').value||0,s=spot[m.toUpperCase()];
+    $(m+'-res').innerHTML=s?`<div class="res-item"><div class="res-lbl">SPOT</div><div class="res-val melt-val">$${s.toFixed(2)}</div></div><div class="res-item"><div class="res-lbl">BUY</div><div class="res-val buy-val">$${(s*(1-bp/100)).toFixed(2)}</div></div><div class="res-item"><div class="res-lbl">SELL</div><div class="res-val sell-val">$${(s*(1+s2/100)).toFixed(2)}</div></div>`:'—';
+  });
+}
+function renderPremiums(){
+  $('premium-content').innerHTML=DL.map(d=>`<div class="dealer-section"><div class="dealer-name">🏪 ${d.n}</div><div class="tbl-wrap"><table><thead><tr><th>ITEM</th><th style="color:var(--green)">LOW</th><th style="color:var(--gold)">AVG</th><th style="color:var(--red)">HIGH</th></tr></thead><tbody>${d.i.map(i=>`<tr><td>${i.item}</td><td style="color:var(--green)">${i.low}</td><td style="color:var(--gold)">${i.avg}</td><td style="color:var(--red)">${i.high}</td></tr>`).join('')}</tbody></table></div></div>`).join('');
+}
+function addInv(){
+  const metal=$('inv-metal').value,desc=$('inv-desc').value.trim()||metal;
+  const qty=+$('inv-qty').value||1,cost=+$('inv-cost').value||0;
+  const date=$('inv-date').value||new Date().toISOString().slice(0,10);
+  if(!qty||!cost){alert('Enter qty and buy price.');return;}
+  const grade=$('inv-coin-grade').value||'';
+  const fmvTxt=$('inv-fmv-display').textContent||'';
+  // Parse FMV from display text (may include melt info)
+  const fmvMatch=fmvTxt.match(/FMV:\s*\$([0-9,]+)/);
+  const fmv=fmvMatch?parseFloat(fmvMatch[1].replace(/,/g,''))||0:0;
+  const ozContent=parseFloat($('inv-metal').dataset.ozContent)||0;
+  inventory.push({metal,desc,qty,cost,date,grade,fmv,ozContent});
+  localStorage.setItem('bdp-inv',JSON.stringify(inventory));
+  $('inv-desc').value='';$('inv-qty').value='1';$('inv-cost').value='';
+  $('inv-coin-series').value='';$('inv-coin-variety').innerHTML='<option value="">— Select Variety —</option>';
+  $('inv-coin-grade').value='';$('inv-fmv-display').textContent='';
+  delete $('inv-metal').dataset.ozContent;
+  renderInventory();
+}
+function clearInv(){if(!confirm('Clear all inventory?'))return;inventory=[];localStorage.setItem('bdp-inv','[]');renderInventory();}
+function renderInventory(){
+  initCoinValDropdowns();
+  let tc=0,tm=0;
+  $('inv-tbody').innerHTML=inventory.map(r=>{
+    const s=spot[r.metal]||0;
+    const b=r.qty*r.cost;
+    // Melt value: use stored oz content × spot if available, else spot × qty for raw metals
+    let melt=0;
+    if(r.metal==='COIN'){
+      // Coin with no spot metal — melt is 0, use FMV for P&L
+      melt=0;
+    } else if(r.ozContent && s){
+      // Silver/gold coin added via coin lookup — melt = oz per coin × qty × spot
+      melt=r.ozContent*r.qty*s;
+    } else {
+      // Raw bullion — melt = spot × qty (qty is in oz)
+      melt=s*r.qty;
+    }
+    // Market value for P&L: prefer FMV for numismatic coins, else melt
+    const mk=r.fmv?(r.fmv*r.qty):melt;
+    const pl=mk-b,pct=b?(pl/b*100).toFixed(1):0;
+    tc+=b;if(mk)tm+=mk;
+    const gradeCell=r.grade?`<td style="color:var(--gold);font-family:var(--mono)">${r.grade}</td>`:'<td>—</td>';
+    const fmvCell=r.fmv?`<td style="color:var(--gold);font-family:var(--mono)">$${r.fmv.toLocaleString()}</td>`:'<td style="color:var(--muted)">—</td>';
+    const meltCell=melt?`<td style="color:#aaa;font-family:var(--mono)">$${melt.toFixed(2)}</td>`:'<td style="color:var(--muted)">—</td>';
+    return`<tr><td>${r.date}</td><td>${r.desc}</td><td>${r.metal}</td><td>${r.qty}</td><td>$${r.cost.toFixed(2)}</td><td>$${b.toFixed(2)}</td>${gradeCell}${fmvCell}${meltCell}<td class="${pl>=0?'up':'dn'}">${mk?'$'+pl.toFixed(2):'—'}</td><td class="${pl>=0?'up':'dn'}">${mk?pct+'%':'—'}</td></tr>`;
+  }).join('');
+  const tp=tm-tc;$('inv-totals').innerHTML=inventory.length?`Cost: <span style="color:var(--gold)">$${tc.toFixed(2)}</span> &nbsp;·&nbsp; Mkt: <span style="color:var(--gold)">$${tm.toFixed(2)}</span> &nbsp;·&nbsp; P&L: <span class="${tp>=0?'up':'dn'}">$${tp.toFixed(2)}</span>`:'';
+}
+
+function initCoinValDropdowns(){
+  const series=[...new Set(CV.map(c=>c.s))];
+  const cvSel=$('cv-series');
+  if(cvSel.options.length<=1) series.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;cvSel.appendChild(o);});
+  const invSel=$('inv-coin-series');
+  if(invSel.options.length<=1) series.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;invSel.appendChild(o);});
+}
+// CV sort state
+let _cvSortKey=null,_cvSortAsc=true;
+function cvSortBy(k){if(_cvSortKey===k)_cvSortAsc=!_cvSortAsc;else{_cvSortKey=k;_cvSortAsc=true;}renderCoinVals();}
+
+const CV_KEY_DATES=['1909-S VDB','1914-D','1931-S','1922 Plain','1877','1909-S',
+  '1916-D','1921','1921-D','1916','1918/7-S','1923-S','1932-D','1932-S',
+  '1889-CC','1893-S','1895 Proof','1885-CC','1921 High Relief','1928','1934-S',
+  '1907 High Relief','1927-D','1913 (Specimen)','1885','1886','1912-S',
+  '1913-S T2','1916 DDO','1918/7-D','1926-S','1937-D 3-Leg','1870-S',
+  '1885 (Proof only)','1894-S','1901-S','1895-O'];
+function _cvIsKey(d){return CV_KEY_DATES.includes(d);}
+function _cvIsError(d){return d.includes('DDO')||d.includes('DDR')||d.includes('Error')||
+  (d.includes('/')&&!d.includes('/oz'))||d.includes('Overdate');}
+
+function renderCoinVals(){
+  initCoinValDropdowns();
+  // ── Live spot melt floor: never show a silver coin below melt value ──
+  const liveAg = (spot && spot.XAG) ? spot.XAG : 0;
+  const liveAu = (spot && spot.XAU) ? spot.XAU : 0;
+  function cvMeltFloor(c, gradeKey){
+    const v = c[gradeKey];
+    if(v == null) return null;
+    // Silver content oz for this series
+    const agOz = (COIN_OZ[c.s] || 0);
+    let auOz = 0;
+    if(c.s.startsWith('Gold ') || c.s.startsWith('Silver Eagle')) {
+      // Gold Eagles / Buffalos use gold oz; Silver Eagle uses silver
+      if(c.s === 'Silver Eagle') { /* agOz already = 1.0 */ }
+      else {
+        const gmap = {'Gold Eagle 1oz':1,'Gold Eagle 1/2oz':0.5,'Gold Eagle 1/4oz':0.25,'Gold Eagle 1/10oz':0.1,'Gold Buffalo 1oz':1,'Gold $20 St. Gaudens':0.9677,'Gold $20 Liberty':0.9677,'Gold $10 Liberty':0.4838,'Gold $10 Indian':0.4838,'Gold $5 Liberty':0.2419,'Gold $5 Indian':0.2419,'Gold $2.50 Liberty':0.1209,'Gold $2.50 Indian':0.1209,'Gold $3 Princess':0.1452,'Gold $1 (Type 1)':0.04837,'Gold $1 (Type 3)':0.04837};
+        auOz = gmap[c.s] || 0;
+      }
+    }
+    const melt = (agOz * liveAg) + (auOz * liveAu);
+    // Apply grade-based premium over melt: G4=5%, VG8=8%, F12=12%, VF20=18%, EF40=32%, AU50=55%, MS63=120%, MS65=350%
+    const premiums = {G4:0.05,VG8:0.08,F12:0.12,VF20:0.18,EF40:0.32,AU50:0.55,MS63:1.2,MS65:3.5};
+    const floor = melt > 0 ? Math.ceil(melt * (1 + (premiums[gradeKey]||0))) : 0;
+    return Math.max(v, floor);
+  }
+  const series=$('cv-series').value;
+  const grade=$('cv-grade').value;
+  const searchEl=document.getElementById('cv-search');
+  const q=searchEl?searchEl.value.toLowerCase().trim():'';
+  const minEl=document.getElementById('cv-minval');
+  const minVal=minEl?parseFloat(minEl.value)||0:0;
+  const grades=['G4','VG8','F12','VF20','EF40','AU50','MS63','MS65'];
+
+  let filtered=CV.filter(c=>{
+    if(series && c.s!==series) return false;
+    if(q && !c.s.toLowerCase().includes(q) && !c.d.toLowerCase().includes(q)) return false;
+    if(grade){
+      const gi=grades.indexOf(grade);
+      let has=false;
+      for(let i=gi;i<grades.length;i++){if(c[grades[i]]!=null){has=true;break;}}
+      if(!has) return false;
+    }
+    if(minVal>0){
+      const mx=Math.max(...grades.map(g=>c[g]||0));
+      if(mx<minVal) return false;
+    }
+    return true;
+  });
+
+  if(_cvSortKey){
+    filtered.sort((a,b)=>{
+      const av=typeof a[_cvSortKey]==='string'?a[_cvSortKey]:(a[_cvSortKey]||-1);
+      const bv=typeof b[_cvSortKey]==='string'?b[_cvSortKey]:(b[_cvSortKey]||-1);
+      return _cvSortAsc?(av<bv?-1:av>bv?1:0):(av<bv?1:av>bv?-1:0);
+    });
+  }
+
+  const cntEl=document.getElementById('cv-count');
+  if(cntEl) cntEl.textContent='Showing '+filtered.length+' of '+CV.length+' coins';
+
+  $('cv-tbody').innerHTML=filtered.map(c=>{
+    const isKey=_cvIsKey(c.d);
+    const isErr=_cvIsError(c.d);
+    const badge=isKey?'<span style="display:inline-block;background:#c00;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">KEY</span>':
+      (isErr?'<span style="display:inline-block;background:#a05000;color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">ERR</span>':'');
+    const rowBg=isKey?'background:rgba(200,50,50,0.08)':'';
+    const cells=grades.map(g=>{
+      if(grade && g!==grade) return '';
+      const raw=c[g];
+      const v=cvMeltFloor(c,g);
+      const bumped=(raw!=null && v!=null && v>raw);
+      const col=v!=null&&v>=1000?'#ffd700':'var(--gold)';
+      const fw=v!=null&&v>=1000?'bold':'normal';
+      const disp=v!=null?'$'+v.toLocaleString()+(bumped?'<sup title="Live melt floor applied" style="font-size:8px;color:#aaa">⚡</sup>':''):'<span style="color:#444">—</span>';
+      return'<td style="color:'+col+';font-family:var(--mono);text-align:right;font-weight:'+fw+'">'+disp+'</td>';
+    }).join('');
+    const jc=JSON.stringify(c).replace(/'/g,"\'");
+    const ds=c.d.replace(/\\/g,'\\\\').replace(/'/g,"\'");
+    const ss=c.s.replace(/\\/g,'\\\\').replace(/'/g,"\'");
+    const addBtn='<td><button onclick="prefillInventory(\''+ss+'\',\''+ds+'\','+jc+')" style="background:var(--gold);color:#000;border:none;padding:3px 8px;font-size:11px;cursor:pointer;border-radius:3px">ADD</button></td>';
+    return'<tr style="'+rowBg+'"><td style="color:#aaa;font-size:12px">'+c.s+'</td><td style="color:#eee;font-weight:500">'+c.d+badge+'</td>'+cells+addBtn+'</tr>';
+  }).join('');
+}
+function invCoinSeriesChange(){
+  const series=$('inv-coin-series').value;
+  const varSel=$('inv-coin-variety');
+  varSel.innerHTML='<option value="">— Select Variety —</option>';
+  if(!series) return;
+  CV.filter(c=>c.s===series).forEach(c=>{const o=document.createElement('option');o.value=c.d;o.textContent=c.d;varSel.appendChild(o);});
+}
+// Silver oz content per coin for melt calculation
+const COIN_OZ={
+  'Morgan Dollar':0.7734,'Peace Dollar':0.7734,'Eisenhower Dollar':0.3161,
+  'Trade Dollar':0.7874,'Seated Liberty Dollar':0.7734,'Draped Bust Dollar':0.7734,
+  'WL Half':0.3617,'Franklin Half':0.3617,'Barber Half':0.3617,'Capped Bust Half':0.3617,
+  'Seated Liberty Half':0.3617,
+  'Kennedy Half':0.3617,// 1964 only; 1965-69 handled separately
+  'SL Quarter':0.1808,'Washington Quarter':0.1808,'Barber Quarter':0.1808,
+  'Seated Liberty Quarter':0.1808,
+  'Mercury Dime':0.0723,'Roosevelt Dime':0.0723,'Barber Dime':0.0723,
+  'Seated Liberty Dime':0.0723,'Capped Bust Dime':0.0723,
+  'War Nickel (35% Silver)':0.0563,'Jefferson Nickel':0,
+  'Buffalo Nickel':0,'Liberty Head Nickel':0,'Lincoln Cent':0,'Indian Head Cent':0,
+  'SBA Dollar':0,
+  'Silver Eagle':1.0,
+  'Gold Eagle 1oz':1.0,'Gold Eagle 1/2oz':0.5,'Gold Eagle 1/4oz':0.25,'Gold Eagle 1/10oz':0.1,
+  'Gold Buffalo 1oz':1.0,
+  'Gold $20 St. Gaudens':0.9677,'Gold $20 Liberty':0.9677,
+  'Gold $10 Indian':0.4839,'Gold $10 Liberty':0.4839,
+  'Gold $5 Indian':0.2419,'Gold $5 Liberty':0.2419,
+  'Gold $3 Princess':0.1452,'Gold $2.50 Indian':0.1210,'Gold $2.50 Liberty':0.1210,
+  'Gold $1 (Type 1)':0.0484,'Gold $1 (Type 3)':0.0484,
+};
+function getSpotMetalForSeries(series){
+  if(series.startsWith('Gold')) return 'XAU';
+  if(series==='Silver Eagle') return 'XAG';
+  const ozMap=COIN_OZ[series]||0;
+  return ozMap>0?'XAG':'COIN';
+}
+function lookupCoinFMV(){
+  const series=$('inv-coin-series').value;
+  const variety=$('inv-coin-variety').value;
+  const grade=$('inv-coin-grade').value;
+  if(!series||!variety||!grade){alert('Select series, variety, and grade.');return;}
+  const coin=CV.find(c=>c.s===series&&c.d===variety);
+  if(!coin){alert('Coin not found.');return;}
+  const fmv=coin[grade];
+  const ozContent=COIN_OZ[series]||0;
+  const metalType=getSpotMetalForSeries(series);
+  const spotVal=spot[metalType]||0;
+  const meltVal=ozContent&&spotVal?(ozContent*spotVal).toFixed(2):null;
+  if(fmv==null){
+    $('inv-fmv-display').textContent=meltVal?`FMV: N/A | Melt: $${meltVal}`:'FMV: N/A for this grade';
+  } else {
+    $('inv-fmv-display').textContent=`FMV: $${fmv.toLocaleString()}${meltVal?' | Melt: $'+meltVal:''}`;
+  }
+  if(!$('inv-desc').value) $('inv-desc').value=series+' '+variety+' '+grade;
+  $('inv-metal').value=metalType;
+  // Store oz content in a hidden field for inventory record
+  $('inv-metal').dataset.ozContent=ozContent;
+}
+function prefillInventory(series,variety,coinData){
+  showTab('inventory');
+  $('inv-metal').value='COIN';
+  $('inv-coin-series').value=series;
+  invCoinSeriesChange();
+  setTimeout(()=>{
+    $('inv-coin-variety').value=variety;
+  },50);
+  $('inv-desc').value=series+' '+variety;
+  $('inv-fmv-display').textContent='';
+}
+
+function renderKeyDates(){
+  const sel=$('kd-select');
+  // Populate dropdown options if not yet done
+  if(sel.options.length<=1){
+    const coins=[...new Set(KD.map(k=>k.c))];
+    coins.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  }
+  const chosen=sel.value;
+  const filtered=chosen?KD.filter(k=>k.c===chosen):KD;
+  $('kd-grid').innerHTML=filtered.map(k=>`<div class="kd-card"><div class="kd-coin">${k.c}</div><div class="kd-years">${k.y} &nbsp;<span class="badge badge-${k.r}">${k.r.toUpperCase()}</span></div><div class="kd-value">${k.v}</div></div>`).join('');
+}
+function renderErrors(){$('errors-grid').innerHTML=ME.map(e=>`<div class="err-card"><div class="err-type">${e.t}</div><div class="err-desc">${e.d}</div></div>`).join('');}
+function renderGrading(){$('grade-tbody').innerHTML=GR.map(g=>`<tr><td>${g.g}</td><td>${g.n}</td><td>${g.d}</td></tr>`).join('');}
+
+async function loadAccount(){
+  try{
+    const r=await fetch('/api/me');if(!r.ok){window.location.href='/login';return;}
+    const u=await r.json();
+    window_isPro = u.isPro === true;
+    if(!window_isPro){
+      document.querySelectorAll('.tab[data-pro="1"]').forEach(t=>{
+        t.setAttribute('data-original-text', t.textContent.trim());
+        t.textContent = '🔒 ' + t.textContent.trim();
+        t.style.opacity = '0.55';
+      });
+    }
+    if(u.plan==='admin')$('admin-btn').style.display='inline-flex';
+    const planLabel = u.plan==='free' ? 'FREE' : u.plan.toUpperCase();
+    $('acct-card').innerHTML=`
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:10px">ACCOUNT</div>
+      <div style="font-family:var(--mono);font-size:18px;color:var(--gold);margin-bottom:14px">${u.email}</div>
+      <span style="background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.35);padding:5px 16px;border-radius:20px;font-family:var(--display);font-size:14px;letter-spacing:2px;color:var(--gold)">${planLabel}</span>
+      ${u.plan==='trial'?`<div style="margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--muted)">Trial ends: ${new Date(u.trialEnd).toLocaleDateString()}</div>`:''}
+      ${(u.plan==='trial'||u.plan==='free')?`<div style="margin-top:20px"><a href="/pricing" style="background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;padding:12px 28px;border-radius:8px;font-family:var(--display);font-size:18px;letter-spacing:2px;text-decoration:none">UPGRADE NOW</a></div>`:''}`;
+    if(u.plan==='trial'&&new Date(u.trialEnd)<new Date()){
+      // expired trial = free tier, don't show hard paywall
+      window_isPro = false;
+    }
+    if(u.plan==='free'){
+      $('paywall').classList.remove('show');
+    } else if(!['admin','monthly','annual','trial'].includes(u.plan)){
+      $('paywall').classList.add('show');
+    }
+  }catch{window.location.href='/login';}
+}
+async function redeemPromo(){
+  const code=$('promo-input').value.trim().toUpperCase(),msg=$('promo-msg');
+  const r=await fetch('/api/promo/redeem',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})});
+  const d=await r.json();
+  msg.innerHTML=r.ok?`<span class="ok">✓ Applied! Plan: ${d.plan}</span>`:`<span class="err">${d.error}</span>`;
+  if(r.ok)loadAccount();
+}
+async function loadNews(){
+  try{const r=await fetch('/api/news'),items=await r.json();if(!items.length)return;const h=items.map(i=>`<a href="${i.link}" target="_blank">${i.title}</a>`).join('&emsp;·&emsp;');$('news-inner').innerHTML=h+'&emsp;&emsp;'+h;}catch{}
+}
+async function doLogout(){await fetch('/api/logout',{method:'POST'});window.location.href='/';}
+function refreshAll(){loadSpot();loadNews();}
+function adjustPad(){
+  const h=document.getElementById('header').offsetHeight;
+  const tb=document.getElementById('tab-bar').offsetHeight;
+  document.getElementById('tab-bar').style.top=h+'px';
+  document.getElementById('content').style.paddingTop=(h+tb)+'px';
+}
+window.addEventListener('load',adjustPad);window.addEventListener('resize',adjustPad);
+async function init(){
+  await loadAccount();renderPremiums();renderErrors();renderGrading();renderKeyDates();renderInventory();renderCoinVals();
+  await loadSpot();await loadNews();
+  setInterval(loadSpot,5*60*1000);setInterval(loadNews,10*60*1000);
+}
+init();
+
+// ════════════════════ CURRENCY EXCHANGE ════════════════════
+const FX_CURRENCIES=[
+  {code:'EUR',country:'Eurozone',flag:'🇪🇺'},
+  {code:'GBP',country:'United Kingdom',flag:'🇬🇧'},
+  {code:'CAD',country:'Canada',flag:'🇨🇦'},
+  {code:'AUD',country:'Australia',flag:'🇦🇺'},
+  {code:'NZD',country:'New Zealand',flag:'🇳🇿'},
+  {code:'CHF',country:'Switzerland',flag:'🇨🇭'},
+  {code:'JPY',country:'Japan',flag:'🇯🇵'},
+  {code:'CNY',country:'China',flag:'🇨🇳'},
+  {code:'HKD',country:'Hong Kong',flag:'🇭🇰'},
+  {code:'SGD',country:'Singapore',flag:'🇸🇬'},
+  {code:'KRW',country:'South Korea',flag:'🇰🇷'},
+  {code:'INR',country:'India',flag:'🇮🇳'},
+  {code:'MXN',country:'Mexico',flag:'🇲🇽'},
+  {code:'BRL',country:'Brazil',flag:'🇧🇷'},
+  {code:'ARS',country:'Argentina',flag:'🇦🇷'},
+  {code:'CLP',country:'Chile',flag:'🇨🇱'},
+  {code:'COP',country:'Colombia',flag:'🇨🇴'},
+  {code:'PEN',country:'Peru',flag:'🇵🇪'},
+  {code:'SEK',country:'Sweden',flag:'🇸🇪'},
+  {code:'NOK',country:'Norway',flag:'🇳🇴'},
+  {code:'DKK',country:'Denmark',flag:'🇩🇰'},
+  {code:'PLN',country:'Poland',flag:'🇵🇱'},
+  {code:'CZK',country:'Czech Republic',flag:'🇨🇿'},
+  {code:'HUF',country:'Hungary',flag:'🇭🇺'},
+  {code:'RON',country:'Romania',flag:'🇷🇴'},
+  {code:'TRY',country:'Turkey',flag:'🇹🇷'},
+  {code:'RUB',country:'Russia',flag:'🇷🇺'},
+  {code:'UAH',country:'Ukraine',flag:'🇺🇦'},
+  {code:'ZAR',country:'South Africa',flag:'🇿🇦'},
+  {code:'NGN',country:'Nigeria',flag:'🇳🇬'},
+  {code:'EGP',country:'Egypt',flag:'🇪🇬'},
+  {code:'KES',country:'Kenya',flag:'🇰🇪'},
+  {code:'GHS',country:'Ghana',flag:'🇬🇭'},
+  {code:'MAD',country:'Morocco',flag:'🇲🇦'},
+  {code:'SAR',country:'Saudi Arabia',flag:'🇸🇦'},
+  {code:'AED',country:'UAE',flag:'🇦🇪'},
+  {code:'QAR',country:'Qatar',flag:'🇶🇦'},
+  {code:'KWD',country:'Kuwait',flag:'🇰🇼'},
+  {code:'BHD',country:'Bahrain',flag:'🇧🇭'},
+  {code:'OMR',country:'Oman',flag:'🇴🇲'},
+  {code:'ILS',country:'Israel',flag:'🇮🇱'},
+  {code:'THB',country:'Thailand',flag:'🇹🇭'},
+  {code:'MYR',country:'Malaysia',flag:'🇲🇾'},
+  {code:'IDR',country:'Indonesia',flag:'🇮🇩'},
+  {code:'PHP',country:'Philippines',flag:'🇵🇭'},
+  {code:'VND',country:'Vietnam',flag:'🇻🇳'},
+  {code:'TWD',country:'Taiwan',flag:'🇹🇼'},
+  {code:'PKR',country:'Pakistan',flag:'🇵🇰'},
+  {code:'BDT',country:'Bangladesh',flag:'🇧🇩'},
+  {code:'LKR',country:'Sri Lanka',flag:'🇱🇰'},
+  {code:'NPR',country:'Nepal',flag:'🇳🇵'},
+  {code:'MMK',country:'Myanmar',flag:'🇲🇲'},
+  {code:'KHR',country:'Cambodia',flag:'🇰🇭'},
+  {code:'CRC',country:'Costa Rica',flag:'🇨🇷'},
+  {code:'GTQ',country:'Guatemala',flag:'🇬🇹'},
+  {code:'HNL',country:'Honduras',flag:'🇭🇳'},
+  {code:'PAB',country:'Panama',flag:'🇵🇦'},
+  {code:'DOP',country:'Dominican Republic',flag:'🇩🇴'},
+  {code:'JMD',country:'Jamaica',flag:'🇯🇲'},
+  {code:'TTD',country:'Trinidad & Tobago',flag:'🇹🇹'},
+  {code:'BOB',country:'Bolivia',flag:'🇧🇴'},
+  {code:'PYG',country:'Paraguay',flag:'🇵🇾'},
+  {code:'UYU',country:'Uruguay',flag:'🇺🇾'},
+  {code:'VES',country:'Venezuela',flag:'🇻🇪'},
+  {code:'ISK',country:'Iceland',flag:'🇮🇸'},
+  {code:'HRK',country:'Croatia',flag:'🇭🇷'},
+  {code:'BGN',country:'Bulgaria',flag:'🇧🇬'},
+  {code:'RSD',country:'Serbia',flag:'🇷🇸'},
+  {code:'MKD',country:'North Macedonia',flag:'🇲🇰'},
+  {code:'ALL',country:'Albania',flag:'🇦🇱'},
+  {code:'GEL',country:'Georgia',flag:'🇬🇪'},
+  {code:'AMD',country:'Armenia',flag:'🇦🇲'},
+  {code:'AZN',country:'Azerbaijan',flag:'🇦🇿'},
+  {code:'KZT',country:'Kazakhstan',flag:'🇰🇿'},
+  {code:'UZS',country:'Uzbekistan',flag:'🇺🇿'},
+  {code:'GBP',country:'United Kingdom',flag:'🇬🇧'},
+  {code:'XAF',country:'Central Africa (CFA)',flag:'🌍'},
+  {code:'XOF',country:'West Africa (CFA)',flag:'🌍'},
+  {code:'XPF',country:'Pacific Franc',flag:'🌊'},
+  {code:'JOD',country:'Jordan',flag:'🇯🇴'},
+  {code:'LBP',country:'Lebanon',flag:'🇱🇧'},
+  {code:'IQD',country:'Iraq',flag:'🇮🇶'},
+  {code:'IRR',country:'Iran',flag:'🇮🇷'},
+  {code:'AFN',country:'Afghanistan',flag:'🇦🇫'},
+  {code:'MNT',country:'Mongolia',flag:'🇲🇳'},
+  {code:'KGS',country:'Kyrgyzstan',flag:'🇰🇬'},
+  {code:'TJS',country:'Tajikistan',flag:'🇹🇯'},
+  {code:'TMT',country:'Turkmenistan',flag:'🇹🇲'},
+  {code:'BYN',country:'Belarus',flag:'🇧🇾'},
+  {code:'MDL',country:'Moldova',flag:'🇲🇩'},
+  {code:'ETB',country:'Ethiopia',flag:'🇪🇹'},
+  {code:'TZS',country:'Tanzania',flag:'🇹🇿'},
+  {code:'UGX',country:'Uganda',flag:'🇺🇬'},
+  {code:'ZMW',country:'Zambia',flag:'🇿🇲'},
+  {code:'MZN',country:'Mozambique',flag:'🇲🇿'},
+  {code:'BWP',country:'Botswana',flag:'🇧🇼'},
+  {code:'NAD',country:'Namibia',flag:'🇳🇦'},
+  {code:'MUR',country:'Mauritius',flag:'🇲🇺'},
+  {code:'DZD',country:'Algeria',flag:'🇩🇿'},
+  {code:'TND',country:'Tunisia',flag:'🇹🇳'},
+  {code:'LYD',country:'Libya',flag:'🇱🇾'},
+  {code:'SDG',country:'Sudan',flag:'🇸🇩'},
+  {code:'SYP',country:'Syria',flag:'🇸🇾'},
+  {code:'YER',country:'Yemen',flag:'🇾🇪'},
+];
+let fxRates={},fxSortCol='country',fxSortDir=1,fxLoaded=false;
+
+async function loadFX(force=false){
+  if(fxLoaded&&!force)return;
+  $('fx-status').textContent='Loading exchange rates…';
+  $('fx-tbody').innerHTML='';
+  try{
+    const r=await fetch('/api/fx');
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    fxRates=d.rates||{};
+    const ts=d.timestamp?new Date(d.timestamp*1000).toLocaleString():'';
+    $('fx-updated').textContent=ts?`Last updated: ${ts}`:'';
+    $('fx-status').textContent='';
+    fxLoaded=true;
+    filterFX();
+  }catch(e){
+    $('fx-status').textContent='Could not load rates. Try refreshing.';
+    console.error(e);
+  }
+}
+function sortFX(col){
+  if(fxSortCol===col)fxSortDir*=-1;else{fxSortCol=col;fxSortDir=1;}
+  filterFX();
+}
+function filterFX(){
+  const q=($('fx-search').value||'').toLowerCase();
+  const amt=parseFloat($('fx-amount').value)||1;
+  let rows=FX_CURRENCIES.filter((c,i,arr)=>arr.findIndex(x=>x.code===c.code)===i); // dedupe
+  if(q) rows=rows.filter(c=>c.country.toLowerCase().includes(q)||c.code.toLowerCase().includes(q));
+  rows=rows.filter(c=>fxRates[c.code]);
+  rows.sort((a,b)=>{
+    let av,bv;
+    if(fxSortCol==='rate'){av=fxRates[a.code]||0;bv=fxRates[b.code]||0;}
+    else if(fxSortCol==='usd'){av=1/(fxRates[a.code]||1);bv=1/(fxRates[b.code]||1);}
+    else if(fxSortCol==='code'){av=a.code;bv=b.code;}
+    else{av=a.country;bv=b.country;}
+    if(typeof av==='string')return av.localeCompare(bv)*fxSortDir;
+    return(av-bv)*fxSortDir;
+  });
+  $('fx-tbody').innerHTML=rows.map(c=>{
+    const rate=fxRates[c.code];
+    if(!rate)return'';
+    const usdVal=(amt/rate);
+    const converted=(rate*amt);
+    return`<tr>
+      <td style="font-size:22px;text-align:center">${c.flag}</td>
+      <td style="font-weight:600">${c.country}</td>
+      <td style="font-family:var(--mono);color:var(--gold)">${c.code}</td>
+      <td style="font-family:var(--mono)">${rate>=1?rate.toLocaleString(undefined,{maximumFractionDigits:4}):rate.toFixed(6)}</td>
+      <td style="font-family:var(--mono);color:#aaa">$${usdVal.toFixed(4)}</td>
+      <td style="font-family:var(--mono);color:var(--gold);font-weight:700">${converted>=1?converted.toLocaleString(undefined,{maximumFractionDigits:2}):converted.toFixed(4)} ${c.code}</td>
+    </tr>`;
+  }).join('');
+  if(!rows.length&&q)$('fx-status').textContent='No currencies match your search.';
+  else $('fx-status').textContent='';
+}
+
+function openGradingLookup(source) {
+  const sel = document.getElementById('grade-lookup-series');
+  const val = sel.value;
+  const info = document.getElementById('grade-lookup-info');
+  if (!val) {
+    info.textContent = '⚠ Please select a coin series first.';
+    info.style.color = 'var(--red)';
+    return;
+  }
+  const [slug, pcgsId] = val.split('|');
+  const label = sel.options[sel.selectedIndex].text;
+  info.style.color = 'var(--muted)';
+
+  if (source === 'pcgs') {
+    // PCGS Photograde — opens the tool, user selects series there
+    window.open('https://www.pcgs.com/photograde', '_blank');
+    info.textContent = '↗ Opened PCGS Photograde — select "' + label + '" from the menu on their site.';
+  } else if (source === 'ngc') {
+    // NGC Coin Grading Guide
+    window.open('https://www.ngccoin.com/coin-grading/', '_blank');
+    info.textContent = '↗ Opened NGC Grading Guide — browse to "' + label + '" on their site.';
+  } else if (source === 'coinfacts') {
+    // PCGS CoinFacts — supports deep links by series ID
+    const url = pcgsId
+      ? `https://www.pcgs.com/coinfacts/series/${slug}-${pcgsId}`
+      : `https://www.pcgs.com/coinfacts`;
+    window.open(url, '_blank');
+    info.textContent = '↗ Opened PCGS CoinFacts for ' + label + ' — includes photos, history & values.';
+  }
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// TRADING SHEET
+// ══════════════════════════════════════════════════════════════
+let tsRows = [];
+let tsTVWindow = null;
+const TS_KEY = 'bdp_trading_sheet';
+
+function tsInit() {
+  tsLoadFromStorage();
+  tsSyncSpot();
+}
+
+function tsSyncSpot() {
+  // Pull from existing spot prices already loaded on the page
+  const g = document.getElementById('ts-spot-gold');
+  const s = document.getElementById('ts-spot-silver');
+  if (g && window.prices && prices.XAU) g.textContent = '$' + prices.XAU.toFixed(2);
+  if (s && window.prices && prices.XAG) s.textContent = '$' + prices.XAG.toFixed(2);
+}
+
+function tsRender() {
+  const tbody = document.getElementById('ts-tbody');
+  if (!tbody) return;
+  if (tsRows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:32px;font-style:italic">No items yet — click + ADD ITEM to get started</td></tr>';
+    return;
+  }
+  tbody.innerHTML = tsRows.map((r, i) => `
+    <tr>
+      <td><input class="ts-input" value="${r.name||''}" placeholder="Item name" onchange="tsUpdate(${i},'name',this.value)"></td>
+      <td><input class="ts-input" value="${r.weight||''}" placeholder="e.g. 1.0" onchange="tsUpdate(${i},'weight',this.value)" style="width:70px"></td>
+      <td>
+        <select class="ts-input" onchange="tsUpdate(${i},'unit',this.value)" style="width:70px;background:var(--bg2);border:none;border-bottom:1px solid #333;color:var(--text)">
+          ${['oz','g','troy oz','lb','kg'].map(u=>`<option value="${u}" ${r.unit===u?'selected':''}>${u}</option>`).join('')}
+        </select>
+      </td>
+      <td><span class="ts-dollar">$</span><input class="ts-input" value="${r.spot||''}" placeholder="—" onchange="tsUpdate(${i},'spot',this.value)" style="width:80px"></td>
+      <td class="ts-buy"><span class="ts-dollar">$</span><input class="ts-input" value="${r.buy||''}" placeholder="0.00" onchange="tsUpdate(${i},'buy',this.value)" style="width:85px"></td>
+      <td class="ts-sell"><span class="ts-dollar">$</span><input class="ts-input" value="${r.sell||''}" placeholder="0.00" onchange="tsUpdate(${i},'sell',this.value)" style="width:85px"></td>
+      <td><input class="ts-input" value="${r.notes||''}" placeholder="Notes…" onchange="tsUpdate(${i},'notes',this.value)"></td>
+      <td><button class="ts-del" onclick="tsDeleteRow(${i})">✕</button></td>
+    </tr>
+  `).join('');
+  tsSyncSpot();
+}
+
+function tsAddRow() {
+  tsRows.push({ name:'', weight:'', unit:'oz', spot:'', buy:'', sell:'', notes:'' });
+  tsRender();
+  tsAutoSave();
+}
+
+function tsUpdate(i, field, val) {
+  tsRows[i][field] = val;
+  tsAutoSave();
+  if (tsTVWindow && !tsTVWindow.closed) tsBroadcast();
+}
+
+function tsDeleteRow(i) {
+  tsRows.splice(i, 1);
+  tsRender();
+  tsAutoSave();
+  if (tsTVWindow && !tsTVWindow.closed) tsBroadcast();
+}
+
+function tsAutoSave() {
+  try {
+    localStorage.setItem(TS_KEY, JSON.stringify(tsRows));
+    const el = document.getElementById('ts-save-status');
+    if (el) { el.textContent = '✓ Auto-saved'; setTimeout(() => el.textContent='', 2000); }
+  } catch(e) {}
+}
+
+function tsSave() {
+  try {
+    localStorage.setItem(TS_KEY, JSON.stringify(tsRows));
+    const el = document.getElementById('ts-save-status');
+    if (el) el.textContent = '✓ Saved!';
+    setTimeout(() => { if(el) el.textContent=''; }, 2500);
+  } catch(e) { alert('Could not save — storage full?'); }
+}
+
+function tsLoad() {
+  tsLoadFromStorage();
+  tsRender();
+}
+
+function tsLoadFromStorage() {
+  try {
+    const raw = localStorage.getItem(TS_KEY);
+    if (raw) tsRows = JSON.parse(raw);
+    else tsRows = [];
+  } catch(e) { tsRows = []; }
+  tsRender();
+}
+
+function tsClear() {
+  if (!confirm('Clear all trading sheet rows?')) return;
+  tsRows = [];
+  localStorage.removeItem(TS_KEY);
+  tsRender();
+  if (tsTVWindow && !tsTVWindow.closed) tsBroadcast();
+}
+
+function tsPrint() {
+  showTab('trading');
+  setTimeout(() => window.print(), 200);
+}
+
+// ── TV MODE ─────────────────────────────────────────────────────
+function tsTVMode() {
+  if (tsTVWindow && !tsTVWindow.closed) { tsTVWindow.focus(); return; }
+
+  // Build TV page on the fly as a data URL
+  const gold = (window.prices && prices.XAU) ? '$' + prices.XAU.toFixed(2) : '—';
+  const silver = (window.prices && prices.XAG) ? '$' + prices.XAG.toFixed(2) : '—';
+  const rows = tsRows;
+
+  const rowsHTML = rows.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:#555;padding:40px;font-style:italic">No items on sheet yet</td></tr>'
+    : rows.map(r => `
+      <tr>
+        <td>${r.name||'—'}</td>
+        <td>${r.weight||'—'} ${r.unit||'oz'}</td>
+        <td>${r.spot ? '$'+r.spot : '—'}</td>
+        <td class="buy">${r.buy ? '$'+r.buy : '—'}</td>
+        <td class="sell">${r.sell ? '$'+r.sell : '—'}</td>
+        <td>${r.notes||''}</td>
+      </tr>`).join('');
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+  const tvHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Trading Sheet — TV Display</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#c9a84c;--lightgold:#e8c97e;--dark:#0a0a0a;--panel:#111;--border:#222;--silver:#b0b8c1;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;background:var(--dark);color:#fff;font-family:'Rajdhani',sans-serif;overflow:hidden;}
+  body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);pointer-events:none;z-index:9999;}
+  .header{padding:18px 48px 14px;border-bottom:3px solid var(--gold);background:linear-gradient(180deg,#0a0a00,#111);display:flex;align-items:center;justify-content:space-between;}
+  .header-title{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);letter-spacing:3px;}
+  .header-sub{font-family:'Rajdhani',sans-serif;font-size:14px;color:#888;letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+  .spot-bar{display:flex;gap:48px;align-items:center;}
+  .spot-item{text-align:center;}
+  .spot-label{font-size:11px;letter-spacing:3px;color:#888;font-family:'Rajdhani',sans-serif;text-transform:uppercase;}
+  .spot-val{font-family:'Share Tech Mono',monospace;font-size:28px;letter-spacing:1px;}
+  .spot-gold{color:var(--lightgold);text-shadow:0 0 20px rgba(232,201,126,.5);}
+  .spot-silver{color:var(--silver);text-shadow:0 0 16px rgba(176,184,193,.4);}
+  .datetime{text-align:right;}
+  .live-date{font-family:'Share Tech Mono',monospace;font-size:16px;color:#aaa;letter-spacing:1px;}
+  .live-time{font-family:'Orbitron',monospace;font-size:26px;color:#fff;letter-spacing:2px;margin-top:4px;}
+  .content{padding:24px 48px;}
+  table{width:100%;border-collapse:collapse;}
+  thead tr{background:linear-gradient(135deg,#1a1508,#111);}
+  thead th{padding:14px 20px;text-align:left;font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);border-bottom:2px solid var(--gold);}
+  tbody tr{border-bottom:1px solid #1e1e1e;transition:background .2s;}
+  tbody tr:nth-child(even){background:#0d0d0d;}
+  tbody td{padding:16px 20px;font-size:22px;font-family:'Rajdhani',sans-serif;color:#ddd;}
+  tbody td.buy{color:#4ddb7a;font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;}
+  tbody td.sell{color:#e07070;font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;}
+  tbody td:first-child{font-size:24px;font-weight:700;color:#fff;}
+  .footer{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;padding:8px 48px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#555;font-family:'Share Tech Mono',monospace;}
+  @keyframes pulse-gold{0%,100%{text-shadow:0 0 20px rgba(232,201,126,.3);}50%{text-shadow:0 0 40px rgba(232,201,126,.7);}}
+  .spot-gold{animation:pulse-gold 3s ease-in-out infinite;}
+</style>
+</head><body>
+<div class="header">
+  <div>
+    <div class="header-title">BULLION DEALER PRO</div>
+    <div class="header-sub">Live Trading Sheet</div>
+  </div>
+  <div class="spot-bar">
+    <div class="spot-item"><div class="spot-label">Gold / oz</div><div class="spot-val spot-gold">${gold}</div></div>
+    <div class="spot-item"><div class="spot-label">Silver / oz</div><div class="spot-val spot-silver">${silver}</div></div>
+  </div>
+  <div class="datetime">
+    <div class="live-date">${dateStr}</div>
+    <div class="live-time" id="tv-time">${timeStr}</div>
+  </div>
+</div>
+<div class="content">
+  <table><thead><tr><th>ITEM</th><th>WEIGHT</th><th>SPOT</th><th>WE BUY</th><th>WE SELL</th><th>NOTES</th></tr></thead>
+  <tbody>${rowsHTML}</tbody></table>
+</div>
+<div class="footer">
+  <span>Spot Prices & Dealer Tools · bulliondealerpro.com</span>
+  <span id="tv-updated">Last updated: ${timeStr}</span>
+</div>
+<script>
+  // Live clock
+  function tick(){
+    const n=new Date();
+    document.getElementById('tv-time').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  }
+  setInterval(tick,1000);
+  // Fullscreen
+  try{document.documentElement.requestFullscreen();}catch(e){}
+  // Listen for updates from parent window
+  window.addEventListener('message',function(e){
+    if(e.data&&e.data.type==='ts-update'){
+      document.querySelector('tbody').innerHTML=e.data.html;
+      document.getElementById('tv-updated').textContent='Last updated: '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    }
+  });
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([tvHTML], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  tsTVWindow = window.open(url, '_blank', 'noopener');
+
+  const btn = document.getElementById('ts-tv-btn');
+  if (btn) { btn.textContent = '📺 TV OPEN ↗'; btn.style.color='#4ddb7a'; btn.style.borderColor='#4ddb7a'; }
+
+  const checker = setInterval(() => {
+    if (!tsTVWindow || tsTVWindow.closed) {
+      clearInterval(checker);
+      tsTVWindow = null;
+      if (btn) { btn.textContent='📺 TV MODE'; btn.style.color=''; btn.style.borderColor=''; }
+    }
+  }, 1000);
+}
+
+function tsBroadcast() {
+  if (!tsTVWindow || tsTVWindow.closed) return;
+  const rows = tsRows;
+  const rowsHTML = rows.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:#555;padding:40px;font-style:italic">No items on sheet yet</td></tr>'
+    : rows.map(r => `<tr><td>${r.name||'—'}</td><td>${r.weight||'—'} ${r.unit||'oz'}</td><td>${r.spot?'$'+r.spot:'—'}</td><td class="buy">${r.buy?'$'+r.buy:'—'}</td><td class="sell">${r.sell?'$'+r.sell:'—'}</td><td>${r.notes||''}</td></tr>`).join('');
+  try { tsTVWindow.postMessage({type:'ts-update', html:rowsHTML}, '*'); } catch(e){}
+}
+
+// Auto-load on tab open
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem(TS_KEY)) tsLoadFromStorage();
+});
+
+</script>
+
+<div style="
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:18px 24px;
+  text-align:center;
+  margin-top:40px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.7;
+  letter-spacing:0.5px;
+">
+  <span style="color:var(--gold);font-weight:600;letter-spacing:2px;">⚠ DISCLAIMER</span><br>
+  Metal Spot Prices &amp; Dealer Tools is intended for <strong style="color:#ccc">practical reference and general use only</strong>. 
+  All spot prices, melt values, coin values, and market data displayed are estimates and may not reflect real-time or exact market conditions. 
+  Always verify pricing independently before making any buying, selling, or investment decisions. 
+  This tool does not constitute financial, investment, or legal advice. 
+  Use at your own discretion.
+</div>
+
+</body>
+</html>
