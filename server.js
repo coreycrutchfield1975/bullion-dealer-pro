@@ -532,5 +532,11 @@ app.get('/admin-panel', (req, res) => res.sendFile(path.join(__dirname, 'public'
 // START
 // ════════════════════════════════════════════════════════════════════════════════
 connectDB().then(() => {
+
+// Health check endpoint for keep-alive pings
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
   app.listen(PORT, () => console.log(`Bullion Dealer Pro running on port ${PORT}`));
 }).catch(e => { console.error('DB error:', e); process.exit(1); });
