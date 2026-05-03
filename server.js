@@ -42,7 +42,10 @@ const userSchema = new mongoose.Schema({
   stripeSubId:     String,
   resetToken:      String,
   resetExpires:    Date,
-  createdAt:       { type: Date, default: Date.now }
+  createdAt:       { type: Date, default: Date.now },
+  syncInventory:   { type: Array,  default: [] },
+  syncSlabs:       { type: Array,  default: [] },
+  syncTypesets:    { type: Object, default: {} }
 });
 
 const promoSchema = new mongoose.Schema({
@@ -467,6 +470,26 @@ app.post('/api/promo/redeem', auth, async (req, res) => {
 // ════════════════════════════════════════════════════════════════════════════════
 // ADMIN API
 // ════════════════════════════════════════════════════════════════════════════════
+// ── Cloud Sync ──
+app.get('/api/sync', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('syncInventory syncSlabs syncTypesets');
+    res.json({ inventory: user.syncInventory||[], slabs: user.syncSlabs||[], typesets: user.syncTypesets||{} });
+  } catch(e) { res.status(500).json({ error: 'Sync read failed' }); }
+});
+
+app.post('/api/sync', auth, async (req, res) => {
+  try {
+    const { inventory, slabs, typesets } = req.body;
+    await User.findByIdAndUpdate(req.user.id, {
+      syncInventory: inventory || [],
+      syncSlabs:     slabs     || [],
+      syncTypesets:  typesets  || {}
+    });
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: 'Sync write failed' }); }
+});
+
 app.get('/api/admin/users', adminAuth, async (req, res) => {
   const users = await User.find().select('-passwordHash -resetToken').sort({ createdAt: -1 });
   res.json(users);

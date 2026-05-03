@@ -1062,7 +1062,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <!-- ROW 2: Inventory full width -->
   <div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <div class="sec-label" style="margin-bottom:0">Inventory Tracker <span class="premium-badge">PRO</span></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="sec-label" style="margin-bottom:0">Inventory Tracker <span class="premium-badge">PRO</span></div>
+        <span id="sync-badge" style="font-size:11px;color:var(--green);font-weight:600;transition:opacity 1s;opacity:0"></span>
+      </div>
     </div>
     <!-- Inventory sub-tabs -->
     <div class="sub-nav" style="margin-bottom:12px">
@@ -3215,6 +3218,7 @@ function tsToggleCoin(setKey, coinId){
   tsSaveChecks(data);
   tsRenderSet(setKey);
   tsUpdateOverall();
+  cloudPush();
 }
 function tsShowSet(key, btn){
   tsCurrentSet=key;
@@ -3528,6 +3532,7 @@ async function loadAccount(){
   try{
     const r=await fetch('/api/me');if(!r.ok){window.location.href='/login';return;}
     const u=await r.json();window_isPro=u.isPro===true;
+    if(window_isPro){setTimeout(cloudPull,800);}
     if(!window_isPro){
       document.querySelectorAll('.tab[data-pro="1"]').forEach(t=>{
         t.style.opacity='0.6';
@@ -3568,6 +3573,61 @@ async function doLogout(){await fetch('/api/logout',{method:'POST'});window.loca
 let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
 let slabs=JSON.parse(localStorage.getItem('bdp-slabs')||'[]');
 let invTabMode='general';
+let syncEnabled=false;
+let syncDebounceTimer=null;
+
+// ── Cloud sync helpers ──
+async function cloudPull(){
+  try{
+    const r=await fetch('/api/sync');
+    if(!r.ok)return;
+    const d=await r.json();
+    // Check if local data exists and differs from cloud
+    const hasLocal=inventory.length>0||slabs.length>0||Object.keys(tsLoadChecks()).length>0;
+    const hasCloud=d.inventory.length>0||d.slabs.length>0||Object.keys(d.typesets).length>0;
+    if(hasLocal&&!hasCloud){
+      // Local data exists, nothing in cloud — offer to upload
+      if(confirm('You have local collection data. Upload it to your PRO account so it syncs across all your devices?')){
+        inventory=inventory; slabs=slabs;
+        await cloudPush(true);
+      }
+    } else if(hasCloud){
+      // Cloud has data — use it (cloud wins)
+      inventory=d.inventory;
+      slabs=d.slabs;
+      localStorage.setItem('bdp-inv',JSON.stringify(inventory));
+      localStorage.setItem('bdp-slabs',JSON.stringify(slabs));
+      if(Object.keys(d.typesets).length>0){
+        localStorage.setItem('bdp_typesets',JSON.stringify(d.typesets));
+      }
+    }
+    syncEnabled=true;
+    renderInventory();renderSlabs();
+    showSyncBadge('✅ Synced');
+  }catch(e){console.warn('Cloud pull failed',e);}
+}
+
+async function cloudPush(immediate=false){
+  if(!syncEnabled&&!immediate)return;
+  clearTimeout(syncDebounceTimer);
+  syncDebounceTimer=setTimeout(async()=>{
+    try{
+      showSyncBadge('⏫ Saving…');
+      const typesets=tsLoadChecks();
+      await fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inventory,slabs,typesets})});
+      showSyncBadge('✅ Synced');
+    }catch(e){showSyncBadge('⚠ Sync error');}
+  }, immediate?0:1500);
+}
+
+function showSyncBadge(msg){
+  let badge=$('sync-badge');
+  if(!badge)return;
+  badge.textContent=msg;
+  badge.style.opacity='1';
+  clearTimeout(badge._fadeTimer);
+  badge._fadeTimer=setTimeout(()=>{badge.style.opacity='0';},3000);
+}
 
 function invSwitchTab(mode,btn){
   invTabMode=mode;
@@ -3583,10 +3643,10 @@ function invSave(){
   const name=$('inv-name').value.trim();if(!name)return alert('Enter item name');
   inventory.push({name,qty:parseInt($('inv-qty').value)||1,cost:parseFloat($('inv-cost').value)||0,type:$('inv-type').value,date:new Date().toLocaleDateString()});
   localStorage.setItem('bdp-inv',JSON.stringify(inventory));
-  $('inv-form').style.display='none';renderInventory();
+  $('inv-form').style.display='none';renderInventory();cloudPush();
 }
-function invDel(i){inventory.splice(i,1);localStorage.setItem('bdp-inv',JSON.stringify(inventory));renderInventory();}
-function clearInv(){if(!confirm('Clear all inventory?'))return;inventory=[];localStorage.setItem('bdp-inv','[]');renderInventory();}
+function invDel(i){inventory.splice(i,1);localStorage.setItem('bdp-inv',JSON.stringify(inventory));renderInventory();cloudPush();}
+function clearInv(){if(!confirm('Clear all inventory?'))return;inventory=[];localStorage.setItem('bdp-inv','[]');renderInventory();cloudPush();}
 function renderInventory(){
   const tb=$('inv-tbody');if(!tb)return;
   if(!inventory.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:22px">No items yet</td></tr>';$('inv-summary').textContent='';return;}
@@ -3616,10 +3676,10 @@ function slabSave(){
   $('slab-form').style.display='none';
   // Reset form
   ['slab-name','slab-year','slab-cert','slab-cost','slab-value','slab-notes'].forEach(id=>{const el=$(id);if(el)el.value='';});
-  renderSlabs();
+  renderSlabs();cloudPush();
 }
-function slabDel(i){if(!confirm('Remove this slab?'))return;slabs.splice(i,1);localStorage.setItem('bdp-slabs',JSON.stringify(slabs));renderSlabs();}
-function clearSlabs(){if(!confirm('Clear all graded slabs?'))return;slabs=[];localStorage.setItem('bdp-slabs','[]');renderSlabs();}
+function slabDel(i){if(!confirm('Remove this slab?'))return;slabs.splice(i,1);localStorage.setItem('bdp-slabs',JSON.stringify(slabs));renderSlabs();cloudPush();}
+function clearSlabs(){if(!confirm('Clear all graded slabs?'))return;slabs=[];localStorage.setItem('bdp-slabs','[]');renderSlabs();cloudPush();}
 function slabCertLink(svc,cert){
   if(!cert)return'—';
   const urls={
