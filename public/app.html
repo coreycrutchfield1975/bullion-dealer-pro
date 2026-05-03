@@ -373,7 +373,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Constitutional<span class="tsub">90% Silver Melt</span></div></button>
     <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Pennies & Copper</span></div></button>
     <button class="tab tnm" onclick="showTab('numismatic')" data-pro="1"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
-    <button class="tab tfx" onclick="showTab('fx')" data-pro="1"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
+    <button class="tab tfx" onclick="showTab('fx')"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
     <button class="tab ttv" onclick="showTab('trading')" data-pro="1"><span class="ticon">📺</span><div>Trading Sheet<span class="tsub">TV Display Mode</span></div></button>
     <button class="tab tts" onclick="showTab('typeset')" data-pro="1"><span class="ticon">📋</span><div>Type Sets<span class="tsub">Collection Tracker</span></div></button>
     <button class="tab ta" onclick="showTab('admin')"><span class="ticon">🔐</span><div>Admin<span class="tsub">Account · Inventory</span></div></button>
@@ -421,7 +421,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
   <div id="gs-karat">
     <div class="tools-grid">
-      <div class="tool-card"><div class="tc-top"><span class="tc-icon">⚖️</span><span class="tc-badge tb-pro">PRO</span></div><div class="tc-title">Karat Calculator</div><div class="tc-desc">Enter weight & karat → live melt value + buy offer for 10k–24k.</div></div>
+      <div class="tool-card"><div class="tc-top"><span class="tc-icon">⚖️</span><span class="tc-badge tb-free">FREE</span><span class="tc-badge tb-pro" style="margin-left:4px">PRO unlimited</span></div><div class="tc-title">Karat Calculator</div><div class="tc-desc">5 free calculations · Unlimited with PRO subscription.</div></div>
       <div class="tool-card"><div class="tc-top"><span class="tc-icon">📏</span><span class="tc-badge tb-pro">PRO</span></div><div class="tc-title">Per Gram / Grain / DWT</div><div class="tc-desc">Gold price per gram, grain, and pennyweight for any karat.</div></div>
       <div class="tool-card"><div class="tc-top"><span class="tc-icon">📋</span><span class="tc-badge tb-free">FREE</span></div><div class="tc-title">Live Karat Table</div><div class="tc-desc">Full karat reference table updating live with spot price.</div></div>
     </div>
@@ -453,6 +453,12 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div class="res-card"><div class="res-label">Per DWT</div><div class="res-value rv-muted" id="gk-pdwt">—</div></div>
         </div>
         <button class="calc-btn calc-btn-gold" onclick="calcGold()">Calculate Gold Value</button>
+        <div id="karat-uses-hint" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center"></div>
+        <div id="karat-limit-nudge" style="display:none;background:linear-gradient(135deg,#1e3a5f22,#f59e0b22);border:1px solid #f59e0b55;border-radius:10px;padding:12px 16px;margin-top:10px;text-align:center">
+          <div style="font-weight:700;font-size:13px;color:var(--gold)">🔒 Free limit reached (5/5 calculations used)</div>
+          <div style="font-size:12px;color:var(--muted);margin:4px 0 10px">Upgrade to PRO for unlimited gold karat calculations</div>
+          <a href="/pricing" style="display:inline-block;background:var(--blue);color:#fff;padding:8px 20px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none">Upgrade Now →</a>
+        </div>
       </div>
     </div>
     <div class="card"><div class="card-title">📋 Live Karat Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Karat</th><th>Purity</th><th>Melt/gram</th><th>Offer @70%</th><th>Melt/troy oz</th><th>Per grain</th></tr></thead><tbody id="karat-tbody"></tbody></table></div></div>
@@ -935,6 +941,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div class="price-box"><div class="pb-label">Base Currency</div><div class="pb-price" style="font-size:20px">USD</div><div class="pb-chg" id="fx-hero-updated">Live</div></div>
   </div>
   <div class="card" style="margin-bottom:13px">
+    <div id="fx-limit-banner" style="display:none;background:linear-gradient(135deg,#1e3a5f22,#2563eb22);border:1px solid #2563eb55;border-radius:10px;padding:12px 16px;margin-bottom:14px;text-align:center">
+      <div style="font-weight:700;font-size:13px;color:var(--blue2)">🔒 Free limit reached (5/5 lookups used)</div>
+      <div style="font-size:12px;color:var(--muted);margin:4px 0 10px">Upgrade to PRO for unlimited currency lookups</div>
+      <a href="/pricing" style="display:inline-block;background:var(--blue);color:#fff;padding:8px 20px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none">Upgrade Now →</a>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;flex-wrap:wrap" id="fx-controls">
       <div><div class="ig-label">Select Country / Currency</div><select class="fx-dropdown" id="fx-dropdown" onchange="fxDropdownChange()"><option value="">— All currencies —</option></select></div>
       <div><div class="ig-label">Or Search</div><input type="text" class="fx-search" id="fx-search" placeholder="Country or code…" oninput="filterFX()"></div>
@@ -1176,7 +1187,7 @@ function updateHeroPrices(){
 }
 
 // ═══ TABS ═══
-const PRO_TABS=['const','fx','trading','numismatic','typeset'];
+const PRO_TABS=['const','trading','numismatic','typeset'];
 function showTab(id){
   if(PRO_TABS.includes(id)&&!window_isPro){$('paywall').classList.add('show');return;}
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1301,6 +1312,23 @@ window.addEventListener('load',adjustPad);window.addEventListener('resize',adjus
 
 // ═══ GOLD CALC ═══
 function calcGold(){
+  // Free usage limit
+  if(!window_isPro){
+    let used=parseInt(localStorage.getItem('bdp-karat-used')||'0');
+    if(used>=5){
+      const nb=$('karat-limit-nudge');if(nb)nb.style.display='block';
+      return;
+    }
+    used++;
+    localStorage.setItem('bdp-karat-used',used);
+    const nb=$('karat-limit-nudge');
+    if(nb){
+      if(used>=5)nb.style.display='block';
+      else nb.style.display='none';
+    }
+    const hint=$('karat-uses-hint');
+    if(hint)hint.textContent=used<5?'ℹ Free: '+(5-used)+' calculations remaining':'';
+  }
   const k=parseInt($('gk-karat').value||'14');const p=k/24;
   let w=parseFloat($('gk-weight').value)||0;
   const spOz=parseFloat($('gk-spot').value)||spot.XAU||3241.80;
@@ -1961,6 +1989,26 @@ const FX_CURRENCIES=[
 const FX_TOP10=['EUR','GBP','JPY','CAD','AUD','CHF','CNY','MXN','INR','BRL'];
 
 async function loadFX(force=false){
+  // Free usage limit check
+  if(!window_isPro){
+    let fxUsed=parseInt(localStorage.getItem('bdp-fx-used')||'0');
+    if(fxUsed>=5){
+      const banner=$('fx-limit-banner');if(banner)banner.style.display='block';
+      const ctrl=$('fx-controls');if(ctrl)ctrl.style.display='none';
+      const top=$('fx-top10');if(top)top.style.display='none';
+      const tbl=$('fx-table');if(tbl)tbl.style.display='none';
+      return;
+    }
+    fxUsed++;
+    localStorage.setItem('bdp-fx-used',fxUsed);
+    const banner=$('fx-limit-banner');
+    if(banner){
+      if(fxUsed>=5){banner.style.display='block';const ctrl=$('fx-controls');if(ctrl)ctrl.style.pointerEvents='none';}
+      else{banner.style.display='none';}
+    }
+    // Show remaining uses hint
+    if(fxUsed<5){const s=$('fx-status');if(s)s.textContent='ℹ Free: '+(5-fxUsed)+' lookups remaining. Upgrade for unlimited.';}
+  }
   if(!force && Object.keys(fxRates).length>0) return;
   $('fx-status').textContent='Loading exchange rates…';
   try{
