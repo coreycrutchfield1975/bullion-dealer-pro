@@ -3755,8 +3755,9 @@ function renderInventory(){
     const melt=invMeltVal(item);totalMelt+=melt;
     const meltStr=melt>0?`<span style="color:var(--gold);font-weight:600">${fmt(melt)}</span>`:'<span style="color:var(--muted)">—</span>';
     const pl=melt>0?melt-cost:0;
-    const plStr=melt>0?`<span style="color:${pl>=0?'var(--green)':'var(--red)';font-weight:600}">${pl>=0?'+':''}${fmt(pl)}</span>`:'<span style="color:var(--muted)">—</span>';
-    return\`<tr><td style="font-weight:600">\${item.name}</td><td>\${item.qty}</td><td class="price-col">\${fmt(item.cost)}</td><td class="price-col">\${fmt(cost)}</td><td>\${meltStr}</td><td>\${plStr}</td><td><button onclick="invDel(\${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td></tr>\`;
+    const plColor2=pl>=0?'var(--green)':'var(--red)';
+    const plStr=melt>0?'<span style="color:'+plColor2+';font-weight:600">'+(pl>=0?'+':'')+fmt(pl)+'</span>':'<span style="color:var(--muted)">—</span>';
+    return`<tr><td style="font-weight:600">${item.name}</td><td>${item.qty}</td><td class="price-col">${fmt(item.cost)}</td><td class="price-col">${fmt(cost)}</td><td>${meltStr}</td><td>${plStr}</td><td><button onclick="invDel(${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td></tr>`;
   }).join('');
   const plTot=totalMelt-totalCost;
   $('inv-summary').innerHTML=inventory.length+' items · Cost: <strong>'+fmt(totalCost)+'</strong> · Melt: <strong style="color:var(--gold)">'+fmt(totalMelt)+'</strong>'+(totalMelt>0?' · P&L: <strong style="color:'+(plTot>=0?'var(--green)':'var(--red)')+'">'+  (plTot>=0?'+':'')+fmt(plTot)+'</strong>':'');
