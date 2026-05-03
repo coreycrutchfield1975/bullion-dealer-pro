@@ -983,6 +983,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="seg" onclick="tsShowSet('silver90',this)">90% Type Set</button>
     <button class="seg" onclick="tsShowSet('statequarters',this)">State Quarters</button>
     <button class="seg" onclick="tsShowSet('ase',this)">Silver Eagles</button>
+    <button class="seg" onclick="tsShowSet('gae',this)">🥇 Gold Eagles</button>
     <button class="seg" onclick="tsShowSet('commem',this)">🏅 Commemoratives</button>
     <button class="seg" onclick="tsShowSet('proofsets',this)">📦 Proof Sets</button>
     <button class="seg" onclick="tsShowSet('mintsets',this)">📦 Mint Sets</button>
@@ -1071,8 +1072,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
     <!-- ── GENERAL INVENTORY ── -->
     <div id="inv-section-general">
-      <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px">
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px;flex-wrap:wrap">
         <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="invAdd()">+ Add Item</button>
+        <button class="ts-btn" onclick="exportInvCSV()">⬇ Export CSV</button>
         <button class="ts-btn" style="border-color:var(--red);color:var(--red)" onclick="clearInv()">🗑 Clear All</button>
       </div>
       <div class="inv-form-card" id="inv-form">
@@ -1095,8 +1097,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
     <!-- ── GRADED SLABS ── -->
     <div id="inv-section-slabs" style="display:none">
-      <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px">
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px;flex-wrap:wrap">
         <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="slabAdd()">+ Add Slab</button>
+        <button class="ts-btn" onclick="exportSlabCSV()">⬇ Export CSV</button>
         <button class="ts-btn" style="border-color:var(--red);color:var(--red)" onclick="clearSlabs()">🗑 Clear All</button>
       </div>
       <div class="inv-form-card" id="slab-form">
@@ -1168,6 +1171,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         </div>
       </div>
       <div class="card">
+        <div style="padding:10px 10px 0">
+          <input class="ig-input" id="slab-search" placeholder="🔍 Search slabs by name, grade, service, cert…" oninput="renderSlabs()" style="width:100%;box-sizing:border-box">
+        </div>
         <div class="tbl-wrap"><table class="dtable" id="slab-table">
           <thead><tr><th>Coin</th><th>Year/MM</th><th>Service</th><th>Grade</th><th>CAC</th><th>Cert #</th><th>Paid</th><th>Est. Value</th><th>P&L</th><th></th></tr></thead>
           <tbody id="slab-tbody"></tbody>
@@ -2775,6 +2781,92 @@ const TS_SETS = {
       ]},
     ]
   },
+  'gae': {
+    title: 'American Gold Eagle Set',
+    desc: 'Annual US Mint Gold Eagles 1986–present — 91.67% gold (22k)',
+    sections: [
+      { heading: '1986–1995 (First Decade)', coins: [
+        {id:'gae_1986_1oz',name:'1986 $50 Gold Eagle (1 oz)',years:'1986',note:'First year — key'},
+        {id:'gae_1986_half',name:'1986 $25 Gold Eagle (½ oz)',years:'1986',note:'First year'},
+        {id:'gae_1986_qtr',name:'1986 $10 Gold Eagle (¼ oz)',years:'1986',note:'First year'},
+        {id:'gae_1986_tenth',name:'1986 $5 Gold Eagle (1/10 oz)',years:'1986',note:'First year'},
+        {id:'gae_1987_1oz',name:'1987 $50 Gold Eagle (1 oz)',years:'1987',note:''},
+        {id:'gae_1988_1oz',name:'1988 $50 Gold Eagle (1 oz)',years:'1988',note:''},
+        {id:'gae_1989_1oz',name:'1989 $50 Gold Eagle (1 oz)',years:'1989',note:''},
+        {id:'gae_1990_1oz',name:'1990 $50 Gold Eagle (1 oz)',years:'1990',note:''},
+        {id:'gae_1991_1oz',name:'1991 $50 Gold Eagle (1 oz)',years:'1991',note:''},
+        {id:'gae_1992_1oz',name:'1992 $50 Gold Eagle (1 oz)',years:'1992',note:''},
+        {id:'gae_1993_1oz',name:'1993 $50 Gold Eagle (1 oz)',years:'1993',note:'Low mintage'},
+        {id:'gae_1994_1oz',name:'1994 $50 Gold Eagle (1 oz)',years:'1994',note:'Key date — low mintage'},
+        {id:'gae_1995_1oz',name:'1995 $50 Gold Eagle (1 oz)',years:'1995',note:''},
+        {id:'gae_1995w_pr',name:'1995-W Proof Gold Eagle Set',years:'1995',note:'10th anniversary — key'},
+      ]},
+      { heading: '1996–2005', coins: [
+        {id:'gae_1996_1oz',name:'1996 $50 Gold Eagle (1 oz)',years:'1996',note:''},
+        {id:'gae_1997_1oz',name:'1997 $50 Gold Eagle (1 oz)',years:'1997',note:''},
+        {id:'gae_1998_1oz',name:'1998 $50 Gold Eagle (1 oz)',years:'1998',note:''},
+        {id:'gae_1999_1oz',name:'1999 $50 Gold Eagle (1 oz)',years:'1999',note:''},
+        {id:'gae_1999w_unf',name:'1999-W $50 Unfinished Proof Dies',years:'1999',note:'Error — scarce variety'},
+        {id:'gae_2000_1oz',name:'2000 $50 Gold Eagle (1 oz)',years:'2000',note:''},
+        {id:'gae_2001_1oz',name:'2001 $50 Gold Eagle (1 oz)',years:'2001',note:''},
+        {id:'gae_2002_1oz',name:'2002 $50 Gold Eagle (1 oz)',years:'2002',note:''},
+        {id:'gae_2003_1oz',name:'2003 $50 Gold Eagle (1 oz)',years:'2003',note:''},
+        {id:'gae_2004_1oz',name:'2004 $50 Gold Eagle (1 oz)',years:'2004',note:''},
+        {id:'gae_2005_1oz',name:'2005 $50 Gold Eagle (1 oz)',years:'2005',note:''},
+      ]},
+      { heading: '2006–2015', coins: [
+        {id:'gae_2006_1oz',name:'2006 $50 Gold Eagle (1 oz)',years:'2006',note:'20th anniversary'},
+        {id:'gae_2006w_buf',name:'2006-W $50 Gold Buffalo (24k)',years:'2006',note:'First 24k US gold coin'},
+        {id:'gae_2007_1oz',name:'2007 $50 Gold Eagle (1 oz)',years:'2007',note:''},
+        {id:'gae_2008_1oz',name:'2008 $50 Gold Eagle (1 oz)',years:'2008',note:''},
+        {id:'gae_2009_1oz',name:'2009 $50 Gold Eagle (1 oz)',years:'2009',note:'High demand year'},
+        {id:'gae_2010_1oz',name:'2010 $50 Gold Eagle (1 oz)',years:'2010',note:''},
+        {id:'gae_2011_1oz',name:'2011 $50 Gold Eagle (1 oz)',years:'2011',note:'25th anniversary'},
+        {id:'gae_2012_1oz',name:'2012 $50 Gold Eagle (1 oz)',years:'2012',note:''},
+        {id:'gae_2013_1oz',name:'2013 $50 Gold Eagle (1 oz)',years:'2013',note:''},
+        {id:'gae_2014_1oz',name:'2014 $50 Gold Eagle (1 oz)',years:'2014',note:''},
+        {id:'gae_2015_1oz',name:'2015 $50 Gold Eagle (1 oz)',years:'2015',note:''},
+        {id:'gae_2015w_75th',name:'2015-W 75th Anniv. Gold Eagle',years:'2015',note:'High relief — key'},
+      ]},
+      { heading: '2016–2026', coins: [
+        {id:'gae_2016_1oz',name:'2016 $50 Gold Eagle (1 oz)',years:'2016',note:'30th anniversary'},
+        {id:'gae_2017_1oz',name:'2017 $50 Gold Eagle (1 oz)',years:'2017',note:''},
+        {id:'gae_2018_1oz',name:'2018 $50 Gold Eagle (1 oz)',years:'2018',note:''},
+        {id:'gae_2019_1oz',name:'2019 $50 Gold Eagle (1 oz)',years:'2019',note:''},
+        {id:'gae_2020_1oz',name:'2020 $50 Gold Eagle (1 oz)',years:'2020',note:''},
+        {id:'gae_2021_t1',name:'2021 Type 1 Gold Eagle (1 oz)',years:'2021',note:'Last original reverse'},
+        {id:'gae_2021_t2',name:'2021 Type 2 Gold Eagle (1 oz)',years:'2021',note:'New reverse design'},
+        {id:'gae_2022_1oz',name:'2022 $50 Gold Eagle (1 oz)',years:'2022',note:''},
+        {id:'gae_2023_1oz',name:'2023 $50 Gold Eagle (1 oz)',years:'2023',note:''},
+        {id:'gae_2024_1oz',name:'2024 $50 Gold Eagle (1 oz)',years:'2024',note:''},
+        {id:'gae_2025_1oz',name:'2025 $50 Gold Eagle (1 oz)',years:'2025',note:''},
+        {id:'gae_2026_1oz',name:'2026 $50 Gold Eagle (1 oz)',years:'2026',note:'40th anniversary'},
+      ]},
+      { heading: 'Gold Buffalo (24k .9999)', coins: [
+        {id:'gbuf_2006',name:'2006 $50 Gold Buffalo',years:'2006',note:'First 24k — key'},
+        {id:'gbuf_2007',name:'2007 $50 Gold Buffalo',years:'2007',note:''},
+        {id:'gbuf_2008',name:'2008 $50 Gold Buffalo',years:'2008',note:'Low mintage — key'},
+        {id:'gbuf_2009',name:'2009 $50 Gold Buffalo',years:'2009',note:''},
+        {id:'gbuf_2010',name:'2010 $50 Gold Buffalo',years:'2010',note:''},
+        {id:'gbuf_2011',name:'2011 $50 Gold Buffalo',years:'2011',note:''},
+        {id:'gbuf_2012',name:'2012 $50 Gold Buffalo',years:'2012',note:''},
+        {id:'gbuf_2013',name:'2013 $50 Gold Buffalo',years:'2013',note:''},
+        {id:'gbuf_2014',name:'2014 $50 Gold Buffalo',years:'2014',note:''},
+        {id:'gbuf_2015',name:'2015 $50 Gold Buffalo',years:'2015',note:''},
+        {id:'gbuf_2016',name:'2016 $50 Gold Buffalo',years:'2016',note:''},
+        {id:'gbuf_2017',name:'2017 $50 Gold Buffalo',years:'2017',note:''},
+        {id:'gbuf_2018',name:'2018 $50 Gold Buffalo',years:'2018',note:'Low mintage — key'},
+        {id:'gbuf_2019',name:'2019 $50 Gold Buffalo',years:'2019',note:''},
+        {id:'gbuf_2020',name:'2020 $50 Gold Buffalo',years:'2020',note:''},
+        {id:'gbuf_2021',name:'2021 $50 Gold Buffalo',years:'2021',note:''},
+        {id:'gbuf_2022',name:'2022 $50 Gold Buffalo',years:'2022',note:''},
+        {id:'gbuf_2023',name:'2023 $50 Gold Buffalo',years:'2023',note:''},
+        {id:'gbuf_2024',name:'2024 $50 Gold Buffalo',years:'2024',note:''},
+        {id:'gbuf_2025',name:'2025 $50 Gold Buffalo',years:'2025',note:''},
+        {id:'gbuf_2026',name:'2026 $50 Gold Buffalo',years:'2026',note:'20th anniversary'},
+      ]},
+    ]
+  },
   'commem': {
     title: 'US Commemorative Coins (Classic)',
     desc: 'Classic US commemoratives 1892–1954 — 90% silver and gold issues',
@@ -3540,15 +3632,29 @@ function slabCertLink(svc,cert){
   const url=urls[svc]||'#';
   return`<a href="${url}" target="_blank" style="color:var(--blue2);font-weight:600;font-size:11px">${cert} ↗</a>`;
 }
+function exportInvCSV(){
+  if(!inventory.length)return alert('No inventory to export');
+  const rows=[['Item','Qty','Cost Each','Total Cost','Type','Date Added'],...inventory.map(i=>[i.name,i.qty,i.cost,(i.qty*i.cost).toFixed(2),i.type,i.date])];
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='inventory_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+function exportSlabCSV(){
+  if(!slabs.length)return alert('No slabs to export');
+  const rows=[['Coin','Year','Mint','Service','Grade','CAC','Cert #','Paid','Est Value','P&L','Notes','Date Added'],...slabs.map(s=>{const pl=((s.value||0)-(s.cost||0)).toFixed(2);return[s.name,s.year||'',s.mint||'',s.svc,s.grade,s.cac||'none',s.cert||'',s.cost||'',s.value||'',pl,s.notes||'',s.date];})];
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='graded_slabs_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
 function renderSlabs(){
   const tb=$('slab-tbody');if(!tb)return;
-  if(!slabs.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:22px">No graded slabs yet — click + Add Slab to get started</td></tr>';$('slab-summary').textContent='';return;}
-  let totalCost=0,totalValue=0;
+  const q=(($('slab-search')||{}).value||'').toLowerCase();
+  const filtered=q?slabs.filter(s=>[s.name,s.svc,s.grade,s.cert,s.notes,s.year,s.mint].join(' ').toLowerCase().includes(q)):slabs;
+  if(!filtered.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:22px">'+(q?'No slabs match your search':'No graded slabs yet — click + Add Slab to get started')+'</td></tr>';$('slab-summary').textContent='';return;}
   const svcColors={PCGS:'#003087',NGC:'#4a90d9',CAC:'#16a34a',ANACS:'#b45309',ICG:'#7c3aed',Raw:'#6b7280'};
   const cacBadge={none:'',green:'<span style="color:#16a34a;font-size:13px" title="CAC Green Bean">✅</span>',gold:'<span style="color:#d97706;font-size:13px" title="CAC Gold Bean">⭐</span>'};
   const gradeColor=g=>{if(g.startsWith('MS7')||g==='PR70')return'var(--green)';if(g.startsWith('MS6')||g.startsWith('PR6'))return'var(--gold)';if(g.startsWith('AU'))return'var(--blue2)';return'var(--text)';};
-  tb.innerHTML=slabs.map((s,i)=>{
-    totalCost+=s.cost||0;totalValue+=s.value||0;
+  let totalCost2=0,totalValue2=0;
+  tb.innerHTML=filtered.map((s,i)=>{
+    totalCost2+=s.cost||0;totalValue2+=s.value||0;
     const pl=(s.value||0)-(s.cost||0);
     const plColor=pl>0?'var(--green)':pl<0?'var(--red)':'var(--muted)';
     const mm=s.mint?`-${s.mint}`:'';
@@ -3562,12 +3668,12 @@ function renderSlabs(){
       <td class="price-col">${s.cost?fmt(s.cost):'—'}</td>
       <td class="price-col rv-gold">${s.value?fmt(s.value):'—'}</td>
       <td style="font-weight:700;color:${plColor}">${s.cost&&s.value?(pl>=0?'+':'')+fmt(pl):'—'}</td>
-      <td><button onclick="slabDel(${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td>
+      <td><button onclick="slabDel(slabs.indexOf(s))" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td>
     </tr>`;
   }).join('');
-  const totalPL=totalValue-totalCost;
+  const totalPL=totalValue2-totalCost2;
   const plColor=totalPL>0?'var(--green)':totalPL<0?'var(--red)':'var(--muted)';
-  $('slab-summary').innerHTML=`${slabs.length} slabs · Total paid: <strong>${fmt(totalCost)}</strong> · Est. value: <strong style="color:var(--gold)">${fmt(totalValue)}</strong> · P&L: <strong style="color:${plColor}">${totalPL>=0?'+':''}${fmt(totalPL)}</strong>`;
+  $('slab-summary').innerHTML=`${filtered.length}${q?' matching':''} of ${slabs.length} slabs · Total paid: <strong>${fmt(totalCost2)}</strong> · Est. value: <strong style="color:var(--gold)">${fmt(totalValue2)}</strong> · P&L: <strong style="color:${plColor}">${totalPL>=0?'+':''}${fmt(totalPL)}</strong>`;
 }
 
 // ═══ INIT ═══
