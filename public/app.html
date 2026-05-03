@@ -1059,59 +1059,57 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     </div>
   </div>
 
-  <!-- ROW 1b: Dealer Presets + Price Alerts -->
-  <div class="two-col" style="margin-bottom:24px">
-
-    <!-- Dealer Markup Presets -->
-    <div>
-      <div class="sec-label">Dealer Markup Presets <span class="premium-badge">PRO</span></div>
-      <div class="card" style="padding:16px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Saved percentages auto-fill all calculators on login.</div>
-        <div class="igrid">
-          <div><div class="ig-label">Silver Buy % Below Melt</div><input class="ig-input" id="preset-ag-buy" type="number" placeholder="e.g. 20" oninput="presetPreview()"></div>
-          <div><div class="ig-label">Silver Sell % Above Melt</div><input class="ig-input" id="preset-ag-sell" type="number" placeholder="e.g. 5" oninput="presetPreview()"></div>
-          <div><div class="ig-label">Gold Buy % Below Melt</div><input class="ig-input" id="preset-au-buy" type="number" placeholder="e.g. 3" oninput="presetPreview()"></div>
-          <div><div class="ig-label">Gold Sell % Above Melt</div><input class="ig-input" id="preset-au-sell" type="number" placeholder="e.g. 2" oninput="presetPreview()"></div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
-          <button class="calc-btn" style="flex:1;padding:9px" onclick="presetSave()">💾 Save Presets</button>
-          <span id="preset-msg" style="font-size:11px;color:var(--green);font-weight:600"></span>
-        </div>
+  <!-- ROW 1b: Dealer Markup Presets (full width) -->
+  <div style="margin-bottom:24px">
+    <div class="sec-label">Dealer Markup Presets <span class="premium-badge">PRO</span></div>
+    <div class="card" style="padding:16px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Saved percentages auto-fill all calculators on login.</div>
+      <div class="igrid">
+        <div><div class="ig-label">Silver Buy % Below Melt</div><input class="ig-input" id="preset-ag-buy" type="number" placeholder="e.g. 20" oninput="presetPreview()"></div>
+        <div><div class="ig-label">Silver Sell % Above Melt</div><input class="ig-input" id="preset-ag-sell" type="number" placeholder="e.g. 5" oninput="presetPreview()"></div>
+        <div><div class="ig-label">Gold Buy % Below Melt</div><input class="ig-input" id="preset-au-buy" type="number" placeholder="e.g. 3" oninput="presetPreview()"></div>
+        <div><div class="ig-label">Gold Sell % Above Melt</div><input class="ig-input" id="preset-au-sell" type="number" placeholder="e.g. 2" oninput="presetPreview()"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+        <button class="calc-btn" style="width:auto;padding:9px 24px" onclick="presetSave()">💾 Save Presets</button>
+        <span id="preset-msg" style="font-size:11px;color:var(--green);font-weight:600"></span>
       </div>
     </div>
+  </div>
 
-    <!-- Price Alerts -->
-    <div>
-      <div class="sec-label">Price Alerts <span class="premium-badge">PRO</span></div>
-      <div class="card" style="padding:16px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Get an email when spot hits your target. Checked every 15 min while you&#39;re logged in.</div>
-        <div class="igrid">
-          <div>
-            <div class="ig-label">Metal</div>
-            <select class="ig-select" id="alert-metal">
-              <option value="XAU">Gold ($/oz)</option>
-              <option value="XAG">Silver ($/oz)</option>
-              <option value="HG">Copper ($/lb)</option>
-              <option value="XPT">Platinum ($/oz)</option>
-              <option value="XPD">Palladium ($/oz)</option>
-            </select>
-          </div>
-          <div>
-            <div class="ig-label">Direction</div>
-            <select class="ig-select" id="alert-dir">
-              <option value="above">Rises Above</option>
-              <option value="below">Falls Below</option>
-            </select>
-          </div>
-          <div><div class="ig-label">Target Price ($)</div><input class="ig-input" id="alert-price" type="number" placeholder="e.g. 3500"></div>
-          <div style="display:flex;align-items:flex-end">
-            <button class="calc-btn" style="width:100%;padding:9px" onclick="alertAdd()">+ Add Alert</button>
-          </div>
+  <!-- ROW 1c: Price Alerts (full width) -->
+  <div style="margin-bottom:24px">
+    <div class="sec-label">Price Alerts <span class="premium-badge">PRO</span></div>
+    <div class="card" style="padding:16px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Get an email when spot hits your target. Checked every 15 min while you&#39;re logged in.</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:130px">
+          <div class="ig-label">Metal</div>
+          <select class="ig-select" id="alert-metal">
+            <option value="XAU">Gold ($/oz)</option>
+            <option value="XAG">Silver ($/oz)</option>
+            <option value="HG">Copper ($/lb)</option>
+            <option value="XPT">Platinum ($/oz)</option>
+            <option value="XPD">Palladium ($/oz)</option>
+          </select>
         </div>
-        <div id="alert-list" style="margin-top:12px"></div>
+        <div style="flex:1;min-width:130px">
+          <div class="ig-label">Direction</div>
+          <select class="ig-select" id="alert-dir">
+            <option value="above">Rises Above</option>
+            <option value="below">Falls Below</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:130px">
+          <div class="ig-label">Target Price ($)</div>
+          <input class="ig-input" id="alert-price" type="number" placeholder="e.g. 3500">
+        </div>
+        <div style="flex:0">
+          <button class="calc-btn" style="white-space:nowrap;padding:9px 20px" onclick="alertAdd()">+ Add Alert</button>
+        </div>
       </div>
+      <div id="alert-list" style="margin-top:14px"></div>
     </div>
-
   </div>
 
   <!-- ROW 2: Inventory full width -->
