@@ -1062,26 +1062,118 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
       <div class="sec-label" style="margin-bottom:0">Inventory Tracker <span class="premium-badge">PRO</span></div>
-      <div style="display:flex;gap:7px">
+    </div>
+    <!-- Inventory sub-tabs -->
+    <div class="sub-nav" style="margin-bottom:12px">
+      <button class="seg active" id="inv-tab-general" onclick="invSwitchTab('general',this)">📦 General Inventory</button>
+      <button class="seg" id="inv-tab-slabs" onclick="invSwitchTab('slabs',this)">🏅 Graded Slabs</button>
+    </div>
+
+    <!-- ── GENERAL INVENTORY ── -->
+    <div id="inv-section-general">
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px">
         <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="invAdd()">+ Add Item</button>
         <button class="ts-btn" style="border-color:var(--red);color:var(--red)" onclick="clearInv()">🗑 Clear All</button>
       </div>
-    </div>
-    <div class="inv-form-card" id="inv-form">
-      <div class="igrid">
-        <div><div class="ig-label">Item Name</div><input class="ig-input" id="inv-name" placeholder="e.g. Morgan Dollar"></div>
-        <div><div class="ig-label">Qty</div><input class="ig-input" id="inv-qty" type="number" value="1"></div>
-        <div><div class="ig-label">Paid Each ($)</div><input class="ig-input" id="inv-cost" type="number" placeholder="0.00"></div>
-        <div><div class="ig-label">Type</div><select class="ig-select" id="inv-type"><option value="silver">Silver Coin</option><option value="gold">Gold Coin/Bar</option><option value="bullion">Silver Bullion</option><option value="other">Other</option></select></div>
+      <div class="inv-form-card" id="inv-form">
+        <div class="igrid">
+          <div><div class="ig-label">Item Name</div><input class="ig-input" id="inv-name" placeholder="e.g. Morgan Dollar"></div>
+          <div><div class="ig-label">Qty</div><input class="ig-input" id="inv-qty" type="number" value="1"></div>
+          <div><div class="ig-label">Paid Each ($)</div><input class="ig-input" id="inv-cost" type="number" placeholder="0.00"></div>
+          <div><div class="ig-label">Type</div><select class="ig-select" id="inv-type"><option value="silver">Silver Coin</option><option value="gold">Gold Coin/Bar</option><option value="bullion">Silver Bullion</option><option value="other">Other</option></select></div>
+        </div>
+        <div style="display:flex;gap:7px">
+          <button class="calc-btn" style="flex:1;padding:9px" onclick="invSave()">Save Item</button>
+          <button class="ts-btn" onclick="document.getElementById('inv-form').style.display='none'">Cancel</button>
+        </div>
       </div>
-      <div style="display:flex;gap:7px">
-        <button class="calc-btn" style="flex:1;padding:9px" onclick="invSave()">Save Item</button>
-        <button class="ts-btn" onclick="document.getElementById('inv-form').style.display='none'">Cancel</button>
+      <div class="card">
+        <div class="tbl-wrap"><table class="dtable" id="inv-table"><thead><tr><th>Item</th><th>Qty</th><th>Cost/ea</th><th>Total</th><th>P&L</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+        <div id="inv-summary" style="padding:10px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)"></div>
       </div>
     </div>
-    <div class="card">
-      <div class="tbl-wrap"><table class="dtable" id="inv-table"><thead><tr><th>Item</th><th>Qty</th><th>Cost/ea</th><th>Total</th><th>P&L</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
-      <div id="inv-summary" style="padding:10px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)"></div>
+
+    <!-- ── GRADED SLABS ── -->
+    <div id="inv-section-slabs" style="display:none">
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px">
+        <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="slabAdd()">+ Add Slab</button>
+        <button class="ts-btn" style="border-color:var(--red);color:var(--red)" onclick="clearSlabs()">🗑 Clear All</button>
+      </div>
+      <div class="inv-form-card" id="slab-form">
+        <div class="igrid">
+          <div style="grid-column:span 2"><div class="ig-label">Coin / Item Name</div><input class="ig-input" id="slab-name" placeholder="e.g. 1881-S Morgan Dollar"></div>
+          <div><div class="ig-label">Year</div><input class="ig-input" id="slab-year" placeholder="e.g. 1881"></div>
+          <div><div class="ig-label">Mint Mark</div><select class="ig-select" id="slab-mint"><option value="">None (P)</option><option value="S">S — San Francisco</option><option value="D">D — Denver</option><option value="O">O — New Orleans</option><option value="CC">CC — Carson City</option><option value="W">W — West Point</option><option value="Other">Other</option></select></div>
+        </div>
+        <div class="igrid" style="margin-top:8px">
+          <div><div class="ig-label">Grading Service</div><select class="ig-select" id="slab-service">
+            <option value="PCGS">PCGS</option>
+            <option value="NGC">NGC</option>
+            <option value="CAC">CAC</option>
+            <option value="ANACS">ANACS</option>
+            <option value="ICG">ICG</option>
+            <option value="Raw">Raw (Ungraded)</option>
+          </select></div>
+          <div><div class="ig-label">Grade</div><select class="ig-select" id="slab-grade">
+            <option value="MS70">MS70 — Perfect Uncirculated</option>
+            <option value="MS69">MS69</option>
+            <option value="MS68">MS68</option>
+            <option value="MS67">MS67</option>
+            <option value="MS66">MS66</option>
+            <option value="MS65" selected>MS65 — Gem Uncirculated</option>
+            <option value="MS64">MS64</option>
+            <option value="MS63">MS63 — Choice Uncirculated</option>
+            <option value="MS62">MS62</option>
+            <option value="MS61">MS61</option>
+            <option value="MS60">MS60 — Uncirculated</option>
+            <option value="AU58">AU58 — Choice About Unc</option>
+            <option value="AU55">AU55</option>
+            <option value="AU50">AU50 — About Uncirculated</option>
+            <option value="EF45">EF45 — Choice Extremely Fine</option>
+            <option value="EF40">EF40 — Extremely Fine</option>
+            <option value="VF35">VF35</option>
+            <option value="VF30">VF30 — Choice Very Fine</option>
+            <option value="VF25">VF25</option>
+            <option value="VF20">VF20 — Very Fine</option>
+            <option value="F15">F15</option>
+            <option value="F12">F12 — Fine</option>
+            <option value="VG10">VG10</option>
+            <option value="VG8">VG8 — Very Good</option>
+            <option value="G6">G6</option>
+            <option value="G4">G4 — Good</option>
+            <option value="AG3">AG3 — About Good</option>
+            <option value="PR70">PR70 — Perfect Proof</option>
+            <option value="PR69">PR69</option>
+            <option value="PR68">PR68</option>
+            <option value="PR67">PR67</option>
+            <option value="PR65">PR65 — Gem Proof</option>
+            <option value="PR64">PR64</option>
+            <option value="PR63">PR63</option>
+          </select></div>
+          <div><div class="ig-label">CAC Sticker</div><select class="ig-select" id="slab-cac">
+            <option value="none">None</option>
+            <option value="green">Green Bean ✅</option>
+            <option value="gold">Gold Bean ⭐</option>
+          </select></div>
+          <div><div class="ig-label">Cert #</div><input class="ig-input" id="slab-cert" placeholder="e.g. 42305873"></div>
+        </div>
+        <div class="igrid" style="margin-top:8px">
+          <div><div class="ig-label">Paid ($)</div><input class="ig-input" id="slab-cost" type="number" placeholder="0.00"></div>
+          <div><div class="ig-label">Est. Value ($)</div><input class="ig-input" id="slab-value" type="number" placeholder="0.00"></div>
+          <div style="grid-column:span 2"><div class="ig-label">Notes</div><input class="ig-input" id="slab-notes" placeholder="e.g. PL surfaces, strong luster, purchased at Heritage auction"></div>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:10px">
+          <button class="calc-btn" style="flex:1;padding:9px" onclick="slabSave()">Save Slab</button>
+          <button class="ts-btn" onclick="document.getElementById('slab-form').style.display='none'">Cancel</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap"><table class="dtable" id="slab-table">
+          <thead><tr><th>Coin</th><th>Year/MM</th><th>Service</th><th>Grade</th><th>CAC</th><th>Cert #</th><th>Paid</th><th>Est. Value</th><th>P&L</th><th></th></tr></thead>
+          <tbody id="slab-tbody"></tbody>
+        </table></div>
+        <div id="slab-summary" style="padding:10px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)"></div>
+      </div>
     </div>
   </div>
 
@@ -1141,7 +1233,7 @@ async function loadSpot(){
   updateHeroPrices();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
   renderKaratTable();renderSilverMeltTable();renderConstRefTable();renderPennyRefTable();
-  renderInventory();tsSyncSpot();
+  renderInventory();renderSlabs();tsSyncSpot();
 }
 function setHdr(id,d,perLb=false){
   const el=$(id);if(!el)return;
@@ -1208,7 +1300,7 @@ function showTab(id){
   if(id==='numismatic'){renderAllKeyDates();}
   if(id==='trading'){tsLoadFromStorage();tsSyncSpot();}
   if(id==='typeset'){tsRenderSet(tsCurrentSet);tsUpdateOverall();}
-  if(id==='admin')renderInventory();
+  if(id==='admin'){renderInventory();renderSlabs();}
 }
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','rolls','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
@@ -3382,6 +3474,18 @@ async function doLogout(){await fetch('/api/logout',{method:'POST'});window.loca
 
 // ═══ INVENTORY ═══
 let inventory=JSON.parse(localStorage.getItem('bdp-inv')||'[]');
+let slabs=JSON.parse(localStorage.getItem('bdp-slabs')||'[]');
+let invTabMode='general';
+
+function invSwitchTab(mode,btn){
+  invTabMode=mode;
+  document.querySelectorAll('#tab-admin .sub-nav .seg').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  $('inv-section-general').style.display=mode==='general'?'':'none';
+  $('inv-section-slabs').style.display=mode==='slabs'?'':'none';
+}
+
+// ── General Inventory ──
 function invAdd(){$('inv-form').style.display='block';}
 function invSave(){
   const name=$('inv-name').value.trim();if(!name)return alert('Enter item name');
@@ -3400,6 +3504,70 @@ function renderInventory(){
     return`<tr><td style="font-weight:600">${item.name}</td><td>${item.qty}</td><td class="price-col">${fmt(item.cost)}</td><td class="price-col">${fmt(cost)}</td><td class="p-col">—</td><td><button onclick="invDel(${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td></tr>`;
   }).join('');
   $('inv-summary').textContent=inventory.length+' items · Total cost: '+fmt(totalCost);
+}
+
+// ── Graded Slabs ──
+function slabAdd(){$('slab-form').style.display='block';}
+function slabSave(){
+  const name=$('slab-name').value.trim();if(!name)return alert('Enter coin name');
+  const svc=$('slab-service').value;
+  const grade=$('slab-grade').value;
+  const cert=$('slab-cert').value.trim();
+  const cac=$('slab-cac').value;
+  const cost=parseFloat($('slab-cost').value)||0;
+  const value=parseFloat($('slab-value').value)||0;
+  const notes=$('slab-notes').value.trim();
+  const year=$('slab-year').value.trim();
+  const mint=$('slab-mint').value;
+  slabs.push({name,year,mint,svc,grade,cac,cert,cost,value,notes,date:new Date().toLocaleDateString()});
+  localStorage.setItem('bdp-slabs',JSON.stringify(slabs));
+  $('slab-form').style.display='none';
+  // Reset form
+  ['slab-name','slab-year','slab-cert','slab-cost','slab-value','slab-notes'].forEach(id=>{const el=$(id);if(el)el.value='';});
+  renderSlabs();
+}
+function slabDel(i){if(!confirm('Remove this slab?'))return;slabs.splice(i,1);localStorage.setItem('bdp-slabs',JSON.stringify(slabs));renderSlabs();}
+function clearSlabs(){if(!confirm('Clear all graded slabs?'))return;slabs=[];localStorage.setItem('bdp-slabs','[]');renderSlabs();}
+function slabCertLink(svc,cert){
+  if(!cert)return'—';
+  const urls={
+    PCGS:`https://www.pcgs.com/cert/${cert}`,
+    NGC:`https://www.ngccoin.com/certlookup/${cert}/`,
+    CAC:`https://www.caccoin.com/`,
+    ANACS:`https://www.anacs.com/`,
+    ICG:`https://www.icgcoin.com/`
+  };
+  const url=urls[svc]||'#';
+  return`<a href="${url}" target="_blank" style="color:var(--blue2);font-weight:600;font-size:11px">${cert} ↗</a>`;
+}
+function renderSlabs(){
+  const tb=$('slab-tbody');if(!tb)return;
+  if(!slabs.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:22px">No graded slabs yet — click + Add Slab to get started</td></tr>';$('slab-summary').textContent='';return;}
+  let totalCost=0,totalValue=0;
+  const svcColors={PCGS:'#003087',NGC:'#4a90d9',CAC:'#16a34a',ANACS:'#b45309',ICG:'#7c3aed',Raw:'#6b7280'};
+  const cacBadge={none:'',green:'<span style="color:#16a34a;font-size:13px" title="CAC Green Bean">✅</span>',gold:'<span style="color:#d97706;font-size:13px" title="CAC Gold Bean">⭐</span>'};
+  const gradeColor=g=>{if(g.startsWith('MS7')||g==='PR70')return'var(--green)';if(g.startsWith('MS6')||g.startsWith('PR6'))return'var(--gold)';if(g.startsWith('AU'))return'var(--blue2)';return'var(--text)';};
+  tb.innerHTML=slabs.map((s,i)=>{
+    totalCost+=s.cost||0;totalValue+=s.value||0;
+    const pl=(s.value||0)-(s.cost||0);
+    const plColor=pl>0?'var(--green)':pl<0?'var(--red)':'var(--muted)';
+    const mm=s.mint?`-${s.mint}`:'';
+    return`<tr>
+      <td style="font-weight:700;max-width:160px">${s.name}</td>
+      <td style="color:var(--muted)">${s.year||'—'}${mm}</td>
+      <td><span style="background:${svcColors[s.svc]||'#666'};color:#fff;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700">${s.svc}</span></td>
+      <td style="font-weight:700;color:${gradeColor(s.grade)}">${s.grade}</td>
+      <td style="text-align:center">${cacBadge[s.cac||'none']||''}</td>
+      <td>${slabCertLink(s.svc,s.cert)}</td>
+      <td class="price-col">${s.cost?fmt(s.cost):'—'}</td>
+      <td class="price-col rv-gold">${s.value?fmt(s.value):'—'}</td>
+      <td style="font-weight:700;color:${plColor}">${s.cost&&s.value?(pl>=0?'+':'')+fmt(pl):'—'}</td>
+      <td><button onclick="slabDel(${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td>
+    </tr>`;
+  }).join('');
+  const totalPL=totalValue-totalCost;
+  const plColor=totalPL>0?'var(--green)':totalPL<0?'var(--red)':'var(--muted)';
+  $('slab-summary').innerHTML=`${slabs.length} slabs · Total paid: <strong>${fmt(totalCost)}</strong> · Est. value: <strong style="color:var(--gold)">${fmt(totalValue)}</strong> · P&L: <strong style="color:${plColor}">${totalPL>=0?'+':''}${fmt(totalPL)}</strong>`;
 }
 
 // ═══ INIT ═══
