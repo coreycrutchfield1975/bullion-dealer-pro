@@ -371,7 +371,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="tab tg active" onclick="showTab('gold')"><span class="ticon">🥇</span><div>Gold<span class="tsub">Karats · Goldbacks</span></div></button>
     <button class="tab ts2" onclick="showTab('silver')"><span class="ticon">🪙</span><div>Silver Bullion<span class="tsub">Spot · Calc · Premiums</span></div></button>
     <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Constitutional<span class="tsub">90% Silver Melt</span></div></button>
-    <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Melt Calculator</span></div></button>
+    <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Pennies & Copper</span></div></button>
     <button class="tab tnm" onclick="showTab('numismatic')" data-pro="1"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
     <button class="tab tfx" onclick="showTab('fx')" data-pro="1"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
     <button class="tab ttv" onclick="showTab('trading')" data-pro="1"><span class="ticon">📺</span><div>Trading Sheet<span class="tsub">TV Display Mode</span></div></button>
@@ -677,7 +677,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ PENNIES TAB ═══════════════════ -->
 <div id="tab-pennies" class="section">
   <div class="sec-hero hero-penny">
-    <div><div class="sh-title">Penny Melt Calculator</div><div class="sh-sub">Live copper/zinc spot prices · Pre-1982 &amp; modern penny melt values</div><div class="sh-chips"><span class="sh-chip">🧮 Melt Calc</span></div></div>
+    <div><div class="sh-title">Copper Melt Calculator</div><div class="sh-sub">Live copper/zinc spot prices · Pennies, copper rounds &amp; bars</div><div class="sh-chips"><span class="sh-chip">🧮 Melt Calc</span></div></div>
     <div class="price-box"><div class="pb-label">Penny Melt</div><div class="pb-price" id="penny-hero-melt">—</div><div class="pb-chg">Cu/Zn live</div></div>
   </div>
   <div class="sub-nav">
@@ -687,7 +687,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <div id="ps-calc">
     <div class="calc-card">
       <div class="calc-hdr">
-        <div class="calc-title">🧮 Penny Melt Calculator</div>
+        <div class="calc-title">🧮 Copper Melt Calculator</div>
         <div class="seg-group">
           <button class="seg active" id="penny-unit-count" onclick="pennyUnit('count',this)">Count</button>
           <button class="seg" id="penny-unit-g" onclick="pennyUnit('g',this)">Grams</button>
@@ -699,7 +699,19 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       </div>
       <div class="calc-body">
         <div class="igrid">
-          <div><div class="ig-label">Penny Type</div><select class="ig-select" id="penny-type" onchange="calcPenny()"><option value="copper" selected>Pre-1982 (95% Cu, 3.11g)</option><option value="modern">Post-1982 (97.5% Zn, 2.5g)</option><option value="wartime">1943 Steel</option></select></div>
+          <div><div class="ig-label">Type / Round</div><select class="ig-select" id="penny-type" onchange="calcPenny()">
+  <optgroup label="Pennies">
+    <option value="copper" selected>Pre-1982 Penny (95% Cu, 3.11g)</option>
+    <option value="modern">Post-1982 Penny (97.5% Zn, 2.5g)</option>
+    <option value="wartime">1943 Steel Penny (2.7g)</option>
+  </optgroup>
+  <optgroup label="Copper Rounds &amp; Bars">
+    <option value="round1oz">1 oz Copper Round (31.1g)</option>
+    <option value="round5oz">5 oz Copper Round (155.5g)</option>
+    <option value="bar1lb">1 lb Copper Bar (453.6g)</option>
+    <option value="bar10oz">10 oz Copper Bar (283.5g)</option>
+  </optgroup>
+</select></div>
           <div id="penny-qty-wrap"><div class="ig-label" id="penny-qty-label">Quantity (coins)</div><input class="ig-input" id="penny-qty" type="number" value="100" oninput="calcPenny()"></div>
           <div><div class="ig-label">Copper $/lb</div><input class="ig-input" id="penny-cu" type="number" value="4.68" oninput="calcPenny()"></div>
           <div><div class="ig-label">Zinc $/lb</div><input class="ig-input" id="penny-zn" type="number" value="1.30" oninput="calcPenny()"></div>
@@ -1482,11 +1494,14 @@ function calcPenny(){
   const t=$('penny-type').value||'copper';
   const cu=parseFloat($('penny-cu').value)||spot.HG||4.68;
   const zn=parseFloat($('penny-zn').value)||spot.ZN||1.30;
-  const coinWt=t==='copper'?3.11:t==='wartime'?2.7:2.5;
-  let m=0;
-  if(t==='copper')m=(cu*0.00220462262*3.11*0.95)+(zn*0.00220462262*3.11*0.05);
-  else if(t==='wartime')m=0.003;
-  else m=(cu*0.00220462262*2.5*0.025)+(zn*0.00220462262*2.5*0.975);
+  const wtMap={'copper':3.11,'modern':2.5,'wartime':2.7,'round1oz':31.1035,'round5oz':155.517,'bar1lb':453.592,'bar10oz':283.495};
+  const coinWt=wtMap[t]||3.11;
+  // purity map: copper content fraction
+  const purMap={'copper':0.95,'modern':0.025,'wartime':0.0,'round1oz':0.999,'round5oz':0.999,'bar1lb':0.999,'bar10oz':0.999};
+  const znPurMap={'copper':0.05,'modern':0.975,'wartime':0.0,'round1oz':0.001,'round5oz':0.001,'bar1lb':0.001,'bar10oz':0.001};
+  const cuPur=purMap[t]||0.95; const znPur=znPurMap[t]||0.05;
+  let m=(cu*0.00220462262*coinWt*cuPur)+(zn*0.00220462262*coinWt*znPur);
+  if(t==='wartime')m=0.003;
   const raw=parseFloat($('penny-qty').value)||0;
   let q=0;
   if(pennyUnitMode==='count')q=raw;
@@ -1501,7 +1516,9 @@ function calcPenny(){
   $('penny-each').textContent='$'+m.toFixed(4);
   $('penny-total').textContent=fmt(total);
   const fl=$('penny-count-label');
-  if(pennyUnitMode==='count'){if(fl)fl.textContent='Face Value';$('penny-face').textContent=fmt(face);}
+  const isRound=t.startsWith('round')||t.startsWith('bar');
+  if(isRound){if(fl)fl.textContent='Unit Count';$('penny-face').textContent=Math.round(q).toLocaleString()+' pcs';}
+  else if(pennyUnitMode==='count'){if(fl)fl.textContent='Face Value';$('penny-face').textContent=fmt(face);}
   else{if(fl)fl.textContent='≈ Coin Count';$('penny-face').textContent=Math.round(q).toLocaleString()+' coins';}
   const re=$('penny-ratio');if(re){re.textContent=(ratio*100).toFixed(1)+'% of face';re.style.color=ratio>1?'var(--green)':'var(--red)';}
   $('penny-cu').value=cu.toFixed(2);$('penny-zn').value=zn.toFixed(2);
