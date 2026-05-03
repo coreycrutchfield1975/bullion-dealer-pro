@@ -997,43 +997,50 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ ADMIN TAB ═══════════════════ -->
 <div id="tab-admin" class="section">
   <h2 style="font-size:18px;font-weight:800;margin-bottom:18px">🔐 Account & Admin</h2>
-  <div class="two-col">
+
+  <!-- ROW 1: Account Info + Redeem side by side -->
+  <div class="two-col" style="margin-bottom:24px">
     <div>
       <div class="sec-label">Account Info</div>
       <div class="acct-box" id="acct-card">Loading…</div>
-      <div style="margin-top:22px">
-        <div class="sec-label">Redeem Gift Code</div>
-        <div class="promo-row">
-          <input type="text" class="promo-input" id="promo-input" placeholder="Enter promo code" maxlength="20">
-          <button class="promo-btn" onclick="redeemPromo()">Redeem</button>
-        </div>
-        <div id="promo-msg" class="promo-msg" style="margin-top:6px"></div>
-      </div>
     </div>
     <div>
-      <div class="sec-label">Inventory Tracker <span class="premium-badge">PRO</span></div>
-      <div style="display:flex;gap:7px;margin-bottom:11px">
+      <div class="sec-label">Redeem Gift Code</div>
+      <div class="promo-row">
+        <input type="text" class="promo-input" id="promo-input" placeholder="Enter promo code" maxlength="20">
+        <button class="promo-btn" onclick="redeemPromo()">Redeem</button>
+      </div>
+      <div id="promo-msg" class="promo-msg" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Inventory full width -->
+  <div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+      <div class="sec-label" style="margin-bottom:0">Inventory Tracker <span class="premium-badge">PRO</span></div>
+      <div style="display:flex;gap:7px">
         <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="invAdd()">+ Add Item</button>
         <button class="ts-btn" style="border-color:var(--red);color:var(--red)" onclick="clearInv()">🗑 Clear All</button>
       </div>
-      <div class="inv-form-card" id="inv-form">
-        <div class="igrid">
-          <div><div class="ig-label">Item Name</div><input class="ig-input" id="inv-name" placeholder="e.g. Morgan Dollar"></div>
-          <div><div class="ig-label">Qty</div><input class="ig-input" id="inv-qty" type="number" value="1"></div>
-          <div><div class="ig-label">Paid Each ($)</div><input class="ig-input" id="inv-cost" type="number" placeholder="0.00"></div>
-          <div><div class="ig-label">Type</div><select class="ig-select" id="inv-type"><option value="silver">Silver Coin</option><option value="gold">Gold Coin/Bar</option><option value="bullion">Silver Bullion</option><option value="other">Other</option></select></div>
-        </div>
-        <div style="display:flex;gap:7px">
-          <button class="calc-btn" style="flex:1;padding:9px" onclick="invSave()">Save Item</button>
-          <button class="ts-btn" onclick="document.getElementById('inv-form').style.display='none'">Cancel</button>
-        </div>
+    </div>
+    <div class="inv-form-card" id="inv-form">
+      <div class="igrid">
+        <div><div class="ig-label">Item Name</div><input class="ig-input" id="inv-name" placeholder="e.g. Morgan Dollar"></div>
+        <div><div class="ig-label">Qty</div><input class="ig-input" id="inv-qty" type="number" value="1"></div>
+        <div><div class="ig-label">Paid Each ($)</div><input class="ig-input" id="inv-cost" type="number" placeholder="0.00"></div>
+        <div><div class="ig-label">Type</div><select class="ig-select" id="inv-type"><option value="silver">Silver Coin</option><option value="gold">Gold Coin/Bar</option><option value="bullion">Silver Bullion</option><option value="other">Other</option></select></div>
       </div>
-      <div class="card">
-        <div class="tbl-wrap"><table class="dtable" id="inv-table"><thead><tr><th>Item</th><th>Qty</th><th>Cost/ea</th><th>Total</th><th>P&L</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
-        <div id="inv-summary" style="padding:10px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)"></div>
+      <div style="display:flex;gap:7px">
+        <button class="calc-btn" style="flex:1;padding:9px" onclick="invSave()">Save Item</button>
+        <button class="ts-btn" onclick="document.getElementById('inv-form').style.display='none'">Cancel</button>
       </div>
     </div>
+    <div class="card">
+      <div class="tbl-wrap"><table class="dtable" id="inv-table"><thead><tr><th>Item</th><th>Qty</th><th>Cost/ea</th><th>Total</th><th>P&L</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+      <div id="inv-summary" style="padding:10px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)"></div>
+    </div>
   </div>
+
 </div>
 
 </div><!-- /#content -->
