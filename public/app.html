@@ -250,6 +250,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .fx-dropdown{background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 11px;font-family:'Inter',sans-serif;font-size:13px;outline:none;min-width:220px;cursor:pointer;width:100%}
 .fx-search{background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 11px;font-family:'Inter',sans-serif;font-size:13px;outline:none;width:100%;transition:border-color .2s}
 .fx-search:focus{border-color:var(--blue)}
+.fx-top-card{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .18s;justify-content:space-between}
+.fx-top-card:hover{border-color:var(--gold);background:var(--gold3)}
 .fx-amt{width:90px;background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--gold);padding:8px 9px;font-size:14px;font-weight:700;text-align:right;outline:none;font-family:'Inter',sans-serif}
 /* ACCOUNT */
 .acct-box{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:22px;max-width:460px;box-shadow:var(--shadow)}
@@ -445,6 +447,14 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
   <div id="gs-goldback" style="display:none">
     <div class="card" style="margin-bottom:12px"><p style="font-size:12px;color:var(--muted);margin-bottom:5px">📡 Official exchange rates from <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold)">goldback.com</a> — updated daily 10 AM MST</p><p id="gb-updated" style="font-size:11px;color:var(--muted)"></p></div>
+    <!-- Denomination Price Cards -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💛 Current Average Prices by Denomination</div>
+      <div id="gb-denom-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px"></div>
+      <div class="card"><div class="card-title">📊 Denomination Detail</div>
+        <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Current Rate</th><th>Face Value</th><th>Premium</th></tr></thead><tbody id="gb-denom-tbody"></tbody></table></div>
+      </div>
+    </div>
     <div id="gb-retailers"></div>
     <div class="card" style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7">💡 Goldback prices fluctuate daily with gold spot. Always verify at <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold)">goldback.com</a> before purchasing.</div>
   </div>
@@ -553,22 +563,46 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ CONSTITUTIONAL TAB ═══════════════════ -->
 <div id="tab-const" class="section">
   <div class="sec-hero hero-const">
-    <div><div class="sh-title">Constitutional Silver</div><div class="sh-sub">90% silver US coins · Melt calculator</div><div class="sh-chips"><span class="sh-chip">🧮 Melt Calc</span></div></div>
+    <div><div class="sh-title">Constitutional Silver</div><div class="sh-sub">90% &amp; 40% silver US coins · Melt calculator · War nickels · Rolls</div><div class="sh-chips"><span class="sh-chip">🧮 Melt Calc</span><span class="sh-chip">📜 Rolls</span><span class="sh-chip">⚡ Quick Ref</span></div></div>
     <div class="price-box"><div class="pb-label">Silver Spot</div><div class="pb-price" id="const-hero-price">—</div><div class="pb-chg">Live</div></div>
   </div>
   <div class="sub-nav">
-    <button class="seg active" onclick="constSec('calc',this)">🧮 Melt Calc</button>
+    <button class="seg active" onclick="constSec('calc',this)">🧮 Individual Coins</button>
+    <button class="seg" onclick="constSec('rolls',this)">📜 Rolls</button>
+    <button class="seg" onclick="constSec('ref',this)">⚡ Quick Ref</button>
   </div>
 
+  <!-- INDIVIDUAL COIN CALC -->
   <div id="cs-calc">
     <div class="calc-card">
       <div class="calc-hdr"><div class="calc-title">🧮 Constitutional Silver Melt Calculator</div></div>
       <div class="calc-body">
         <div class="igrid">
-          <div><div class="ig-label">Coin Type</div><select class="ig-select" id="const-type" onchange="calcConst()"><option value="dime">Dime (0.0723 oz)</option><option value="quarter">Quarter (0.1808 oz)</option><option value="half" selected>Half Dollar (0.3617 oz)</option><option value="dollar">Morgan/Peace (0.7734 oz)</option></select></div>
+          <div><div class="ig-label">Coin Type</div>
+            <select class="ig-select" id="const-type" onchange="calcConst()">
+              <optgroup label="── 90% Silver ──">
+                <option value="dime_90">Dime — 90% (0.07234 oz)</option>
+                <option value="quarter_90">Quarter — 90% (0.18084 oz)</option>
+                <option value="half_90" selected>Half Dollar — 90% (0.36169 oz)</option>
+                <option value="dollar_90">Morgan/Peace Dollar — 90% (0.77344 oz)</option>
+                <option value="dollar_seated">Seated Liberty Dollar — 90% (0.77344 oz)</option>
+                <option value="dollar_trade">Trade Dollar — 90% (0.78737 oz)</option>
+              </optgroup>
+              <optgroup label="── 40% Silver ──">
+                <option value="half_40">Kennedy Half 1965–1969 — 40% (0.14792 oz)</option>
+                <option value="half_40_70d">Kennedy Half 1970-D — 40% (0.14792 oz)</option>
+              </optgroup>
+              <optgroup label="── 35% Silver ──">
+                <option value="nickel_35">War Nickel 1942–1945 — 35% (0.05626 oz)</option>
+              </optgroup>
+              <optgroup label="── 40% Ike Dollar ──">
+                <option value="ike_40">Ike Dollar 1971–1976 — 40% (0.31570 oz)</option>
+              </optgroup>
+            </select>
+          </div>
           <div><div class="ig-label">Quantity</div><input class="ig-input" id="const-qty" type="number" value="10" oninput="calcConst()"></div>
           <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="const-spot" type="number" value="32.45" oninput="calcConst()"></div>
-          <div><div class="ig-label">Buy % Below</div><input class="ig-input" id="const-pct" type="number" value="20" oninput="calcConst()"></div>
+          <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="const-pct" type="number" value="20" oninput="calcConst()"></div>
         </div>
         <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
           <div class="res-card"><div class="res-label">Total oz</div><div class="res-value rv-blue" id="const-oz">—</div></div>
@@ -576,15 +610,55 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="const-buy">—</div></div>
           <div class="res-card"><div class="res-label">Per Coin</div><div class="res-value rv-muted" id="const-percoin">—</div></div>
         </div>
-        <button class="calc-btn" onclick="calcConst()">Calculate Constitutional Value</button>
+        <button class="calc-btn" onclick="calcConst()">Calculate Melt Value</button>
       </div>
     </div>
-    <div class="card"><div class="card-title">⚡ 90% Silver Quick Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Coin</th><th>Silver oz</th><th>Melt Value</th><th>$100 Face Melt</th></tr></thead><tbody id="const-ref-tbody"></tbody></table></div></div>
   </div>
 
-  
-  
-  
+  <!-- ROLLS CALC -->
+  <div id="cs-rolls" style="display:none">
+    <div class="calc-card">
+      <div class="calc-hdr"><div class="calc-title">📜 Silver Coin Roll Calculator</div></div>
+      <div class="calc-body">
+        <div class="igrid">
+          <div><div class="ig-label">Roll Type</div>
+            <select class="ig-select" id="const-roll-type" onchange="calcConstRolls()">
+              <optgroup label="── 90% Silver ──">
+                <option value="dime_90_r">Dimes — 90% (50/roll · 3.617 oz)</option>
+                <option value="quarter_90_r">Quarters — 90% (40/roll · 7.234 oz)</option>
+                <option value="half_90_r" selected>Halves — 90% (20/roll · 7.234 oz)</option>
+                <option value="dollar_90_r">Morgan/Peace — 90% (20/roll · 15.469 oz)</option>
+              </optgroup>
+              <optgroup label="── 40% Silver ──">
+                <option value="half_40_r">Kennedy Halves — 40% (20/roll · 2.958 oz)</option>
+              </optgroup>
+              <optgroup label="── 35% War Nickels ──">
+                <option value="nickel_35_r">War Nickels — 35% (40/roll · 2.250 oz)</option>
+              </optgroup>
+              <optgroup label="── 40% Ike Dollars ──">
+                <option value="ike_40_r">Ike Dollars — 40% (20/roll · 6.314 oz)</option>
+              </optgroup>
+            </select>
+          </div>
+          <div><div class="ig-label">Number of Rolls</div><input class="ig-input" id="const-roll-count" type="number" value="1" oninput="calcConstRolls()"></div>
+          <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="const-roll-spot" type="number" value="32.45" oninput="calcConstRolls()"></div>
+          <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="const-roll-pct" type="number" value="20" oninput="calcConstRolls()"></div>
+        </div>
+        <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="res-card"><div class="res-label">Total oz</div><div class="res-value rv-blue" id="cr-oz">—</div></div>
+          <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="cr-melt">—</div></div>
+          <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="cr-buy">—</div></div>
+          <div class="res-card"><div class="res-label">Per Roll</div><div class="res-value rv-muted" id="cr-perroll">—</div></div>
+        </div>
+        <button class="calc-btn" onclick="calcConstRolls()">Calculate Roll Value</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK REF -->
+  <div id="cs-ref" style="display:none">
+    <div class="card"><div class="card-title">⚡ All Constitutional Silver — Quick Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Coin</th><th>Composition</th><th>Silver oz</th><th>Melt Value</th><th>$100 Face Melt</th></tr></thead><tbody id="const-ref-tbody"></tbody></table></div></div>
+  </div>
 </div>
 
 <!-- ═══════════════════ PENNIES TAB ═══════════════════ -->
@@ -817,6 +891,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       <button class="calc-btn" style="width:auto;padding:9px 14px;font-size:12px;height:fit-content" onclick="loadFX(true)">↻ Refresh</button>
     </div>
     <div id="fx-updated" style="color:var(--muted);font-size:11px;margin-top:8px"></div>
+    <div style="margin:14px 0 4px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase">⭐ Top Currencies</div>
+    <div id="fx-top10" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px"></div>
   </div>
   <div class="card">
     <div class="tbl-wrap"><table class="dtable" id="fx-table"><thead><tr><th>🌐</th><th style="cursor:pointer" onclick="sortFX('country')">Country ↕</th><th style="cursor:pointer" onclick="sortFX('code')">Code ↕</th><th style="cursor:pointer" onclick="sortFX('rate')">Rate / USD ↕</th><th style="cursor:pointer" onclick="sortFX('usd')">USD per 1 unit ↕</th><th>Converted</th></tr></thead><tbody id="fx-tbody"></tbody></table></div>
@@ -1015,7 +1091,7 @@ function showTab(id){
 }
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','rolls','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
-function constSec(s,btn){['calc'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function constSec(s,btn){['calc','rolls','ref'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='ref')renderConstRef();if(s==='rolls')calcConstRolls();}
 function pennySec(s,btn){['calc'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 function numSec(s,btn){['keydate','grading','errors','coinvals'].forEach(k=>{const e=$('nm-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-numismatic .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='errors')renderErrors('nm-errors-grid');if(s==='grading')renderNmGrading();if(s==='keydate')renderAllKeyDates();if(s==='coinvals')renderNmCoinVals();}
 function renderNmGrading(){const grades=[['PO-1','Poor','Barely identifiable, heavily worn'],['FR-2','Fair','Extremely worn, some design visible'],['AG-3','About Good','Very heavily worn, outline visible'],['G-4','Good','Heavily worn, major design clear'],['G-6','Good+','Slightly more detail than G-4'],['VG-8','Very Good','Well worn, main features clear'],['VG-10','Very Good+','More detail than VG-8'],['F-12','Fine','Moderate to considerable even wear'],['F-15','Fine+','More detail than F-12'],['VF-20','Very Fine','Moderate wear on high points'],['VF-25','Very Fine+','Slightly less wear than VF-30'],['VF-30','Choice Very Fine','Light wear on high points'],['VF-35','Choice VF+','Very light wear on highest points'],['EF-40','Extremely Fine','Light wear throughout'],['EF-45','Choice EF','Slight wear on highest points'],['AU-50','About Uncirculated','Slight wear on high points, half luster'],['AU-55','Choice AU','Slight wear, most luster'],['AU-58','Very Choice AU','Minimal wear, nearly full luster'],['MS-60','Mint State','No wear, many contact marks'],['MS-61','MS61','No wear, noticeable marks'],['MS-62','MS62','No wear, some distracting marks'],['MS-63','Choice BU','No wear, some noticeable marks'],['MS-64','Choice BU+','No wear, few marks'],['MS-65','Gem BU','No wear, strong luster, minor marks'],['MS-66','Gem BU+','No wear, superior luster, very minor marks'],['MS-67','Superb Gem','Virtually perfect, exceptional'],['MS-68','Superb Gem+','Nearly perfect coin'],['MS-69','MS69','Nearly perfect, only tiny imperfections'],['MS-70','Perfect','Absolutely perfect coin']];const tb=document.getElementById('nm-grade-tbody');if(tb)tb.innerHTML=grades.map(([g,n,d])=>`<tr><td style="font-weight:700;color:var(--gold)">${g}</td><td>${n}</td><td>${d}</td></tr>`).join('');}
@@ -1159,6 +1235,25 @@ async function renderGoldback(){
     try{const r=await fetch('/api/goldback-rate');const d=await r.json();gbRates=d.rates||{};if(d.updated)$('gb-updated').textContent='Last updated: '+new Date(d.updated).toLocaleString()+' · Source: goldback.com';}
     catch{const au=spot.XAU||3241.80;[1,5,10,25,50].forEach(n=>{gbRates[n]=au/1000*n*1.1;});$('gb-updated').textContent='⚠ Estimate — could not reach goldback.com';}
   }
+  // Denomination price cards
+  const au=spot.XAU||3241.80;
+  const denomCards=$('gb-denom-cards');
+  const denomTbody=$('gb-denom-tbody');
+  const denoms=[{n:1,label:'1/1000 oz'},{n:5,label:'5/1000 oz'},{n:10,label:'10/1000 oz'},{n:25,label:'25/1000 oz'},{n:50,label:'50/1000 oz'}];
+  if(denomCards){denomCards.innerHTML=denoms.map(d=>{
+    const rate=gbRates[d.n]?parseFloat(gbRates[d.n]):(au/1000*d.n*1.1);
+    const goldOz=d.n/1000;
+    return`<div style="background:linear-gradient(135deg,#78350f22,#d9770622);border:1px solid #d97706;border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:22px font-weight:800;color:var(--gold)">${d.n}💛</div>
+      <div style="font-size:11px;color:var(--muted);margin:3px 0">${d.label} gold</div>
+      <div style="font-size:20px;font-weight:800;color:var(--gold)">$${rate.toFixed(2)}</div>
+    </div>`;
+  }).join('');}
+  if(denomTbody){denomTbody.innerHTML=denoms.map(d=>{
+    const rate=gbRates[d.n]?parseFloat(gbRates[d.n]):(au/1000*d.n*1.1);
+    const goldOz=d.n/1000;const meltVal=goldOz*au;const premium=((rate-meltVal)/meltVal*100);
+    return`<tr><td style="font-weight:700;color:var(--gold)">${d.n} Goldback</td><td class="p-col">${goldOz.toFixed(4)}</td><td style="font-weight:800;color:var(--gold)">$${rate.toFixed(2)}</td><td class="p-col">$${meltVal.toFixed(2)}</td><td style="color:${premium<30?'var(--green)':'var(--red)'};font-weight:600">+${premium.toFixed(1)}%</td></tr>`;
+  }).join('');}
   const c=$('gb-retailers');if(!c)return;
   c.innerHTML=GB.map((r,i)=>`<div class="gb-retailer" id="gbr-${i}">
     <div class="gb-hdr" onclick="gbToggle(${i})"><span class="gb-name">${r.name}</span><span style="font-size:10px;font-weight:700;color:var(--muted);background:var(--bg3);padding:2px 8px;border-radius:8px">${r.tag}</span><span class="gb-arrow">▼</span></div>
@@ -1214,13 +1309,57 @@ function calcPlatPal(){
 }
 
 // ═══ CONSTITUTIONAL ═══
-const CONST_OZ={dime:0.07234,quarter:0.18084,half:0.36169,dollar:0.77344};
+const CONST_OZ={
+  dime_90:0.07234, quarter_90:0.18084, half_90:0.36169,
+  dollar_90:0.77344, dollar_seated:0.77344, dollar_trade:0.78737,
+  half_40:0.14792, half_40_70d:0.14792,
+  nickel_35:0.05626,
+  ike_40:0.31570
+};
+const CONST_ROLL_OZ={
+  dime_90_r:{oz:3.617,coins:50,label:'Dimes 90%'},
+  quarter_90_r:{oz:7.234,coins:40,label:'Quarters 90%'},
+  half_90_r:{oz:7.234,coins:20,label:'Halves 90%'},
+  dollar_90_r:{oz:15.469,coins:20,label:'Morgan/Peace 90%'},
+  half_40_r:{oz:2.958,coins:20,label:'Kennedy Halves 40%'},
+  nickel_35_r:{oz:2.250,coins:40,label:'War Nickels 35%'},
+  ike_40_r:{oz:6.314,coins:20,label:'Ike Dollars 40%'}
+};
 function calcConst(){
-  const t=$('const-type').value||'half';const q=parseFloat($('const-qty').value)||10;
+  const t=$('const-type').value||'half_90';const q=parseFloat($('const-qty').value)||10;
   const ag=parseFloat($('const-spot').value)||spot.XAG||32.45;const p=parseFloat($('const-pct').value)||20;
-  const oze=CONST_OZ[t];const oz=oze*q;const melt=oz*ag;
+  const oze=CONST_OZ[t]||0.36169;const oz=oze*q;const melt=oz*ag;
   $('const-oz').textContent=oz.toFixed(4)+' oz';$('const-melt').textContent=fmt(melt);
   $('const-buy').textContent=fmt(melt*(1-p/100));$('const-percoin').textContent=fmt(oze*ag);
+}
+function calcConstRolls(){
+  const t=($('const-roll-type')||{}).value||'half_90_r';
+  const rc=parseFloat(($('const-roll-count')||{}).value)||1;
+  const ag=parseFloat(($('const-roll-spot')||{}).value)||spot.XAG||32.45;
+  const p=parseFloat(($('const-roll-pct')||{}).value)||20;
+  const rd=CONST_ROLL_OZ[t]||{oz:7.234,coins:20};
+  const totalOz=rd.oz*rc;const melt=totalOz*ag;
+  const buy=melt*(1-p/100);const perRoll=melt/rc;
+  if($('cr-oz'))$('cr-oz').textContent=totalOz.toFixed(3)+' oz';
+  if($('cr-melt'))$('cr-melt').textContent=fmt(melt);
+  if($('cr-buy'))$('cr-buy').textContent=fmt(buy);
+  if($('cr-perroll'))$('cr-perroll').textContent=fmt(perRoll);
+}
+function renderConstRef(){
+  const ag=spot.XAG||32.45;
+  const coins=[
+    {n:'Dime — 90%',comp:'90% Ag',oz:0.07234,face:0.10},
+    {n:'Quarter — 90%',comp:'90% Ag',oz:0.18084,face:0.25},
+    {n:'Half Dollar — 90%',comp:'90% Ag',oz:0.36169,face:0.50},
+    {n:'Morgan/Peace Dollar — 90%',comp:'90% Ag',oz:0.77344,face:1.00},
+    {n:'Trade Dollar — 90%',comp:'90% Ag',oz:0.78737,face:1.00},
+    {n:'Kennedy Half 1965–69 — 40%',comp:'40% Ag',oz:0.14792,face:0.50},
+    {n:'Kennedy Half 1970-D — 40%',comp:'40% Ag',oz:0.14792,face:0.50},
+    {n:'War Nickel 1942–45 — 35%',comp:'35% Ag',oz:0.05626,face:0.05},
+    {n:'Ike Dollar 1971–76 — 40%',comp:'40% Ag',oz:0.31570,face:1.00},
+  ];
+  const tb=$('const-ref-tbody');if(!tb)return;
+  tb.innerHTML=coins.map(c=>`<tr><td style="font-weight:600">${c.n}</td><td style="color:var(--muted)">${c.comp}</td><td class="p-col">${c.oz.toFixed(5)} oz</td><td class="rv-gold price-col">${fmt(c.oz*ag)}</td><td class="green-col">${fmt((100/c.face)*c.oz*ag)}</td></tr>`).join('');
 }
 function renderConstRefTable(){
   const ag=spot.XAG||32.45;
@@ -1608,6 +1747,113 @@ function openGradingLookup(source) {
     if(infoEl) infoEl.textContent = '↗ Opened PCGS CoinFacts — search for ' + label;
   }
 }
+// ═══ CURRENCY EXCHANGE DATA ═══
+let fxRates={};
+let fxSortCol='country';
+let fxSortDir=1;
+const FX_CURRENCIES=[
+  {flag:'🇦🇺',country:'Australia',code:'AUD'},
+  {flag:'🇧🇷',country:'Brazil',code:'BRL'},
+  {flag:'🇨🇦',country:'Canada',code:'CAD'},
+  {flag:'🇨🇳',country:'China',code:'CNY'},
+  {flag:'🇨🇿',country:'Czech Republic',code:'CZK'},
+  {flag:'🇩🇰',country:'Denmark',code:'DKK'},
+  {flag:'🇪🇺',country:'Euro Zone',code:'EUR'},
+  {flag:'🇬🇧',country:'United Kingdom',code:'GBP'},
+  {flag:'🇭🇰',country:'Hong Kong',code:'HKD'},
+  {flag:'🇭🇺',country:'Hungary',code:'HUF'},
+  {flag:'🇮🇳',country:'India',code:'INR'},
+  {flag:'🇮🇩',country:'Indonesia',code:'IDR'},
+  {flag:'🇮🇱',country:'Israel',code:'ILS'},
+  {flag:'🇯🇵',country:'Japan',code:'JPY'},
+  {flag:'🇲🇽',country:'Mexico',code:'MXN'},
+  {flag:'🇳🇿',country:'New Zealand',code:'NZD'},
+  {flag:'🇳🇴',country:'Norway',code:'NOK'},
+  {flag:'🇵🇭',country:'Philippines',code:'PHP'},
+  {flag:'🇵🇱',country:'Poland',code:'PLN'},
+  {flag:'🇷🇴',country:'Romania',code:'RON'},
+  {flag:'🇷🇺',country:'Russia',code:'RUB'},
+  {flag:'🇸🇬',country:'Singapore',code:'SGD'},
+  {flag:'🇿🇦',country:'South Africa',code:'ZAR'},
+  {flag:'🇰🇷',country:'South Korea',code:'KRW'},
+  {flag:'🇸🇪',country:'Sweden',code:'SEK'},
+  {flag:'🇨🇭',country:'Switzerland',code:'CHF'},
+  {flag:'🇹🇼',country:'Taiwan',code:'TWD'},
+  {flag:'🇹🇭',country:'Thailand',code:'THB'},
+  {flag:'🇹🇷',country:'Turkey',code:'TRY'},
+  {flag:'🇦🇪',country:'UAE',code:'AED'},
+  {flag:'🇺🇦',country:'Ukraine',code:'UAH'},
+  {flag:'🇻🇳',country:'Vietnam',code:'VND'},
+  {flag:'🇦🇷',country:'Argentina',code:'ARS'},
+  {flag:'🇨🇱',country:'Chile',code:'CLP'},
+  {flag:'🇨🇴',country:'Colombia',code:'COP'},
+  {flag:'🇵🇰',country:'Pakistan',code:'PKR'},
+  {flag:'🇧🇩',country:'Bangladesh',code:'BDT'},
+  {flag:'🇪🇬',country:'Egypt',code:'EGP'},
+  {flag:'🇰🇪',country:'Kenya',code:'KES'},
+  {flag:'🇳🇬',country:'Nigeria',code:'NGN'},
+  {flag:'🇬🇭',country:'Ghana',code:'GHS'},
+  {flag:'🇲🇦',country:'Morocco',code:'MAD'},
+  {flag:'🇮🇶',country:'Iraq',code:'IQD'},
+  {flag:'🇸🇦',country:'Saudi Arabia',code:'SAR'},
+  {flag:'🇯🇴',country:'Jordan',code:'JOD'},
+  {flag:'🇰🇼',country:'Kuwait',code:'KWD'},
+  {flag:'🇶🇦',country:'Qatar',code:'QAR'},
+  {flag:'🇧🇭',country:'Bahrain',code:'BHD'},
+  {flag:'🇴🇲',country:'Oman',code:'OMR'},
+  {flag:'🇮🇷',country:'Iran',code:'IRR'},
+  {flag:'🇲🇾',country:'Malaysia',code:'MYR'},
+  {flag:'🇳🇵',country:'Nepal',code:'NPR'},
+  {flag:'🇱🇰',country:'Sri Lanka',code:'LKR'},
+  {flag:'🇲🇲',country:'Myanmar',code:'MMK'},
+  {flag:'🇰🇭',country:'Cambodia',code:'KHR'},
+  {flag:'🇺🇿',country:'Uzbekistan',code:'UZS'},
+  {flag:'🇰🇿',country:'Kazakhstan',code:'KZT'},
+  {flag:'🇦🇲',country:'Armenia',code:'AMD'},
+  {flag:'🇬🇪',country:'Georgia',code:'GEL'},
+  {flag:'🇦🇿',country:'Azerbaijan',code:'AZN'},
+  {flag:'🇧🇾',country:'Belarus',code:'BYN'},
+  {flag:'🇷🇸',country:'Serbia',code:'RSD'},
+  {flag:'🇭🇷',country:'Croatia',code:'HRK'},
+  {flag:'🇧🇬',country:'Bulgaria',code:'BGN'},
+  {flag:'🇮🇸',country:'Iceland',code:'ISK'},
+];
+// Top 10 featured countries shown on load
+const FX_TOP10=['EUR','GBP','JPY','CAD','AUD','CHF','CNY','MXN','INR','BRL'];
+
+async function loadFX(force=false){
+  if(!force && Object.keys(fxRates).length>0) return;
+  $('fx-status').textContent='Loading exchange rates…';
+  try{
+    const r=await fetch('/api/fx-rates');
+    if(!r.ok)throw new Error('API error');
+    const d=await r.json();
+    fxRates=d.rates||{};
+    $('fx-updated').textContent='Updated: '+new Date(d.updated||(d.timestamp*1000)||Date.now()).toLocaleString()+' · Source: Open Exchange Rates';
+  } catch(e) {
+    // Fallback: use static approximate rates
+    fxRates={AUD:1.54,BRL:5.10,CAD:1.36,CNY:7.24,CZK:22.8,DKK:6.90,EUR:0.92,GBP:0.79,HKD:7.82,HUF:360,INR:83.1,IDR:15800,ILS:3.72,JPY:149.5,MXN:17.2,NZD:1.65,NOK:10.5,PHP:55.8,PLN:3.98,RON:4.57,RUB:89.5,SGD:1.34,ZAR:18.8,KRW:1330,SEK:10.4,CHF:0.88,TWD:31.8,THB:35.2,TRY:32.1,AED:3.67,UAH:38.2,VND:24500,ARS:900,CLP:950,COP:4000,PKR:279,BDT:110,EGP:47.5,KES:130,NGN:1500,GHS:12.5,MAD:10.1,IQD:1310,SAR:3.75,JOD:0.71,KWD:0.31,QAR:3.64,BHD:0.377,OMR:0.385,IRR:42000,MYR:4.68,NPR:133,LKR:315,MMK:2100,KHR:4100,UZS:12600,KZT:450,AMD:387,GEL:2.66,AZN:1.70,BYN:3.27,RSD:108,HRK:7.05,BGN:1.80,ISK:137};
+    $('fx-updated').textContent='⚠ Using estimated rates — live data unavailable';
+  }
+  buildFXDropdown();
+  renderFXTop10();
+  filterFX();
+  $('fx-status').textContent='';
+}
+function renderFXTop10(){
+  const amt=parseFloat($('fx-amount').value)||1;
+  const container=$('fx-top10');if(!container)return;
+  container.innerHTML=FX_TOP10.map(code=>{
+    const c=FX_CURRENCIES.find(x=>x.code===code);if(!c||!fxRates[code])return'';
+    const rate=fxRates[code];const converted=(rate*amt);
+    return`<div class="fx-top-card" onclick="document.getElementById('fx-search').value='${code}';filterFX()">
+      <div style="font-size:26px">${c.flag}</div>
+      <div><div style="font-weight:700;font-size:13px">${c.country}</div><div style="color:var(--gold);font-size:11px;font-weight:600">${c.code}</div></div>
+      <div style="text-align:right"><div style="font-weight:800;font-size:14px;color:var(--gold)">${converted>=100?converted.toLocaleString(undefined,{maximumFractionDigits:0}):converted.toFixed(2)}</div><div style="color:var(--muted);font-size:10px">per $${amt}</div></div>
+    </div>`;
+  }).join('');
+}
+
 function sortFX(col){
   if(fxSortCol===col)fxSortDir*=-1;else{fxSortCol=col;fxSortDir=1;}
   filterFX();
@@ -1643,6 +1889,7 @@ function filterFX(){
   }).join('');
   if(!rows.length&&q)$('fx-status').textContent='No currencies match your search.';
   else $('fx-status').textContent='';
+  renderFXTop10();
 }
 
 
@@ -1974,7 +2221,6 @@ async function init(){
   renderCoinVals();
   renderAllKeyDates();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
-  buildFXDropdown();
   await loadSpot();
   await loadNews();
   setInterval(loadSpot,5*60*1000);
