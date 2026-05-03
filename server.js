@@ -45,7 +45,9 @@ const userSchema = new mongoose.Schema({
   createdAt:       { type: Date, default: Date.now },
   syncInventory:   { type: Array,  default: [] },
   syncSlabs:       { type: Array,  default: [] },
-  syncTypesets:    { type: Object, default: {} }
+  syncTypesets:    { type: Object, default: {} },
+  syncPresets:     { type: Object, default: {} },
+  syncAlerts:      { type: Array,  default: [] }
 });
 
 const promoSchema = new mongoose.Schema({
@@ -474,17 +476,19 @@ app.post('/api/promo/redeem', auth, async (req, res) => {
 app.get('/api/sync', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('syncInventory syncSlabs syncTypesets');
-    res.json({ inventory: user.syncInventory||[], slabs: user.syncSlabs||[], typesets: user.syncTypesets||{} });
+    res.json({ inventory: user.syncInventory||[], slabs: user.syncSlabs||[], typesets: user.syncTypesets||{}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
   } catch(e) { res.status(500).json({ error: 'Sync read failed' }); }
 });
 
 app.post('/api/sync', auth, async (req, res) => {
   try {
-    const { inventory, slabs, typesets } = req.body;
+    const { inventory, slabs, typesets, presets, alerts } = req.body;
     await User.findByIdAndUpdate(req.user.id, {
       syncInventory: inventory || [],
       syncSlabs:     slabs     || [],
-      syncTypesets:  typesets  || {}
+      syncTypesets:  typesets  || {},
+      syncPresets:   presets   || {},
+      syncAlerts:    alerts    || []
     });
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ error: 'Sync write failed' }); }

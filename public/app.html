@@ -1059,6 +1059,61 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     </div>
   </div>
 
+  <!-- ROW 1b: Dealer Presets + Price Alerts -->
+  <div class="two-col" style="margin-bottom:24px">
+
+    <!-- Dealer Markup Presets -->
+    <div>
+      <div class="sec-label">Dealer Markup Presets <span class="premium-badge">PRO</span></div>
+      <div class="card" style="padding:16px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Saved percentages auto-fill all calculators on login.</div>
+        <div class="igrid">
+          <div><div class="ig-label">Silver Buy % Below Melt</div><input class="ig-input" id="preset-ag-buy" type="number" placeholder="e.g. 20" oninput="presetPreview()"></div>
+          <div><div class="ig-label">Silver Sell % Above Melt</div><input class="ig-input" id="preset-ag-sell" type="number" placeholder="e.g. 5" oninput="presetPreview()"></div>
+          <div><div class="ig-label">Gold Buy % Below Melt</div><input class="ig-input" id="preset-au-buy" type="number" placeholder="e.g. 3" oninput="presetPreview()"></div>
+          <div><div class="ig-label">Gold Sell % Above Melt</div><input class="ig-input" id="preset-au-sell" type="number" placeholder="e.g. 2" oninput="presetPreview()"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+          <button class="calc-btn" style="flex:1;padding:9px" onclick="presetSave()">💾 Save Presets</button>
+          <span id="preset-msg" style="font-size:11px;color:var(--green);font-weight:600"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price Alerts -->
+    <div>
+      <div class="sec-label">Price Alerts <span class="premium-badge">PRO</span></div>
+      <div class="card" style="padding:16px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Get an email when spot hits your target. Checked every 15 min while you&#39;re logged in.</div>
+        <div class="igrid">
+          <div>
+            <div class="ig-label">Metal</div>
+            <select class="ig-select" id="alert-metal">
+              <option value="XAU">Gold ($/oz)</option>
+              <option value="XAG">Silver ($/oz)</option>
+              <option value="HG">Copper ($/lb)</option>
+              <option value="XPT">Platinum ($/oz)</option>
+              <option value="XPD">Palladium ($/oz)</option>
+            </select>
+          </div>
+          <div>
+            <div class="ig-label">Direction</div>
+            <select class="ig-select" id="alert-dir">
+              <option value="above">Rises Above</option>
+              <option value="below">Falls Below</option>
+            </select>
+          </div>
+          <div><div class="ig-label">Target Price ($)</div><input class="ig-input" id="alert-price" type="number" placeholder="e.g. 3500"></div>
+          <div style="display:flex;align-items:flex-end">
+            <button class="calc-btn" style="width:100%;padding:9px" onclick="alertAdd()">+ Add Alert</button>
+          </div>
+        </div>
+        <div id="alert-list" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+  </div>
+
   <!-- ROW 2: Inventory full width -->
   <div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
@@ -1085,7 +1140,21 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div><div class="ig-label">Item Name</div><input class="ig-input" id="inv-name" placeholder="e.g. Morgan Dollar"></div>
           <div><div class="ig-label">Qty</div><input class="ig-input" id="inv-qty" type="number" value="1"></div>
           <div><div class="ig-label">Paid Each ($)</div><input class="ig-input" id="inv-cost" type="number" placeholder="0.00"></div>
-          <div><div class="ig-label">Type</div><select class="ig-select" id="inv-type"><option value="silver">Silver Coin</option><option value="gold">Gold Coin/Bar</option><option value="bullion">Silver Bullion</option><option value="other">Other</option></select></div>
+          <div><div class="ig-label">Type</div><select class="ig-select" id="inv-type">
+            <option value="silver_coin">Silver Coin (0.7234 oz/face $)</option>
+            <option value="morgan">Morgan/Peace Dollar (0.77344 oz)</option>
+            <option value="silver_eagle">Silver Eagle (1 oz)</option>
+            <option value="gold_eagle_1oz">Gold Eagle 1 oz</option>
+            <option value="gold_eagle_half">Gold Eagle ½ oz</option>
+            <option value="gold_eagle_qtr">Gold Eagle ¼ oz</option>
+            <option value="gold_eagle_tenth">Gold Eagle 1/10 oz</option>
+            <option value="gold_buffalo">Gold Buffalo 1 oz</option>
+            <option value="gold_bar">Gold Bar (troy oz)</option>
+            <option value="silver_bar">Silver Bar (troy oz)</option>
+            <option value="silver_bullion">Silver Bullion (oz)</option>
+            <option value="copper_penny">Copper Penny (pre-1983)</option>
+            <option value="other">Other / No Melt</option>
+          </select></div>
         </div>
         <div style="display:flex;gap:7px">
           <button class="calc-btn" style="flex:1;padding:9px" onclick="invSave()">Save Item</button>
@@ -1093,7 +1162,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         </div>
       </div>
       <div class="card">
-        <div class="tbl-wrap"><table class="dtable" id="inv-table"><thead><tr><th>Item</th><th>Qty</th><th>Cost/ea</th><th>Total</th><th>P&L</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+        <div class="tbl-wrap"><table class="dtable" id="inv-table"><thead><tr><th>Item</th><th>Qty</th><th>Cost/ea</th><th>Total</th><th>Melt Value</th><th>P&L</th><th></th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
         <div id="inv-summary" style="padding:10px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)"></div>
       </div>
     </div>
@@ -1102,7 +1171,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div id="inv-section-slabs" style="display:none">
       <div style="display:flex;justify-content:flex-end;gap:7px;margin-bottom:8px;flex-wrap:wrap">
         <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="slabAdd()">+ Add Slab</button>
-        <button class="ts-btn" onclick="exportSlabCSV()">⬇ Export CSV</button>
+        <button class="ts-btn" onclick="exportSlabCSV()">⬇ CSV</button>
+        <button class="ts-btn" onclick="printSlabReport()">🖨 Print Report</button>
         <button class="ts-btn" style="border-color:var(--red);color:var(--red)" onclick="clearSlabs()">🗑 Clear All</button>
       </div>
       <div class="inv-form-card" id="slab-form">
@@ -1242,7 +1312,7 @@ async function loadSpot(){
   updateHeroPrices();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
   renderKaratTable();renderSilverMeltTable();renderConstRefTable();renderPennyRefTable();
-  renderInventory();renderSlabs();tsSyncSpot();
+  renderInventory();renderSlabs();presetLoad();tsSyncSpot();
 }
 function setHdr(id,d,perLb=false){
   const el=$(id);if(!el)return;
@@ -1309,7 +1379,7 @@ function showTab(id){
   if(id==='numismatic'){renderAllKeyDates();}
   if(id==='trading'){tsLoadFromStorage();tsSyncSpot();}
   if(id==='typeset'){tsRenderSet(tsCurrentSet);tsUpdateOverall();}
-  if(id==='admin'){renderInventory();renderSlabs();}
+  if(id==='admin'){renderInventory();renderSlabs();renderAlerts();presetLoad();}
 }
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','rolls','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
@@ -3600,6 +3670,14 @@ async function cloudPull(){
       if(Object.keys(d.typesets).length>0){
         localStorage.setItem('bdp_typesets',JSON.stringify(d.typesets));
       }
+      if(d.presets&&Object.keys(d.presets).length>0){
+        localStorage.setItem('bdp-presets',JSON.stringify(d.presets));
+        presetLoad();
+      }
+      if(d.alerts&&d.alerts.length>0){
+        priceAlerts=d.alerts;
+        localStorage.setItem('bdp-alerts',JSON.stringify(priceAlerts));
+      }
     }
     syncEnabled=true;
     renderInventory();renderSlabs();
@@ -3614,7 +3692,9 @@ async function cloudPush(immediate=false){
     try{
       showSyncBadge('⏫ Saving…');
       const typesets=tsLoadChecks();
-      await fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inventory,slabs,typesets})});
+      const presets=JSON.parse(localStorage.getItem('bdp-presets')||'{}');
+      const alerts=JSON.parse(localStorage.getItem('bdp-alerts')||'[]');
+      await fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inventory,slabs,typesets,presets,alerts})});
       showSyncBadge('✅ Synced');
     }catch(e){showSyncBadge('⚠ Sync error');}
   }, immediate?0:1500);
@@ -3647,15 +3727,39 @@ function invSave(){
 }
 function invDel(i){inventory.splice(i,1);localStorage.setItem('bdp-inv',JSON.stringify(inventory));renderInventory();cloudPush();}
 function clearInv(){if(!confirm('Clear all inventory?'))return;inventory=[];localStorage.setItem('bdp-inv','[]');renderInventory();cloudPush();}
+function invMeltVal(item){
+  const ag=spot.XAG||0, au=spot.XAU||0, cu=spot.HG||0;
+  const q=item.qty||1;
+  switch(item.type){
+    case'silver_coin':   return ag*0.7234*q;   // per $1 face
+    case'morgan':        return ag*0.77344*q;
+    case'silver_eagle':  return ag*1.0*q;
+    case'gold_eagle_1oz':return au*1.0*q;
+    case'gold_eagle_half':return au*0.5*q;
+    case'gold_eagle_qtr':return au*0.25*q;
+    case'gold_eagle_tenth':return au*0.1*q;
+    case'gold_buffalo':  return au*1.0*q;
+    case'gold_bar':      return au*(item.qty||1); // qty = troy oz
+    case'silver_bar':    return ag*(item.qty||1);
+    case'silver_bullion':return ag*(item.qty||1);
+    case'copper_penny':  return cu*0.00220462262*3.11*0.95*q;
+    default: return 0;
+  }
+}
 function renderInventory(){
   const tb=$('inv-tbody');if(!tb)return;
-  if(!inventory.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:22px">No items yet</td></tr>';$('inv-summary').textContent='';return;}
-  let totalCost=0;
+  if(!inventory.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:22px">No items yet</td></tr>';$('inv-summary').textContent='';return;}
+  let totalCost=0,totalMelt=0;
   tb.innerHTML=inventory.map((item,i)=>{
     const cost=item.qty*item.cost;totalCost+=cost;
-    return`<tr><td style="font-weight:600">${item.name}</td><td>${item.qty}</td><td class="price-col">${fmt(item.cost)}</td><td class="price-col">${fmt(cost)}</td><td class="p-col">—</td><td><button onclick="invDel(${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td></tr>`;
+    const melt=invMeltVal(item);totalMelt+=melt;
+    const meltStr=melt>0?`<span style="color:var(--gold);font-weight:600">${fmt(melt)}</span>`:'<span style="color:var(--muted)">—</span>';
+    const pl=melt>0?melt-cost:0;
+    const plStr=melt>0?`<span style="color:${pl>=0?'var(--green)':'var(--red)';font-weight:600}">${pl>=0?'+':''}${fmt(pl)}</span>`:'<span style="color:var(--muted)">—</span>';
+    return\`<tr><td style="font-weight:600">\${item.name}</td><td>\${item.qty}</td><td class="price-col">\${fmt(item.cost)}</td><td class="price-col">\${fmt(cost)}</td><td>\${meltStr}</td><td>\${plStr}</td><td><button onclick="invDel(\${i})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></td></tr>\`;
   }).join('');
-  $('inv-summary').textContent=inventory.length+' items · Total cost: '+fmt(totalCost);
+  const plTot=totalMelt-totalCost;
+  $('inv-summary').innerHTML=inventory.length+' items · Cost: <strong>'+fmt(totalCost)+'</strong> · Melt: <strong style="color:var(--gold)">'+fmt(totalMelt)+'</strong>'+(totalMelt>0?' · P&L: <strong style="color:'+(plTot>=0?'var(--green)':'var(--red)')+'">'+  (plTot>=0?'+':'')+fmt(plTot)+'</strong>':'');
 }
 
 // ── Graded Slabs ──
@@ -3734,6 +3838,146 @@ function renderSlabs(){
   const totalPL=totalValue2-totalCost2;
   const plColor=totalPL>0?'var(--green)':totalPL<0?'var(--red)':'var(--muted)';
   $('slab-summary').innerHTML=`${filtered.length}${q?' matching':''} of ${slabs.length} slabs · Total paid: <strong>${fmt(totalCost2)}</strong> · Est. value: <strong style="color:var(--gold)">${fmt(totalValue2)}</strong> · P&L: <strong style="color:${plColor}">${totalPL>=0?'+':''}${fmt(totalPL)}</strong>`;
+}
+
+// ═══ DEALER PRESETS ═══
+function presetLoad(){
+  const p=JSON.parse(localStorage.getItem('bdp-presets')||'{}');
+  if(p.agBuy!=null){const el=$('deal-buy-pct');if(el)el.value=p.agBuy;}
+  if(p.agSell!=null){const el=$('deal-sell-pct');if(el)el.value=p.agSell;}
+  if($('preset-ag-buy'))$('preset-ag-buy').value=p.agBuy||'';
+  if($('preset-ag-sell'))$('preset-ag-sell').value=p.agSell||'';
+  if($('preset-au-buy'))$('preset-au-buy').value=p.auBuy||'';
+  if($('preset-au-sell'))$('preset-au-sell').value=p.auSell||'';
+}
+function presetSave(){
+  const p={
+    agBuy:parseFloat($('preset-ag-buy').value)||null,
+    agSell:parseFloat($('preset-ag-sell').value)||null,
+    auBuy:parseFloat($('preset-au-buy').value)||null,
+    auSell:parseFloat($('preset-au-sell').value)||null,
+  };
+  localStorage.setItem('bdp-presets',JSON.stringify(p));
+  presetLoad();
+  const msg=$('preset-msg');msg.textContent='✅ Saved!';setTimeout(()=>msg.textContent='',2500);
+  cloudPush();
+}
+function presetPreview(){}
+
+// ═══ PRICE ALERTS ═══
+let priceAlerts=JSON.parse(localStorage.getItem('bdp-alerts')||'[]');
+const metalNames={XAU:'Gold',XAG:'Silver',HG:'Copper',XPT:'Platinum',XPD:'Palladium'};
+
+function alertAdd(){
+  const metal=$('alert-metal').value;
+  const dir=$('alert-dir').value;
+  const price=parseFloat($('alert-price').value);
+  if(!price||price<=0)return alert('Enter a valid target price');
+  priceAlerts.push({metal,dir,price,triggered:false,id:Date.now()});
+  localStorage.setItem('bdp-alerts',JSON.stringify(priceAlerts));
+  $('alert-price').value='';
+  renderAlerts();
+}
+function alertDel(id){
+  priceAlerts=priceAlerts.filter(a=>a.id!==id);
+  localStorage.setItem('bdp-alerts',JSON.stringify(priceAlerts));
+  renderAlerts();
+}
+function renderAlerts(){
+  const el=$('alert-list');if(!el)return;
+  if(!priceAlerts.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px">No alerts set</div>';return;}
+  el.innerHTML=priceAlerts.map(a=>{
+    const cur=spot[a.metal]||0;
+    const triggered=a.dir==='above'?cur>=a.price:cur<=a.price;
+    const status=triggered?'<span style="color:var(--green);font-weight:700">🔔 HIT</span>':'<span style="color:var(--muted)">⏳ Watching</span>';
+    return`<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap">
+      <div style="font-size:13px;font-weight:600">${metalNames[a.metal]} ${a.dir==='above'?'↑ above':'↓ below'} ${fmt(a.price)}</div>
+      <div style="display:flex;align-items:center;gap:8px">${status}<button onclick="alertDel(${a.id})" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:2px 7px;border-radius:4px;cursor:pointer;font-size:10px">✕</button></div>
+    </div>`;
+  }).join('');
+}
+function checkAlerts(){
+  if(!priceAlerts.length)return;
+  priceAlerts.forEach(a=>{
+    if(a.triggered)return;
+    const cur=spot[a.metal]||0;if(!cur)return;
+    const hit=a.dir==='above'?cur>=a.price:cur<=a.price;
+    if(hit){
+      a.triggered=true;
+      alert(`🔔 Price Alert: ${metalNames[a.metal]} has ${a.dir==='above'?'risen above':'fallen below'} your target of ${fmt(a.price)}!\nCurrent price: ${fmt(cur)}`);
+      localStorage.setItem('bdp-alerts',JSON.stringify(priceAlerts));
+      renderAlerts();
+    }
+  });
+}
+setInterval(checkAlerts,900000); // check every 15 min
+
+// ═══ PRINT REPORT ═══
+function printSlabReport(){
+  if(!slabs.length)return alert('No slabs to print');
+  const d=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const auPrice=spot.XAU?fmt(spot.XAU):'—';
+  const agPrice=spot.XAG?fmt(spot.XAG):'—';
+  let totalCost=0,totalVal=0;
+  const svcColors={PCGS:'#003087',NGC:'#2563eb',CAC:'#16a34a',ANACS:'#b45309',ICG:'#7c3aed',Raw:'#6b7280'};
+  const rows=slabs.map(s=>{
+    totalCost+=s.cost||0;totalVal+=s.value||0;
+    const pl=(s.value||0)-(s.cost||0);
+    const mm=s.mint?`-${s.mint}`:'';
+    const cacLabel=s.cac==='green'?'Green ✅':s.cac==='gold'?'Gold ⭐':'—';
+    return`<tr>
+      <td><strong>${s.name}</strong></td>
+      <td>${s.year||'—'}${mm}</td>
+      <td><span style="background:${svcColors[s.svc]||'#666'};color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${s.svc}</span></td>
+      <td><strong>${s.grade}</strong></td>
+      <td>${cacLabel}</td>
+      <td>${s.cert||'—'}</td>
+      <td>$${(s.cost||0).toFixed(2)}</td>
+      <td>$${(s.value||0).toFixed(2)}</td>
+      <td style="color:${pl>=0?'#16a34a':'#dc2626'};font-weight:700">${pl>=0?'+':''}$${pl.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+  const totalPL=totalVal-totalCost;
+  const w=window.open('','_blank','width=900,height=700');
+  w.document.write(`<!DOCTYPE html><html><head><title>Graded Coin Collection Report</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;padding:32px;color:#111;font-size:13px}
+    h1{font-size:22px;font-weight:800;margin-bottom:4px}
+    .subtitle{color:#555;font-size:13px;margin-bottom:20px}
+    .meta{display:flex;gap:32px;margin-bottom:24px;padding:12px 16px;background:#f8f9fa;border-radius:8px;border:1px solid #e5e7eb}
+    .meta-item{text-align:center}
+    .meta-label{font-size:10px;font-weight:700;letter-spacing:1px;color:#888;text-transform:uppercase}
+    .meta-value{font-size:16px;font-weight:800;color:#111;margin-top:2px}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th{background:#1e3a5f;color:#fff;padding:8px 10px;font-size:11px;font-weight:700;text-align:left;letter-spacing:.5px}
+    td{padding:7px 10px;border-bottom:1px solid #e5e7eb;vertical-align:middle}
+    tr:nth-child(even) td{background:#f9fafb}
+    .totals{margin-top:20px;padding:14px 16px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;display:flex;gap:32px;flex-wrap:wrap}
+    .tot-item{text-align:center}
+    .tot-label{font-size:10px;font-weight:700;letter-spacing:1px;color:#555;text-transform:uppercase}
+    .tot-val{font-size:18px;font-weight:800;margin-top:2px}
+    .footer{margin-top:28px;font-size:11px;color:#999;text-align:center;border-top:1px solid #e5e7eb;padding-top:12px}
+    @media print{body{padding:20px}.footer{position:fixed;bottom:0;width:100%}}
+  </style></head><body>
+  <h1>🏅 Graded Coin Collection Report</h1>
+  <div class="subtitle">Spot Prices &amp; Dealer Tools &nbsp;·&nbsp; ${d}</div>
+  <div class="meta">
+    <div class="meta-item"><div class="meta-label">Total Slabs</div><div class="meta-value">${slabs.length}</div></div>
+    <div class="meta-item"><div class="meta-label">Total Paid</div><div class="meta-value">$${totalCost.toFixed(2)}</div></div>
+    <div class="meta-item"><div class="meta-label">Est. Value</div><div class="meta-value" style="color:#d97706">$${totalVal.toFixed(2)}</div></div>
+    <div class="meta-item"><div class="meta-label">Overall P&amp;L</div><div class="meta-value" style="color:${totalPL>=0?'#16a34a':'#dc2626'}">${totalPL>=0?'+':''}$${totalPL.toFixed(2)}</div></div>
+    <div class="meta-item"><div class="meta-label">Gold Spot</div><div class="meta-value">${auPrice}</div></div>
+    <div class="meta-item"><div class="meta-label">Silver Spot</div><div class="meta-value">${agPrice}</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Coin</th><th>Year/MM</th><th>Service</th><th>Grade</th><th>CAC</th><th>Cert #</th><th>Paid</th><th>Est. Value</th><th>P&amp;L</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="footer">Generated by Spot Prices &amp; Dealer Tools · bulliondealerpro.com · ${d}</div>
+  <script>window.onload=()=>window.print();<\/script>
+  </body></html>`);
+  w.document.close();
 }
 
 // ═══ INIT ═══
