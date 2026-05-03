@@ -42,6 +42,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;gap:12px}
 .logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text);text-decoration:none;flex-shrink:0;max-width:220px}
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
+.tts{background:linear-gradient(135deg,#1e3a5f,#2563eb)}
 .logo-name{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--text);white-space:nowrap;line-height:1.1}
 .logo-name span.logo-short{display:none}
 .logo-name span.logo-full{display:inline}
@@ -250,6 +251,17 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .fx-dropdown{background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 11px;font-family:'Inter',sans-serif;font-size:13px;outline:none;min-width:220px;cursor:pointer;width:100%}
 .fx-search{background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 11px;font-family:'Inter',sans-serif;font-size:13px;outline:none;width:100%;transition:border-color .2s}
 .fx-search:focus{border-color:var(--blue)}
+.ts-coin-card{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card-bg);border:1px solid var(--border);border-radius:9px;cursor:pointer;transition:all .15s;user-select:none}
+.ts-coin-card:hover{border-color:#2563eb;background:var(--gold3)}
+.ts-coin-card.owned{background:linear-gradient(135deg,#14532d22,#16a34a22);border-color:#16a34a}
+.ts-coin-card.owned .ts-coin-name{color:var(--green)}
+.ts-coin-name{font-weight:700;font-size:13px;line-height:1.2}
+.ts-coin-years{font-size:11px;color:var(--muted);margin-top:2px}
+.ts-coin-note{font-size:10px;color:var(--muted);margin-top:1px;font-style:italic}
+.ts-chk{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:13px}
+.ts-coin-card.owned .ts-chk{background:#16a34a;border-color:#16a34a;color:#fff}
+.ts-section-head{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.ts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:18px}
 .fx-top-card{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .18s;justify-content:space-between}
 .fx-top-card:hover{border-color:var(--gold);background:var(--gold3)}
 .fx-amt{width:90px;background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--gold);padding:8px 9px;font-size:14px;font-weight:700;text-align:right;outline:none;font-family:'Inter',sans-serif}
@@ -363,6 +375,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="tab tnm" onclick="showTab('numismatic')" data-pro="1"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
     <button class="tab tfx" onclick="showTab('fx')" data-pro="1"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
     <button class="tab ttv" onclick="showTab('trading')" data-pro="1"><span class="ticon">📺</span><div>Trading Sheet<span class="tsub">TV Display Mode</span></div></button>
+    <button class="tab tts" onclick="showTab('typeset')" data-pro="1"><span class="ticon">📋</span><div>Type Sets<span class="tsub">Collection Tracker</span></div></button>
     <button class="tab ta" onclick="showTab('admin')"><span class="ticon">🔐</span><div>Admin<span class="tsub">Account · Inventory</span></div></button>
   </div>
 </div>
@@ -900,6 +913,51 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   </div>
 </div>
 
+<!-- ═══════════════════ TYPE SETS TAB ═══════════════════ -->
+<div id="tab-typeset" class="section">
+  <div class="sec-hero" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
+    <div><div class="sh-title">Collection Type Sets</div><div class="sh-sub">Track your progress across 12 popular sets · Checkboxes save automatically</div><div class="sh-chips"><span class="sh-chip">📋 12 Sets</span><span class="sh-chip">✅ Progress Tracking</span><span class="sh-chip">💾 Auto-Save</span></div></div>
+    <div class="price-box" style="min-width:110px"><div class="pb-label">Total Progress</div><div class="pb-price" id="ts-overall-pct" style="font-size:24px">0%</div><div class="pb-chg" id="ts-overall-count">0 / 0 coins</div></div>
+  </div>
+
+  <!-- Set Selector -->
+  <div class="sub-nav" style="flex-wrap:wrap;gap:4px;padding:8px 12px" id="ts-set-nav">
+    <button class="seg active" onclick="tsShowSet('20th',this)">20th C. Type</button>
+    <button class="seg" onclick="tsShowSet('lincoln',this)">Lincoln Cents</button>
+    <button class="seg" onclick="tsShowSet('morgan',this)">Morgan $</button>
+    <button class="seg" onclick="tsShowSet('peace',this)">Peace $</button>
+    <button class="seg" onclick="tsShowSet('mercury',this)">Mercury Dimes</button>
+    <button class="seg" onclick="tsShowSet('walkliberty',this)">Walking Liberty ½</button>
+    <button class="seg" onclick="tsShowSet('slq',this)">Standing Liberty ¼</button>
+    <button class="seg" onclick="tsShowSet('buffalo',this)">Buffalo Nickels</button>
+    <button class="seg" onclick="tsShowSet('barber',this)">Barber Series</button>
+    <button class="seg" onclick="tsShowSet('silver90',this)">90% Type Set</button>
+    <button class="seg" onclick="tsShowSet('statequarters',this)">State Quarters</button>
+    <button class="seg" onclick="tsShowSet('ase',this)">Silver Eagles</button>
+  </div>
+
+  <!-- Progress bar -->
+  <div style="padding:0 12px 8px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span style="font-size:12px;font-weight:700;color:var(--text)" id="ts-set-title">20th Century Type Set</span>
+      <span style="font-size:12px;color:var(--muted)" id="ts-set-progress">0 / 0</span>
+    </div>
+    <div style="background:var(--border);border-radius:8px;height:8px;overflow:hidden">
+      <div id="ts-progress-bar" style="height:100%;background:linear-gradient(90deg,#2563eb,#7c3aed);border-radius:8px;transition:width .4s;width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div style="padding:0 12px 10px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px" onclick="tsCheckAll()">✅ Check All</button>
+    <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="tsClearAll()">☐ Clear All</button>
+    <button class="calc-btn" style="width:auto;padding:7px 14px;font-size:12px;background:transparent;color:var(--muted);border:1px solid var(--border)" onclick="tsResetAll()">🗑 Reset All Sets</button>
+  </div>
+
+  <!-- Coin grid -->
+  <div id="ts-coin-grid" style="padding:0 12px 24px"></div>
+</div>
+
 <!-- ═══════════════════ TRADING SHEET TAB ═══════════════════ -->
 <div id="tab-trading" class="section">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
@@ -1073,7 +1131,7 @@ function updateHeroPrices(){
 }
 
 // ═══ TABS ═══
-const PRO_TABS=['const','fx','trading','numismatic'];
+const PRO_TABS=['const','fx','trading','numismatic','typeset'];
 function showTab(id){
   if(PRO_TABS.includes(id)&&!window_isPro){$('paywall').classList.add('show');return;}
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1087,6 +1145,7 @@ function showTab(id){
   if(id==='pennies'){renderPennyCoinVals();}
   if(id==='numismatic'){renderAllKeyDates();}
   if(id==='trading'){tsLoadFromStorage();tsSyncSpot();}
+  if(id==='typeset'){tsRenderSet(tsCurrentSet);tsUpdateOverall();}
   if(id==='admin')renderInventory();
 }
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
@@ -1905,6 +1964,672 @@ function fxDropdownChange(){
 // ══════════════════════════════════════════════════════════════
 // TRADING SHEET
 // ══════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════════
+// TYPE SET TRACKER
+// ════════════════════════════════════════════════════════════════
+const TS_SETS = {
+  '20th': {
+    title: '20th Century Type Set',
+    desc: 'One example of each major US coin design issued 1900–2000',
+    sections: [
+      { heading: 'Cents', coins: [
+        {id:'ihc',name:'Indian Head Cent',years:'1859–1909',note:'Final year 1909 most common'},
+        {id:'linc_wheat',name:'Lincoln Wheat Cent',years:'1909–1958',note:'Wheat reverse'},
+        {id:'linc_mem',name:'Lincoln Memorial Cent',years:'1959–2008',note:'Memorial reverse'},
+      ]},
+      { heading: 'Nickels', coins: [
+        {id:'lib_nickel',name:'Liberty V Nickel',years:'1883–1912',note:''},
+        {id:'buffalo',name:'Buffalo Nickel',years:'1913–1938',note:'Indian Head / Bison'},
+        {id:'jefferson_war',name:'Jefferson Nickel (War)',years:'1942–1945',note:'35% silver'},
+        {id:'jefferson',name:'Jefferson Nickel',years:'1938–2003',note:''},
+      ]},
+      { heading: 'Dimes', coins: [
+        {id:'barber_dime',name:'Barber Dime',years:'1892–1916',note:''},
+        {id:'mercury_dime',name:'Mercury Dime',years:'1916–1945',note:'90% silver'},
+        {id:'roose_dime',name:'Roosevelt Dime',years:'1946–present',note:'90% silver pre-1965'},
+      ]},
+      { heading: 'Quarters', coins: [
+        {id:'barber_q',name:'Barber Quarter',years:'1892–1916',note:''},
+        {id:'slq',name:'Standing Liberty Quarter',years:'1916–1930',note:'90% silver'},
+        {id:'wash_q',name:'Washington Quarter',years:'1932–present',note:'90% silver pre-1965'},
+      ]},
+      { heading: 'Half Dollars', coins: [
+        {id:'barber_h',name:'Barber Half Dollar',years:'1892–1915',note:''},
+        {id:'walking_lib',name:'Walking Liberty Half',years:'1916–1947',note:'90% silver'},
+        {id:'franklin',name:'Franklin Half Dollar',years:'1948–1963',note:'90% silver'},
+        {id:'kennedy_90',name:'Kennedy Half — 90%',years:'1964',note:'Key — first year'},
+        {id:'kennedy_40',name:'Kennedy Half — 40%',years:'1965–1970',note:'40% silver'},
+        {id:'kennedy_clad',name:'Kennedy Half — Clad',years:'1971–present',note:''},
+      ]},
+      { heading: 'Dollars', coins: [
+        {id:'morgan',name:'Morgan Dollar',years:'1878–1921',note:'90% silver'},
+        {id:'peace',name:'Peace Dollar',years:'1921–1935',note:'90% silver'},
+        {id:'ike',name:'Eisenhower Dollar',years:'1971–1978',note:'40% silver proofs'},
+        {id:'sba',name:'Susan B. Anthony Dollar',years:'1979–1981, 1999',note:''},
+        {id:'sacagawea',name:'Sacagawea Dollar',years:'2000–present',note:''},
+      ]},
+    ]
+  },
+  'lincoln': {
+    title: 'Lincoln Cent Set',
+    desc: 'Major date/mintmark combinations of the Lincoln cent series',
+    sections: [
+      { heading: 'Wheat Cents — Philadelphia', coins: [
+        {id:'lc_1909',name:'1909 VDB',years:'1909',note:'Key date — first year'},
+        {id:'lc_1914',name:'1914',years:'1914-P',note:'Scarce P-mint'},
+        {id:'lc_1922',name:'1922 Plain',years:'1922',note:'No D — weak die'},
+        {id:'lc_1931',name:'1931',years:'1931-P',note:'Low mintage'},
+        {id:'lc_1943_steel',name:'1943 Steel',years:'1943',note:'Wartime steel planchet'},
+        {id:'lc_1944',name:'1944',years:'1944-P',note:'Shell case bronze'},
+        {id:'lc_1955_dbl',name:'1955 Doubled Die',years:'1955',note:'Famous error'},
+        {id:'lc_1958',name:'1958',years:'1958-P',note:'Last wheat cent'},
+      ]},
+      { heading: 'Wheat Cents — Denver', coins: [
+        {id:'lc_1909d',name:'1909-D',years:'1909-D',note:''},
+        {id:'lc_1914d',name:'1914-D',years:'1914-D',note:'Key date'},
+        {id:'lc_1922d',name:'1922-D',years:'1922-D',note:'Normal D-mint'},
+        {id:'lc_1931d',name:'1931-D',years:'1931-D',note:''},
+        {id:'lc_1943d',name:'1943-D Steel',years:'1943-D',note:''},
+      ]},
+      { heading: 'Wheat Cents — San Francisco', coins: [
+        {id:'lc_1909s_vdb',name:'1909-S VDB',years:'1909-S',note:'Rarest wheat cent'},
+        {id:'lc_1909s',name:'1909-S',years:'1909-S',note:'Key date'},
+        {id:'lc_1914s',name:'1914-S',years:'1914-S',note:''},
+        {id:'lc_1924s',name:'1924-S',years:'1924-S',note:'Scarce'},
+        {id:'lc_1931s',name:'1931-S',years:'1931-S',note:'Key date'},
+      ]},
+      { heading: 'Memorial Cents — Key Dates', coins: [
+        {id:'lc_1960s',name:'1960-D Small Date',years:'1960-D',note:'Variety'},
+        {id:'lc_1969s_dbl',name:'1969-S Doubled Die',years:'1969-S',note:'Rare error'},
+        {id:'lc_1972_dbl',name:'1972 Doubled Die',years:'1972',note:'Notable error'},
+        {id:'lc_1983_dbl',name:'1983 Doubled Die Reverse',years:'1983',note:''},
+        {id:'lc_1995_dbl',name:'1995 Doubled Die',years:'1995',note:'Last notable DDO'},
+      ]},
+    ]
+  },
+  'morgan': {
+    title: 'Morgan Dollar Set',
+    desc: 'Complete date/mintmark set 1878–1921',
+    sections: [
+      { heading: 'Philadelphia Mint', coins: [
+        {id:'mo_1878_8tf',name:'1878 8 Tail Feathers',years:'1878',note:'First year, variety'},
+        {id:'mo_1878_7tf',name:'1878 7 Tail Feathers',years:'1878',note:'Variety'},
+        {id:'mo_1879',name:'1879',years:'1879-P',note:''},
+        {id:'mo_1880',name:'1880',years:'1880-P',note:''},
+        {id:'mo_1881',name:'1881',years:'1881-P',note:''},
+        {id:'mo_1882',name:'1882',years:'1882-P',note:''},
+        {id:'mo_1883',name:'1883',years:'1883-P',note:''},
+        {id:'mo_1884',name:'1884',years:'1884-P',note:''},
+        {id:'mo_1885',name:'1885',years:'1885-P',note:''},
+        {id:'mo_1886',name:'1886',years:'1886-P',note:''},
+        {id:'mo_1887',name:'1887',years:'1887-P',note:''},
+        {id:'mo_1888',name:'1888',years:'1888-P',note:''},
+        {id:'mo_1889',name:'1889',years:'1889-P',note:''},
+        {id:'mo_1890',name:'1890',years:'1890-P',note:''},
+        {id:'mo_1891',name:'1891',years:'1891-P',note:''},
+        {id:'mo_1892',name:'1892',years:'1892-P',note:''},
+        {id:'mo_1893',name:'1893',years:'1893-P',note:'Key date'},
+        {id:'mo_1894',name:'1894',years:'1894-P',note:'Key date — rare'},
+        {id:'mo_1895_proof',name:'1895 Proof',years:'1895',note:'Rarest Morgan'},
+        {id:'mo_1896',name:'1896',years:'1896-P',note:''},
+        {id:'mo_1897',name:'1897',years:'1897-P',note:''},
+        {id:'mo_1898',name:'1898',years:'1898-P',note:''},
+        {id:'mo_1899',name:'1899',years:'1899-P',note:'Semi-key'},
+        {id:'mo_1900',name:'1900',years:'1900-P',note:''},
+        {id:'mo_1901',name:'1901',years:'1901-P',note:'Key date'},
+        {id:'mo_1902',name:'1902',years:'1902-P',note:''},
+        {id:'mo_1903',name:'1903',years:'1903-P',note:''},
+        {id:'mo_1904',name:'1904',years:'1904-P',note:''},
+        {id:'mo_1921',name:'1921',years:'1921-P',note:'Last year'},
+      ]},
+      { heading: 'New Orleans Mint', coins: [
+        {id:'mo_1879o',name:'1879-O',years:'1879-O',note:''},
+        {id:'mo_1882o',name:'1882-O',years:'1882-O',note:''},
+        {id:'mo_1884o',name:'1884-O',years:'1884-O',note:'Common date'},
+        {id:'mo_1885o',name:'1885-O',years:'1885-O',note:'Common date'},
+        {id:'mo_1893o',name:'1893-O',years:'1893-O',note:'Key date'},
+        {id:'mo_1894o',name:'1894-O',years:'1894-O',note:'Key date'},
+        {id:'mo_1895o',name:'1895-O',years:'1895-O',note:'Key date'},
+        {id:'mo_1897o',name:'1897-O',years:'1897-O',note:''},
+        {id:'mo_1898o',name:'1898-O',years:'1898-O',note:'Common'},
+        {id:'mo_1900o',name:'1900-O',years:'1900-O',note:''},
+        {id:'mo_1904o',name:'1904-O',years:'1904-O',note:'Common date'},
+      ]},
+      { heading: 'San Francisco Mint', coins: [
+        {id:'mo_1879s',name:'1879-S',years:'1879-S',note:''},
+        {id:'mo_1881s',name:'1881-S',years:'1881-S',note:'Common date'},
+        {id:'mo_1883s',name:'1883-S',years:'1883-S',note:'Key date'},
+        {id:'mo_1884s',name:'1884-S',years:'1884-S',note:'Key date'},
+        {id:'mo_1892s',name:'1892-S',years:'1892-S',note:'Key date'},
+        {id:'mo_1893s',name:'1893-S',years:'1893-S',note:'King of Morgans'},
+        {id:'mo_1894s',name:'1894-S',years:'1894-S',note:''},
+        {id:'mo_1895s',name:'1895-S',years:'1895-S',note:'Key date'},
+        {id:'mo_1901s',name:'1901-S',years:'1901-S',note:''},
+        {id:'mo_1903s',name:'1903-S',years:'1903-S',note:'Key date'},
+        {id:'mo_1904s',name:'1904-S',years:'1904-S',note:''},
+      ]},
+      { heading: 'Carson City Mint', coins: [
+        {id:'mo_1878cc',name:'1878-CC',years:'1878-CC',note:''},
+        {id:'mo_1879cc',name:'1879-CC',years:'1879-CC',note:'Key date'},
+        {id:'mo_1882cc',name:'1882-CC',years:'1882-CC',note:''},
+        {id:'mo_1883cc',name:'1883-CC',years:'1883-CC',note:''},
+        {id:'mo_1884cc',name:'1884-CC',years:'1884-CC',note:''},
+        {id:'mo_1885cc',name:'1885-CC',years:'1885-CC',note:''},
+        {id:'mo_1889cc',name:'1889-CC',years:'1889-CC',note:'Key date'},
+        {id:'mo_1890cc',name:'1890-CC',years:'1890-CC',note:''},
+        {id:'mo_1891cc',name:'1891-CC',years:'1891-CC',note:''},
+        {id:'mo_1892cc',name:'1892-CC',years:'1892-CC',note:''},
+        {id:'mo_1893cc',name:'1893-CC',years:'1893-CC',note:'Key date'},
+      ]},
+    ]
+  },
+  'peace': {
+    title: 'Peace Dollar Set',
+    desc: 'Complete date/mintmark set 1921–1935',
+    sections: [
+      { heading: 'Philadelphia Mint', coins: [
+        {id:'pd_1921',name:'1921',years:'1921-P',note:'Key date — first year'},
+        {id:'pd_1922',name:'1922',years:'1922-P',note:'High relief variety'},
+        {id:'pd_1923',name:'1923',years:'1923-P',note:'Common'},
+        {id:'pd_1924',name:'1924',years:'1924-P',note:''},
+        {id:'pd_1925',name:'1925',years:'1925-P',note:''},
+        {id:'pd_1926',name:'1926',years:'1926-P',note:''},
+        {id:'pd_1927',name:'1927',years:'1927-P',note:'Semi-key'},
+        {id:'pd_1928',name:'1928',years:'1928-P',note:'Key date'},
+        {id:'pd_1934',name:'1934',years:'1934-P',note:''},
+        {id:'pd_1935',name:'1935',years:'1935-P',note:'Last year'},
+      ]},
+      { heading: 'San Francisco Mint', coins: [
+        {id:'pd_1922s',name:'1922-S',years:'1922-S',note:''},
+        {id:'pd_1923s',name:'1923-S',years:'1923-S',note:''},
+        {id:'pd_1924s',name:'1924-S',years:'1924-S',note:''},
+        {id:'pd_1925s',name:'1925-S',years:'1925-S',note:''},
+        {id:'pd_1926s',name:'1926-S',years:'1926-S',note:''},
+        {id:'pd_1927s',name:'1927-S',years:'1927-S',note:''},
+        {id:'pd_1928s',name:'1928-S',years:'1928-S',note:''},
+        {id:'pd_1934s',name:'1934-S',years:'1934-S',note:'Key date'},
+        {id:'pd_1935s',name:'1935-S',years:'1935-S',note:''},
+      ]},
+      { heading: 'Denver Mint', coins: [
+        {id:'pd_1922d',name:'1922-D',years:'1922-D',note:''},
+        {id:'pd_1923d',name:'1923-D',years:'1923-D',note:'Semi-key'},
+        {id:'pd_1925d',name:'1925-D',years:'1925-D',note:''},
+        {id:'pd_1926d',name:'1926-D',years:'1926-D',note:''},
+        {id:'pd_1927d',name:'1927-D',years:'1927-D',note:'Key date'},
+        {id:'pd_1928d',name:'1928-D',years:'1928-D',note:''},
+        {id:'pd_1934d',name:'1934-D',years:'1934-D',note:''},
+        {id:'pd_1935d',name:'1935-D',years:'1935-D',note:''},
+      ]},
+    ]
+  },
+  'mercury': {
+    title: 'Mercury Dime Set',
+    desc: 'Complete date/mintmark set 1916–1945 — all 90% silver',
+    sections: [
+      { heading: 'Key Dates & Semi-Keys', coins: [
+        {id:'md_1916d',name:'1916-D',years:'1916-D',note:'King of Mercury Dimes'},
+        {id:'md_1921',name:'1921',years:'1921-P',note:'Key date'},
+        {id:'md_1921d',name:'1921-D',years:'1921-D',note:'Key date'},
+        {id:'md_1926s',name:'1926-S',years:'1926-S',note:'Key date'},
+        {id:'md_1931d',name:'1931-D',years:'1931-D',note:'Semi-key'},
+        {id:'md_1931s',name:'1931-S',years:'1931-S',note:'Semi-key'},
+        {id:'md_1942_41',name:'1942/41 DDO',years:'1942/41',note:'Famous overdate error'},
+      ]},
+      { heading: 'Philadelphia Mint', coins: [
+        {id:'md_1916',name:'1916-P',years:'1916-P',note:'First year'},
+        {id:'md_1917',name:'1917-P',years:'1917-P',note:''},
+        {id:'md_1918',name:'1918-P',years:'1918-P',note:''},
+        {id:'md_1919',name:'1919-P',years:'1919-P',note:''},
+        {id:'md_1920',name:'1920-P',years:'1920-P',note:''},
+        {id:'md_1923',name:'1923-P',years:'1923-P',note:''},
+        {id:'md_1924',name:'1924-P',years:'1924-P',note:''},
+        {id:'md_1925',name:'1925-P',years:'1925-P',note:''},
+        {id:'md_1930',name:'1930-P',years:'1930-P',note:''},
+        {id:'md_1935',name:'1935-P',years:'1935-P',note:''},
+        {id:'md_1940',name:'1940-P',years:'1940-P',note:''},
+        {id:'md_1945',name:'1945-P',years:'1945-P',note:'Last year'},
+      ]},
+      { heading: 'Denver & San Francisco', coins: [
+        {id:'md_1917d',name:'1917-D',years:'1917-D',note:''},
+        {id:'md_1920d',name:'1920-D',years:'1920-D',note:''},
+        {id:'md_1925d',name:'1925-D',years:'1925-D',note:''},
+        {id:'md_1935d',name:'1935-D',years:'1935-D',note:''},
+        {id:'md_1942d',name:'1942-D',years:'1942-D',note:''},
+        {id:'md_1917s',name:'1917-S',years:'1917-S',note:''},
+        {id:'md_1920s',name:'1920-S',years:'1920-S',note:''},
+        {id:'md_1923s',name:'1923-S',years:'1923-S',note:''},
+        {id:'md_1927s',name:'1927-S',years:'1927-S',note:''},
+        {id:'md_1934s',name:'1934-S',years:'1934-S',note:''},
+        {id:'md_1945s',name:'1945-S',years:'1945-S',note:'Micro-S variety'},
+      ]},
+    ]
+  },
+  'walkliberty': {
+    title: 'Walking Liberty Half Dollar Set',
+    desc: 'Complete date/mintmark set 1916–1947 — all 90% silver',
+    sections: [
+      { heading: 'Key & Semi-Key Dates', coins: [
+        {id:'wlh_1916',name:'1916-P',years:'1916',note:'First year — key date'},
+        {id:'wlh_1916d_obv',name:'1916-D Obverse',years:'1916-D',note:'D on obverse — key'},
+        {id:'wlh_1916s',name:'1916-S',years:'1916-S',note:'Key date'},
+        {id:'wlh_1917d_obv',name:'1917-D Obverse',years:'1917-D',note:'D on obverse'},
+        {id:'wlh_1917s_obv',name:'1917-S Obverse',years:'1917-S',note:'S on obverse'},
+        {id:'wlh_1919',name:'1919-P',years:'1919',note:'Semi-key'},
+        {id:'wlh_1919d',name:'1919-D',years:'1919-D',note:'Key date'},
+        {id:'wlh_1919s',name:'1919-S',years:'1919-S',note:'Key date'},
+        {id:'wlh_1921',name:'1921-P',years:'1921',note:'Key date'},
+        {id:'wlh_1921d',name:'1921-D',years:'1921-D',note:'Key date'},
+        {id:'wlh_1921s',name:'1921-S',years:'1921-S',note:'Key date'},
+        {id:'wlh_1938d',name:'1938-D',years:'1938-D',note:'Key date — lowest mintage'},
+      ]},
+      { heading: 'Philadelphia — Common Dates', coins: [
+        {id:'wlh_1917',name:'1917-P',years:'1917',note:''},
+        {id:'wlh_1918',name:'1918-P',years:'1918',note:''},
+        {id:'wlh_1920',name:'1920-P',years:'1920',note:''},
+        {id:'wlh_1941',name:'1941-P',years:'1941',note:''},
+        {id:'wlh_1942',name:'1942-P',years:'1942',note:''},
+        {id:'wlh_1943',name:'1943-P',years:'1943',note:''},
+        {id:'wlh_1945',name:'1945-P',years:'1945',note:''},
+        {id:'wlh_1946',name:'1946-P',years:'1946',note:''},
+        {id:'wlh_1947',name:'1947-P',years:'1947',note:'Last year'},
+      ]},
+      { heading: 'Denver & San Francisco', coins: [
+        {id:'wlh_1917d_rev',name:'1917-D Reverse',years:'1917-D',note:'D on reverse'},
+        {id:'wlh_1918d',name:'1918-D',years:'1918-D',note:''},
+        {id:'wlh_1920d',name:'1920-D',years:'1920-D',note:''},
+        {id:'wlh_1941d',name:'1941-D',years:'1941-D',note:''},
+        {id:'wlh_1942d',name:'1942-D',years:'1942-D',note:''},
+        {id:'wlh_1917s_rev',name:'1917-S Reverse',years:'1917-S',note:'S on reverse'},
+        {id:'wlh_1918s',name:'1918-S',years:'1918-S',note:''},
+        {id:'wlh_1923s',name:'1923-S',years:'1923-S',note:'Semi-key'},
+        {id:'wlh_1927s',name:'1927-S',years:'1927-S',note:'Semi-key'},
+        {id:'wlh_1941s',name:'1941-S',years:'1941-S',note:''},
+        {id:'wlh_1942s',name:'1942-S',years:'1942-S',note:''},
+        {id:'wlh_1943s',name:'1943-S',years:'1943-S',note:''},
+        {id:'wlh_1945d',name:'1945-D',years:'1945-D',note:''},
+        {id:'wlh_1946d',name:'1946-D',years:'1946-D',note:''},
+        {id:'wlh_1947d',name:'1947-D',years:'1947-D',note:'Last Denver'},
+      ]},
+    ]
+  },
+  'slq': {
+    title: 'Standing Liberty Quarter Set',
+    desc: 'Complete date/mintmark set 1916–1930 — all 90% silver',
+    sections: [
+      { heading: 'Key Dates', coins: [
+        {id:'slq_1916',name:'1916',years:'1916',note:'Rarest SLQ — key date'},
+        {id:'slq_1918_7',name:'1918/17-D',years:'1918/17-D',note:'Famous overdate'},
+        {id:'slq_1918_7s',name:'1918/17-S',years:'1918/17-S',note:'Overdate S-mint'},
+        {id:'slq_1919d',name:'1919-D',years:'1919-D',note:'Key date'},
+        {id:'slq_1919s',name:'1919-S',years:'1919-S',note:'Key date'},
+        {id:'slq_1921',name:'1921',years:'1921',note:'Key date'},
+        {id:'slq_1923s',name:'1923-S',years:'1923-S',note:'Key date'},
+        {id:'slq_1926s',name:'1926-S',years:'1926-S',note:'Semi-key'},
+        {id:'slq_1927s',name:'1927-S',years:'1927-S',note:'Key date'},
+      ]},
+      { heading: 'Philadelphia Mint', coins: [
+        {id:'slq_1917_t1',name:'1917 Type 1',years:'1917',note:'Bare breast design'},
+        {id:'slq_1917_t2',name:'1917 Type 2',years:'1917',note:'Mail coat design'},
+        {id:'slq_1918',name:'1918',years:'1918-P',note:''},
+        {id:'slq_1919',name:'1919',years:'1919-P',note:''},
+        {id:'slq_1920',name:'1920',years:'1920-P',note:''},
+        {id:'slq_1924',name:'1924',years:'1924-P',note:''},
+        {id:'slq_1925',name:'1925',years:'1925-P',note:''},
+        {id:'slq_1926',name:'1926',years:'1926-P',note:''},
+        {id:'slq_1927',name:'1927',years:'1927-P',note:''},
+        {id:'slq_1928',name:'1928',years:'1928-P',note:''},
+        {id:'slq_1929',name:'1929',years:'1929-P',note:''},
+        {id:'slq_1930',name:'1930',years:'1930-P',note:'Last year'},
+      ]},
+      { heading: 'Denver & San Francisco', coins: [
+        {id:'slq_1917d_t1',name:'1917-D Type 1',years:'1917-D',note:''},
+        {id:'slq_1917d_t2',name:'1917-D Type 2',years:'1917-D',note:''},
+        {id:'slq_1918d',name:'1918-D',years:'1918-D',note:''},
+        {id:'slq_1920d',name:'1920-D',years:'1920-D',note:''},
+        {id:'slq_1917s_t1',name:'1917-S Type 1',years:'1917-S',note:''},
+        {id:'slq_1917s_t2',name:'1917-S Type 2',years:'1917-S',note:''},
+        {id:'slq_1918s',name:'1918-S',years:'1918-S',note:''},
+        {id:'slq_1920s',name:'1920-S',years:'1920-S',note:'Semi-key'},
+        {id:'slq_1924d',name:'1924-D',years:'1924-D',note:''},
+        {id:'slq_1924s',name:'1924-S',years:'1924-S',note:''},
+        {id:'slq_1925d',name:'1925-D',years:'1925-D',note:''},
+        {id:'slq_1930d',name:'1930-D',years:'1930-D',note:''},
+        {id:'slq_1930s',name:'1930-S',years:'1930-S',note:''},
+      ]},
+    ]
+  },
+  'buffalo': {
+    title: 'Buffalo Nickel Set',
+    desc: 'Complete date/mintmark set 1913–1938',
+    sections: [
+      { heading: 'Key & Semi-Key Dates', coins: [
+        {id:'bn_1913_t1',name:'1913 Type 1',years:'1913',note:'Mound reverse'},
+        {id:'bn_1913_t2',name:'1913 Type 2',years:'1913',note:'Plain ground reverse'},
+        {id:'bn_1913s_t2',name:'1913-S Type 2',years:'1913-S',note:'Key date'},
+        {id:'bn_1913d_t2',name:'1913-D Type 2',years:'1913-D',note:'Key date'},
+        {id:'bn_1914',name:'1914',years:'1914-P',note:'Semi-key'},
+        {id:'bn_1916_dbl',name:'1916 Doubled Die',years:'1916',note:'Famous DDO error'},
+        {id:'bn_1918_7d',name:'1918/17-D',years:'1918/17-D',note:'Overdate key'},
+        {id:'bn_1921s',name:'1921-S',years:'1921-S',note:'Semi-key'},
+        {id:'bn_1924s',name:'1924-S',years:'1924-S',note:'Semi-key'},
+        {id:'bn_1926s',name:'1926-S',years:'1926-S',note:'Key date'},
+        {id:'bn_1937d_3leg',name:'1937-D 3-Legged',years:'1937-D',note:'Famous die error'},
+      ]},
+      { heading: 'Philadelphia Mint', coins: [
+        {id:'bn_1914p',name:'1914-P',years:'1914',note:''},
+        {id:'bn_1915',name:'1915-P',years:'1915',note:''},
+        {id:'bn_1918',name:'1918-P',years:'1918',note:''},
+        {id:'bn_1920',name:'1920-P',years:'1920',note:''},
+        {id:'bn_1923',name:'1923-P',years:'1923',note:''},
+        {id:'bn_1925',name:'1925-P',years:'1925',note:''},
+        {id:'bn_1928',name:'1928-P',years:'1928',note:''},
+        {id:'bn_1934',name:'1934-P',years:'1934',note:''},
+        {id:'bn_1936',name:'1936-P',years:'1936',note:''},
+        {id:'bn_1938',name:'1938-P',years:'1938',note:'Last year P-mint'},
+      ]},
+      { heading: 'Denver & San Francisco', coins: [
+        {id:'bn_1913d_t1',name:'1913-D Type 1',years:'1913-D',note:''},
+        {id:'bn_1914d',name:'1914-D',years:'1914-D',note:'Key date'},
+        {id:'bn_1918d',name:'1918-D',years:'1918-D',note:''},
+        {id:'bn_1920d',name:'1920-D',years:'1920-D',note:''},
+        {id:'bn_1936d',name:'1936-D',years:'1936-D',note:''},
+        {id:'bn_1938d',name:'1938-D',years:'1938-D',note:'Last year Denver'},
+        {id:'bn_1917s',name:'1917-S',years:'1917-S',note:''},
+        {id:'bn_1919s',name:'1919-S',years:'1919-S',note:''},
+        {id:'bn_1920s',name:'1920-S',years:'1920-S',note:''},
+        {id:'bn_1923s',name:'1923-S',years:'1923-S',note:''},
+        {id:'bn_1925s',name:'1925-S',years:'1925-S',note:''},
+        {id:'bn_1927s',name:'1927-S',years:'1927-S',note:''},
+      ]},
+    ]
+  },
+  'barber': {
+    title: 'Barber Series Set',
+    desc: 'Barber Dimes, Quarters, and Half Dollars 1892–1916',
+    sections: [
+      { heading: 'Barber Dimes — Key Dates', coins: [
+        {id:'bd_1895o',name:'1895-O Dime',years:'1895-O',note:'Key date'},
+        {id:'bd_1896s',name:'1896-S Dime',years:'1896-S',note:'Key date'},
+        {id:'bd_1901s',name:'1901-S Dime',years:'1901-S',note:'Key date'},
+        {id:'bd_1903s',name:'1903-S Dime',years:'1903-S',note:'Key date'},
+        {id:'bd_1913s',name:'1913-S Dime',years:'1913-S',note:'Key date'},
+        {id:'bd_1916s_d',name:'1916-S Dime',years:'1916-S',note:'Last Barber dime'},
+      ]},
+      { heading: 'Barber Quarters — Key Dates', coins: [
+        {id:'bq_1896s',name:'1896-S Quarter',years:'1896-S',note:'Key date'},
+        {id:'bq_1901s',name:'1901-S Quarter',years:'1901-S',note:'Rarest Barber quarter'},
+        {id:'bq_1913s',name:'1913-S Quarter',years:'1913-S',note:'Key date'},
+        {id:'bq_1914s',name:'1914-S Quarter',years:'1914-S',note:'Key date'},
+        {id:'bq_1896o',name:'1896-O Quarter',years:'1896-O',note:'Semi-key'},
+      ]},
+      { heading: 'Barber Half Dollars — Key Dates', coins: [
+        {id:'bh_1892o',name:'1892-O Half',years:'1892-O',note:'Key date — first year O-mint'},
+        {id:'bh_1892s',name:'1892-S Half',years:'1892-S',note:'Key date'},
+        {id:'bh_1893s',name:'1893-S Half',years:'1893-S',note:'Semi-key'},
+        {id:'bh_1897o',name:'1897-O Half',years:'1897-O',note:'Key date'},
+        {id:'bh_1897s',name:'1897-S Half',years:'1897-S',note:'Key date'},
+        {id:'bh_1914',name:'1914 Half',years:'1914-P',note:'Key date — low mintage'},
+        {id:'bh_1915',name:'1915 Half',years:'1915-P',note:'Last Barber half'},
+      ]},
+      { heading: 'Barber Type Coins (one each)', coins: [
+        {id:'bt_dime',name:'Barber Dime — Type',years:'1892–1916',note:'Any date/mint'},
+        {id:'bt_quarter',name:'Barber Quarter — Type',years:'1892–1916',note:'Any date/mint'},
+        {id:'bt_half',name:'Barber Half — Type',years:'1892–1915',note:'Any date/mint'},
+      ]},
+    ]
+  },
+  'silver90': {
+    title: '90% Silver Type Set',
+    desc: 'One example of each 90% silver US coin type — excellent starter set',
+    sections: [
+      { heading: 'Dimes', coins: [
+        {id:'s90_seated_d',name:'Seated Liberty Dime',years:'1837–1891',note:'90% silver'},
+        {id:'s90_barber_d',name:'Barber Dime',years:'1892–1916',note:'90% silver'},
+        {id:'s90_mercury_d',name:'Mercury Dime',years:'1916–1945',note:'90% silver'},
+        {id:'s90_roose_d',name:'Roosevelt Dime',years:'1946–1964',note:'90% silver pre-1965'},
+      ]},
+      { heading: 'Quarters', coins: [
+        {id:'s90_seated_q',name:'Seated Liberty Quarter',years:'1838–1891',note:'90% silver'},
+        {id:'s90_barber_q',name:'Barber Quarter',years:'1892–1916',note:'90% silver'},
+        {id:'s90_slq',name:'Standing Liberty Quarter',years:'1916–1930',note:'90% silver'},
+        {id:'s90_wash_q',name:'Washington Quarter',years:'1932–1964',note:'90% silver'},
+      ]},
+      { heading: 'Half Dollars', coins: [
+        {id:'s90_seated_h',name:'Seated Liberty Half',years:'1839–1891',note:'90% silver'},
+        {id:'s90_barber_h',name:'Barber Half Dollar',years:'1892–1915',note:'90% silver'},
+        {id:'s90_walking_h',name:'Walking Liberty Half',years:'1916–1947',note:'90% silver'},
+        {id:'s90_franklin',name:'Franklin Half Dollar',years:'1948–1963',note:'90% silver'},
+        {id:'s90_kennedy_64',name:'Kennedy Half 1964',years:'1964',note:'90% silver — first year'},
+      ]},
+      { heading: 'Dollars', coins: [
+        {id:'s90_seated_dol',name:'Seated Liberty Dollar',years:'1840–1873',note:'90% silver'},
+        {id:'s90_trade',name:'Trade Dollar',years:'1873–1885',note:'90% silver'},
+        {id:'s90_morgan',name:'Morgan Dollar',years:'1878–1921',note:'90% silver'},
+        {id:'s90_peace',name:'Peace Dollar',years:'1921–1935',note:'90% silver'},
+      ]},
+      { heading: 'Other Silver Types', coins: [
+        {id:'s90_3cent',name:'3-Cent Silver',years:'1851–1873',note:'75% silver'},
+        {id:'s90_halfime',name:'Half Dime',years:'1794–1873',note:'90% silver'},
+        {id:'s90_20cent',name:'20-Cent Piece',years:'1875–1878',note:'90% silver'},
+        {id:'s90_capped_bust',name:'Capped Bust Half',years:'1807–1839',note:'89.25% silver'},
+        {id:'s90_draped_bust',name:'Draped Bust Dollar',years:'1795–1804',note:'Early silver dollar'},
+      ]},
+    ]
+  },
+  'statequarters': {
+    title: 'State Quarters Set',
+    desc: 'All 50 State Quarters 1999–2008',
+    sections: [
+      { heading: '1999', coins: [
+        {id:'sq_de',name:'Delaware',years:'1999',note:'First State'},
+        {id:'sq_pa',name:'Pennsylvania',years:'1999',note:''},
+        {id:'sq_nj',name:'New Jersey',years:'1999',note:''},
+        {id:'sq_ga',name:'Georgia',years:'1999',note:''},
+        {id:'sq_ct',name:'Connecticut',years:'1999',note:''},
+      ]},
+      { heading: '2000', coins: [
+        {id:'sq_ma',name:'Massachusetts',years:'2000',note:''},
+        {id:'sq_md',name:'Maryland',years:'2000',note:''},
+        {id:'sq_sc',name:'South Carolina',years:'2000',note:''},
+        {id:'sq_nh',name:'New Hampshire',years:'2000',note:''},
+        {id:'sq_va',name:'Virginia',years:'2000',note:''},
+      ]},
+      { heading: '2001', coins: [
+        {id:'sq_ny',name:'New York',years:'2001',note:''},
+        {id:'sq_nc',name:'North Carolina',years:'2001',note:''},
+        {id:'sq_ri',name:'Rhode Island',years:'2001',note:''},
+        {id:'sq_vt',name:'Vermont',years:'2001',note:''},
+        {id:'sq_ky',name:'Kentucky',years:'2001',note:''},
+      ]},
+      { heading: '2002', coins: [
+        {id:'sq_tn',name:'Tennessee',years:'2002',note:''},
+        {id:'sq_oh',name:'Ohio',years:'2002',note:''},
+        {id:'sq_la',name:'Louisiana',years:'2002',note:''},
+        {id:'sq_in',name:'Indiana',years:'2002',note:''},
+        {id:'sq_ms',name:'Mississippi',years:'2002',note:''},
+      ]},
+      { heading: '2003', coins: [
+        {id:'sq_il',name:'Illinois',years:'2003',note:''},
+        {id:'sq_al',name:'Alabama',years:'2003',note:''},
+        {id:'sq_me',name:'Maine',years:'2003',note:''},
+        {id:'sq_mo_q',name:'Missouri',years:'2003',note:''},
+        {id:'sq_ar',name:'Arkansas',years:'2003',note:''},
+      ]},
+      { heading: '2004', coins: [
+        {id:'sq_mi',name:'Michigan',years:'2004',note:''},
+        {id:'sq_fl',name:'Florida',years:'2004',note:''},
+        {id:'sq_tx',name:'Texas',years:'2004',note:''},
+        {id:'sq_ia',name:'Iowa',years:'2004',note:''},
+        {id:'sq_wi',name:'Wisconsin',years:'2004',note:'Extra leaf error'},
+      ]},
+      { heading: '2005', coins: [
+        {id:'sq_ca',name:'California',years:'2005',note:''},
+        {id:'sq_mn',name:'Minnesota',years:'2005',note:''},
+        {id:'sq_or',name:'Oregon',years:'2005',note:''},
+        {id:'sq_ks',name:'Kansas',years:'2005',note:''},
+        {id:'sq_wv',name:'West Virginia',years:'2005',note:''},
+      ]},
+      { heading: '2006', coins: [
+        {id:'sq_nv',name:'Nevada',years:'2006',note:''},
+        {id:'sq_ne',name:'Nebraska',years:'2006',note:''},
+        {id:'sq_co',name:'Colorado',years:'2006',note:''},
+        {id:'sq_nd',name:'North Dakota',years:'2006',note:''},
+        {id:'sq_sd',name:'South Dakota',years:'2006',note:''},
+      ]},
+      { heading: '2007', coins: [
+        {id:'sq_mt',name:'Montana',years:'2007',note:''},
+        {id:'sq_wa',name:'Washington',years:'2007',note:''},
+        {id:'sq_id',name:'Idaho',years:'2007',note:''},
+        {id:'sq_wy',name:'Wyoming',years:'2007',note:''},
+        {id:'sq_ut',name:'Utah',years:'2007',note:''},
+      ]},
+      { heading: '2008', coins: [
+        {id:'sq_ok',name:'Oklahoma',years:'2008',note:''},
+        {id:'sq_nm',name:'New Mexico',years:'2008',note:''},
+        {id:'sq_az',name:'Arizona',years:'2008',note:''},
+        {id:'sq_ak',name:'Alaska',years:'2008',note:''},
+        {id:'sq_hi',name:'Hawaii',years:'2008',note:'Last state quarter'},
+      ]},
+    ]
+  },
+  'ase': {
+    title: 'American Silver Eagle Set',
+    desc: 'Annual issues 1986–present — 1 oz .999 fine silver',
+    sections: [
+      { heading: '1986–1995', coins: [
+        {id:'ase_1986',name:'1986',years:'1986',note:'First year — key'},
+        {id:'ase_1987',name:'1987',years:'1987',note:''},
+        {id:'ase_1988',name:'1988',years:'1988',note:''},
+        {id:'ase_1989',name:'1989',years:'1989',note:''},
+        {id:'ase_1990',name:'1990',years:'1990',note:''},
+        {id:'ase_1991',name:'1991',years:'1991',note:''},
+        {id:'ase_1992',name:'1992',years:'1992',note:''},
+        {id:'ase_1993',name:'1993',years:'1993',note:'Low mintage'},
+        {id:'ase_1994',name:'1994',years:'1994',note:'Key date — low mintage'},
+        {id:'ase_1995',name:'1995',years:'1995',note:''},
+      ]},
+      { heading: '1996–2005', coins: [
+        {id:'ase_1996',name:'1996',years:'1996',note:'Key date — lowest bullion mintage'},
+        {id:'ase_1997',name:'1997',years:'1997',note:''},
+        {id:'ase_1998',name:'1998',years:'1998',note:''},
+        {id:'ase_1999',name:'1999',years:'1999',note:''},
+        {id:'ase_2000',name:'2000',years:'2000',note:''},
+        {id:'ase_2001',name:'2001',years:'2001',note:''},
+        {id:'ase_2002',name:'2002',years:'2002',note:''},
+        {id:'ase_2003',name:'2003',years:'2003',note:''},
+        {id:'ase_2004',name:'2004',years:'2004',note:''},
+        {id:'ase_2005',name:'2005',years:'2005',note:''},
+      ]},
+      { heading: '2006–2015', coins: [
+        {id:'ase_2006',name:'2006',years:'2006',note:'20th anniversary'},
+        {id:'ase_2007',name:'2007',years:'2007',note:''},
+        {id:'ase_2008',name:'2008',years:'2008',note:''},
+        {id:'ase_2009',name:'2009',years:'2009',note:'High mintage year'},
+        {id:'ase_2010',name:'2010',years:'2010',note:''},
+        {id:'ase_2011',name:'2011',years:'2011',note:'25th anniversary'},
+        {id:'ase_2012',name:'2012',years:'2012',note:''},
+        {id:'ase_2013',name:'2013',years:'2013',note:''},
+        {id:'ase_2014',name:'2014',years:'2014',note:''},
+        {id:'ase_2015',name:'2015',years:'2015',note:''},
+      ]},
+      { heading: '2016–2026', coins: [
+        {id:'ase_2016',name:'2016',years:'2016',note:'30th anniversary'},
+        {id:'ase_2017',name:'2017',years:'2017',note:''},
+        {id:'ase_2018',name:'2018',years:'2018',note:''},
+        {id:'ase_2019',name:'2019',years:'2019',note:''},
+        {id:'ase_2020',name:'2020',years:'2020',note:''},
+        {id:'ase_2021_t1',name:'2021 Type 1',years:'2021',note:'Last Adolph Weinman design'},
+        {id:'ase_2021_t2',name:'2021 Type 2',years:'2021',note:'New reverse design'},
+        {id:'ase_2022',name:'2022',years:'2022',note:'New design'},
+        {id:'ase_2023',name:'2023',years:'2023',note:''},
+        {id:'ase_2024',name:'2024',years:'2024',note:''},
+        {id:'ase_2025',name:'2025',years:'2025',note:''},
+        {id:'ase_2026',name:'2026',years:'2026',note:'40th anniversary'},
+      ]},
+    ]
+  },
+};
+
+// ── TypeSet state ──
+let tsCurrentSet = '20th';
+const TS_STORAGE_KEY = 'bdp_typesets';
+
+function tsLoadChecks(){
+  try{return JSON.parse(localStorage.getItem(TS_STORAGE_KEY)||'{}');}catch{return{};}
+}
+function tsSaveChecks(data){
+  localStorage.setItem(TS_STORAGE_KEY, JSON.stringify(data));
+}
+function tsToggleCoin(setKey, coinId){
+  const data=tsLoadChecks();
+  if(!data[setKey])data[setKey]={};
+  data[setKey][coinId]=!data[setKey][coinId];
+  tsSaveChecks(data);
+  tsRenderSet(setKey);
+  tsUpdateOverall();
+}
+function tsShowSet(key, btn){
+  tsCurrentSet=key;
+  document.querySelectorAll('#ts-set-nav .seg').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  tsRenderSet(key);
+}
+function tsRenderSet(key){
+  const set=TS_SETS[key];if(!set)return;
+  const data=tsLoadChecks();
+  const owned=data[key]||{};
+  $('ts-set-title').textContent=set.title;
+  // Count
+  let total=0,have=0;
+  set.sections.forEach(sec=>sec.coins.forEach(c=>{total++;if(owned[c.id])have++;}));
+  $('ts-set-progress').textContent=`${have} / ${total}`;
+  const pct=total?Math.round(have/total*100):0;
+  $('ts-progress-bar').style.width=pct+'%';
+  // Render grid
+  const grid=$('ts-coin-grid');if(!grid)return;
+  grid.innerHTML=set.sections.map(sec=>`
+    <div class="ts-section-head">${sec.heading}</div>
+    <div class="ts-grid">
+      ${sec.coins.map(c=>`
+        <div class="ts-coin-card ${owned[c.id]?'owned':''}" onclick="tsToggleCoin('${key}','${c.id}')">
+          <div class="ts-chk">${owned[c.id]?'✓':''}</div>
+          <div style="flex:1;min-width:0">
+            <div class="ts-coin-name">${c.name}</div>
+            <div class="ts-coin-years">${c.years}</div>
+            ${c.note?`<div class="ts-coin-note">${c.note}</div>`:''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+function tsUpdateOverall(){
+  const data=tsLoadChecks();
+  let total=0,have=0;
+  Object.keys(TS_SETS).forEach(k=>{
+    const owned=data[k]||{};
+    TS_SETS[k].sections.forEach(sec=>sec.coins.forEach(c=>{total++;if(owned[c.id])have++;}));
+  });
+  const pct=total?Math.round(have/total*100):0;
+  $('ts-overall-pct').textContent=pct+'%';
+  $('ts-overall-count').textContent=`${have} / ${total} coins`;
+}
+function tsCheckAll(){
+  const data=tsLoadChecks();if(!data[tsCurrentSet])data[tsCurrentSet]={};
+  TS_SETS[tsCurrentSet].sections.forEach(sec=>sec.coins.forEach(c=>data[tsCurrentSet][c.id]=true));
+  tsSaveChecks(data);tsRenderSet(tsCurrentSet);tsUpdateOverall();
+}
+function tsClearAll(){
+  const data=tsLoadChecks();data[tsCurrentSet]={};
+  tsSaveChecks(data);tsRenderSet(tsCurrentSet);tsUpdateOverall();
+}
+function tsResetAll(){
+  if(!confirm('Reset ALL type sets? This cannot be undone.'))return;
+  localStorage.removeItem(TS_STORAGE_KEY);
+  tsRenderSet(tsCurrentSet);tsUpdateOverall();
+}
+
 let tsRows = [];
 let tsTVWindow = null;
 const TS_KEY = 'bdp_trading_sheet';
@@ -2222,6 +2947,7 @@ async function init(){
   renderAllKeyDates();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
   await loadSpot();
+  tsUpdateOverall();
   await loadNews();
   setInterval(loadSpot,5*60*1000);
   setInterval(loadNews,10*60*1000);
