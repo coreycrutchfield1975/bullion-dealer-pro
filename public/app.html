@@ -686,19 +686,34 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
   <div id="ps-calc">
     <div class="calc-card">
-      <div class="calc-hdr"><div class="calc-title">🧮 Penny Melt Calculator</div></div>
+      <div class="calc-hdr">
+        <div class="calc-title">🧮 Penny Melt Calculator</div>
+        <div class="seg-group">
+          <button class="seg active" id="penny-unit-count" onclick="pennyUnit('count',this)">Count</button>
+          <button class="seg" id="penny-unit-g" onclick="pennyUnit('g',this)">Grams</button>
+          <button class="seg" id="penny-unit-oz" onclick="pennyUnit('oz',this)">Troy oz</button>
+          <button class="seg" id="penny-unit-gr" onclick="pennyUnit('gr',this)">Grains</button>
+          <button class="seg" id="penny-unit-dwt" onclick="pennyUnit('dwt',this)">DWT</button>
+          <button class="seg" id="penny-unit-lb" onclick="pennyUnit('lb',this)">Pounds</button>
+        </div>
+      </div>
       <div class="calc-body">
         <div class="igrid">
           <div><div class="ig-label">Penny Type</div><select class="ig-select" id="penny-type" onchange="calcPenny()"><option value="copper" selected>Pre-1982 (95% Cu, 3.11g)</option><option value="modern">Post-1982 (97.5% Zn, 2.5g)</option><option value="wartime">1943 Steel</option></select></div>
-          <div><div class="ig-label">Quantity</div><input class="ig-input" id="penny-qty" type="number" value="100" oninput="calcPenny()"></div>
+          <div id="penny-qty-wrap"><div class="ig-label" id="penny-qty-label">Quantity (coins)</div><input class="ig-input" id="penny-qty" type="number" value="100" oninput="calcPenny()"></div>
           <div><div class="ig-label">Copper $/lb</div><input class="ig-input" id="penny-cu" type="number" value="4.68" oninput="calcPenny()"></div>
           <div><div class="ig-label">Zinc $/lb</div><input class="ig-input" id="penny-zn" type="number" value="1.30" oninput="calcPenny()"></div>
         </div>
         <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
           <div class="res-card"><div class="res-label">Melt Each</div><div class="res-value rv-gold" id="penny-each">—</div></div>
           <div class="res-card"><div class="res-label">Total Melt</div><div class="res-value rv-blue" id="penny-total">—</div></div>
-          <div class="res-card"><div class="res-label">Face Value</div><div class="res-value rv-muted" id="penny-face">—</div></div>
+          <div class="res-card"><div class="res-label" id="penny-count-label">Face Value</div><div class="res-value rv-muted" id="penny-face">—</div></div>
           <div class="res-card"><div class="res-label">% of Face</div><div class="res-value" id="penny-ratio">—</div></div>
+        </div>
+        <div class="rgrid" style="grid-template-columns:repeat(3,1fr);margin-top:8px">
+          <div class="res-card"><div class="res-label">Weight (g)</div><div class="res-value rv-muted" id="penny-weight-g">—</div></div>
+          <div class="res-card"><div class="res-label">Weight (troy oz)</div><div class="res-value rv-muted" id="penny-weight-oz">—</div></div>
+          <div class="res-card"><div class="res-label">Weight (lb)</div><div class="res-value rv-muted" id="penny-weight-lb">—</div></div>
         </div>
         <button class="calc-btn calc-btn-gold" onclick="calcPenny()">Calculate Penny Melt</button>
       </div>
@@ -1451,19 +1466,49 @@ function renderConstKeyDates(){
 }
 
 // ═══ PENNIES ═══
+let pennyUnitMode='count';
+function pennyUnit(u,btn){
+  pennyUnitMode=u;
+  document.querySelectorAll('#tab-pennies .calc-hdr .seg').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const labels={count:'Quantity (coins)',g:'Weight (grams)',oz:'Weight (troy oz)',gr:'Weight (grains)',dwt:'Weight (DWT)',lb:'Weight (pounds)'};
+  const lbl=$('penny-qty-label');if(lbl)lbl.textContent=labels[u]||'Amount';
+  const defaults={count:100,g:311,oz:10,gr:4822,dwt:200,lb:0.686};
+  const inp=$('penny-qty');
+  if(inp){inp.value=defaults[u];inp.dataset.lastDefault=defaults[u];}
+  calcPenny();
+}
 function calcPenny(){
-  const t=$('penny-type').value||'copper';const q=parseInt($('penny-qty').value)||100;
+  const t=$('penny-type').value||'copper';
   const cu=parseFloat($('penny-cu').value)||spot.HG||4.68;
   const zn=parseFloat($('penny-zn').value)||spot.ZN||1.30;
+  const coinWt=t==='copper'?3.11:t==='wartime'?2.7:2.5;
   let m=0;
   if(t==='copper')m=(cu*0.00220462262*3.11*0.95)+(zn*0.00220462262*3.11*0.05);
-  else if(t==='wartime')m=0.01;
+  else if(t==='wartime')m=0.003;
   else m=(cu*0.00220462262*2.5*0.025)+(zn*0.00220462262*2.5*0.975);
+  const raw=parseFloat($('penny-qty').value)||0;
+  let q=0;
+  if(pennyUnitMode==='count')q=raw;
+  else if(pennyUnitMode==='g')q=raw/coinWt;
+  else if(pennyUnitMode==='oz')q=(raw*31.1035)/coinWt;
+  else if(pennyUnitMode==='gr')q=(raw*0.0647989)/coinWt;
+  else if(pennyUnitMode==='dwt')q=(raw*1.55517)/coinWt;
+  else if(pennyUnitMode==='lb')q=(raw*453.592)/coinWt;
+  q=Math.round(q*100)/100;
+  const totalGrams=q*coinWt;
   const total=m*q;const face=q*0.01;const ratio=m/0.01;
   $('penny-each').textContent='$'+m.toFixed(4);
-  $('penny-total').textContent=fmt(total);$('penny-face').textContent=fmt(face);
+  $('penny-total').textContent=fmt(total);
+  const fl=$('penny-count-label');
+  if(pennyUnitMode==='count'){if(fl)fl.textContent='Face Value';$('penny-face').textContent=fmt(face);}
+  else{if(fl)fl.textContent='≈ Coin Count';$('penny-face').textContent=Math.round(q).toLocaleString()+' coins';}
   const re=$('penny-ratio');if(re){re.textContent=(ratio*100).toFixed(1)+'% of face';re.style.color=ratio>1?'var(--green)':'var(--red)';}
   $('penny-cu').value=cu.toFixed(2);$('penny-zn').value=zn.toFixed(2);
+  const wg=$('penny-weight-g');const woz=$('penny-weight-oz');const wlb=$('penny-weight-lb');
+  if(wg)wg.textContent=totalGrams.toFixed(2)+' g';
+  if(woz)woz.textContent=(totalGrams/31.1035).toFixed(4)+' oz';
+  if(wlb)wlb.textContent=(totalGrams/453.592).toFixed(4)+' lb';
 }
 function renderPennyRefTable(){
   const cu=spot.HG||4.68;const zn=spot.ZN||1.30;
