@@ -1703,6 +1703,7 @@ function calcRolls(){
 
 // ═══ PLAT/PAL ═══
 function calcPlatPal(){
+  if(!$('pt-weight'))return;
   const ptW=parseFloat($('pt-weight').value)||5;const ptP=parseFloat($('pt-pct').value)||25;
   const pdW=parseFloat($('pd-weight').value)||5;const pdP=parseFloat($('pd-pct').value)||25;
   const ptSp=spot.XPT||1089;const pdSp=spot.XPD||1012;
@@ -1729,6 +1730,7 @@ const CONST_ROLL_OZ={
   ike_40_r:{oz:6.314,coins:20,label:'Ike Dollars 40%'}
 };
 function calcConst(){
+  if(!$('const-type'))return;
   const t=$('const-type').value||'half_90';const q=parseFloat($('const-qty').value)||10;
   const ag=parseFloat($('const-spot').value)||spot.XAG||32.45;const p=parseFloat($('const-pct').value)||20;
   const oze=CONST_OZ[t]||0.36169;const oz=oze*q;const melt=oz*ag;
@@ -1790,6 +1792,7 @@ function pennyUnit(u,btn){
   calcPenny();
 }
 function calcPenny(){
+  if(!$('penny-type'))return;
   const t=$('penny-type').value||'copper';
   const cu=parseFloat($('penny-cu').value)||spot.HG||4.68;
   const zn=parseFloat($('penny-zn').value)||spot.ZN||1.30;
@@ -4132,8 +4135,7 @@ function printSlabReport(){
 async function init(){
   adjustPad();
   // renderCoinVals and renderAllKeyDates are called when their tabs open — not at startup
-  calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
-  tsUpdateOverall();
+  try{calcGold();calcConst();calcPenny();calcPlatPal();tsUpdateOverall();}catch(e){console.warn('[init] calc error:',e);}
   // Spot prices and auth are FULLY independent — run simultaneously
   loadSpot().catch(e=>console.warn('loadSpot:',e));
   loadAccount().catch(e=>{ window_isPro=false; window_authReady=true; applyGuestUI(); console.warn('loadAccount:',e); });
