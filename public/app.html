@@ -442,7 +442,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         <div class="igrid">
           <div><div class="ig-label">Weight</div><input class="ig-input" id="gk-weight" type="number" value="10.00" oninput="calcGold()"></div>
           <div><div class="ig-label">Karat</div><select class="ig-select" id="gk-karat" onchange="calcGold()"><option value="24">24k (99.9%)</option><option value="22">22k (91.7%)</option><option value="18">18k (75.0%)</option><option value="14" selected>14k (58.3%)</option><option value="10">10k (41.7%)</option><option value="9">9k (37.5%)</option></select></div>
-          <div><div class="ig-label">Gold Spot ($/oz)</div><input class="ig-input" id="gk-spot" type="number" value="3241.80" oninput="calcGold()"></div>
+          <div><div class="ig-label">Gold Spot ($/oz)</div><input class="ig-input" id="gk-spot" type="number" value="0" oninput="calcGold()"></div>
           <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="gk-pct" type="number" value="30" oninput="calcGold()"></div>
         </div>
         <div class="rgrid">
@@ -1358,6 +1358,10 @@ function updateHeroPrices(){
     const gPerDwt=(spot.XAU/20).toFixed(2);
     const gpg=$('gold-per-gram');if(gpg)gpg.textContent='$'+gPerG+' / g';
     const dpg=$('gold-per-dwt');if(dpg)dpg.textContent='$'+gPerDwt+' / dwt';
+    // Auto-populate karat calculator spot input if user hasn't changed it
+    const gkSpotEl=$('gk-spot');
+    if(gkSpotEl&&(!gkSpotEl.value||parseFloat(gkSpotEl.value)===0))gkSpotEl.value=spot.XAU.toFixed(2);
+    renderKaratTable();
   }
   if(spot.XAG){
     const agFmt='$'+spot.XAG.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -1555,7 +1559,7 @@ function calcGold(){
   }
   const k=parseInt($('gk-karat').value||'14');const p=k/24;
   let w=parseFloat($('gk-weight').value)||0;
-  const spOz=parseFloat($('gk-spot').value)||spot.XAU||3241.80;
+  const spOz=parseFloat($('gk-spot').value)||spot.XAU||0;
   const pct=parseFloat($('gk-pct').value)||30;
   const spg=spOz/31.1035;
   if(goldWUnit==='oz')w*=31.1035;else if(goldWUnit==='gr')w*=0.06479891;else if(goldWUnit==='dwt')w*=1.55517;
@@ -1568,7 +1572,7 @@ function calcGold(){
   if($('gk-pdwt'))$('gk-pdwt').textContent=fmt(spg*p*1.55517);
 }
 function renderKaratTable(){
-  const spOz=spot.XAU||3241.80;const spg=spOz/31.1035;
+  const spOz=spot.XAU||0;const spg=spOz/31.1035;
   const tb=$('karat-tbody');if(!tb)return;
   tb.innerHTML=[[24,24/24],[22,22/24],[18,18/24],[14,14/24],[10,10/24],[9,9/24]].map(([k,p])=>`<tr><td class="k-col">${k}k</td><td class="p-col">${(p*100).toFixed(1)}%</td><td class="price-col rv-gold">${fmt(spg*p)}</td><td class="green-col">${fmt(spg*p*0.70)}</td><td class="price-col">${fmt(spg*p*31.1035)}</td><td class="p-col">${fmt(spg*p*0.06479891)}</td></tr>`).join('');
 }
