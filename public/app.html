@@ -1323,7 +1323,7 @@ async function loadSpot(attempt){
     if(attempt<4) setTimeout(()=>loadSpot(attempt+1), attempt*2000);
     return;
   }
-  try{calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();}catch(e){console.error('[loadSpot] calc ERROR:',e);}
+  try{calcGold();calcConst();calcPenny();calcPlatPal();}catch(e){console.error('[loadSpot] calc ERROR:',e);}
   try{renderKaratTable();renderSilverMeltTable();renderConstRefTable();renderPennyRefTable();}catch(e){console.error('[loadSpot] render ERROR:',e);}
   try{renderInventory();renderSlabs();presetLoad();tsSyncSpot();}catch(e){console.error('[loadSpot] admin ERROR:',e);}
 }
@@ -1644,6 +1644,7 @@ function gbToggle(i){const e=$('gbr-'+i);if(e)e.classList.toggle('open');}
 
 // ═══ SILVER DEAL CALC ═══
 function calcDeal(){
+  if(!$('deal-face'))return;
   const face=parseFloat($('deal-face').value)||100;
   const ag=parseFloat($('deal-spot').value)||spot.XAG||32.45;
   const bp=parseFloat($('deal-buy-pct').value)||20;
@@ -1655,6 +1656,7 @@ function calcDeal(){
   $('deal-sell').textContent=fmt(melt*(1+sp/100));
 }
 function calcDealBullion(){
+  if(!$('deal-bul-oz'))return;
   const oz=parseFloat($('deal-bul-oz').value)||1;
   const ag=parseFloat($('deal-bul-spot').value)||spot.XAG||32.45;
   const bp=parseFloat($('deal-bul-buy-pct').value)||5;
@@ -1665,6 +1667,7 @@ function calcDealBullion(){
   $('deal-bul-sell').textContent=fmt(melt*(1+sp/100));
 }
 function calcDealRolls(){
+  if(!$('deal-roll-type'))return;
   const t=$('deal-roll-type').value||'half';
   const n=parseInt($('deal-roll-count').value)||1;
   const ag=parseFloat($('deal-roll-spot').value)||spot.XAG||32.45;
