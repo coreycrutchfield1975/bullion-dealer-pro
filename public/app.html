@@ -42,9 +42,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 /* HEADER */
 #header{position:fixed;top:0;left:0;right:0;z-index:300;background:#0d1117;border-bottom:1px solid rgba(212,175,55,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.6)}
-.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0;height:140px;gap:0;position:relative}
-.logo{display:flex;flex:1;height:140px;align-items:center;justify-content:center;text-decoration:none;overflow:hidden}
-.logo img.banner-img{display:block;width:50%;height:140px;object-fit:cover;object-position:center center}
+.hdr-banner-row{display:flex;align-items:center;justify-content:space-between;height:120px;padding:0 16px;gap:8px}
+.hdr-banner-center{flex:1;display:flex;justify-content:center;align-items:center;height:120px;overflow:hidden}
+.hdr-banner-center img{height:120px;width:auto;max-width:50%;object-fit:contain}
+.hdr-controls-right{display:flex;align-items:center;gap:8px;white-space:nowrap;min-width:160px;justify-content:flex-end}
+.hdr-spacer{min-width:160px}
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
 .tts{background:linear-gradient(135deg,#1e3a5f,#2563eb)}
 .logo-name{display:none}
@@ -305,21 +307,19 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   .section:not(.active){display:none!important}
 }
 @media(max-width:480px){
-  .hdr-inner{padding:0;height:112px}
+  .hdr-banner-row{height:80px}
   .logo{height:80px}
   .logo img.banner-img{height:80px}
 }
 /* Landscape phone — shorter banner so content isn't eaten */
 @media(max-width:900px) and (orientation:landscape){
-  .hdr-inner{height:112px}
-  .logo{height:112px}
-  .logo img.banner-img{height:112px}
+  .hdr-banner-row{height:80px}
+  .hdr-banner-center img{height:80px}
 }
 /* Portrait phone */
 @media(max-width:600px) and (orientation:portrait){
-  .hdr-inner{height:112px}
-  .logo{height:112px}
-  .logo img.banner-img{height:112px}
+  .hdr-banner-row{height:80px}
+  .hdr-banner-center img{height:80px}
   .logo img{height:42px!important}
   .spot-strip{max-width:240px}
   .sec-hero{padding:16px}
@@ -348,9 +348,12 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- HEADER -->
 <div id="header">
-  <div class="hdr-inner">
-    <a class="logo" href="#"><img class="banner-img" src="/banner.png?v=13" alt="Bullion Dealer Pro"></a>
-    <div class="hdr-controls">
+  <div class="hdr-banner-row">
+    <div class="hdr-spacer"></div>
+    <div class="hdr-banner-center">
+      <img src="/banner.png?v=13" alt="Bullion Dealer Pro">
+    </div>
+    <div class="hdr-controls-right">
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">🌙</button>
       <button id="admin-btn" style="display:none" class="btn-outline" onclick="window.location='/admin.html'">⚙ Admin</button>
       <button id="logout-btn" class="btn-danger" onclick="doLogout()">⏻ Logout</button>
