@@ -3612,16 +3612,13 @@ async function loadAccount(){
   try{
     const r=await fetch('/api/me');
     if(!r.ok){
-      // Not logged in — still load spot prices, just mark as guest
+      // Not logged in — redirect to login
       window_isPro=false;
-      await loadSpot();
-      await loadNews();
-      setInterval(loadSpot,5*60*1000);
-      setInterval(loadNews,10*60*1000);
       window.location.href='/login';
       return;
     }
-    const u=await r.json();window_isPro=u.isPro===true;
+    const u=await r.json();
+    window_isPro=u.isPro===true;
     if(window_isPro){setTimeout(cloudPull,800);}
     if(!window_isPro){
       document.querySelectorAll('.tab[data-pro="1"]').forEach(t=>{
@@ -3648,7 +3645,11 @@ async function loadAccount(){
       ${(u.plan==='trial'||u.plan==='free')?`<div style="margin-top:18px"><a href="/pricing" style="display:inline-block;background:var(--blue);color:#fff;padding:9px 22px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none">Upgrade Now →</a></div>`:''}`;
     if(u.plan==='free')$('paywall').classList.remove('show');
     else if(!['admin','monthly','annual','trial'].includes(u.plan))$('paywall').classList.add('show');
-  }catch{window.location.href='/login';}
+  }catch(e){
+    console.error('loadAccount error:', e);
+    // Don't redirect on error - just mark as non-pro so spot prices still load
+    window_isPro=false;
+  }
 }
 async function redeemPromo(){
   const code=$('promo-input').value.trim().toUpperCase();
