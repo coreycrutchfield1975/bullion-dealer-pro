@@ -510,19 +510,52 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         <div class="seg-group"><button class="seg active" onclick="dealType('coins',this)">90% Coins</button><button class="seg" onclick="dealType('bullion',this)">Bullion oz</button><button class="seg" onclick="dealType('rolls',this)">Rolls</button></div>
       </div>
       <div class="calc-body">
-        <div class="igrid">
-          <div><div class="ig-label">Face Value ($)</div><input class="ig-input" id="deal-face" type="number" value="100" oninput="calcDeal()"></div>
-          <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="deal-spot" type="number" value="32.45" oninput="calcDeal()"></div>
-          <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="deal-buy-pct" type="number" value="20" oninput="calcDeal()"></div>
-          <div><div class="ig-label">Sell % Above Melt</div><input class="ig-input" id="deal-sell-pct" type="number" value="5" oninput="calcDeal()"></div>
+        <!-- 90% Coins panel -->
+        <div id="deal-panel-coins">
+          <div class="igrid">
+            <div><div class="ig-label">Face Value ($)</div><input class="ig-input" id="deal-face" type="number" value="100" oninput="calcDeal()"></div>
+            <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="deal-spot" type="number" value="32.45" oninput="calcDeal()"></div>
+            <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="deal-buy-pct" type="number" value="20" oninput="calcDeal()"></div>
+            <div><div class="ig-label">Sell % Above Melt</div><input class="ig-input" id="deal-sell-pct" type="number" value="5" oninput="calcDeal()"></div>
+          </div>
+          <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
+            <div class="res-card"><div class="res-label">Troy Oz</div><div class="res-value rv-blue" id="deal-oz">—</div></div>
+            <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="deal-melt">—</div></div>
+            <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="deal-buy">—</div></div>
+            <div class="res-card"><div class="res-label">Sell Price</div><div class="res-value rv-blue" id="deal-sell">—</div></div>
+          </div>
+          <button class="calc-btn" onclick="calcDeal()">Calculate Silver Value</button>
         </div>
-        <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
-          <div class="res-card"><div class="res-label">Troy Oz</div><div class="res-value rv-blue" id="deal-oz">—</div></div>
-          <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="deal-melt">—</div></div>
-          <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="deal-buy">—</div></div>
-          <div class="res-card"><div class="res-label">Sell Price</div><div class="res-value rv-blue" id="deal-sell">—</div></div>
+        <!-- Bullion oz panel -->
+        <div id="deal-panel-bullion" style="display:none">
+          <div class="igrid">
+            <div><div class="ig-label">Troy Oz</div><input class="ig-input" id="deal-bul-oz" type="number" value="1" oninput="calcDealBullion()"></div>
+            <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="deal-bul-spot" type="number" value="32.45" oninput="calcDealBullion()"></div>
+            <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="deal-bul-buy-pct" type="number" value="5" oninput="calcDealBullion()"></div>
+            <div><div class="ig-label">Sell % Above Melt</div><input class="ig-input" id="deal-bul-sell-pct" type="number" value="3" oninput="calcDealBullion()"></div>
+          </div>
+          <div class="rgrid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="deal-bul-melt">—</div></div>
+            <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="deal-bul-buy">—</div></div>
+            <div class="res-card"><div class="res-label">Sell Price</div><div class="res-value rv-blue" id="deal-bul-sell">—</div></div>
+          </div>
+          <button class="calc-btn" onclick="calcDealBullion()">Calculate Bullion Value</button>
         </div>
-        <button class="calc-btn" onclick="calcDeal()">Calculate Silver Value</button>
+        <!-- Rolls panel -->
+        <div id="deal-panel-rolls" style="display:none">
+          <div class="igrid">
+            <div><div class="ig-label">Roll Type</div><select class="ig-select" id="deal-roll-type" onchange="calcDealRolls()"><option value="dime">Dimes (50 coins)</option><option value="quarter">Quarters (40 coins)</option><option value="half" selected>Halves (20 coins)</option><option value="dollar">Morgan/Peace (20 coins)</option></select></div>
+            <div><div class="ig-label">Number of Rolls</div><input class="ig-input" id="deal-roll-count" type="number" value="1" oninput="calcDealRolls()"></div>
+            <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="deal-roll-spot" type="number" value="32.45" oninput="calcDealRolls()"></div>
+            <div><div class="ig-label">Buy % Below</div><input class="ig-input" id="deal-roll-pct" type="number" value="20" oninput="calcDealRolls()"></div>
+          </div>
+          <div class="rgrid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="res-card"><div class="res-label">Total oz</div><div class="res-value rv-blue" id="deal-roll-oz">—</div></div>
+            <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="deal-roll-melt">—</div></div>
+            <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="deal-roll-buy">—</div></div>
+          </div>
+          <button class="calc-btn" onclick="calcDealRolls()">Calculate Roll Value</button>
+        </div>
       </div>
     </div>
     <div class="card"><div class="card-title">⚡ Quick Melt Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Coin / Bar</th><th>Silver oz</th><th>Melt Value</th><th>Buy @80%</th><th>Buy @70%</th></tr></thead><tbody id="silver-melt-tbody"></tbody></table></div></div>
@@ -1393,7 +1426,7 @@ function updateHeroPrices(){
     const spo=$('silver-per-oz');if(spo)spo.textContent='$'+spot.XAG.toFixed(2)+' / oz';
     // Auto-populate silver spot inputs if user hasn't changed them
     const agVal=spot.XAG.toFixed(2);
-    ['deal-spot','roll-spot','const-spot'].forEach(id=>{const el=$(id);if(el&&(!el.value||parseFloat(el.value)===32.45||parseFloat(el.value)===0))el.value=agVal;});
+    ['deal-spot','roll-spot','const-spot','deal-bul-spot','deal-roll-spot'].forEach(id=>{const el=$(id);if(el&&(!el.value||parseFloat(el.value)===32.45||parseFloat(el.value)===0))el.value=agVal;});
   }
   if(spot.HG&&spot.ZN){
     const m=(spot.HG*0.00220462262*3.11*0.95)+(spot.ZN*0.00220462262*3.11*0.05);
@@ -1548,7 +1581,19 @@ function renderAllKeyDates(){
   const tb=document.getElementById('nm-kd-tbody');
   if(tb)tb.innerHTML=filtered.length?filtered.map(r=>`<tr><td style="font-weight:700">${r.date}</td><td>${r.series}</td><td>${r.notes}</td><td><span style="color:${rarityColor[r.rarity]||'var(--text)'};font-weight:600">${r.rarity}</span></td><td class="green-col">${r.value}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No results found</td></tr>';
 }
-function dealType(t,btn){document.querySelectorAll('#ss-calc .seg-group .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function dealType(t,btn){
+  document.querySelectorAll('#ss-calc .seg-group .seg').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  ['coins','bullion','rolls'].forEach(p=>{const el=$('deal-panel-'+p);if(el)el.style.display=p===t?'':'none';});
+  const agVal=spot.XAG?spot.XAG.toFixed(2):'32.45';
+  if(t==='bullion'){
+    const bs=$('deal-bul-spot');if(bs&&(!bs.value||parseFloat(bs.value)===32.45||parseFloat(bs.value)===0))bs.value=agVal;
+    calcDealBullion();
+  } else if(t==='rolls'){
+    const rs=$('deal-roll-spot');if(rs&&(!rs.value||parseFloat(rs.value)===32.45||parseFloat(rs.value)===0))rs.value=agVal;
+    calcDealRolls();
+  }
+}
 let goldWUnit='g';
 function goldUnit(u,btn){goldWUnit=u;document.querySelectorAll('.calc-hdr .seg-group .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');calcGold();}
 function adjustPad(){const h=$('header');const tb=$('tab-bar');if(!h||!tb)return;const off=h.offsetHeight+tb.offsetHeight;$('content').style.paddingTop=off+'px';$('tab-bar').style.top=h.offsetHeight+'px';}
@@ -1659,6 +1704,26 @@ function calcDeal(){
   $('deal-melt').textContent=fmt(melt);
   $('deal-buy').textContent=fmt(melt*(1-bp/100));
   $('deal-sell').textContent=fmt(melt*(1+sp/100));
+}
+function calcDealBullion(){
+  const oz=parseFloat($('deal-bul-oz').value)||1;
+  const ag=parseFloat($('deal-bul-spot').value)||spot.XAG||32.45;
+  const bp=parseFloat($('deal-bul-buy-pct').value)||5;
+  const sp=parseFloat($('deal-bul-sell-pct').value)||3;
+  const melt=oz*ag;
+  $('deal-bul-melt').textContent=fmt(melt);
+  $('deal-bul-buy').textContent=fmt(melt*(1-bp/100));
+  $('deal-bul-sell').textContent=fmt(melt*(1+sp/100));
+}
+function calcDealRolls(){
+  const t=$('deal-roll-type').value||'half';
+  const n=parseInt($('deal-roll-count').value)||1;
+  const ag=parseFloat($('deal-roll-spot').value)||spot.XAG||32.45;
+  const p=parseFloat($('deal-roll-pct').value)||20;
+  const oz=ROLL_OZ[t]*n;const melt=oz*ag;
+  $('deal-roll-oz').textContent=oz.toFixed(3)+' oz';
+  $('deal-roll-melt').textContent=fmt(melt);
+  $('deal-roll-buy').textContent=fmt(melt*(1-p/100));
 }
 function renderSilverMeltTable(){
   const ag=spot.XAG||32.45;
