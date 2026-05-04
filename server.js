@@ -392,7 +392,7 @@ app.get('/api/goldback-rate', async (req, res) => {
 
     if (!spotPerOz || spotPerOz < 100) throw new Error('Invalid gold spot price');
 
-    const PREMIUM = 1.25; // ~25% over spot (typical goldback.com market rate)
+    const PREMIUM = 1.94; // spot + 94% = typical dealer purchase price
     const denoms = [
       { label: '¼ Goldback',   mult: 0.25,  oz: 0.00025 },
       { label: '½ Goldback',   mult: 0.5,   oz: 0.0005  },
@@ -420,7 +420,7 @@ app.get('/api/goldback-rate', async (req, res) => {
       premium: PREMIUM,
       rates,
       source: 'calculated',
-      note: 'Values calculated from live gold spot. Market price ~25% over spot (typical goldback.com premium).',
+      note: 'Values calculated from live gold spot. Purchase price ≈ spot × 1.94 (spot + 94% — typical dealer buy rate).',
       updated: new Date().toISOString()
     };
 

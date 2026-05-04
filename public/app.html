@@ -1589,7 +1589,7 @@ const GB_DENOMS=[{d:'1 (1/1000 oz)',n:'1'},{d:'5 (1/500 oz)',n:'5'},{d:'10 (1/20
 let gbRates={};
 async function renderGoldback(){
   const au = spot.XAU || 4500;
-  const PREMIUM = 1.25; // ~25% over spot = typical goldback.com market rate
+  const PREMIUM = 1.94; // spot × 94% premium = typical dealer purchase price
   const denoms = [
     {n:0.25, label:'¼ Goldback',  oz:0.00025},
     {n:0.5,  label:'½ Goldback',  oz:0.0005 },
@@ -1603,7 +1603,7 @@ async function renderGoldback(){
   ];
 
   const upd = $('gb-updated');
-  if(upd) upd.innerHTML = 'Live gold $'+au.toFixed(2)+'/oz &nbsp;·&nbsp; Market est = spot &times; 1.25 (typical goldback.com premium) &nbsp;·&nbsp; <a href="https://www.goldback.com/exchange-rates/" target="_blank" style="color:var(--blue)">Official rates &#8599;</a>';
+  if(upd) upd.innerHTML = 'Live gold $'+au.toFixed(2)+'/oz &nbsp;·&nbsp; Buy price &asymp; spot &times; 1.94 (spot + 94% &mdash; typical dealer purchase rate) &nbsp;·&nbsp; <a href="https://www.goldback.com/exchange-rates/" target="_blank" style="color:var(--blue)">Official rates &#8599;</a>';
 
   const denomCards = $('gb-denom-cards');
   if(denomCards){
