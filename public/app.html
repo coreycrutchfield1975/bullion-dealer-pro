@@ -43,8 +43,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 /* HEADER */
 #header{position:fixed;top:0;left:0;right:0;z-index:300;background:#0d1117;border-bottom:1px solid rgba(212,175,55,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.6)}
 .hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0;height:90px;gap:0;position:relative}
-.logo{display:block;flex:1;height:90px;overflow:hidden;text-decoration:none}
-.logo img.banner-img{display:block;width:100%;height:90px;object-fit:cover;object-position:center center}
+.logo{display:block;flex:1;height:90px;overflow:hidden;text-decoration:none;background:#0d1117}
+.logo img.banner-img{display:block;width:100%;height:90px;object-fit:contain;object-position:center center}
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
 .tts{background:linear-gradient(135deg,#1e3a5f,#2563eb)}
 .logo-name{display:none}
@@ -349,7 +349,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- HEADER -->
 <div id="header">
   <div class="hdr-inner">
-    <a class="logo" href="#"><img class="banner-img" src="/banner.png?v=6" alt="Bullion Dealer Pro"></a>
+    <a class="logo" href="#"><img class="banner-img" src="/banner.png?v=7" alt="Bullion Dealer Pro"></a>
     <div class="hdr-controls">
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">🌙</button>
       <button id="admin-btn" style="display:none" class="btn-outline" onclick="window.location='/admin.html'">⚙ Admin</button>
