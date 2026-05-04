@@ -1261,7 +1261,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 </div><!-- /#content -->
 
-<script>// CLEAN BUILD: 20260504_184506
+<script>// CLEAN BUILD: 20260504_190541
 
 
 // ═══ THEME ═══
@@ -2128,9 +2128,10 @@ function initCVDropdowns(){
 }
 function renderCoinVals(){
   initCVDropdowns();
-  const q=($('cv-search').value||'').toLowerCase();
-  const ser=$('cv-series').value||'';
-  const max=parseFloat($('cv-max').value)||Infinity;
+  const cvSearch=$('cv-search');const cvSeries=$('cv-series');const cvMax=$('cv-max');
+  const q=(cvSearch?cvSearch.value:'').toLowerCase();
+  const ser=cvSeries?cvSeries.value:'';
+  const max=cvMax?parseFloat(cvMax.value)||Infinity:Infinity;
   let rows=CV;
   if(ser)rows=rows.filter(c=>c.s===ser);
   if(q)rows=rows.filter(c=>c.d.toLowerCase().includes(q)||c.s.toLowerCase().includes(q));
@@ -4110,8 +4111,7 @@ function printSlabReport(){
 // ═══ INIT ═══
 async function init(){
   adjustPad();
-  renderCoinVals();
-  renderAllKeyDates();
+  // renderCoinVals and renderAllKeyDates are called when their tabs open — not at startup
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
   tsUpdateOverall();
   // Spot prices and auth are FULLY independent — run simultaneously
