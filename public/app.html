@@ -42,13 +42,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 /* HEADER */
 #header{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--header-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--header-border);box-shadow:var(--shadow)}
-.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:72px;gap:12px}
-.logo{display:flex;align-items:center;text-decoration:none;flex:1;min-width:0;position:relative;height:60px;overflow:hidden;border-radius:8px}
-.logo-dragon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:58px;width:auto;opacity:0.22;pointer-events:none;filter:drop-shadow(0 0 8px rgba(212,175,55,0.4))}
-.logo-banner{position:relative;z-index:2;width:100%;text-align:center;font-size:clamp(18px,4vw,32px);font-weight:900;letter-spacing:clamp(4px,2vw,14px);text-transform:uppercase;background:linear-gradient(135deg,#ffd700 0%,#fff8dc 40%,#ffd700 60%,#b8860b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none;line-height:1;padding:0 8px;white-space:nowrap}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--text);text-decoration:none;flex-shrink:0;max-width:220px}
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
 .tts{background:linear-gradient(135deg,#1e3a5f,#2563eb)}
-.logo-name{display:none}
+.logo-name{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--text);white-space:nowrap;line-height:1.1}
 
 
 
@@ -305,7 +303,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 }
 @media(max-width:480px){
   .hdr-inner{padding:0 10px}
-  .logo-dragon{height:52px!important}
+  .logo img{height:42px!important}
   .spot-strip{max-width:240px}
   .sec-hero{padding:16px}
   .sh-title{font-size:16px}
@@ -335,8 +333,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <div id="header">
   <div class="hdr-inner">
     <a class="logo" href="#">
-      <img class="logo-dragon" src="/dragon-logo.png" alt="">
-      <span class="logo-banner">Bullion Dealer Pro</span>
+      <img src="/dragon-logo.png" alt="Bullion Dealer Pro" style="height:38px;width:auto;object-fit:contain;border-radius:6px">
+      <span class="logo-name"><span class="logo-full">Bullion Dealer Pro</span><span class="logo-short">BDP</span></span>
     </a>
     <div class="hdr-right">
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">🌙</button>
