@@ -1286,7 +1286,19 @@ const fmt=v=>v==null?'—':'$'+v.toLocaleString('en-US',{minimumFractionDigits:2
 const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0,ZN:0};
 let window_isPro=false;
 
-async function fm(sym){try{const r=await fetch('/api/metals/'+sym);return r.ok?r.json():null}catch{return null}}
+async function fm(sym){
+  try{
+    const r=await fetch('/api/metals/'+sym);
+    if(!r.ok)return null;
+    const d=await r.json();
+    // normalize API response fields
+    if(d && d.ch !== undefined){
+      d.change = d.ch;
+      d.changePercent = d.prev_close_price ? (d.ch / d.prev_close_price * 100) : 0;
+    }
+    return d;
+  }catch{return null}
+}
 function fmtSpotChange(d){
   if(!d||d.change==null)return '';
   const arr=d.change>=0?'▲':'▼';
@@ -3598,7 +3610,17 @@ async function loadNews(){
 // ═══ ACCOUNT ═══
 async function loadAccount(){
   try{
-    const r=await fetch('/api/me');if(!r.ok){window.location.href='/login';return;}
+    const r=await fetch('/api/me');
+    if(!r.ok){
+      // Not logged in — still load spot prices, just mark as guest
+      window_isPro=false;
+      await loadSpot();
+      await loadNews();
+      setInterval(loadSpot,5*60*1000);
+      setInterval(loadNews,10*60*1000);
+      window.location.href='/login';
+      return;
+    }
     const u=await r.json();window_isPro=u.isPro===true;
     if(window_isPro){setTimeout(cloudPull,800);}
     if(!window_isPro){
