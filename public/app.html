@@ -1261,7 +1261,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 </div><!-- /#content -->
 
-<script>
+<script>// CLEAN BUILD: 20260504_184506
+
 
 // ═══ THEME ═══
 function toggleTheme(){
@@ -3669,15 +3670,15 @@ async function loadNews(){
     const r=await fetch('/api/news');
     const items=await r.json();
     if(!items||!items.length)return;
-    const h=items.map(i=>`<a href="${encodeURI(i.link)?i.link:''}" target="_blank">${i.title}</a>`).join(' &nbsp;·&nbsp; ');
+    const dots=' &nbsp;·&nbsp; ';
+    const h=items.map(i=>'<a href="'+i.link+'" target="_blank">'+i.title+'</a>').join(dots);
     const el=$('news-inner');
     if(!el)return;
-    // Force animation restart: clone trick
+    // kill animation, swap content, reflow, restart
     el.style.animation='none';
-    el.innerHTML=h+' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '+h;
-    // Trigger reflow then re-enable animation
+    el.innerHTML=h+' &emsp;&emsp;&emsp; '+h;
     void el.offsetWidth;
-    el.style.animation='';
+    el.style.animation='scrollL 60s linear infinite';
   }catch(e){console.warn('[loadNews]',e);}
 }
 
@@ -4121,6 +4122,7 @@ async function init(){
   setInterval(()=>loadNews().catch(()=>{}), 10*60*1000);
 }
 init();
+
 
 </script>
 </body>
