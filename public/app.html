@@ -3618,9 +3618,9 @@ async function loadAccount(){
   try{
     const r=await fetch('/api/me');
     if(!r.ok){
-      // Not logged in — redirect to login
+      // Not logged in — show paywall but still load spot prices
       window_isPro=false;
-      window.location.href='/login';
+      $('paywall').classList.add('show');
       return;
     }
     const u=await r.json();
