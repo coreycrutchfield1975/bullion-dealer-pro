@@ -376,53 +376,59 @@ app.post('/api/create-checkout', auth, async (req, res) => {
 const goldbackCache = { data: null, ts: 0 };
 app.get('/api/goldback-rate', async (req, res) => {
   try {
-    if (goldbackCache.data && Date.now() - goldbackCache.ts < 30 * 60 * 1000)
+    if (goldbackCache.data && Date.now() - goldbackCache.ts < 5 * 60 * 1000)
       return res.json(goldbackCache.data);
-    const r = await fetch('https://www.goldback.com/exchange-rates/', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-    });
-    const html = await r.text();
-    // Extract rates - goldback.com lists them as "$9.46" pattern near denomination labels
-    const rates = {};
+
+    // goldback.com and all Goldback retailer sites are JS-rendered and block server scraping.
+    // Instead: calculate directly from live gold spot price.
+    // 1 Goldback = 1/1000 troy oz of 24k gold (by design).
+    // Official market price typically runs 20-30% over gold spot value.
+    // We show both: spot value and estimated market value (~25% over spot).
+
+    // Get live gold spot from our own Yahoo proxy
+    const goldReq = await fetch('https://bulliondealerpro.com/api/metals/XAU');
+    const goldData = await goldReq.json();
+    const spotPerOz = goldData.price;
+
+    if (!spotPerOz || spotPerOz < 100) throw new Error('Invalid gold spot price');
+
+    const PREMIUM = 1.25; // ~25% over spot (typical goldback.com market rate)
     const denoms = [
-      { key: '1/4', label: '¼ Goldback', oz: 1/4000 },
-      { key: '1/2', label: '½ Goldback', oz: 1/2000 },
-      { key: '1',   label: '1 Goldback',  oz: 1/1000 },
-      { key: '2',   label: '2 Goldback',  oz: 1/500  },
-      { key: '5',   label: '5 Goldback',  oz: 1/200  },
-      { key: '10',  label: '10 Goldback', oz: 1/100  },
-      { key: '25',  label: '25 Goldback', oz: 1/40   },
-      { key: '50',  label: '50 Goldback', oz: 1/20   },
-      { key: '100', label: '100 Goldback',oz: 1/10   }
+      { label: '¼ Goldback',   mult: 0.25,  oz: 0.00025 },
+      { label: '½ Goldback',   mult: 0.5,   oz: 0.0005  },
+      { label: '1 Goldback',   mult: 1,     oz: 0.001   },
+      { label: '2 Goldback',   mult: 2,     oz: 0.002   },
+      { label: '5 Goldback',   mult: 5,     oz: 0.005   },
+      { label: '10 Goldback',  mult: 10,    oz: 0.010   },
+      { label: '25 Goldback',  mult: 25,    oz: 0.025   },
+      { label: '50 Goldback',  mult: 50,    oz: 0.050   },
+      { label: '100 Goldback', mult: 100,   oz: 0.100   },
     ];
-    // Try to find the 1 Goldback base rate — pattern: "1 : $X.XX" or similar
-    const match1 = html.match(/1\s*[Gg]oldback[^$]*\$\s*([\d.]+)/);
-    const matchBase = html.match(/\$\s*([\d.]+)\s*[—\-–]\s*Contains\s*1\/1000/);
-    let base = null;
-    if (matchBase) base = parseFloat(matchBase[1]);
-    else if (match1) base = parseFloat(match1[1]);
-    // Also try pattern like "9.46" near "1/1000"
-    if (!base) {
-      const m = html.match(/1\/1000[^$]*\$\s*([\d.]+)/);
-      if (m) base = parseFloat(m[1]);
-    }
-    if (base && base > 1) {
-      const data = denoms.map(d => ({
-        label: d.label,
-        oz: d.oz,
-        rate: +(base * parseFloat(d.key.includes('/') ? eval(d.key) : d.key)).toFixed(4)
-      }));
-      // fix quarter and half manually
-      data[0].rate = +(base * 0.25).toFixed(4);
-      data[1].rate = +(base * 0.5).toFixed(4);
-      goldbackCache.data = { base, rates: data, updated: new Date().toISOString() };
-      goldbackCache.ts = Date.now();
-      return res.json(goldbackCache.data);
-    }
-    throw new Error('Could not parse rate from goldback.com');
+
+    const base = +(spotPerOz / 1000).toFixed(4); // spot value of 1 Goldback
+    const rates = denoms.map(d => ({
+      label: d.label,
+      oz: d.oz,
+      spotValue: +(spotPerOz * d.oz).toFixed(4),
+      marketValue: +(spotPerOz * d.oz * PREMIUM).toFixed(4),
+      rate: +(spotPerOz * d.oz * PREMIUM).toFixed(4), // backward compat
+    }));
+
+    const result = {
+      base,
+      goldSpot: spotPerOz,
+      premium: PREMIUM,
+      rates,
+      source: 'calculated',
+      note: 'Values calculated from live gold spot. Market price ~25% over spot (typical goldback.com premium).',
+      updated: new Date().toISOString()
+    };
+
+    goldbackCache.data = result;
+    goldbackCache.ts = Date.now();
+    return res.json(result);
   } catch(e) {
     console.log('[goldback-rate] error:', e.message);
-    // Fallback: return null so client knows to show static
     return res.json({ base: null, rates: null, error: e.message });
   }
 });

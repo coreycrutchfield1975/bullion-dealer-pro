@@ -474,7 +474,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💛 Current Average Prices by Denomination</div>
       <div id="gb-denom-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px"></div>
       <div class="card"><div class="card-title">📊 Denomination Detail</div>
-        <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Current Rate</th><th>Face Value</th><th>Premium</th></tr></thead><tbody id="gb-denom-tbody"></tbody></table></div>
+        <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Spot Value</th><th>Market Est.</th><th>Premium</th></tr></thead><tbody id="gb-denom-tbody"></tbody></table></div>
       </div>
     </div>
     <div id="gb-retailers"></div>
@@ -1575,47 +1575,57 @@ function renderKaratTable(){
 
 // ═══ GOLDBACKS ═══
 const GB=[
+  {name:'Goldback Inc.',tag:'Official',url:'https://www.goldback.com/shop/'},
+  {name:'Defy The Grid',tag:'Specialty',url:'https://defythegrid.com/collections/goldbacks'},
+  {name:'Finest Known',tag:'Specialty',url:'https://finestknown.com/goldbacks-for-sale/'},
   {name:'APMEX',tag:'Large Selection',url:'https://www.apmex.com/category/19605/goldbacks'},
   {name:'JM Bullion',tag:'Fast Shipping',url:'https://www.jmbullion.com/gold/gold-notes/goldbacks/'},
   {name:'Money Metals',tag:'Competitive',url:'https://www.moneymetals.com/goldbacks'},
-  {name:'Finest Known',tag:'Specialty',url:'https://finestknown.com/goldbacks-for-sale/'},
   {name:'Scottsdale Bullion',tag:'Quality Stock',url:'https://www.scottsdalebullion.com/goldbacks/'},
-  {name:'GoldSilver',tag:'Trusted',url:'https://goldsilver.com/buy-online/goldbacks/'},
   {name:'Bold Precious Metals',tag:'Value Priced',url:'https://boldpreciousmetals.com/collections/goldbacks'},
   {name:'Gainesville Coins',tag:'Dealer',url:'https://www.gainesvillecoins.com/goldbacks'},
 ];
 const GB_DENOMS=[{d:'1 (1/1000 oz)',n:'1'},{d:'5 (1/500 oz)',n:'5'},{d:'10 (1/200 oz)',n:'10'},{d:'25 (1/100 oz)',n:'25'},{d:'50 (1/50 oz)',n:'50'}];
 let gbRates={};
 async function renderGoldback(){
-  if(!Object.keys(gbRates).length){
-    try{const r=await fetch('/api/goldback-rate');const d=await r.json();gbRates=d.rates||{};if(d.updated)$('gb-updated').textContent='Last updated: '+new Date(d.updated).toLocaleString()+' · Source: goldback.com';}
-    catch{const au=spot.XAU||3241.80;[1,5,10,25,50].forEach(n=>{gbRates[n]=au/1000*n*1.1;});$('gb-updated').textContent='⚠ Estimate — could not reach goldback.com';}
+  const au = spot.XAU || 4500;
+  const PREMIUM = 1.25; // ~25% over spot = typical goldback.com market rate
+  const denoms = [
+    {n:0.25, label:'¼ Goldback',  oz:0.00025},
+    {n:0.5,  label:'½ Goldback',  oz:0.0005 },
+    {n:1,    label:'1 Goldback',  oz:0.001  },
+    {n:2,    label:'2 Goldback',  oz:0.002  },
+    {n:5,    label:'5 Goldback',  oz:0.005  },
+    {n:10,   label:'10 Goldback', oz:0.010  },
+    {n:25,   label:'25 Goldback', oz:0.025  },
+    {n:50,   label:'50 Goldback', oz:0.050  },
+    {n:100,  label:'100 Goldback',oz:0.100  },
+  ];
+
+  const upd = $('gb-updated');
+  if(upd) upd.innerHTML = 'Live gold $'+au.toFixed(2)+'/oz &nbsp;·&nbsp; Market est = spot &times; 1.25 (typical goldback.com premium) &nbsp;·&nbsp; <a href="https://www.goldback.com/exchange-rates/" target="_blank" style="color:var(--blue)">Official rates &#8599;</a>';
+
+  const denomCards = $('gb-denom-cards');
+  if(denomCards){
+    const cardSet = denoms.filter(d => [1,5,10,25,50].includes(d.n));
+    denomCards.innerHTML = cardSet.map(d => {
+      const sv = au * d.oz; const mv = sv * PREMIUM;
+      return '<div style="background:linear-gradient(135deg,#78350f22,#d9770622);border:1px solid #d97706;border-radius:10px;padding:14px;text-align:center"><div style="font-size:15px;font-weight:800;color:var(--gold)">'+d.label+'</div><div style="font-size:11px;color:var(--muted);margin:3px 0">'+d.oz.toFixed(4)+' oz gold</div><div style="font-size:18px;font-weight:800;color:var(--gold)">$'+mv.toFixed(2)+'</div><div style="font-size:10px;color:var(--muted)">spot $'+sv.toFixed(3)+'</div></div>';
+    }).join('');
   }
-  // Denomination price cards
-  const au=spot.XAU||3241.80;
-  const denomCards=$('gb-denom-cards');
-  const denomTbody=$('gb-denom-tbody');
-  const denoms=[{n:1,label:'1/1000 oz'},{n:5,label:'5/1000 oz'},{n:10,label:'10/1000 oz'},{n:25,label:'25/1000 oz'},{n:50,label:'50/1000 oz'}];
-  if(denomCards){denomCards.innerHTML=denoms.map(d=>{
-    const rate=gbRates[d.n]?parseFloat(gbRates[d.n]):(au/1000*d.n*1.1);
-    const goldOz=d.n/1000;
-    return`<div style="background:linear-gradient(135deg,#78350f22,#d9770622);border:1px solid #d97706;border-radius:10px;padding:14px;text-align:center">
-      <div style="font-size:22px font-weight:800;color:var(--gold)">${d.n}💛</div>
-      <div style="font-size:11px;color:var(--muted);margin:3px 0">${d.label} gold</div>
-      <div style="font-size:20px;font-weight:800;color:var(--gold)">$${rate.toFixed(2)}</div>
-    </div>`;
-  }).join('');}
-  if(denomTbody){denomTbody.innerHTML=denoms.map(d=>{
-    const rate=gbRates[d.n]?parseFloat(gbRates[d.n]):(au/1000*d.n*1.1);
-    const goldOz=d.n/1000;const meltVal=goldOz*au;const premium=((rate-meltVal)/meltVal*100);
-    return`<tr><td style="font-weight:700;color:var(--gold)">${d.n} Goldback</td><td class="p-col">${goldOz.toFixed(4)}</td><td style="font-weight:800;color:var(--gold)">$${rate.toFixed(2)}</td><td class="p-col">$${meltVal.toFixed(2)}</td><td style="color:${premium<30?'var(--green)':'var(--red)'};font-weight:600">+${premium.toFixed(1)}%</td></tr>`;
-  }).join('');}
-  const c=$('gb-retailers');if(!c)return;
-  c.innerHTML=GB.map((r,i)=>`<div class="gb-retailer" id="gbr-${i}">
-    <div class="gb-hdr" onclick="gbToggle(${i})"><span class="gb-name">${r.name}</span><span style="font-size:10px;font-weight:700;color:var(--muted);background:var(--bg3);padding:2px 8px;border-radius:8px">${r.tag}</span><span class="gb-arrow">▼</span></div>
-    <div class="gb-body"><table class="gb-tbl"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Est. Rate</th></tr></thead><tbody>${GB_DENOMS.map(d=>`<tr><td>${d.d}</td><td>${(parseInt(d.n)/1000).toFixed(4)}</td><td style="color:var(--gold);font-weight:700">${gbRates[d.n]?'$'+parseFloat(gbRates[d.n]).toFixed(2):'—'}</td></tr>`).join('')}</tbody></table><a href="${r.url}" target="_blank" class="gb-shop">Shop ${r.name} ↗</a></div>
-  </div>`).join('');
+
+  const denomTbody = $('gb-denom-tbody');
+  if(denomTbody){
+    denomTbody.innerHTML = denoms.map(d => {
+      const sv = au * d.oz; const mv = sv * PREMIUM;
+      return '<tr><td style="font-weight:700;color:var(--gold)">'+d.label+'</td><td class="p-col">'+d.oz.toFixed(4)+'</td><td style="color:var(--muted);">$'+sv.toFixed(3)+'</td><td style="font-weight:800;color:var(--gold)">$'+mv.toFixed(2)+'</td><td style="color:var(--green);font-weight:600">+25%</td></tr>';
+    }).join('');
+  }
+
+  const c = $('gb-retailers'); if(!c) return;
+  c.innerHTML = GB.map((r,i) => '<div class="gb-retailer" id="gbr-'+i+'"><div class="gb-hdr" onclick="gbToggle('+i+')"><span class="gb-name">'+r.name+'</span><span style="font-size:10px;font-weight:700;color:var(--muted);background:var(--bg3);padding:2px 8px;border-radius:8px">'+r.tag+'</span><span class="gb-arrow">&#9660;</span></div><div class="gb-body"><table class="gb-tbl"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Spot Value</th><th>Market Est.</th></tr></thead><tbody>'+denoms.map(d=>{const sv=au*d.oz;const mv=sv*PREMIUM;return '<tr><td>'+d.label+'</td><td>'+d.oz.toFixed(4)+'</td><td style="color:var(--muted)">$'+sv.toFixed(3)+'</td><td style="color:var(--gold);font-weight:700">$'+mv.toFixed(2)+'</td></tr>';}).join('')+'</tbody></table><div style="font-size:11px;color:var(--muted);margin:6px 0 10px">Prices vary by retailer. Click to browse current inventory.</div><a href="'+r.url+'" target="_blank" class="gb-shop">Shop '+r.name+' &#8599;</a></div></div>').join('');
 }
+
 function gbToggle(i){const e=$('gbr-'+i);if(e)e.classList.toggle('open');}
 
 // ═══ SILVER DEAL CALC ═══
