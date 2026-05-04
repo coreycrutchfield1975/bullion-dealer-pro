@@ -234,7 +234,7 @@ const METALS_TTL = 5 * 60 * 1000;
 // Symbol map: our codes -> Yahoo Finance futures tickers
 const YAHOO_MAP = { XAU:'GC=F', XAG:'SI=F', XCU:'HG=F', XPT:'PL=F', XPD:'PA=F', ZN:'ZN=F' };
 
-app.get('/api/metals/:sym', auth, async (req, res) => {
+app.get('/api/metals/:sym', async (req, res) => {
   const sym = req.params.sym.toUpperCase();
   const cached = metalsCache[sym];
   if (cached && Date.now() - cached.ts < METALS_TTL) return res.json(cached.data);
