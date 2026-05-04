@@ -1288,6 +1288,8 @@ const fmt=v=>v==null?'—':'$'+v.toLocaleString('en-US',{minimumFractionDigits:2
 // ═══ SPOT STATE ═══
 const spot={XAU:0,XAG:0,HG:0,XPT:0,XPD:0,ZN:0};
 let window_isPro=false;
+let window_authReady=false;  // true once loadAccount resolves
+let window_pendingTab=null;  // tab to open once auth resolves
 
 async function fm(sym){
   try{
@@ -1382,6 +1384,14 @@ function updateHeroPrices(){
 // ═══ TABS ═══
 const PRO_TABS=['const','trading','numismatic','typeset'];
 function showTab(id){
+  // If auth hasn't resolved yet and this is a pro tab, queue it and highlight
+  if(PRO_TABS.includes(id)&&!window_authReady){
+    window_pendingTab=id;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    const tPend=document.querySelector('.tab[onclick="showTab(\''+id+'\')"]');
+    if(tPend)tPend.classList.add('active');
+    return;
+  }
   if(PRO_TABS.includes(id)&&!window_isPro){$('paywall').classList.add('show');return;}
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   const sec=$('tab-'+id);if(sec)sec.classList.add('active');
@@ -1397,6 +1407,7 @@ function showTab(id){
   if(id==='typeset'){tsRenderSet(tsCurrentSet);tsUpdateOverall();}
   if(id==='admin'){renderInventory();renderSlabs();renderAlerts();presetLoad();}
 }
+
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','rolls','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
 function constSec(s,btn){['calc','rolls','ref'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='ref')renderConstRef();if(s==='rolls')calcConstRolls();}
@@ -3618,13 +3629,20 @@ async function loadAccount(){
   try{
     const r=await fetch('/api/me');
     if(!r.ok){
-      // Not logged in — show paywall but still load spot prices
+      // Not logged in — set authReady so tabs don't queue forever
       window_isPro=false;
+      window_authReady=true;
       $('paywall').classList.add('show');
       return;
     }
     const u=await r.json();
     window_isPro=u.isPro===true;
+    window_authReady=true;
+    // If user clicked a pro tab before auth resolved, open it now
+    if(window_pendingTab){
+      const pt=window_pendingTab; window_pendingTab=null;
+      showTab(pt);
+    }
     if(window_isPro){setTimeout(cloudPull,800);}
     if(!window_isPro){
       document.querySelectorAll('.tab[data-pro="1"]').forEach(t=>{
@@ -3653,8 +3671,8 @@ async function loadAccount(){
     else if(!['admin','monthly','annual','trial'].includes(u.plan))$('paywall').classList.add('show');
   }catch(e){
     console.error('loadAccount error:', e);
-    // Don't redirect on error - just mark as non-pro so spot prices still load
     window_isPro=false;
+    window_authReady=true;  // unblock tabs even on error
   }
 }
 async function redeemPromo(){
