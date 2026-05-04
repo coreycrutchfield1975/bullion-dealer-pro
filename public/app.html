@@ -4010,16 +4010,20 @@ function printSlabReport(){
 
 // ═══ INIT ═══
 async function init(){
-  await loadAccount();
+  // Run spot prices and account auth in PARALLEL — auth failure cannot block prices
   adjustPad();
   renderCoinVals();
   renderAllKeyDates();
   calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
-  await loadSpot();
   tsUpdateOverall();
-  await loadNews();
-  setInterval(loadSpot,5*60*1000);
-  setInterval(loadNews,10*60*1000);
+
+  // Fire these completely independently — no await chaining
+  loadSpot().catch(e=>console.warn('loadSpot failed:',e));
+  loadAccount().catch(e=>console.warn('loadAccount failed:',e));
+  loadNews().catch(e=>console.warn('loadNews failed:',e));
+
+  setInterval(()=>loadSpot().catch(()=>{}), 5*60*1000);
+  setInterval(()=>loadNews().catch(()=>{}), 10*60*1000);
 }
 init();
 
