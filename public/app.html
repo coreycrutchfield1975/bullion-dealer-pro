@@ -42,9 +42,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 /* HEADER */
 #header{position:fixed;top:0;left:0;right:0;z-index:300;background:#0d1117 url(/banner.png?v=7) center center/cover no-repeat;border-bottom:1px solid rgba(212,175,55,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.6)}
-.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0;height:90px;gap:0;position:relative}
-.logo{display:block;flex:1;height:90px;overflow:hidden;text-decoration:none}
-.logo img.banner-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:0;height:56px;gap:0;position:relative}
+.logo{display:block;flex:1;height:56px;overflow:hidden;text-decoration:none}
+.logo img.banner-img{display:block;width:100%;height:56px;object-fit:cover;object-position:center center}
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
 .tts{background:linear-gradient(135deg,#1e3a5f,#2563eb)}
 .logo-name{display:none}
@@ -129,7 +129,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .tnm{background:linear-gradient(135deg,#2c1654 0%,#4a1942 100%)}
 .tnm.active,.tnm:hover{background:linear-gradient(135deg,#4a1942,#7b2d8b)!important}
 /* CONTENT */
-#content{padding-top:160px}
+#content{padding-top:140px}
 .section{display:none;max-width:1100px;margin:0 auto;padding:24px 20px 60px;animation:fadeIn .25s ease}
 .section.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
@@ -305,21 +305,21 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   .section:not(.active){display:none!important}
 }
 @media(max-width:480px){
-  .hdr-inner{padding:0;height:70px}
+  .hdr-inner{padding:0;height:48px}
   .logo{height:80px}
   .logo img.banner-img{height:80px}
 }
 /* Landscape phone — shorter banner so content isn't eaten */
 @media(max-width:900px) and (orientation:landscape){
-  .hdr-inner{height:70px}
-  .logo{height:70px}
-  .logo img.banner-img{height:70px}
+  .hdr-inner{height:48px}
+  .logo{height:48px}
+  .logo img.banner-img{height:48px}
 }
 /* Portrait phone */
 @media(max-width:600px) and (orientation:portrait){
-  .hdr-inner{height:70px}
-  .logo{height:70px}
-  .logo img.banner-img{height:70px}
+  .hdr-inner{height:48px}
+  .logo{height:48px}
+  .logo img.banner-img{height:48px}
   .logo img{height:42px!important}
   .spot-strip{max-width:240px}
   .sec-hero{padding:16px}
