@@ -1391,6 +1391,9 @@ function updateHeroPrices(){
     const sPerG=(spot.XAG/31.1035).toFixed(4);
     const spg=$('silver-per-gram');if(spg)spg.textContent='$'+sPerG+' / g';
     const spo=$('silver-per-oz');if(spo)spo.textContent='$'+spot.XAG.toFixed(2)+' / oz';
+    // Auto-populate silver spot inputs if user hasn't changed them
+    const agVal=spot.XAG.toFixed(2);
+    ['deal-spot','roll-spot','const-spot'].forEach(id=>{const el=$(id);if(el&&(!el.value||parseFloat(el.value)===32.45||parseFloat(el.value)===0))el.value=agVal;});
   }
   if(spot.HG&&spot.ZN){
     const m=(spot.HG*0.00220462262*3.11*0.95)+(spot.ZN*0.00220462262*3.11*0.05);
