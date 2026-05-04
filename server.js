@@ -242,13 +242,27 @@ app.get('/api/metals/:sym', auth, async (req, res) => {
   const yticker = YAHOO_MAP[sym];
   if (!yticker) return res.status(404).json({ error: 'Unknown symbol' });
 
-  try {
-    const yr = await fetch(
-      `https://query1.finance.yahoo.com/v8/finance/chart/${yticker}?interval=1m&range=1d`,
-      { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } }
+  const YAHOO_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Cache-Control': 'no-cache'
+  };
+  const tryFetch = async (host) => {
+    const r = await fetch(
+      `https://${host}/v8/finance/chart/${yticker}?interval=1m&range=1d`,
+      { headers: YAHOO_HEADERS }
     );
-    if (!yr.ok) throw new Error(`Yahoo ${yr.status}`);
-    const yd = await yr.json();
+    if (!r.ok) throw new Error(`Yahoo ${host} ${r.status}`);
+    return r.json();
+  };
+  try {
+    let yd;
+    try { yd = await tryFetch('query1.finance.yahoo.com'); }
+    catch(e1) {
+      console.log(`[metals] query1 failed (${e1.message}), trying query2...`);
+      yd = await tryFetch('query2.finance.yahoo.com');
+    }
     const meta = yd?.chart?.result?.[0]?.meta;
     if (!meta) throw new Error('No meta in response');
     const price = meta.regularMarketPrice || 0;
@@ -272,9 +286,9 @@ app.get('/api/news', async (req, res) => {
   try {
     if (Date.now() - newsCache.ts < 10 * 60 * 1000) return res.json(newsCache.items);
     const feeds = [
-      'https://www.kitco.com/rss/kitconews.rss',
-      'https://finance.yahoo.com/rss/topic/gold',
-      'https://coindesk.com/arc/outboundfeeds/rss/'
+      'https://feeds.bloomberg.com/markets/news.rss',
+      'https://feeds.marketwatch.com/marketwatch/topstories/',
+      'https://www.coindesk.com/arc/outboundfeeds/rss/'
     ];
     const results = await Promise.allSettled(feeds.map(f => rssParser.parseURL(f)));
     const items = [];
