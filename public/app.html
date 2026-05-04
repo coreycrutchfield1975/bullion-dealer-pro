@@ -1312,17 +1312,20 @@ function setTicker(ids,d,perLb=false){
   ids.forEach(id=>{const e=$(id);if(e)e.innerHTML=label+' '+chg;});
 }
 async function loadSpot(){
-  const [au,ag,cu,pt,pd]=await Promise.all([fm('XAU'),fm('XAG'),fm('XCU'),fm('XPT'),fm('XPD')]);
-  if(au?.price){spot.XAU=au.price;spot._au=au;setHdr('hdr-au',au);setTicker(['tkr-au','tkr-au2'],au);}
-  if(ag?.price){spot.XAG=ag.price;spot._ag=ag;setHdr('hdr-ag',ag);setTicker(['tkr-ag','tkr-ag2'],ag);}
-  if(cu?.price){spot.HG=cu.price;setHdr('hdr-cu',cu,true);setTicker(['tkr-cu','tkr-cu2'],cu,true);}
-  if(pt?.price){spot.XPT=pt.price;setHdr('hdr-pt',pt);setTicker(['tkr-pt','tkr-pt2'],pt);}
-  if(pd?.price){spot.XPD=pd.price;setHdr('hdr-pd',pd);setTicker(['tkr-pd','tkr-pd2'],pd);}
-  fetch('/api/metals/ZN').then(r=>r.json()).then(d=>{if(d?.price)spot.ZN=d.price;}).catch(()=>{spot.ZN=1.30;});
-  updateHeroPrices();
-  calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();
-  renderKaratTable();renderSilverMeltTable();renderConstRefTable();renderPennyRefTable();
-  renderInventory();renderSlabs();presetLoad();tsSyncSpot();
+  try{
+    const [au,ag,cu,pt,pd]=await Promise.all([fm('XAU'),fm('XAG'),fm('XCU'),fm('XPT'),fm('XPD')]);
+    if(au?.price){spot.XAU=au.price;spot._au=au;setTicker(['tkr-au','tkr-au2'],au);}
+    if(ag?.price){spot.XAG=ag.price;spot._ag=ag;setTicker(['tkr-ag','tkr-ag2'],ag);}
+    if(cu?.price){spot.HG=cu.price;setTicker(['tkr-cu','tkr-cu2'],cu,true);}
+    if(pt?.price){spot.XPT=pt.price;setTicker(['tkr-pt','tkr-pt2'],pt);}
+    if(pd?.price){spot.XPD=pd.price;setTicker(['tkr-pd','tkr-pd2'],pd);}
+    fetch('/api/metals/ZN').then(r=>r.json()).then(d=>{if(d?.price)spot.ZN=d.price;}).catch(()=>{spot.ZN=1.30;});
+    console.log('[loadSpot] prices loaded - AU:'+spot.XAU+' AG:'+spot.XAG);
+    updateHeroPrices();
+  }catch(e){console.error('[loadSpot] ERROR:',e);}
+  try{calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();}catch(e){console.error('[loadSpot] calc ERROR:',e);}
+  try{renderKaratTable();renderSilverMeltTable();renderConstRefTable();renderPennyRefTable();}catch(e){console.error('[loadSpot] render ERROR:',e);}
+  try{renderInventory();renderSlabs();presetLoad();tsSyncSpot();}catch(e){console.error('[loadSpot] admin ERROR:',e);}
 }
 function setHdr(id,d,perLb=false){
   const el=$(id);if(!el)return;
