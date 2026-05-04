@@ -45,14 +45,14 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .hdr-banner-row{display:flex;align-items:center;justify-content:space-between;height:120px;padding:0 16px;gap:8px}
 .hdr-banner-center{flex:1;display:flex;justify-content:center;align-items:center;height:120px;overflow:hidden}
 .hdr-banner-center img{height:120px;width:auto;max-width:50%;object-fit:contain}
-.hdr-controls-right{display:flex;align-items:center;gap:8px;white-space:nowrap;min-width:160px;justify-content:flex-end}
+.hdr-controls-right{display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:120px;justify-content:flex-end;flex-shrink:0}
 .hdr-spacer{min-width:160px}
 /* ── Mobile portrait (phone upright) ── */
 @media(max-width:600px) and (orientation:portrait){
   .hdr-banner-row{height:120px}
   .hdr-banner-center img{height:110px;max-width:90%;object-fit:contain}
-  .hdr-controls-right{min-width:auto;gap:5px}
-  .hdr-controls-right button{font-size:11px;padding:4px 7px}
+  .hdr-controls-right{min-width:auto;gap:4px;flex-shrink:0}
+  .hdr-controls-right button{font-size:10px;padding:3px 6px}
   .hdr-spacer{display:none}
 }
 /* ── Compact tabs on mobile ── */
