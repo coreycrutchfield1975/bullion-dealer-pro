@@ -1316,18 +1316,30 @@ function setTicker(ids,d,perLb=false){
   const chg=fmtSpotChange(d);
   ids.forEach(id=>{const e=$(id);if(e)e.innerHTML=label+' '+chg;});
 }
-async function loadSpot(){
+async function loadSpot(attempt){
+  attempt = attempt||1;
   try{
     const [au,ag,cu,pt,pd]=await Promise.all([fm('XAU'),fm('XAG'),fm('XCU'),fm('XPT'),fm('XPD')]);
+    const gotPrices = au?.price && ag?.price;
     if(au?.price){spot.XAU=au.price;spot._au=au;setTicker(['tkr-au','tkr-au2'],au);}
     if(ag?.price){spot.XAG=ag.price;spot._ag=ag;setTicker(['tkr-ag','tkr-ag2'],ag);}
     if(cu?.price){spot.HG=cu.price;setTicker(['tkr-cu','tkr-cu2'],cu,true);}
     if(pt?.price){spot.XPT=pt.price;setTicker(['tkr-pt','tkr-pt2'],pt);}
     if(pd?.price){spot.XPD=pd.price;setTicker(['tkr-pd','tkr-pd2'],pd);}
     fetch('/api/metals/ZN').then(r=>r.json()).then(d=>{if(d?.price)spot.ZN=d.price;}).catch(()=>{spot.ZN=1.30;});
-    console.log('[loadSpot] prices loaded - AU:'+spot.XAU+' AG:'+spot.XAG);
+    if(!gotPrices && attempt<4){
+      // Didn't get prices — retry with backoff (2s, 4s, 8s)
+      console.warn('[loadSpot] attempt '+attempt+' got no prices, retrying in '+(attempt*2)+'s...');
+      setTimeout(()=>loadSpot(attempt+1), attempt*2000);
+      return;
+    }
+    console.log('[loadSpot] prices loaded (attempt '+attempt+') AU:'+spot.XAU+' AG:'+spot.XAG);
     updateHeroPrices();
-  }catch(e){console.error('[loadSpot] ERROR:',e);}
+  }catch(e){
+    console.error('[loadSpot] ERROR attempt '+attempt+':', e);
+    if(attempt<4) setTimeout(()=>loadSpot(attempt+1), attempt*2000);
+    return;
+  }
   try{calcGold();calcDeal();calcConst();calcRolls();calcPenny();calcPlatPal();}catch(e){console.error('[loadSpot] calc ERROR:',e);}
   try{renderKaratTable();renderSilverMeltTable();renderConstRefTable();renderPennyRefTable();}catch(e){console.error('[loadSpot] render ERROR:',e);}
   try{renderInventory();renderSlabs();presetLoad();tsSyncSpot();}catch(e){console.error('[loadSpot] admin ERROR:',e);}

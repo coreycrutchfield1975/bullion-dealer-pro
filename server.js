@@ -544,6 +544,7 @@ app.get('/', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.set('Pragma', 'no-cache');
   res.set('Expires', '0');
+  res.setHeader('Cache-Control','no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'app.html'));
 });
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
@@ -554,6 +555,7 @@ app.get('/app', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.set('Pragma', 'no-cache');
   res.set('Expires', '0');
+  res.setHeader('Cache-Control','no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'app.html'));
 });
 app.get('/admin-panel', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
