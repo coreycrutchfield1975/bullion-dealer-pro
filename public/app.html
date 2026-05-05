@@ -443,6 +443,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       </div>
     </div>
   </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:9px 16px;margin:10px 0 4px;font-size:13px">
+    <span style="color:var(--muted)">Gold:Silver Ratio</span>
+    <span id="gs-ratio" style="font-weight:700;font-size:16px;color:var(--gold)">—</span>
+    <span style="color:var(--muted);font-size:11px">oz of silver = 1 oz gold</span>
+  </div>
   <div class="sec-hero hero-gold" style="margin-top:12px">
     <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Karat calculator · Goldback exchange rates</div><div class="sh-chips"><span class="sh-chip">⚖️ Karat Calc</span><span class="sh-chip">💛 Goldbacks</span></div></div>
   </div>
@@ -1381,6 +1386,12 @@ function updateHeroPrices(){
   if(spot.XAU){
     const auFmt='$'+spot.XAU.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
     $('gold-hero-price').textContent=auFmt;
+    // Gold:Silver ratio
+    if(spot.XAG && spot.XAU){
+      const ratio=(spot.XAU/spot.XAG);
+      const ratioEl=$('gs-ratio');
+      if(ratioEl)ratioEl.textContent=ratio.toFixed(1)+':1';
+    }
     const ghcEl=$('gold-hero-chg');
     if(ghcEl){
       if(spot._au&&spot._au.change!=null){
