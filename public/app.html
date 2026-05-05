@@ -228,7 +228,12 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .calc-btn-gold{background:linear-gradient(135deg,#d97706,#f59e0b)}
 .calc-btn-gold:hover{opacity:.88}
 /* TABLES */
-.tbl-wrap{overflow-x:auto}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+@media(max-width:500px){#fx-table th:nth-child(5),#fx-table td:nth-child(5){display:none}
+#fx-table th:nth-child(3),#fx-table td:nth-child(3){display:none}
+#fx-table{font-size:12px}
+#fx-table td:nth-child(1){font-size:18px}}
+@media(max-width:500px){.fx-controls-grid{grid-template-columns:1fr 1fr!important}}
 .dtable{width:100%;border-collapse:collapse;font-size:13px}
 .dtable th{color:var(--muted);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 11px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;background:var(--bg3)}
 .dtable td{padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -848,38 +853,13 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <!-- GRADING SECTION -->
   <div id="nm-grading" style="display:none">
     <div class="card" style="margin-bottom:13px">
-      <div class="card-title">🔍 Photo Grading Lookup</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
-        <div style="flex:1;min-width:160px"><div class="ig-label">Coin Type</div>
-          <select class="ig-select" id="nm-grade-type">
-            <option value="cent">Lincoln Cent</option>
-            <option value="nickel">Buffalo Nickel</option>
-            <option value="dime">Mercury Dime</option>
-            <option value="quarter">Standing Liberty Quarter</option>
-            <option value="half">Walking Liberty Half</option>
-            <option value="dollar">Morgan Dollar</option>
-            <option value="gold">Gold Eagle</option>
-          </select>
-        </div>
-        <div style="min-width:120px"><div class="ig-label">Grade</div>
-          <select class="ig-select" id="nm-grade-val">
-            <option>AG-3</option><option>G-4</option><option>G-6</option>
-            <option>VG-8</option><option>VG-10</option><option>F-12</option>
-            <option>F-15</option><option>VF-20</option><option>VF-25</option>
-            <option>VF-30</option><option>VF-35</option><option>EF-40</option>
-            <option>EF-45</option><option>AU-50</option><option>AU-55</option>
-            <option selected>AU-58</option><option>MS-60</option><option>MS-61</option>
-            <option>MS-62</option><option>MS-63</option><option>MS-64</option>
-            <option>MS-65</option><option>MS-66</option><option>MS-67</option>
-          </select>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px" onclick="openGradingLookup('pcgs')">PCGS Photograde</button>
-          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('ngc')">NGC Grading</button>
-          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('coinfacts')">PCGS CoinFacts</button>
-        </div>
+      <div class="card-title">🔍 Photo Grading Reference</div>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 14px">Tap a resource below to open the grading guide — each site has its own photo reference library to browse.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="https://www.pcgs.com/photograde" target="_blank" class="calc-btn" style="width:auto;padding:10px 18px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px">📷 PCGS Photograde</a>
+        <a href="https://www.ngccoin.com/coin-grading/" target="_blank" class="calc-btn" style="width:auto;padding:10px 18px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;background:var(--bg3);color:var(--text);border:1px solid var(--border)">🏅 NGC Grading Guide</a>
+        <a href="https://www.pcgs.com/coinfacts" target="_blank" class="calc-btn" style="width:auto;padding:10px 18px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;background:var(--bg3);color:var(--text);border:1px solid var(--border)">📖 PCGS CoinFacts</a>
       </div>
-      <div id="nm-grading-info" style="color:var(--muted);font-size:12px;padding:6px 0"></div>
     </div>
     <div class="card">
       <div class="card-title">🏅 Sheldon Grading Scale — Full Reference</div>
@@ -978,7 +958,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       <div style="font-size:12px;color:var(--muted);margin:4px 0 10px">Upgrade to PRO for unlimited currency lookups</div>
       <a href="/pricing" style="display:inline-block;background:var(--blue);color:#fff;padding:8px 20px;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none">Upgrade Now →</a>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;flex-wrap:wrap" id="fx-controls">
+    <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;flex-wrap:wrap" id="fx-controls" class="fx-controls-grid">
       <div><div class="ig-label">Select Country / Currency</div><select class="fx-dropdown" id="fx-dropdown" onchange="fxDropdownChange()"><option value="">— All currencies —</option></select></div>
       <div><div class="ig-label">Or Search</div><input type="text" class="fx-search" id="fx-search" placeholder="Country or code…" oninput="filterFX()"></div>
       <div><div class="ig-label">Amount (USD)</div><input type="number" class="fx-amt" id="fx-amount" value="1" min="0.01" step="0.01" oninput="filterFX()"></div>
@@ -986,7 +966,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     </div>
     <div id="fx-updated" style="color:var(--muted);font-size:11px;margin-top:8px"></div>
     <div style="margin:14px 0 4px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase">⭐ Top Currencies</div>
-    <div id="fx-top10" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px"></div>
+    <div id="fx-top10" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:16px"></div>
   </div>
   <div class="card">
     <div class="tbl-wrap"><table class="dtable" id="fx-table"><thead><tr><th>🌐</th><th style="cursor:pointer" onclick="sortFX('country')">Country ↕</th><th style="cursor:pointer" onclick="sortFX('code')">Code ↕</th><th style="cursor:pointer" onclick="sortFX('rate')">Rate / USD ↕</th><th style="cursor:pointer" onclick="sortFX('usd')">USD per 1 unit ↕</th><th>Converted</th></tr></thead><tbody id="fx-tbody"></tbody></table></div>
@@ -1491,27 +1471,26 @@ function numSec(s,btn){['keydate','grading','errors','coinvals'].forEach(k=>{con
 function renderNmGrading(){const grades=[['PO-1','Poor','Barely identifiable, heavily worn'],['FR-2','Fair','Extremely worn, some design visible'],['AG-3','About Good','Very heavily worn, outline visible'],['G-4','Good','Heavily worn, major design clear'],['G-6','Good+','Slightly more detail than G-4'],['VG-8','Very Good','Well worn, main features clear'],['VG-10','Very Good+','More detail than VG-8'],['F-12','Fine','Moderate to considerable even wear'],['F-15','Fine+','More detail than F-12'],['VF-20','Very Fine','Moderate wear on high points'],['VF-25','Very Fine+','Slightly less wear than VF-30'],['VF-30','Choice Very Fine','Light wear on high points'],['VF-35','Choice VF+','Very light wear on highest points'],['EF-40','Extremely Fine','Light wear throughout'],['EF-45','Choice EF','Slight wear on highest points'],['AU-50','About Uncirculated','Slight wear on high points, half luster'],['AU-55','Choice AU','Slight wear, most luster'],['AU-58','Very Choice AU','Minimal wear, nearly full luster'],['MS-60','Mint State','No wear, many contact marks'],['MS-61','MS61','No wear, noticeable marks'],['MS-62','MS62','No wear, some distracting marks'],['MS-63','Choice BU','No wear, some noticeable marks'],['MS-64','Choice BU+','No wear, few marks'],['MS-65','Gem BU','No wear, strong luster, minor marks'],['MS-66','Gem BU+','No wear, superior luster, very minor marks'],['MS-67','Superb Gem','Virtually perfect, exceptional'],['MS-68','Superb Gem+','Nearly perfect coin'],['MS-69','MS69','Nearly perfect, only tiny imperfections'],['MS-70','Perfect','Absolutely perfect coin']];const tb=document.getElementById('nm-grade-tbody');if(tb)tb.innerHTML=grades.map(([g,n,d])=>`<tr><td style="font-weight:700;color:var(--gold)">${g}</td><td>${n}</td><td>${d}</td></tr>`).join('');}
 
 function renderNmCoinVals(){
-  // Check subscription
-  if(typeof userPlan !== 'undefined' && userPlan==='free'){
-    const tb=document.getElementById('nm-cv-tbody');
-    if(tb)tb.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--muted)">💎 Coin Values require a Pro subscription. <a href="/pricing.html" style="color:var(--gold)">Upgrade here</a></td></tr>';
-    return;
-  }
-  const allCV=typeof COIN_VALUES!=='undefined'?COIN_VALUES:[];
-  const pennyCV=typeof PENNY_COIN_VALUES!=='undefined'?PENNY_COIN_VALUES:[];
-  const combined=[...allCV,...pennyCV];
+  // Uses CV[] which is defined inline in app.html
+  const combined=typeof CV!=='undefined'?CV:[];
   const search=(document.getElementById('nm-cv-search')||{}).value||'';
   const series=(document.getElementById('nm-cv-series')||{}).value||'';
+  // Populate series dropdown if empty
+  const selEl=document.getElementById('nm-cv-series');
+  if(selEl && selEl.options.length<=1 && combined.length){
+    [...new Set(combined.map(c=>c.s))].forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;selEl.appendChild(o);});
+  }
   const filtered=combined.filter(r=>{
     const s=search.toLowerCase();
-    const matchSearch=!s||(r.series+r.date).toLowerCase().includes(s);
-    const matchSeries=!series||r.series===series;
+    const matchSearch=!s||(r.s+r.d).toLowerCase().includes(s);
+    const matchSeries=!series||r.s===series;
     return matchSearch&&matchSeries;
   });
   const tb=document.getElementById('nm-cv-tbody');
   if(!tb)return;
   if(!combined.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">Coin value data loading...</td></tr>';return;}
-  tb.innerHTML=filtered.length?filtered.map(r=>`<tr><td>${r.series}</td><td style="font-weight:700">${r.date}</td><td>${r.g4||'—'}</td><td>${r.vg8||'—'}</td><td>${r.f12||'—'}</td><td>${r.vf20||'—'}</td><td>${r.ef40||'—'}</td><td>${r.au50||'—'}</td><td>${r.ms63||'—'}</td><td class="green-col">${r.ms65||'—'}</td></tr>`).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">No results found</td></tr>';
+  const grades=['G4','VG8','F12','VF20','EF40','AU50','MS63','MS65'];
+  tb.innerHTML=filtered.length?filtered.slice(0,300).map(r=>`<tr><td>${r.s}</td><td style="font-weight:700">${r.d}</td>${grades.map(g=>`<td>${r[g]?'$'+r[g].toLocaleString():'—'}</td>`).join('')}</tr>`).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">No results found</td></tr>';
 }
 function renderAllKeyDates(){
   const allKD=[
