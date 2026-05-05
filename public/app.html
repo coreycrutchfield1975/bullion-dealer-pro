@@ -4192,6 +4192,33 @@ async function init(){
 init();
 
 
+
+function copySpotPrices(){
+  const gEl=$('gold-hero-price');
+  const sEl=$('silver-spotlight-price');
+  const rEl=$('gs-ratio');
+  const g=gEl?gEl.textContent.trim():'—';
+  const s=sEl?sEl.textContent.trim():'—';
+  const r=rEl?rEl.textContent.trim():'—';
+  const now=new Date();
+  const ts=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const text='📊 Spot Prices as of '+ts+'\n🥇 Gold: '+g+'/oz\n🪙 Silver: '+s+'/oz\n⚖️ Gold:Silver Ratio: '+r;
+  const btn=$('copy-prices-btn');
+  function flash(){if(btn){btn.textContent='✅ Copied!';setTimeout(()=>{btn.textContent='📋 Copy Prices';},2000);}}
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).then(flash).catch(()=>{
+      const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+      document.body.appendChild(ta);ta.focus();ta.select();
+      try{document.execCommand('copy');flash();}catch(e){}
+      document.body.removeChild(ta);
+    });
+  } else {
+    const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{document.execCommand('copy');flash();}catch(e){}
+    document.body.removeChild(ta);
+  }
+}
 </script>
 </body>
 </html>
