@@ -209,6 +209,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .seg.active{background:var(--card-bg);color:var(--text);box-shadow:var(--shadow)}
 .igrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:13px}
 @media(max-width:580px){.igrid{grid-template-columns:1fr 1fr}}
+@media(max-width:380px){.igrid{grid-template-columns:1fr}}
 .ig-label{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
 .ig-input{background:var(--input-bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 11px;width:100%;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;outline:none;transition:border-color .18s}
 .ig-input:focus{border-color:var(--blue)}
@@ -217,6 +218,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .ig-select:focus{border-color:var(--blue)}
 .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:13px}
 @media(max-width:480px){.rgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:360px){.rgrid{grid-template-columns:1fr}}
 .res-card{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:11px;text-align:center}
 .res-label{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
 .res-value{font-size:17px;font-weight:800;letter-spacing:-.3px}
@@ -554,32 +556,34 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <div id="ss-premiums" style="display:none"><div id="premiums-container"></div></div>
 
   <div id="ss-platpal" style="display:none">
-    <div class="calc-card">
-      <div class="calc-hdr"><div class="calc-title">⚗️ Platinum & Palladium Calculator</div></div>
+    <!-- Platinum Card -->
+    <div class="calc-card" style="margin-bottom:14px">
+      <div class="calc-hdr"><div class="calc-title">⚗️ Platinum Calculator</div></div>
       <div class="calc-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <div><div class="sec-label">Platinum</div>
-            <div class="igrid" style="grid-template-columns:1fr 1fr">
-              <div><div class="ig-label">Weight (g)</div><input class="ig-input" id="pt-weight" type="number" value="5" oninput="calcPlatPal()"></div>
-              <div><div class="ig-label">Buy % Below</div><input class="ig-input" id="pt-pct" type="number" value="25" oninput="calcPlatPal()"></div>
-            </div>
-            <div class="rgrid" style="grid-template-columns:1fr 1fr">
-              <div class="res-card"><div class="res-label">Spot $/oz</div><div class="res-value rv-blue" id="pt-spot-disp">—</div></div>
-              <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="pt-offer">—</div></div>
-            </div>
-          </div>
-          <div><div class="sec-label">Palladium</div>
-            <div class="igrid" style="grid-template-columns:1fr 1fr">
-              <div><div class="ig-label">Weight (g)</div><input class="ig-input" id="pd-weight" type="number" value="5" oninput="calcPlatPal()"></div>
-              <div><div class="ig-label">Buy % Below</div><input class="ig-input" id="pd-pct" type="number" value="25" oninput="calcPlatPal()"></div>
-            </div>
-            <div class="rgrid" style="grid-template-columns:1fr 1fr">
-              <div class="res-card"><div class="res-label">Spot $/oz</div><div class="res-value rv-blue" id="pd-spot-disp">—</div></div>
-              <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="pd-offer">—</div></div>
-            </div>
-          </div>
+        <div class="igrid" style="grid-template-columns:1fr 1fr">
+          <div><div class="ig-label">Weight (g)</div><input class="ig-input" id="pt-weight" type="number" value="5" oninput="calcPlatPal()"></div>
+          <div><div class="ig-label">Buy % Below</div><input class="ig-input" id="pt-pct" type="number" value="25" oninput="calcPlatPal()"></div>
         </div>
-        <button class="calc-btn" style="margin-top:14px" onclick="calcPlatPal()">Calculate Plat / Pal</button>
+        <div class="rgrid" style="grid-template-columns:1fr 1fr;margin-top:10px">
+          <div class="res-card"><div class="res-label">Spot $/oz</div><div class="res-value rv-blue" id="pt-spot-disp">—</div></div>
+          <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="pt-offer">—</div></div>
+        </div>
+        <button class="calc-btn" style="margin-top:14px" onclick="calcPlatPal()">Calculate Platinum</button>
+      </div>
+    </div>
+    <!-- Palladium Card -->
+    <div class="calc-card">
+      <div class="calc-hdr"><div class="calc-title">⚗️ Palladium Calculator</div></div>
+      <div class="calc-body">
+        <div class="igrid" style="grid-template-columns:1fr 1fr">
+          <div><div class="ig-label">Weight (g)</div><input class="ig-input" id="pd-weight" type="number" value="5" oninput="calcPlatPal()"></div>
+          <div><div class="ig-label">Buy % Below</div><input class="ig-input" id="pd-pct" type="number" value="25" oninput="calcPlatPal()"></div>
+        </div>
+        <div class="rgrid" style="grid-template-columns:1fr 1fr;margin-top:10px">
+          <div class="res-card"><div class="res-label">Spot $/oz</div><div class="res-value rv-blue" id="pd-spot-disp">—</div></div>
+          <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="pd-offer">—</div></div>
+        </div>
+        <button class="calc-btn" style="margin-top:14px" onclick="calcPlatPal()">Calculate Palladium</button>
       </div>
     </div>
   </div>
@@ -630,7 +634,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="const-spot" type="number" value="32.45" oninput="calcConst()"></div>
           <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="const-pct" type="number" value="20" oninput="calcConst()"></div>
         </div>
-        <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="rgrid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">
           <div class="res-card"><div class="res-label">Total oz</div><div class="res-value rv-blue" id="const-oz">—</div></div>
           <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="const-melt">—</div></div>
           <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="const-buy">—</div></div>
@@ -670,7 +674,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="const-roll-spot" type="number" value="32.45" oninput="calcConstRolls()"></div>
           <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="const-roll-pct" type="number" value="20" oninput="calcConstRolls()"></div>
         </div>
-        <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="rgrid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">
           <div class="res-card"><div class="res-label">Total oz</div><div class="res-value rv-blue" id="cr-oz">—</div></div>
           <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="cr-melt">—</div></div>
           <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="cr-buy">—</div></div>
@@ -734,7 +738,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div><div class="ig-label">Copper $/lb</div><input class="ig-input" id="penny-cu" type="number" value="4.68" oninput="calcPenny()"></div>
           <div><div class="ig-label">Zinc $/lb</div><input class="ig-input" id="penny-zn" type="number" value="1.30" oninput="calcPenny()"></div>
         </div>
-        <div class="rgrid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="rgrid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">
           <div class="res-card"><div class="res-label">Melt Each</div><div class="res-value rv-gold" id="penny-each">—</div></div>
           <div class="res-card"><div class="res-label">Total Melt</div><div class="res-value rv-blue" id="penny-total">—</div></div>
           <div class="res-card"><div class="res-label" id="penny-count-label">Face Value</div><div class="res-value rv-muted" id="penny-face">—</div></div>
@@ -866,7 +870,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px" onclick="openGradingLookup('pcgs')">PCGS Photograde</button>
-          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('ngc')">NGC Guide</button>
+          <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('ngc')">NGC Grading</button>
           <button class="calc-btn" style="width:auto;padding:8px 15px;font-size:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border)" onclick="openGradingLookup('coinfacts')">PCGS CoinFacts</button>
         </div>
       </div>
@@ -885,6 +889,17 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
   <!-- ERRORS SECTION -->
   <div id="nm-errors" style="display:none">
+    <div class="card" style="margin-bottom:13px;background:linear-gradient(135deg,rgba(220,38,38,0.07),transparent)">
+      <div class="card-title">🌐 Error Coin Resources</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;padding:4px 0 6px">
+        <a href="https://www.error-ref.com" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:600">🔍 Error-Ref.com <span style="font-size:10px;color:var(--muted)">(Photo Library)</span></a>
+        <a href="https://www.coinworld.com/news/us-coins/error-coins" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:600">📰 Coin World Errors</a>
+        <a href="https://www.pcgs.com/coinfacts" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:600">📖 PCGS CoinFacts</a>
+        <a href="https://www.ngccoin.com/variety-plus/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:600">🔢 NGC VarietyPlus</a>
+        <a href="https://www.doubleddie.com" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:600">🔀 DoubledDie.com</a>
+        <a href="https://www.conecaonline.org" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:600">🏛 CONECA (Error Club)</a>
+      </div>
+    </div>
     <div class="card" style="margin-bottom:13px">
       <div class="card-title">⚠️ Mint Error Type Reference</div>
       <div class="err-grid" id="nm-errors-grid"></div>
@@ -1577,7 +1592,7 @@ window.addEventListener('load',adjustPad);window.addEventListener('resize',adjus
 
 // ═══ GOLD CALC ═══
 function calcGold(){
-  // Free usage limit
+  // Free usage limit (skip for Pro/Admin)
   if(!window_isPro){
     let used=parseInt(localStorage.getItem('bdp-karat-used')||'0');
     if(used>=5){
@@ -1593,6 +1608,10 @@ function calcGold(){
     }
     const hint=$('karat-uses-hint');
     if(hint)hint.textContent=used<5?'ℹ Free: '+(5-used)+' calculations remaining':'';
+  } else {
+    // Pro/Admin — hide any limit nudge
+    const nb=$('karat-limit-nudge');if(nb)nb.style.display='none';
+    const hint=$('karat-uses-hint');if(hint)hint.textContent='';
   }
   const k=parseInt($('gk-karat').value||'14');const p=k/24;
   let w=parseFloat($('gk-weight').value)||0;
@@ -2209,8 +2228,8 @@ function openGradingLookup(source) {
     window.open('https://www.pcgs.com/photograde','_blank');
     if(infoEl) infoEl.textContent = '↗ Opened PCGS Photograde — browse to ' + label;
   } else if(source==='ngc'){
-    window.open('https://www.ngccoin.com/coin-grading/','_blank');
-    if(infoEl) infoEl.textContent = '↗ Opened NGC Grading Guide — browse to ' + label;
+    window.open('https://www.ngccoin.com/resources/grading-standards/','_blank');
+    if(infoEl) infoEl.textContent = '↗ Opened NGC Grading Standards page';
   } else if(source==='coinfacts'){
     window.open('https://www.pcgs.com/coinfacts','_blank');
     if(infoEl) infoEl.textContent = '↗ Opened PCGS CoinFacts — search for ' + label;
@@ -2294,22 +2313,21 @@ async function loadFX(force=false){
   // Free usage limit check
   if(!window_isPro){
     let fxUsed=parseInt(localStorage.getItem('bdp-fx-used')||'0');
-    if(fxUsed>=5){
+    if(!window_isPro && fxUsed>=5){
       const banner=$('fx-limit-banner');if(banner)banner.style.display='block';
       const ctrl=$('fx-controls');if(ctrl)ctrl.style.display='none';
       const top=$('fx-top10');if(top)top.style.display='none';
       const tbl=$('fx-table');if(tbl)tbl.style.display='none';
       return;
     }
-    fxUsed++;
-    localStorage.setItem('bdp-fx-used',fxUsed);
+    if(!window_isPro){ fxUsed++; localStorage.setItem('bdp-fx-used',fxUsed); }
     const banner=$('fx-limit-banner');
     if(banner){
-      if(fxUsed>=5){banner.style.display='block';const ctrl=$('fx-controls');if(ctrl)ctrl.style.pointerEvents='none';}
+      if(!window_isPro && fxUsed>=5){banner.style.display='block';const ctrl=$('fx-controls');if(ctrl)ctrl.style.pointerEvents='none';}
       else{banner.style.display='none';}
     }
     // Show remaining uses hint
-    if(fxUsed<5){const s=$('fx-status');if(s)s.textContent='ℹ Free: '+(5-fxUsed)+' lookups remaining. Upgrade for unlimited.';}
+    if(!window_isPro && fxUsed<5){const s=$('fx-status');if(s)s.textContent='ℹ Free: '+(5-fxUsed)+' lookups remaining. Upgrade for unlimited.';}
   }
   if(!force && Object.keys(fxRates).length>0) return;
   $('fx-status').textContent='Loading exchange rates…';
@@ -3747,6 +3765,13 @@ async function loadAccount(){
     const u = await r.json();
     const paid = ['admin','monthly','annual','trial'];
     window_isPro = paid.includes(u.plan);
+    if(window_isPro){
+      localStorage.removeItem('bdp-karat-used');
+      localStorage.removeItem('bdp-fx-used');
+      const knudge=$('karat-limit-nudge');if(knudge)knudge.style.display='none';
+      const fxbanner=$('fx-limit-banner');if(fxbanner)fxbanner.style.display='none';
+      const fxctrl=$('fx-controls');if(fxctrl)fxctrl.style.pointerEvents='auto';
+    }
     window_authReady = true;
 
     // ALWAYS remove the paywall for any logged-in user
