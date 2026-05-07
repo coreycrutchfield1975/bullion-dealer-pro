@@ -463,7 +463,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <span style="font-size:11px;color:var(--muted);line-height:1.4">Copies current Gold, Silver &amp; ratio to your clipboard — handy for texting or messaging customers a quick quote.</span>
   </div>
   <div class="sec-hero hero-gold" style="margin-top:12px">
-    <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Karat calculator · Goldback exchange rates</div><div class="sh-chips"><span class="sh-chip">⚖️ Karat Calc</span><span class="sh-chip">💛 Goldbacks</span></div></div>
+    <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Karat calculator · Goldback exchange rates</div><div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="gold-daily-fact"></span>
+      </div></div>
   </div>
   <div class="sub-nav">
     <button class="seg active" onclick="goldSec('karat',this)">⚖️ Karat Calc</button>
@@ -541,7 +544,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
 <div id="tab-silver" class="section">
   <div class="sec-hero hero-silver">
-    <div><div class="sh-title">Precious Metals</div><div class="sh-sub">Silver bullion · Platinum · Palladium · Dealer premiums · Live spot pricesm</div><div class="sh-chips"><span class="sh-chip">🧮 Silver Calc</span><span class="sh-chip">🏪 Premiums</span><span class="sh-chip">⚗️ Plat/Pal</span></div></div>
+    <div><div class="sh-title">Precious Metals</div><div class="sh-sub">Silver bullion · Platinum · Palladium · Dealer premiums · Live spot pricesm</div><div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="silver-daily-fact"></span>
+      </div></div>
     <div class="price-box"><div class="pb-label">Silver Spot</div><div class="pb-price" id="silver-hero-price">—</div><div class="pb-chg" id="silver-hero-chg">Loading…</div></div>
   </div>
   <div class="sub-nav">
@@ -611,7 +617,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ CONSTITUTIONAL TAB ═══════════════════ -->
 <div id="tab-const" class="section">
   <div class="sec-hero hero-const">
-    <div><div class="sh-title">Constitutional Silver</div><div class="sh-sub">90% &amp; 40% silver US coins · Melt calculator · War nickels · Rolls</div><div class="sh-chips"><span class="sh-chip">🧮 Melt Calc</span><span class="sh-chip">📜 Rolls</span><span class="sh-chip">⚡ Quick Ref</span></div></div>
+    <div><div class="sh-title">Constitutional Silver</div><div class="sh-sub">90% &amp; 40% silver US coins · Melt calculator · War nickels · Rolls</div><div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="const-daily-fact"></span>
+      </div></div>
     <div class="price-box"><div class="pb-label">Silver Spot</div><div class="pb-price" id="const-hero-price">—</div><div class="pb-chg">Live</div></div>
   </div>
   <div class="sub-nav">
@@ -718,7 +727,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ PENNIES TAB ═══════════════════ -->
 <div id="tab-pennies" class="section">
   <div class="sec-hero hero-penny">
-    <div><div class="sh-title">Copper Melt Calculator</div><div class="sh-sub">Live copper/zinc spot prices · Pennies, copper rounds &amp; bars</div><div class="sh-chips"><span class="sh-chip">🧮 Melt Calc</span></div></div>
+    <div><div class="sh-title">Copper Melt Calculator</div><div class="sh-sub">Live copper/zinc spot prices · Pennies, copper rounds &amp; bars</div><div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="copper-daily-fact"></span>
+      </div></div>
     <div class="price-box"><div class="pb-label">Penny Melt</div><div class="pb-price" id="penny-hero-melt">—</div><div class="pb-chg">Cu/Zn live</div></div>
   </div>
   <div class="sub-nav">
@@ -790,11 +802,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div>
       <div class="sh-title" style="color:#fff">📚 Numismatic Guide</div>
       <div class="sh-sub" style="color:rgba(255,255,255,0.85)">Key Dates · Grading · Errors · Coin Values — All series in one place</div>
-      <div class="sh-chips">
-        <span class="sh-chip">🔑 Key Dates</span>
-        <span class="sh-chip">🏅 Grading</span>
-        <span class="sh-chip">⚠️ Errors</span>
-        <span class="sh-chip">💎 Coin Values</span>
+      <div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="numis-daily-fact"></span>
+      </div>
         <a href="https://en.numista.com" target="_blank" class="sh-chip" style="text-decoration:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-weight:700">🌐 Numista.com ↗</a>
       </div>
     </div>
@@ -958,7 +969,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ CURRENCY TAB ═══════════════════ -->
 <div id="tab-fx" class="section">
   <div class="sec-hero hero-fx">
-    <div><div class="sh-title">World Currency Exchange</div><div class="sh-sub">Live rates for 80+ currencies vs US Dollar · Dropdown selector · Search · Sortable table</div><div class="sh-chips"><span class="sh-chip">80+ Currencies</span><span class="sh-chip">🔄 Live Rates</span><span class="sh-chip">🔍 Searchable</span></div></div>
+    <div><div class="sh-title">World Currency Exchange</div><div class="sh-sub">Live rates for 80+ currencies vs US Dollar · Dropdown selector · Search · Sortable table</div><div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="fx-daily-fact"></span>
+      </div></div>
     <div class="price-box"><div class="pb-label">Base Currency</div><div class="pb-price" style="font-size:20px">USD</div><div class="pb-chg" id="fx-hero-updated">Live</div></div>
   </div>
   <div class="card" style="margin-bottom:13px">
@@ -986,7 +1000,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ TYPE SETS TAB ═══════════════════ -->
 <div id="tab-typeset" class="section">
   <div class="sec-hero" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
-    <div><div class="sh-title">Collector's Corner</div><div class="sh-sub">Track your progress across coins, currency &amp; commemoratives · Saves automatically</div><div class="sh-chips"><span class="sh-chip">🪙 Coin Sets</span><span class="sh-chip">💵 Currency</span><span class="sh-chip">🏅 Commemoratives</span><span class="sh-chip">✅ Progress Tracking</span></div></div>
+    <div><div class="sh-title">Collector's Corner</div><div class="sh-sub">Track your progress across coins, currency &amp; commemoratives · Saves automatically</div><div style="border-top:1px solid rgba(201,162,39,0.25);margin-top:10px;padding-top:8px;display:flex;align-items:flex-start;gap:6px">
+        <span style="font-size:13px;flex-shrink:0">📅</span>
+        <span style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.5" id="collect-daily-fact"></span>
+      </div></div>
     <div class="price-box" style="min-width:110px"><div class="pb-label">Total Progress</div><div class="pb-price" id="ts-overall-pct" style="font-size:24px">0%</div><div class="pb-chg" id="ts-overall-count">0 / 0 coins</div></div>
   </div>
 
@@ -4224,6 +4241,262 @@ function copySpotPrices(){
     document.body.removeChild(ta);
   }
 }
+
+const GOLD_FACTS=[
+"Gold has been valued for over 5,000 years — the earliest known coins date to 600 BC in ancient Lydia.",
+"The word 'gold' comes from the Old English word 'geolu,' meaning yellow.",
+"All the gold ever mined in history would fit into a cube roughly 21 meters on each side.",
+"Gold is so malleable that one ounce can be beaten into a sheet covering 100 square feet.",
+"The United States held the world's largest gold reserve at Fort Knox — over 4,600 tons.",
+"Gold was the foundation of the international monetary system until the US ended the gold standard in 1971.",
+"Ancient Egyptians associated gold with the sun god Ra and used it extensively in burial rituals.",
+"The California Gold Rush of 1848–1855 brought over 300,000 prospectors to the state.",
+"The highest recorded gold price was over $3,500 per troy ounce in 2025.",
+"Gold is one of the few elements that occurs in nature in its pure metallic form.",
+"The Witwatersrand Basin in South Africa has produced roughly 40% of all gold ever mined.",
+"Gold melts at 1,064°C (1,947°F) and boils at 2,856°C (5,173°F).",
+"Pure gold (24 karat) is too soft for most jewelry — it's typically alloyed with silver or copper.",
+"The Aztec word for gold was 'teocuitlatl,' meaning 'excrement of the gods.'",
+"Spain looted an estimated 200 tons of gold and silver from the Americas between 1500–1600.",
+"Gold is chemically inert — it doesn't rust, tarnish, or corrode under normal conditions.",
+"The Midas touch legend comes from King Midas of Phrygia, a real ancient ruler known for his wealth.",
+"NASA uses gold-coated visors on astronaut helmets to reflect solar radiation.",
+"The Klondike Gold Rush of 1896 in Yukon, Canada led to the founding of Dawson City.",
+"Gold's atomic number is 79 and its chemical symbol Au comes from the Latin 'aurum.'",
+"The largest gold nugget ever found was the 'Welcome Stranger' — 2,316 troy ounces, found in Australia in 1869.",
+"Central banks collectively hold over 35,000 tons of gold as monetary reserves.",
+"Gold is edible — 24-karat gold leaf is used as a food decoration and is classified as safe.",
+"The phrase 'good as gold' dates to at least the 1840s and reflects gold's reputation for reliability.",
+"Gold's rarity on Earth is partly because most of it sank to the planet's core during formation.",
+"Scientists believe most gold on Earth arrived via meteorite bombardment 4 billion years ago.",
+"The first gold coins in the US were minted in 1795 by the Philadelphia Mint.",
+"South Africa was the world's top gold producer for most of the 20th century; China now holds that title.",
+"The Gold Reserve Act of 1934 raised the official gold price from \$20.67 to \$35 per troy ounce.",
+"During WWII, many countries secretly moved gold reserves to prevent capture by Axis powers.",
+"Gold's thermal and electrical conductivity make it essential in electronics and aerospace.",
+"The Dead Sea Scrolls jars were sealed with a bitumen that contained trace amounts of gold.",
+"Roman soldiers were sometimes paid in gold — the term 'salary' traces back to salt, but gold was the prestige pay.",
+"The Swiss Franc was backed by gold at a 40% reserve requirement until the year 2000.",
+"Jewelry accounts for roughly 50% of global gold demand each year."
+];
+const SILVER_FACTS=[
+"Silver has been used as money for over 4,000 years — longer than gold in many civilizations.",
+"The chemical symbol for silver, Ag, comes from the Latin word 'argentum.'",
+"Argentina was named after silver — Spanish explorers believed it held vast silver deposits.",
+"Silver is the best electrical conductor of all metals, surpassing even copper.",
+"The largest silver nugget ever found weighed 1,840 pounds and was discovered in Mexico.",
+"In the 1800s, the Comstock Lode in Nevada produced over 300 million ounces of silver.",
+"Silver has natural antimicrobial properties — ancient civilizations stored water in silver vessels.",
+"The US officially demonetized silver in 1873, an act critics called the 'Crime of 1873.'",
+"Silver's melting point is 961.8°C (1,763°F).",
+"The Hunt Brothers attempted to corner the silver market in 1980, driving prices to \$50/oz before a dramatic collapse.",
+"One troy ounce of silver can be drawn into a wire over 8,000 feet long.",
+"Silver is used in solar panels — approximately 100 million ounces per year go to the solar industry.",
+"The phrase 'born with a silver spoon' reflects the historical association of silver with wealth and good health.",
+"Bolivia's Cerro Rico mountain produced so much silver that it was called the 'mountain that eats men.'",
+"90% silver US coins — dimes, quarters, and halves — were struck from 1892 through 1964.",
+"Silver iodide is used in cloud seeding to induce rainfall.",
+"Ancient Romans used silver acetate as an early treatment for alcoholism.",
+"The Morgan Silver Dollar (1878–1921) is the most collected US coin series of all time.",
+"Silver's reflectivity is the highest of any metal — over 99% of visible light.",
+"The term 'sterling silver' (92.5% pure) dates to medieval England and the Easterling traders.",
+"During WWI, the US Mint melted over 270 million silver dollars to provide silver to Britain.",
+"Silver was once more valuable than gold in ancient Egypt due to its relative scarcity.",
+"Photography relied on silver halide compounds from the 1830s until the digital age.",
+"Silver is a byproduct of lead, zinc, and copper mining — less than 30% comes from primary silver mines.",
+"The Peace Dollar (1921–1935) was designed to commemorate the end of World War I.",
+"Mexico is the world's largest silver-producing country, followed by China and Peru.",
+"The US Strategic Stockpile once held over 2 billion ounces of silver.",
+"Silver nanoparticles are embedded in clothing, bandages, and medical devices for their antibacterial properties.",
+"The Walking Liberty Half Dollar (1916–1947) is considered one of the most beautiful US coin designs.",
+"Silver prices hit an all-time high of about \$50/oz twice — in 1980 and again in 2011.",
+"Warren Buffett purchased 130 million ounces of silver in 1997 — about 30% of world supply at the time.",
+"Silver is used in every new car — approximately one ounce per vehicle for electrical contacts.",
+"The first American silver coin was the Flowing Hair Dollar, struck in 1794.",
+"Ancient Greeks used silver to purify water during military campaigns.",
+"Silver's role in mirrors dates to the 13th century — modern mirrors still use a thin silver coating."
+];
+const CONST_FACTS=[
+"US dimes, quarters, and half dollars minted before 1965 contain 90% silver.",
+"The Coinage Act of 1792 established the US Mint and set the silver dollar at 371.25 grains of pure silver.",
+"War nickels (1942–1945) contain 35% silver — minted to save nickel for WWII military use.",
+"Franklin Half Dollars minted 1948–1963 contain .3617 oz of silver each.",
+"Kennedy Half Dollars from 1965–1970 are 40% silver, not 90%.",
+"A roll of 90% silver quarters (40 coins) contains approximately 7.15 troy ounces of silver.",
+"The Mercury Dime (1916–1945) is actually Lady Liberty — not the Roman god Mercury.",
+"Barber coinage (1892–1916) includes dimes, quarters, and half dollars — all 90% silver.",
+"The Standing Liberty Quarter was redesigned in 1917 after the public objected to Liberty's exposed breast.",
+"A 'junk silver' bag containing \$1,000 face value holds approximately 715 troy ounces of silver.",
+"The term 'constitutional silver' refers to coins that were legal tender under the original US monetary system.",
+"Morgan Dollars (1878–1921) and Peace Dollars (1921–1935) each contain .7734 oz of silver.",
+"Eisenhower Dollars (1971–1978) struck for circulation contain no silver — only proof versions do.",
+"The Walking Liberty Half Dollar inspired the design of the modern American Silver Eagle.",
+"Silver coins were removed from circulation when the rising silver price made their melt value exceed face value.",
+"The Coinage Act of 1965, signed by LBJ, eliminated silver from dimes and quarters entirely.",
+"A \$1 face value of 90% silver coins contains approximately 0.715 troy ounces of silver.",
+"Pre-1965 Roosevelt Dimes are one of the most affordable ways to accumulate silver by weight.",
+"The design on the Standing Liberty Quarter was modified in 1925 to add a date that was wearing off too quickly.",
+"The 1916-D Mercury Dime is one of the most coveted key dates in 20th century US coinage.",
+"Silver Washington Quarters were first minted in 1932 to commemorate the 200th anniversary of his birth.",
+"The Seated Liberty design appeared on US silver coins from 1836 through 1891.",
+"During WWII, the US Mint used silver in nickels to free up nickel for military equipment like armor plating.",
+"The 1955 Doubled Die Lincoln Cent is the most famous US mint error coin.",
+"Franklin Half Dollars were only minted for 15 years — making them relatively scarce compared to other series.",
+"Proof sets containing 90% silver coins were sold directly to collectors by the US Mint starting in 1936.",
+"A full set of circulated 90% silver coins from 1892–1964 spans over 70 years of US monetary history.",
+"The New Orleans Mint produced silver coins from 1838 until it was captured by Confederate forces in 1861.",
+"The 1804 Silver Dollar — though dated 1804 — was actually struck decades later as a diplomatic gift.",
+"Coin roll hunting is a popular hobby where collectors search through bank rolls for silver coins still in circulation."
+];
+const COPPER_FACTS=[
+"Pennies minted before 1982 are 95% copper and worth more than face value in melt.",
+"The 1943 Steel Penny was made of zinc-coated steel to save copper for WWII ammunition casings.",
+"A few 1943 copper pennies were accidentally struck — one sold for over \$1.7 million.",
+"Copper has been used by humans for over 10,000 years — longer than any other metal.",
+"The US switched pennies from 95% copper to copper-plated zinc in 1982 to cut production costs.",
+"Copper's chemical symbol Cu comes from 'Cuprum,' the Latin name for Cyprus, where Romans mined it.",
+"Modern pennies cost about 2 cents each to produce — the US loses money on every penny minted.",
+"Copper is essential for electric vehicles — a single EV uses about 183 pounds of copper.",
+"The Statue of Liberty is clad in approximately 80 tons of copper sheet — now green from oxidation.",
+"Chile holds the world's largest copper reserves and produces about 27% of global supply.",
+"Copper is one of the best conductors of electricity, second only to silver.",
+"The first US cent was the large cent — nearly the size of a modern half dollar — minted from 1793 to 1857.",
+"Lincoln replaced the Indian Head Cent design in 1909 — the first US coin to feature a real person.",
+"The Flying Eagle Cent (1856–1858) was the first small cent produced by the US Mint.",
+"Copper's antimicrobial properties have led hospitals to install copper door handles to reduce infection spread.",
+"The Bronze Age (3300–1200 BC) was named after the copper-tin alloy that defined that era.",
+"A pre-1982 penny contains about 2.95 grams of copper worth more than its 1-cent face value.",
+"The 1955 Doubled Die Cent is worth thousands — caused by a misaligned hub during the minting process.",
+"Copper is 100% recyclable without any loss of quality — about 80% of all copper ever mined is still in use.",
+"The wheat penny (1909–1958) is one of the most collected US coin series ever produced.",
+"Chilean copper mining giant Codelco is the world's largest copper producer.",
+"The Indian Head Cent was designed by James Barton Longacre — the chief engraver of the US Mint.",
+"Romans used copper coins called 'as' as their primary small denomination currency.",
+"Zinc prices heavily influence the modern penny's cost since they make up 97.5% of its composition.",
+"Copper shortages during WWII also led to the brief use of plastic pennies in experimental test strikes.",
+"The Shield Nickel (1866–1883) was the first US five-cent piece made of copper-nickel alloy.",
+"Copper futures trade on the COMEX exchange under the symbol HG (High Grade copper).",
+"China consumes about 50% of the world's annual copper production.",
+"The US Mint struck over 8 billion pennies in 2023 — more than any other coin denomination.",
+"Hoarding pre-1982 pennies for their copper content is technically legal in the US as long as you don't export them in bulk."
+];
+const NUMIS_FACTS=[
+"The word 'numismatics' comes from the Greek 'nomisma,' meaning coin.",
+"The 1913 Liberty Head Nickel is one of the rarest US coins — only 5 are known to exist.",
+"The Professional Coin Grading Service (PCGS) was founded in 1986 and has graded over 45 million coins.",
+"A coin graded MS-70 is considered perfect with no post-production imperfections under 5x magnification.",
+"The Sheldon scale (1–70) used to grade coins was created by Dr. William Sheldon in 1949.",
+"The 1804 Silver Dollar is known as the 'King of American Coins' — only 15 known examples exist.",
+"The American Numismatic Association (ANA) was founded in 1891 and has over 25,000 members.",
+"Key date coins are those with the lowest mintage in a series — they command the highest premiums.",
+"A coin's luster refers to the cartwheel-like reflective flow lines created during the minting process.",
+"Toning on silver coins can be desirable — original natural toning often adds to a coin's value.",
+"The Numismatic Guaranty Corporation (NGC) was founded in 1987 and is PCGS's main competitor.",
+"Proof coins are struck at least twice with specially polished dies to create mirror-like fields.",
+"The most expensive coin ever sold was the 1933 Saint-Gaudens Double Eagle — \$18.9 million in 2021.",
+"Error coins result from mistakes in the minting process — doubled dies, off-centers, and broadstrikes.",
+"CAC (Certified Acceptance Corporation) stickers indicate a coin grades solidly for its assigned grade.",
+"Mintmarks identify which facility struck a coin — P (Philadelphia), D (Denver), S (San Francisco), O (New Orleans).",
+"The term 'slider' refers to a coin that's been circulated but looks close to uncirculated.",
+"Strike refers to the sharpness of detail on a coin — a full strike means all design elements are sharp.",
+"Bag marks are small nicks from coins contacting each other in mint bags — common on large silver dollars.",
+"Eye appeal is a subjective but important factor — a coin with great eye appeal often brings a premium.",
+"The 1916-D Mercury Dime had a mintage of only 264,000 — making it one of the rarest 20th century dimes.",
+"Ancient coins from Greece and Rome can often be purchased for under \$100 — making them accessible to new collectors.",
+"The Flying Eagle Cent pattern coins struck in 1856 were used to lobby Congress to approve the new small cent design.",
+"A coin's obverse is the front (usually with a portrait), and the reverse is the back.",
+"The edge of a coin is called the third side — reeding (ridges) was added to detect coin clipping.",
+"The Barber coinage series was so unpopular that very few were saved in high grades — making MS examples very rare.",
+"Coin albums and folders should be acid-free to prevent chemical damage to stored coins.",
+"The greysheet (CDN) provides wholesale bid prices used by dealers — retail is typically 10–30% above.",
+"Cleaning a coin — even lightly — almost always permanently damages its surface and reduces its value.",
+"A type set is a collection containing one example of each major design type rather than every date and mintmark."
+];
+const FX_FACTS=[
+"The US Dollar has been the world's primary reserve currency since the Bretton Woods Agreement in 1944.",
+"The Zimbabwean dollar experienced hyperinflation so severe that a \$100 trillion note was issued in 2009.",
+"The British Pound Sterling is the oldest currency still in use today — dating back to 775 AD.",
+"The Euro was introduced as a virtual currency in 1999 and as physical coins and notes in 2002.",
+"Switzerland's Swiss Franc is considered one of the world's most stable currencies.",
+"The term 'dollar' traces back to the Bohemian 'thaler' coin first minted in 1518.",
+"Currency exchange rates fluctuate 24 hours a day, 5 days a week across global forex markets.",
+"The daily forex market trades over \$7.5 trillion — the largest financial market on Earth.",
+"Gold was the backbone of the international monetary system until Nixon ended convertibility in 1971.",
+"The strongest currency by face value is the Kuwaiti Dinar — 1 KWD ≈ \$3.25 USD.",
+"In 1923 Germany, hyperinflation was so bad that workers were paid twice a day so they could spend wages before prices rose.",
+"The US Dollar is used in about 88% of all currency transactions globally.",
+"Currency pegging ties one country's exchange rate to another — many Middle Eastern countries peg to the USD.",
+"The Yuan/Renminbi is China's official currency — 'renminbi' means 'people's currency.'",
+"Dollarization is when a country abandons its own currency and adopts the US Dollar — Ecuador did this in 2000.",
+"The Japanese Yen is one of the most traded currencies in the world, despite Japan's relatively small economy.",
+"The Euro is used by 20 of the 27 EU member states.",
+"The first paper money was used in Tang Dynasty China around the 7th century AD.",
+"Purchasing Power Parity (PPP) compares currencies based on the cost of a basket of goods.",
+"The Big Mac Index, created by The Economist in 1986, uses burger prices to measure currency valuation.",
+"Currency carries color — the US \$100 bill is green; the British £50 note is red; the EU €500 was purple.",
+"The Mexican Peso was the world's most widely traded currency in the 18th and 19th centuries.",
+"When a currency depreciates, exports become cheaper and more competitive on the global market.",
+"The Canadian Dollar is informally called the 'Loonie' because of the loon bird on the \$1 coin.",
+"Australian Dollar notes are made of polymer plastic — more durable and harder to counterfeit than paper.",
+"Currency futures allow traders to lock in an exchange rate for a future date.",
+"The Russian Ruble lost 50% of its value in late 2014 due to falling oil prices and sanctions.",
+"The Turkish Lira redenominated in 2005, removing six zeros — 1,000,000 old lira became 1 new lira.",
+"The US \$2 bill is still being produced but is rarely seen in circulation — many people think it's rare.",
+"In 2022, the US Dollar Index hit a 20-year high as the Fed aggressively raised interest rates."
+];
+const COLLECT_FACTS=[
+"The US Mint has been continuously operating since 1792 — making it one of the oldest government agencies.",
+"Coin collecting is one of the oldest hobbies in the world — Roman emperors collected ancient Greek coins.",
+"The American Numismatic Association hosts the World's Fair of Money — the largest coin show in the US.",
+"A complete set of Lincoln cents from 1909–present contains over 100 coins.",
+"The most popular modern US coin series to collect is the 50 State Quarters program (1999–2008).",
+"Proof sets have been sold by the US Mint to collectors every year since 1936.",
+"The Presidential Dollar series (2007–2016) featured all US presidents in order of service.",
+"First Spouse Gold Coins were issued alongside Presidential Dollars, featuring the First Ladies.",
+"The American Silver Eagle, first minted in 1986, is the best-selling silver bullion coin in the world.",
+"The American Gold Eagle comes in four sizes: 1/10 oz, 1/4 oz, 1/2 oz, and 1 oz.",
+"The US Mint at West Point produces most of the nation's bullion and commemorative gold and silver coins.",
+"The National Coin Week is celebrated each April — sponsored by the ANA since 1924.",
+"World coins can be collected for far less than US coins — ancient Roman coins start under \$20.",
+"The Hawaii Five-O quarters from the America the Beautiful series are some of the most sought-after modern quarters.",
+"A complete set of Morgan Dollars by date and mintmark requires over 100 coins.",
+"The first commemorative US coin was the Columbian Exposition Half Dollar of 1892.",
+"The US Mint's S-Mint proof coins are highly sought after by collectors for their mirrored surfaces.",
+"Type collecting focuses on one coin per design type rather than every date — a popular approach for beginners.",
+"The Numismatic Coin Bulletin (NCB) and Coin World are two of the oldest publications in the hobby.",
+"Coins stored in 2x2 cardboard holders (flips) should be Mylar-lined to prevent PVC damage.",
+"The Denver Mint has operated since 1906 and is one of the highest-output mints in the world.",
+"The San Francisco Mint earned the nickname 'Granite Lady' for its imposing stone building.",
+"The New Orleans Mint struck coins from 1838–1909 — O-mint coins are popular with collectors.",
+"The Carson City Mint (1870–1893) produced some of the most iconic and valuable coins in US history.",
+"The West Point Bullion Depository held \$100 billion in gold before becoming a mint in 1988.",
+"The US Mint produces over 14 billion coins per year for general circulation.",
+"Coin albums are a popular storage and display option — Dansco and Whitman are the most respected brands.",
+"The 2009 Lincoln cents featured four reverse designs commemorating Lincoln's bicentennial.",
+"The Smithsonian National Numismatic Collection holds over 1.6 million coins and is the world's largest.",
+"Numismatic literature — books, price guides, auction records — is considered an important part of the hobby."
+];
+function getDailyFact(arr){
+  const day=Math.floor(Date.now()/86400000);
+  return arr[day%arr.length];
+}
+function injectDailyFacts(){
+  const map=[
+    ['gold-daily-fact',GOLD_FACTS],
+    ['silver-daily-fact',SILVER_FACTS],
+    ['const-daily-fact',CONST_FACTS],
+    ['copper-daily-fact',COPPER_FACTS],
+    ['numis-daily-fact',NUMIS_FACTS],
+    ['fx-daily-fact',FX_FACTS],
+    ['collect-daily-fact',COLLECT_FACTS]
+  ];
+  map.forEach(([id,arr])=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=getDailyFact(arr);
+  });
+}
+
+injectDailyFacts();
 </script>
 </body>
 </html>
