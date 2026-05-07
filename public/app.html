@@ -113,15 +113,23 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .spotlight-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:4px}
 @media(max-width:480px){.spotlight-row{grid-template-columns:1fr}}
 .spot-card{border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
-.spot-card-gold{background:linear-gradient(135deg,#78350f,#b45309,#d97706);color:#fff}
-.spot-card-silver{background:linear-gradient(135deg,#334155,#475569,#64748b);color:#fff}
+.spot-card-gold{background:#050810;border:1px solid #c9a227;box-shadow:0 0 18px rgba(201,162,39,0.22),inset 0 0 30px rgba(201,162,39,0.04);color:#fff}
+.spot-card-silver{background:#050810;border:1px solid #94a3b8;box-shadow:0 0 18px rgba(148,163,184,0.18),inset 0 0 30px rgba(148,163,184,0.03);color:#fff}
 .sc-icon{font-size:38px;line-height:1;flex-shrink:0}
 .sc-body{flex:1}
 .sc-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.8;margin-bottom:2px}
+.spot-card-gold .sc-label{color:#e2c96e;opacity:1}
+.spot-card-gold .sc-price{color:#ffd060;text-shadow:0 0 20px rgba(255,208,96,0.35)}
+.spot-card-gold .sc-gram{color:rgba(226,201,110,0.7);opacity:1}
+.spot-card-gold .sc-chg{color:#e2c96e}
+.spot-card-silver .sc-label{color:#cbd5e1;opacity:1}
+.spot-card-silver .sc-price{color:#f1f5f9;text-shadow:0 0 20px rgba(241,245,249,0.2)}
+.spot-card-silver .sc-gram{color:rgba(203,213,225,0.65);opacity:1}
+.spot-card-silver .sc-chg{color:#cbd5e1}
 .sc-price{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1.1}
 .sc-chg{font-size:13px;margin-top:4px;opacity:0.9}
-.spot-card .up{color:#ffffff!important;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
-.spot-card .dn{color:#fca5a5!important;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
+.spot-card .up{color:#86efac!important;font-weight:700}
+.spot-card .dn{color:#fca5a5!important;font-weight:700}
 .sc-meta{text-align:right;flex-shrink:0}
 .sc-gram{font-size:12px;opacity:0.75;margin-bottom:3px}
 /* ── NEWS BAR ── */
@@ -176,19 +184,23 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .pb-price{font-size:24px;font-weight:900;letter-spacing:-1px}
 [data-theme="dark"] .pb-price{color:var(--gold)}
 .pb-chg{font-size:10px;font-weight:700;margin-top:3px;background:rgba(0,0,0,.2);padding:2px 7px;border-radius:4px;display:inline-block}
-.hero-gold{background:linear-gradient(135deg,#78350f,#b45309,#d97706);color:#fff}
-[data-theme="dark"] .hero-gold{background:linear-gradient(135deg,#1a1000,#251600,#1e1200)}
-[data-theme="dark"] .hero-gold .sh-title{color:#ffd060}
-[data-theme="dark"] .hero-gold .sh-sub{color:rgba(255,208,96,.55)}
-.hero-silver{background:linear-gradient(135deg,#1e2a38,#334155,#475569);color:#fff}
-[data-theme="dark"] .hero-silver{background:linear-gradient(135deg,#0a0f18,#101828,#141e2e)}
-.hero-const{background:linear-gradient(135deg,#1e3a5f,#1d4ed8,#3b82f6);color:#fff}
-[data-theme="dark"] .hero-const{background:linear-gradient(135deg,#080f1e,#0d1836,#101e40)}
-.hero-penny{background:linear-gradient(135deg,#451a03,#92400e,#b45309);color:#fff}
-[data-theme="dark"] .hero-penny{background:linear-gradient(135deg,#120800,#1e0e00,#180c00)}
-[data-theme="dark"] .hero-penny .sh-title{color:#ffd060}
-.hero-fx{background:linear-gradient(135deg,#312e81,#4338ca,#6d28d9);color:#fff}
-[data-theme="dark"] .hero-fx{background:linear-gradient(135deg,#0d0a1e,#14103a,#180e50)}
+.hero-gold{background:#050810;border:1px solid #c9a227;box-shadow:0 0 22px rgba(201,162,39,0.2);color:#fff}
+[data-theme="dark"] .hero-gold{background:#050810}
+.hero-gold .sh-title{color:#ffd060}[data-theme="dark"] .hero-gold .sh-title{color:#ffd060}
+.hero-gold .sh-sub{color:rgba(226,201,110,0.7)}[data-theme="dark"] .hero-gold .sh-sub{color:rgba(226,201,110,0.65)}
+.hero-silver{background:#050810;border:1px solid #94a3b8;box-shadow:0 0 22px rgba(148,163,184,0.15);color:#fff}
+.hero-silver .sh-title{color:#f1f5f9}.hero-silver .sh-sub{color:rgba(203,213,225,0.75)}
+[data-theme="dark"] .hero-silver{background:#050810}
+.hero-const{background:#050810;border:1px solid #3b82f6;box-shadow:0 0 22px rgba(59,130,246,0.18);color:#fff}
+.hero-const .sh-title{color:#93c5fd}.hero-const .sh-sub{color:rgba(147,197,253,0.7)}
+[data-theme="dark"] .hero-const{background:#050810}
+.hero-penny{background:#050810;border:1px solid #c2773a;box-shadow:0 0 22px rgba(194,119,58,0.2);color:#fff}
+.hero-penny .sh-title{color:#fbbf77}.hero-penny .sh-sub{color:rgba(251,191,119,0.7)}
+[data-theme="dark"] .hero-penny{background:#050810}
+[data-theme="dark"] .hero-penny .sh-title{color:#fbbf77}
+.hero-fx{background:#050810;border:1px solid #7c3aed;box-shadow:0 0 22px rgba(124,58,237,0.18);color:#fff}
+.hero-fx .sh-title{color:#c4b5fd}.hero-fx .sh-sub{color:rgba(196,181,253,0.7)}
+[data-theme="dark"] .hero-fx{background:#050810}
 /* TOOL CARDS */
 .tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:18px}
 @media(max-width:680px){.tools-grid{grid-template-columns:1fr 1fr}}
@@ -463,9 +475,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <span style="font-size:11px;color:var(--muted);line-height:1.4">Copies current Gold, Silver &amp; ratio to your clipboard — handy for texting or messaging customers a quick quote.</span>
   </div>
   <div class="sec-hero hero-gold" style="margin-top:12px">
-    <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Karat calculator · Goldback exchange rates</div><div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+    <div><div class="sh-title">Gold Reference Center</div><div class="sh-sub">Karat calculator · Goldback exchange rates</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="gold-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="gold-daily-fact"></span>
       </div></div>
   </div>
   <div class="sub-nav">
@@ -544,9 +556,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
 <div id="tab-silver" class="section">
   <div class="sec-hero hero-silver">
-    <div><div class="sh-title">Precious Metals</div><div class="sh-sub">Silver bullion · Platinum · Palladium · Dealer premiums · Live spot pricesm</div><div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+    <div><div class="sh-title">Precious Metals</div><div class="sh-sub">Silver bullion · Platinum · Palladium · Dealer premiums · Live spot pricesm</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="silver-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="silver-daily-fact"></span>
       </div></div>
     <div class="price-box"><div class="pb-label">Silver Spot</div><div class="pb-price" id="silver-hero-price">—</div><div class="pb-chg" id="silver-hero-chg">Loading…</div></div>
   </div>
@@ -617,9 +629,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ CONSTITUTIONAL TAB ═══════════════════ -->
 <div id="tab-const" class="section">
   <div class="sec-hero hero-const">
-    <div><div class="sh-title">Constitutional Silver</div><div class="sh-sub">90% &amp; 40% silver US coins · Melt calculator · War nickels · Rolls</div><div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+    <div><div class="sh-title">Constitutional Silver</div><div class="sh-sub">90% &amp; 40% silver US coins · Melt calculator · War nickels · Rolls</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="const-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="const-daily-fact"></span>
       </div></div>
     <div class="price-box"><div class="pb-label">Silver Spot</div><div class="pb-price" id="const-hero-price">—</div><div class="pb-chg">Live</div></div>
   </div>
@@ -727,9 +739,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ PENNIES TAB ═══════════════════ -->
 <div id="tab-pennies" class="section">
   <div class="sec-hero hero-penny">
-    <div><div class="sh-title">Copper Melt Calculator</div><div class="sh-sub">Live copper/zinc spot prices · Pennies, copper rounds &amp; bars</div><div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+    <div><div class="sh-title">Copper Melt Calculator</div><div class="sh-sub">Live copper/zinc spot prices · Pennies, copper rounds &amp; bars</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="copper-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="copper-daily-fact"></span>
       </div></div>
     <div class="price-box"><div class="pb-label">Penny Melt</div><div class="pb-price" id="penny-hero-melt">—</div><div class="pb-chg">Cu/Zn live</div></div>
   </div>
@@ -798,13 +810,13 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- ═══════════════════ NUMISMATIC GUIDE TAB ═══════════════════ -->
 <div id="tab-numismatic" class="section">
-  <div class="sec-hero" style="background:linear-gradient(135deg,#1a0a2e 0%,#2c1654 50%,#4a1942 100%);color:#fff">
+  <div class="sec-hero" style="background:#050810;border:1px solid #7c3aed;box-shadow:0 0 22px rgba(124,58,237,0.18);color:#fff">
     <div>
       <div class="sh-title" style="color:#fff">📚 Numismatic Guide</div>
       <div class="sh-sub" style="color:rgba(255,255,255,0.85)">Key Dates · Grading · Errors · Coin Values — All series in one place</div>
-      <div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="numis-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="numis-daily-fact"></span>
       </div>
         <a href="https://en.numista.com" target="_blank" class="sh-chip" style="text-decoration:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-weight:700">🌐 Numista.com ↗</a>
       </div>
@@ -969,9 +981,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- ═══════════════════ CURRENCY TAB ═══════════════════ -->
 <div id="tab-fx" class="section">
   <div class="sec-hero hero-fx">
-    <div><div class="sh-title">World Currency Exchange</div><div class="sh-sub">Live rates for 80+ currencies vs US Dollar · Dropdown selector · Search · Sortable table</div><div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+    <div><div class="sh-title">World Currency Exchange</div><div class="sh-sub">Live rates for 80+ currencies vs US Dollar · Dropdown selector · Search · Sortable table</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="fx-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="fx-daily-fact"></span>
       </div></div>
     <div class="price-box"><div class="pb-label">Base Currency</div><div class="pb-price" style="font-size:20px">USD</div><div class="pb-chg" id="fx-hero-updated">Live</div></div>
   </div>
@@ -999,10 +1011,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- ═══════════════════ TYPE SETS TAB ═══════════════════ -->
 <div id="tab-typeset" class="section">
-  <div class="sec-hero" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
-    <div><div class="sh-title">Collector's Corner</div><div class="sh-sub">Track your progress across coins, currency &amp; commemoratives · Saves automatically</div><div style="background:rgba(217,119,6,0.1);border:1px solid rgba(201,162,39,0.22);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
+  <div class="sec-hero" style="background:#050810;border:1px solid #3b82f6;box-shadow:0 0 22px rgba(59,130,246,0.18)">
+    <div><div class="sh-title">Collector's Corner</div><div class="sh-sub">Track your progress across coins, currency &amp; commemoratives · Saves automatically</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
         <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:var(--text);line-height:1.6;font-weight:400" id="collect-daily-fact"></span>
+        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="collect-daily-fact"></span>
       </div></div>
     <div class="price-box" style="min-width:110px"><div class="pb-label">Total Progress</div><div class="pb-price" id="ts-overall-pct" style="font-size:24px">0%</div><div class="pb-chg" id="ts-overall-count">0 / 0 coins</div></div>
   </div>
