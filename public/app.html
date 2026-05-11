@@ -4134,6 +4134,19 @@ const GOLD_COINS=[
   {name:'Chinese Gold Panda 1 oz',country:'🇨🇳 China',agw:1.0000,series:'Panda'},
   {name:'Chinese Gold Panda 1/2 oz',country:'🇨🇳 China',agw:0.5000,series:'Panda'}
 ];
+const COIN_IMG={
+  'American Eagle':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Liberty_%2450_Obverse.jpg/120px-Liberty_%2450_Obverse.jpg',
+  'Buffalo':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Buffalo_%2450_Obverse.jpg/120px-Buffalo_%2450_Obverse.jpg',
+  'Pre-1933':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/NNC-US-1907-G%2420-Saint_Gaudens_%28Ultra_High_Relief%29.jpg/120px-NNC-US-1907-G%2420-Saint_Gaudens_%28Ultra_High_Relief%29.jpg',
+  'Krugerrand':'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/1_oz_Krugerrand_2017_Obverse.png/120px-1_oz_Krugerrand_2017_Obverse.png',
+  'Philharmonic':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/1_oz_Vienna_Philharmonic_2017_reverse.png/120px-1_oz_Vienna_Philharmonic_2017_reverse.png',
+  'Restrikes':'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/1_oz_Vienna_Philharmonic_2017_reverse.png/120px-1_oz_Vienna_Philharmonic_2017_reverse.png',
+  'Sovereign':'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/1963_Gold_Sovereign_%28obverse%29.jpg/120px-1963_Gold_Sovereign_%28obverse%29.jpg',
+  'Britannia':'https://upload.wikimedia.org/wikipedia/en/3/3e/Obverse_of_the_2016_Britannia_bullion_coin.jpg',
+  'Mexican':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Centenario_libertad.jpg/120px-Centenario_libertad.jpg',
+  'Panda':'https://upload.wikimedia.org/wikipedia/en/d/df/Panda100YuanA.jpg'
+};
+const COIN_IMG_FALLBACK='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="38" fill="%23d4af37" stroke="%23f59e0b" stroke-width="2"/><circle cx="40" cy="40" r="30" fill="none" stroke="%23b8860b" stroke-width="1.5"/><text x="40" y="47" text-anchor="middle" font-size="26" fill="%23b8860b" font-family="serif">🪙</text></svg>';
 function renderGoldCoins(){
   const gs=spot.XAU||0;
   const pctEl=document.getElementById('gcl-buy-pct');
@@ -4146,17 +4159,32 @@ function renderGoldCoins(){
   GOLD_COINS.forEach(coin=>{
     const melt=gs*coin.agw;
     const buy=melt*(buyPct/100);
+    const imgSrc=COIN_IMG[coin.series]||'';
+    const imgHtml=imgSrc
+      ?'<img src="'+imgSrc+'" alt="'+coin.name+'" style="width:72px;height:72px;object-fit:contain;border-radius:50%;border:2px solid rgba(212,175,55,0.4);background:#111;flex-shrink:0" onerror="this.src=COIN_IMG_FALLBACK">'
+      :'<div style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.12);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px">🪙</div>';
     const card=document.createElement('div');
-    card.style.cssText='background:#0d1117;border:1px solid rgba(212,175,55,0.35);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px';
-    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start">'
-      +'<div style="font-size:13px;font-weight:700;color:var(--gold);line-height:1.3">'+coin.name+'</div>'
-      +'<div style="font-size:10px;color:var(--muted);white-space:nowrap;margin-left:8px">'+coin.country+'</div></div>'
-      +'<div style="font-size:10px;color:var(--muted)">AGW: <span style="color:var(--text2);font-weight:600">'+coin.agw.toFixed(4)+' troy oz</span></div>'
-      +'<div style="display:flex;gap:8px;margin-top:4px">'
-      +'<div style="flex:1;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:10px;color:var(--muted);margin-bottom:2px">Melt Value</div><div style="font-size:16px;font-weight:800;color:var(--gold)">'+(gs?'$'+melt.toFixed(2):'—')+'</div></div>'
-      +'<div style="flex:1;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:10px;color:var(--muted);margin-bottom:2px">Buy @ '+buyPct+'%</div><div style="font-size:16px;font-weight:800;color:var(--green)">'+(gs?'$'+buy.toFixed(2):'—')+'</div></div>'
+    card.style.cssText='background:#0d1117;border:1px solid rgba(212,175,55,0.35);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px';
+    card.innerHTML=
+      '<div style="display:flex;gap:12px;align-items:center">'
+        +imgHtml
+        +'<div style="flex:1;min-width:0">'
+          +'<div style="font-size:13px;font-weight:700;color:var(--gold);line-height:1.3;margin-bottom:2px">'+coin.name+'</div>'
+          +'<div style="font-size:10px;color:var(--muted)">'+coin.country+'</div>'
+          +'<div style="font-size:10px;color:var(--muted);margin-top:3px">AGW: <span style="color:var(--text2);font-weight:600">'+coin.agw.toFixed(4)+' troy oz</span></div>'
+        +'</div>'
       +'</div>'
-      +'<div style="font-size:10px;color:var(--muted);margin-top:2px">Series: '+coin.series+'</div>';
+      +'<div style="display:flex;gap:8px">'
+        +'<div style="flex:1;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:8px;text-align:center">'
+          +'<div style="font-size:10px;color:var(--muted);margin-bottom:2px">Melt Value</div>'
+          +'<div style="font-size:16px;font-weight:800;color:var(--gold)">'+(gs?'$'+melt.toFixed(2):'—')+'</div>'
+        +'</div>'
+        +'<div style="flex:1;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:8px;text-align:center">'
+          +'<div style="font-size:10px;color:var(--muted);margin-bottom:2px">Buy @ '+buyPct+'%</div>'
+          +'<div style="font-size:16px;font-weight:800;color:var(--green)">'+(gs?'$'+buy.toFixed(2):'—')+'</div>'
+        +'</div>'
+      +'</div>'
+      +'<div style="font-size:10px;color:var(--muted)">Series: '+coin.series+'</div>';
     grid.appendChild(card);
   });
 }
