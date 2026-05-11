@@ -1369,8 +1369,10 @@ document.addEventListener('click',function(e){
   const s=localStorage.getItem('bdp-theme')||'light';
   document.documentElement.setAttribute('data-theme',s);
   window.addEventListener('DOMContentLoaded',function(){
-    const b=document.getElementById('theme-btn');
-    if(b)b.textContent=s==='dark'?'☀️':'🌙';
+    const icon=document.getElementById('ham-theme-icon');
+    const lbl=document.getElementById('ham-theme-label');
+    if(icon) icon.textContent=s==='dark'?'☀️':'🌙';
+    if(lbl) lbl.textContent=s==='dark'?'Light Mode':'Dark Mode';
   });
 })();
 
