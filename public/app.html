@@ -42,18 +42,23 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 /* HEADER */
 #header{position:fixed;top:0;left:0;right:0;z-index:300;background:#0d1117;border-bottom:1px solid rgba(212,175,55,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.6)}
-.hdr-banner-row{display:flex;align-items:center;justify-content:space-between;height:120px;padding:0 16px;gap:8px}
-.hdr-banner-center{flex:1;display:flex;justify-content:center;align-items:center;height:120px;overflow:hidden}
-.hdr-banner-center img{height:120px;width:auto;max-width:90%;object-fit:contain}
-.hdr-controls-right{display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:120px;justify-content:flex-end;flex-shrink:0}
-.hdr-spacer{min-width:160px}
+.hdr-banner-row{display:flex;align-items:center;justify-content:center;height:120px;padding:0 16px;position:relative}
+.hdr-banner-center{display:flex;justify-content:center;align-items:center;height:120px;overflow:hidden}
+.hdr-banner-center img{height:115px;width:auto;max-width:80%;object-fit:contain}
+.hdr-controls-right{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;align-items:center}
+.hdr-spacer{display:none}
+.ham-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1}
+.ham-btn:hover{background:var(--bg4)}
+.ham-menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--bg2);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.4);min-width:160px;z-index:500;overflow:hidden;display:none}
+.ham-menu.open{display:block}
+.ham-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+.ham-item:hover{background:var(--bg3)}
+.ham-item.danger{color:var(--red)}
+.ham-item.danger:hover{background:rgba(220,38,38,.1)}
 /* ── Mobile portrait (phone upright) ── */
 @media(max-width:600px) and (orientation:portrait){
-  .hdr-banner-row{height:120px}
-  .hdr-banner-center img{height:110px;max-width:90%;object-fit:contain}
-  .hdr-controls-right{min-width:auto;gap:4px;flex-shrink:0}
-  .hdr-controls-right button{font-size:10px;padding:3px 6px}
-  .hdr-spacer{display:none}
+  .hdr-banner-row{height:100px}
+  .hdr-banner-center img{height:90px;max-width:85%;object-fit:contain}
 }
 /* ── Compact tabs on mobile ── */
 @media(max-width:767px){
@@ -64,14 +69,13 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 }
 /* ── Tablet portrait (768–1199px) ── */
 @media(min-width:768px) and (max-width:1199px) and (orientation:portrait){
-  .hdr-banner-row{height:140px}
-  .hdr-banner-center img{height:130px;max-width:95%;object-fit:contain}
+  .hdr-banner-row{height:130px}
+  .hdr-banner-center img{height:120px;max-width:75%;object-fit:contain}
 }
 /* ── Mobile landscape (phone sideways) ── */
 @media(max-width:900px) and (orientation:landscape){
   .hdr-banner-row{height:80px}
-  .hdr-banner-center img{height:70px;max-width:60%;object-fit:contain}
-  .hdr-spacer{display:none}
+  .hdr-banner-center img{height:68px;max-width:70%;object-fit:contain}
 }
 .logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#d97706,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:15px}
 .tts{background:linear-gradient(135deg,#1e3a5f,#2563eb)}
@@ -391,14 +395,15 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- HEADER -->
 <div id="header">
   <div class="hdr-banner-row">
-    <div class="hdr-spacer"></div>
     <div class="hdr-banner-center">
       <img src="/banner.png?v=13" alt="Bullion Dealer Pro">
     </div>
-    <div class="hdr-controls-right">
-      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle light/dark">🌙</button>
-      <button id="admin-btn" style="display:none" class="btn-outline" onclick="window.location='/admin.html'">⚙ Admin</button>
-      <button id="logout-btn" class="btn-danger" onclick="doLogout()">⏻ Logout</button>
+    <div class="hdr-controls-right" style="position:relative">
+      <button class="ham-btn" id="ham-btn" onclick="toggleHamMenu()" title="Menu">☰</button>
+      <div class="ham-menu" id="ham-menu">
+        <button class="ham-item" onclick="toggleTheme();closeHamMenu()"><span id="ham-theme-icon">🌙</span> <span id="ham-theme-label">Dark Mode</span></button>
+        <button id="logout-btn" class="ham-item danger" onclick="doLogout()">⏻ Logout</button>
+      </div>
     </div>
   </div>
   <!-- SPOT PRICE TICKER ROW -->
@@ -1313,6 +1318,20 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 </div>
 
+  <!-- Admin Dashboard Access -->
+  <div id="admin-access-section" style="display:none;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
+    <div class="sec-label" style="margin-bottom:12px">🔐 Admin Dashboard</div>
+    <div class="card" style="padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Dealer Admin Panel</div>
+        <div style="font-size:12px;color:var(--muted)">Manage subscriptions, users, and platform settings.</div>
+      </div>
+      <button class="calc-btn" style="width:auto;padding:10px 24px;font-size:13px" onclick="window.location='/admin.html'">⚙ Open Admin Panel →</button>
+    </div>
+  </div>
+
+</div>
+
 </div><!-- /#content -->
 
 <script>// CLEAN BUILD: 20260504_190541
@@ -1325,8 +1344,27 @@ function toggleTheme(){
   const t=dark?'light':'dark';
   html.setAttribute('data-theme',t);
   localStorage.setItem('bdp-theme',t);
-  document.getElementById('theme-btn').textContent=t==='dark'?'☀️':'🌙';
+  const icon=document.getElementById('ham-theme-icon');
+  const lbl=document.getElementById('ham-theme-label');
+  if(icon) icon.textContent=t==='dark'?'☀️':'🌙';
+  if(lbl) lbl.textContent=t==='dark'?'Light Mode':'Dark Mode';
 }
+function toggleHamMenu(){
+  const m=document.getElementById('ham-menu');
+  m.classList.toggle('open');
+}
+function closeHamMenu(){
+  const m=document.getElementById('ham-menu');
+  m.classList.remove('open');
+}
+// Close ham menu when clicking outside
+document.addEventListener('click',function(e){
+  const menu=document.getElementById('ham-menu');
+  const btn=document.getElementById('ham-btn');
+  if(menu&&btn&&!menu.contains(e.target)&&!btn.contains(e.target)){
+    menu.classList.remove('open');
+  }
+});
 (function(){
   const s=localStorage.getItem('bdp-theme')||'light';
   document.documentElement.setAttribute('data-theme',s);
@@ -3813,7 +3851,7 @@ async function loadAccount(){
     $('paywall').classList.remove('show');
 
     // Header buttons
-    if(u.plan==='admin') $('admin-btn').style.display='inline-flex';
+    if(u.plan==='admin'){const sec=document.getElementById('admin-access-section');if(sec)sec.style.display='block';}
     $('logout-btn').style.display='inline-flex';
 
     // Account card
