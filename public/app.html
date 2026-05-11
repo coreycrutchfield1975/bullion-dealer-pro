@@ -496,6 +496,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <div class="sub-nav">
     <button class="seg active" onclick="goldSec('karat',this)">⚖️ Karat Calc</button>
     <button class="seg" onclick="goldSec('goldback',this)">💛 Goldbacks</button>
+    <button class="seg" onclick="goldSec('scrapgold',this)">🔥 Scrap Buyer</button>
+    <button class="seg" onclick="goldSec('goldcoins',this)">🪙 Gold Coins</button>
   </div>
 
   <div id="gs-karat">
@@ -565,6 +567,75 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
   
 </div>
+
+  <!-- ═══ SCRAP GOLD BUYER ═══ -->
+  <div id="gs-scrapgold" style="display:none">
+    <div class="sec-hero hero-gold" style="margin-bottom:14px">
+      <div><div class="sh-title">🔥 Scrap Gold Buyer</div><div class="sh-sub">Set your buy % · Show customers live offer prices</div></div>
+    </div>
+    <div class="card" style="padding:16px;margin-bottom:14px">
+      <div class="card-title" style="margin-bottom:12px">⚙️ Your Buy Percentages (% of Melt)</div>
+      <div class="igrid">
+        <div><div class="ig-label">10k Buy %</div><input class="ig-input" id="scrap-pct-10" type="number" value="40" min="1" max="99" oninput="calcScrapGold()"></div>
+        <div><div class="ig-label">14k Buy %</div><input class="ig-input" id="scrap-pct-14" type="number" value="50" min="1" max="99" oninput="calcScrapGold()"></div>
+        <div><div class="ig-label">18k Buy %</div><input class="ig-input" id="scrap-pct-18" type="number" value="60" min="1" max="99" oninput="calcScrapGold()"></div>
+        <div><div class="ig-label">22k Buy %</div><input class="ig-input" id="scrap-pct-22" type="number" value="70" min="1" max="99" oninput="calcScrapGold()"></div>
+        <div><div class="ig-label">24k Buy %</div><input class="ig-input" id="scrap-pct-24" type="number" value="80" min="1" max="99" oninput="calcScrapGold()"></div>
+        <div><div class="ig-label">Sterling Silver Buy %</div><input class="ig-input" id="scrap-pct-sterling" type="number" value="70" min="1" max="99" oninput="calcScrapGold()"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="calc-btn calc-btn-gold" style="width:auto;padding:9px 22px" onclick="calcScrapGold()">🔄 Refresh Prices</button>
+        <button class="calc-btn" style="width:auto;padding:9px 22px;background:var(--bg3);color:var(--text)" onclick="saveScrapPresets()">💾 Save Presets</button>
+      </div>
+      <div id="scrap-save-msg" style="font-size:11px;color:var(--green);margin-top:6px;font-weight:600"></div>
+    </div>
+    <div class="card" style="padding:16px;margin-bottom:14px">
+      <div class="card-title" style="margin-bottom:14px">📋 Live Scrap Buy Price Board</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Gold Spot: <span id="scrap-spot-display" style="color:var(--gold);font-weight:700">—</span> &nbsp;|&nbsp; Updated: <span id="scrap-spot-time" style="color:var(--muted)">—</span></div>
+      <div id="scrap-board" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px"></div>
+    </div>
+    <div class="calc-card">
+      <div class="calc-hdr"><div class="calc-title">⚖️ Quick Weigh &amp; Quote</div></div>
+      <div class="calc-body">
+        <div class="igrid">
+          <div><div class="ig-label">Weight</div><input class="ig-input" id="sq-weight" type="number" value="5.00" step="0.01" oninput="calcScrapQuote()"></div>
+          <div><div class="ig-label">Unit</div><select class="ig-select" id="sq-unit" onchange="calcScrapQuote()">
+            <option value="g">Grams</option>
+            <option value="dwt">Pennyweight (DWT)</option>
+            <option value="oz">Troy oz</option>
+            <option value="gr">Grains</option>
+          </select></div>
+          <div><div class="ig-label">Karat / Type</div><select class="ig-select" id="sq-karat" onchange="calcScrapQuote()">
+            <option value="10">10k Gold</option>
+            <option value="14" selected>14k Gold</option>
+            <option value="18">18k Gold</option>
+            <option value="22">22k Gold</option>
+            <option value="24">24k Gold</option>
+            <option value="sterling">Sterling Silver (.925)</option>
+          </select></div>
+        </div>
+        <div class="rgrid" style="margin-top:12px">
+          <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="sq-melt">—</div></div>
+          <div class="res-card"><div class="res-label">Your Buy Offer</div><div class="res-value rv-green" id="sq-offer">—</div></div>
+          <div class="res-card"><div class="res-label">Profit @ Sell Melt</div><div class="res-value rv-blue" id="sq-profit">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GOLD COIN LIBRARY ═══ -->
+  <div id="gs-goldcoins" style="display:none">
+    <div class="sec-hero hero-gold" style="margin-bottom:14px">
+      <div><div class="sh-title">🪙 Gold Coin Library</div><div class="sh-sub">AGW · Live melt values · Common gold coins</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;padding:0 2px">Gold Spot: <span id="gcl-spot" style="color:var(--gold);font-weight:700">—</span> &nbsp;|&nbsp; All melt values update live with spot price.</div>
+    <div class="card" style="padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="font-size:13px;font-weight:600;color:var(--text)">Your Buy % of Melt:</div>
+      <input class="ig-input" id="gcl-buy-pct" type="number" value="90" min="1" max="110" style="width:80px" oninput="renderGoldCoins()">
+      <div style="font-size:11px;color:var(--muted)">e.g. 90 = buy at 90% of melt value</div>
+    </div>
+    <div id="gcl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+  </div>
 
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
 <div id="tab-silver" class="section">
@@ -1580,7 +1651,9 @@ function showProUpgrade(tabId){
     sec.insertBefore(div, sec.firstChild);
   }
 }
-function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
+function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals','scrapgold','goldcoins'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));
+  if(s==='scrapgold'){loadScrapPresets();calcScrapGold();}
+  if(s==='goldcoins'){renderGoldCoins();}if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
 function silverSec(s,btn){['calc','premiums','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
 function constSec(s,btn){['calc','rolls','ref','melt'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='ref')renderConstRef();if(s==='rolls')calcConstRolls();}
 function pennySec(s,btn){['calc'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
@@ -3946,6 +4019,148 @@ async function redeemPromo(){
   $('promo-msg').innerHTML=r.ok?`<span class="ok">✓ Applied! Plan: ${d.plan}</span>`:`<span class="err">${d.error}</span>`;
   if(r.ok)loadAccount();
 }
+
+// ═══════════════════════════════════════════════════
+// SCRAP GOLD BUYER
+// ═══════════════════════════════════════════════════
+const SCRAP_KARATS=[
+  {id:'10',label:'10k Gold',purity:0.4167},
+  {id:'14',label:'14k Gold',purity:0.5833},
+  {id:'18',label:'18k Gold',purity:0.7500},
+  {id:'22',label:'22k Gold',purity:0.9167},
+  {id:'24',label:'24k Gold',purity:0.9999},
+  {id:'sterling',label:'Sterling Silver (.925)',purity:0.925,isSilver:true}
+];
+const SCRAP_BG={'10':'rgba(212,175,55,0.12)','14':'rgba(212,175,55,0.18)','18':'rgba(212,175,55,0.25)','22':'rgba(212,175,55,0.32)','24':'rgba(212,175,55,0.40)','sterling':'rgba(148,163,184,0.15)'};
+const SCRAP_BD={'10':'rgba(212,175,55,0.35)','14':'rgba(212,175,55,0.45)','18':'rgba(212,175,55,0.55)','22':'rgba(212,175,55,0.65)','24':'rgba(212,175,55,0.80)','sterling':'rgba(148,163,184,0.45)'};
+function calcScrapGold(){
+  const gs=spot.XAU||0, ss=spot.XAG||0;
+  const disp=document.getElementById('scrap-spot-display');
+  const tm=document.getElementById('scrap-spot-time');
+  if(disp) disp.textContent=gs?'$'+gs.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+'/oz':'—';
+  if(tm) tm.textContent=new Date().toLocaleTimeString();
+  const board=document.getElementById('scrap-board');
+  if(!board) return;
+  board.innerHTML='';
+  SCRAP_KARATS.forEach(k=>{
+    const pctEl=document.getElementById('scrap-pct-'+k.id);
+    const pct=pctEl?(parseFloat(pctEl.value)||50):50;
+    const sp=k.isSilver?ss:gs;
+    const mpg=(sp*k.purity)/31.1035;
+    const bpg=mpg*(pct/100);
+    const bpd=bpg*1.55517;
+    const card=document.createElement('div');
+    card.style.cssText='background:'+SCRAP_BG[k.id]+';border:1px solid '+SCRAP_BD[k.id]+';border-radius:12px;padding:14px;text-align:center';
+    card.innerHTML='<div style="font-size:13px;font-weight:800;color:var(--gold);margin-bottom:6px">'+k.label+'</div>'
+      +'<div style="font-size:11px;color:var(--muted);margin-bottom:8px">Buy @ '+pct+'% of melt</div>'
+      +'<div style="font-size:20px;font-weight:900;color:var(--green);margin-bottom:4px">$'+bpg.toFixed(2)+'<span style="font-size:11px;color:var(--muted)">/g</span></div>'
+      +'<div style="font-size:14px;font-weight:700;color:var(--text2)">$'+bpd.toFixed(2)+'<span style="font-size:10px;color:var(--muted)">/dwt</span></div>'
+      +'<div style="font-size:10px;color:var(--muted);margin-top:6px">Melt: $'+mpg.toFixed(2)+'/g</div>';
+    board.appendChild(card);
+  });
+  calcScrapQuote();
+}
+function calcScrapQuote(){
+  const wt=parseFloat(document.getElementById('sq-weight')?.value)||0;
+  const unit=document.getElementById('sq-unit')?.value||'g';
+  const kid=document.getElementById('sq-karat')?.value||'14';
+  const k=SCRAP_KARATS.find(x=>x.id===kid)||SCRAP_KARATS[1];
+  let g=wt;
+  if(unit==='dwt') g=wt*1.55517;
+  else if(unit==='oz') g=wt*31.1035;
+  else if(unit==='gr') g=wt*0.0648;
+  const sp=k.isSilver?(spot.XAG||0):(spot.XAU||0);
+  const mpg=(sp*k.purity)/31.1035;
+  const melt=mpg*g;
+  const pctEl=document.getElementById('scrap-pct-'+kid);
+  const pct=pctEl?(parseFloat(pctEl.value)||50):50;
+  const offer=melt*(pct/100);
+  const profit=melt-offer;
+  const me=document.getElementById('sq-melt'), oe=document.getElementById('sq-offer'), pe=document.getElementById('sq-profit');
+  if(me) me.textContent=fmt(melt);
+  if(oe) oe.textContent=fmt(offer);
+  if(pe) pe.textContent=fmt(profit);
+}
+function saveScrapPresets(){
+  const p={};
+  SCRAP_KARATS.forEach(k=>{const el=document.getElementById('scrap-pct-'+k.id);if(el) p['scrap_pct_'+k.id]=el.value;});
+  localStorage.setItem('bdp-scrap-presets',JSON.stringify(p));
+  const msg=document.getElementById('scrap-save-msg');
+  if(msg){msg.textContent='✅ Presets saved!';setTimeout(()=>msg.textContent='',2500);}
+}
+function loadScrapPresets(){
+  try{
+    const p=JSON.parse(localStorage.getItem('bdp-scrap-presets')||'{}');
+    Object.keys(p).forEach(k=>{const el=document.getElementById(k.replace('scrap_pct_','scrap-pct-'));if(el) el.value=p[k];});
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════════════
+// GOLD COIN LIBRARY (AGW)
+// ═══════════════════════════════════════════════════
+const GOLD_COINS=[
+  {name:'American Gold Eagle 1 oz',country:'🇺🇸 USA',agw:1.0000,series:'American Eagle'},
+  {name:'American Gold Eagle 1/2 oz',country:'🇺🇸 USA',agw:0.5000,series:'American Eagle'},
+  {name:'American Gold Eagle 1/4 oz',country:'🇺🇸 USA',agw:0.2500,series:'American Eagle'},
+  {name:'American Gold Eagle 1/10 oz',country:'🇺🇸 USA',agw:0.1000,series:'American Eagle'},
+  {name:'American Gold Buffalo 1 oz',country:'🇺🇸 USA',agw:1.0000,series:'Buffalo'},
+  {name:'US $20 Saint-Gaudens',country:'🇺🇸 USA',agw:0.9675,series:'Pre-1933'},
+  {name:'US $20 Liberty (Double Eagle)',country:'🇺🇸 USA',agw:0.9675,series:'Pre-1933'},
+  {name:'US $10 Liberty Eagle',country:'🇺🇸 USA',agw:0.4838,series:'Pre-1933'},
+  {name:'US $10 Indian Eagle',country:'🇺🇸 USA',agw:0.4838,series:'Pre-1933'},
+  {name:'US $5 Liberty Half Eagle',country:'🇺🇸 USA',agw:0.2419,series:'Pre-1933'},
+  {name:'US $5 Indian Half Eagle',country:'🇺🇸 USA',agw:0.2419,series:'Pre-1933'},
+  {name:'US $2.5 Liberty Quarter Eagle',country:'🇺🇸 USA',agw:0.1209,series:'Pre-1933'},
+  {name:'US $1 Gold (Type 1-3)',country:'🇺🇸 USA',agw:0.0484,series:'Pre-1933'},
+  {name:'Canadian Maple Leaf 1 oz',country:'🇨🇦 Canada',agw:1.0000,series:'Maple Leaf'},
+  {name:'Canadian Maple Leaf 1/2 oz',country:'🇨🇦 Canada',agw:0.5000,series:'Maple Leaf'},
+  {name:'Canadian Maple Leaf 1/4 oz',country:'🇨🇦 Canada',agw:0.2500,series:'Maple Leaf'},
+  {name:'Canadian Maple Leaf 1/10 oz',country:'🇨🇦 Canada',agw:0.1000,series:'Maple Leaf'},
+  {name:'Krugerrand 1 oz',country:'🇿🇦 S. Africa',agw:1.0000,series:'Krugerrand'},
+  {name:'Krugerrand 1/2 oz',country:'🇿🇦 S. Africa',agw:0.5000,series:'Krugerrand'},
+  {name:'Krugerrand 1/4 oz',country:'🇿🇦 S. Africa',agw:0.2500,series:'Krugerrand'},
+  {name:'Krugerrand 1/10 oz',country:'🇿🇦 S. Africa',agw:0.1000,series:'Krugerrand'},
+  {name:'Austrian Philharmonic 1 oz',country:'🇦🇹 Austria',agw:1.0000,series:'Philharmonic'},
+  {name:'Austrian 100 Corona',country:'🇦🇹 Austria',agw:0.9802,series:'Restrikes'},
+  {name:'Austrian 4 Ducat',country:'🇦🇹 Austria',agw:0.4426,series:'Restrikes'},
+  {name:'Austrian 1 Ducat',country:'🇦🇹 Austria',agw:0.1106,series:'Restrikes'},
+  {name:'Mexican 50 Peso (Centenario)',country:'🇲🇽 Mexico',agw:1.2057,series:'Mexican'},
+  {name:'Mexican 20 Peso',country:'🇲🇽 Mexico',agw:0.4823,series:'Mexican'},
+  {name:'Mexican 10 Peso',country:'🇲🇽 Mexico',agw:0.2411,series:'Mexican'},
+  {name:'Mexican 5 Peso',country:'🇲🇽 Mexico',agw:0.1205,series:'Mexican'},
+  {name:'British Gold Sovereign',country:'🇬🇧 UK',agw:0.2354,series:'Sovereign'},
+  {name:'British Britannia 1 oz',country:'🇬🇧 UK',agw:1.0000,series:'Britannia'},
+  {name:'Australian Kangaroo 1 oz',country:'🇦🇺 Australia',agw:1.0000,series:'Kangaroo'},
+  {name:'Chinese Gold Panda 1 oz',country:'🇨🇳 China',agw:1.0000,series:'Panda'},
+  {name:'Chinese Gold Panda 1/2 oz',country:'🇨🇳 China',agw:0.5000,series:'Panda'}
+];
+function renderGoldCoins(){
+  const gs=spot.XAU||0;
+  const pctEl=document.getElementById('gcl-buy-pct');
+  const buyPct=pctEl?(parseFloat(pctEl.value)||90):90;
+  const spotEl=document.getElementById('gcl-spot');
+  if(spotEl) spotEl.textContent=gs?'$'+gs.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+'/oz':'—';
+  const grid=document.getElementById('gcl-grid');
+  if(!grid) return;
+  grid.innerHTML='';
+  GOLD_COINS.forEach(coin=>{
+    const melt=gs*coin.agw;
+    const buy=melt*(buyPct/100);
+    const card=document.createElement('div');
+    card.style.cssText='background:#0d1117;border:1px solid rgba(212,175,55,0.35);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px';
+    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start">'
+      +'<div style="font-size:13px;font-weight:700;color:var(--gold);line-height:1.3">'+coin.name+'</div>'
+      +'<div style="font-size:10px;color:var(--muted);white-space:nowrap;margin-left:8px">'+coin.country+'</div></div>'
+      +'<div style="font-size:10px;color:var(--muted)">AGW: <span style="color:var(--text2);font-weight:600">'+coin.agw.toFixed(4)+' troy oz</span></div>'
+      +'<div style="display:flex;gap:8px;margin-top:4px">'
+      +'<div style="flex:1;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:10px;color:var(--muted);margin-bottom:2px">Melt Value</div><div style="font-size:16px;font-weight:800;color:var(--gold)">'+(gs?'$'+melt.toFixed(2):'—')+'</div></div>'
+      +'<div style="flex:1;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:8px;text-align:center"><div style="font-size:10px;color:var(--muted);margin-bottom:2px">Buy @ '+buyPct+'%</div><div style="font-size:16px;font-weight:800;color:var(--green)">'+(gs?'$'+buy.toFixed(2):'—')+'</div></div>'
+      +'</div>'
+      +'<div style="font-size:10px;color:var(--muted);margin-top:2px">Series: '+coin.series+'</div>';
+    grid.appendChild(card);
+  });
+}
+
 async function doLogout(){await fetch('/api/logout',{method:'POST'});window.location.href='/';}
 
 // ═══ INVENTORY ═══
