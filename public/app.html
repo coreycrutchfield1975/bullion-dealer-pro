@@ -42,19 +42,19 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 /* HEADER */
 #header{position:fixed;top:0;left:0;right:0;z-index:300;background:#0d1117;border-bottom:1px solid rgba(212,175,55,0.25);box-shadow:0 2px 12px rgba(0,0,0,0.6)}
-.hdr-banner-row{display:flex;align-items:center;justify-content:center;height:120px;padding:0 16px;position:relative}
-.hdr-banner-center{display:flex;justify-content:center;align-items:center;height:120px;overflow:hidden}
-.hdr-banner-center img{height:115px;width:auto;max-width:80%;object-fit:contain}
-.hdr-controls-right{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;align-items:center}
+.hdr-banner-row{display:flex;align-items:center;justify-content:center;height:150px;padding:0 16px;position:relative}
+.hdr-banner-center{display:flex;justify-content:center;align-items:center;height:150px;overflow:hidden}
+.hdr-banner-center img{height:140px;width:auto;max-width:70%;object-fit:contain}
+.hdr-controls-right{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;align-items:center;z-index:600}
 .hdr-spacer{display:none}
-.ham-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1}
+.ham-btn{width:42px;height:42px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .ham-btn:hover{background:var(--bg4)}
-.ham-menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--bg2);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.4);min-width:160px;z-index:500;overflow:hidden;display:none}
+.ham-menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--bg2);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.5);min-width:170px;z-index:1000;overflow:hidden;display:none}
 .ham-menu.open{display:block}
-.ham-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
-.ham-item:hover{background:var(--bg3)}
+.ham-item{display:flex;align-items:center;gap:10px;padding:13px 18px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.ham-item:hover,.ham-item:active{background:var(--bg3)}
 .ham-item.danger{color:var(--red)}
-.ham-item.danger:hover{background:rgba(220,38,38,.1)}
+.ham-item.danger:hover,.ham-item.danger:active{background:rgba(220,38,38,.1)}
 /* ── Mobile portrait (phone upright) ── */
 @media(max-width:600px) and (orientation:portrait){
   .hdr-banner-row{height:100px}
@@ -70,7 +70,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 /* ── Tablet portrait (768–1199px) ── */
 @media(min-width:768px) and (max-width:1199px) and (orientation:portrait){
   .hdr-banner-row{height:130px}
-  .hdr-banner-center img{height:120px;max-width:75%;object-fit:contain}
+  .hdr-banner-center img{height:118px;max-width:75%;object-fit:contain}
 }
 /* ── Mobile landscape (phone sideways) ── */
 @media(max-width:900px) and (orientation:landscape){
@@ -398,11 +398,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div class="hdr-banner-center">
       <img src="/banner.png?v=13" alt="Bullion Dealer Pro">
     </div>
-    <div class="hdr-controls-right" style="position:relative">
-      <button class="ham-btn" id="ham-btn" onclick="toggleHamMenu()" title="Menu">☰</button>
+    <div class="hdr-controls-right">
+      <button class="ham-btn" id="ham-btn" title="Menu">☰</button>
       <div class="ham-menu" id="ham-menu">
-        <button class="ham-item" onclick="toggleTheme();closeHamMenu()"><span id="ham-theme-icon">🌙</span> <span id="ham-theme-label">Dark Mode</span></button>
-        <button id="logout-btn" class="ham-item danger" onclick="doLogout()">⏻ Logout</button>
+        <button class="ham-item" id="ham-theme-btn"><span id="ham-theme-icon">🌙</span> <span id="ham-theme-label">Dark Mode</span></button>
+        <button id="logout-btn" class="ham-item danger">⏻ Logout</button>
       </div>
     </div>
   </div>
@@ -1349,22 +1349,54 @@ function toggleTheme(){
   if(icon) icon.textContent=t==='dark'?'☀️':'🌙';
   if(lbl) lbl.textContent=t==='dark'?'Light Mode':'Dark Mode';
 }
-function toggleHamMenu(){
+function toggleHamMenu(e){
+  if(e){e.preventDefault();e.stopPropagation();}
   const m=document.getElementById('ham-menu');
   m.classList.toggle('open');
 }
 function closeHamMenu(){
   const m=document.getElementById('ham-menu');
-  m.classList.remove('open');
+  if(m) m.classList.remove('open');
 }
-// Close ham menu when clicking outside
-document.addEventListener('click',function(e){
-  const menu=document.getElementById('ham-menu');
-  const btn=document.getElementById('ham-btn');
-  if(menu&&btn&&!menu.contains(e.target)&&!btn.contains(e.target)){
-    menu.classList.remove('open');
+// Wire up ham button — click + touchend for tablet/mobile
+(function(){
+  function wireHam(){
+    const btn=document.getElementById('ham-btn');
+    const menu=document.getElementById('ham-menu');
+    const themeBtn=document.getElementById('ham-theme-btn');
+    const logoutBtn=document.getElementById('logout-btn');
+    if(!btn||!menu) return;
+    function onHamTap(e){e.preventDefault();e.stopPropagation();menu.classList.toggle('open');}
+    btn.addEventListener('click',onHamTap);
+    btn.addEventListener('touchend',onHamTap,{passive:false});
+    if(themeBtn){
+      function onThemeTap(e){e.preventDefault();e.stopPropagation();toggleTheme();closeHamMenu();}
+      themeBtn.addEventListener('click',onThemeTap);
+      themeBtn.addEventListener('touchend',onThemeTap,{passive:false});
+    }
+    if(logoutBtn){
+      function onLogoutTap(e){
+        // only wire if inside ham-menu (not the old header logout)
+        if(!logoutBtn.closest('.ham-menu'))return;
+        e.preventDefault();e.stopPropagation();doLogout();
+      }
+      logoutBtn.addEventListener('touchend',onLogoutTap,{passive:false});
+    }
+    // Close when tapping outside
+    document.addEventListener('touchend',function(e){
+      if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target)){
+        menu.classList.remove('open');
+      }
+    },{passive:true});
+    document.addEventListener('click',function(e){
+      if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target)){
+        menu.classList.remove('open');
+      }
+    });
   }
-});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wireHam);
+  else wireHam();
+})();
 (function(){
   const s=localStorage.getItem('bdp-theme')||'light';
   document.documentElement.setAttribute('data-theme',s);
