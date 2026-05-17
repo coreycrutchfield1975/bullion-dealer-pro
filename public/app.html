@@ -1459,11 +1459,8 @@ function closeHamMenu(){
       themeBtn.addEventListener('touchend',onThemeTap,{passive:false});
     }
     if(logoutBtn){
-      function onLogoutTap(e){
-        // only wire if inside ham-menu (not the old header logout)
-        if(!logoutBtn.closest('.ham-menu'))return;
-        e.preventDefault();e.stopPropagation();doLogout();
-      }
+      function onLogoutTap(e){e.preventDefault();e.stopPropagation();closeHamMenu();doLogout();}
+      logoutBtn.addEventListener('click',onLogoutTap);
       logoutBtn.addEventListener('touchend',onLogoutTap,{passive:false});
     }
     // Close when tapping outside
