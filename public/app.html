@@ -2565,7 +2565,7 @@ async function loadFX(force=false){
   if(!force && Object.keys(fxRates).length>0) return;
   $('fx-status').textContent='Loading exchange rates…';
   try{
-    const r=await fetch('/api/fx-rates');
+    const r=await fetch('/api/fx');
     if(!r.ok)throw new Error('API error');
     const d=await r.json();
     fxRates=d.rates||{};

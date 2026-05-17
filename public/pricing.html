@@ -280,8 +280,8 @@ a.back{display:inline-block;margin-top:36px;color:var(--gold);font-size:13px;tex
   </div>
 
 <script>
-fetch('/api/me').then(r=>r.json()).then(u=>{
-  if(u.testMode){
+fetch('/api/me').then(r=>r.ok?r.json():null).then(u=>{
+  if(u&&u.testMode){
     document.getElementById('test-banner').style.display='block';
     document.getElementById('test-card').style.display='block';
   }

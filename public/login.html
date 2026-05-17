@@ -244,7 +244,7 @@ async function handleLogin(){
       sucEl.textContent='Login successful! Redirecting…';sucEl.style.display='block';
       setTimeout(()=>window.location.href=data.redirect||'/app',1000);
     } else {
-      errEl.textContent=data.message||'Invalid email or password.';errEl.style.display='block';
+      errEl.textContent=data.error||'Invalid email or password.';errEl.style.display='block';
       btn.textContent='LOG IN';btn.disabled=false;
     }
   }catch{
