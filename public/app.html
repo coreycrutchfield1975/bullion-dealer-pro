@@ -178,9 +178,41 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 [data-theme="dark"] .tab.active.ttv{color:#c084fc;border-bottom-color:#a855f7;background:rgba(168,85,247,.1)}
 .tab.active.ta{color:#dc2626;border-bottom-color:#ef4444;background:#fff5f5}
 [data-theme="dark"] .tab.active.ta{color:#f87171;border-bottom-color:#ef4444;background:rgba(239,68,68,.1)}
+.tab.active.tdr{color:#059669;border-bottom-color:#10b981;background:#f0fdf4}
+[data-theme="dark"] .tab.active.tdr{color:#34d399;border-bottom-color:#10b981;background:rgba(16,185,129,.1)}
 .ticon{font-size:17px;line-height:1}
 .tnm{background:linear-gradient(135deg,#2c1654 0%,#4a1942 100%)}
 .tnm.active,.tnm:hover{background:linear-gradient(135deg,#4a1942,#7b2d8b)!important}
+.tdr{background:linear-gradient(135deg,#022c22 0%,#064e3b 100%)}
+.tdr.active,.tdr:hover{background:linear-gradient(135deg,#064e3b,#059669)!important}
+/* DEALERS TAB */
+.hero-dealers{background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#065f46 100%);border:1px solid #059669;box-shadow:0 0 22px rgba(5,150,105,.2);color:#fff}
+.hero-dealers .sh-title{color:#6ee7b7}
+.hero-dealers .sh-sub{color:rgba(110,231,183,.7)}
+.dlr-featured{background:var(--card-bg);border:2px solid #10b981;border-radius:16px;padding:24px 28px;margin-bottom:18px;position:relative;box-shadow:0 4px 20px rgba(5,150,105,.12)}
+.dlr-badge-feat{position:absolute;top:-1px;right:20px;background:#059669;color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;padding:4px 12px;border-radius:0 0 8px 8px}
+.dlr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+@media(max-width:600px){.dlr-grid{grid-template-columns:1fr}}
+.dlr-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:box-shadow .2s,border-color .2s}
+.dlr-card:hover{border-color:#10b981;box-shadow:0 4px 16px rgba(5,150,105,.1)}
+.dlr-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:14px 0 0 14px}
+.dlr-card.acc-gold::before{background:#d97706}
+.dlr-card.acc-silver::before{background:#94a3b8}
+.dlr-card.acc-coin::before{background:#3b82f6}
+.dlr-card.acc-auction::before{background:#8b5cf6}
+.dlr-name{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.3px;padding-left:4px}
+.dlr-tags{display:flex;flex-wrap:wrap;gap:5px;padding-left:4px}
+.dlr-tag{font-size:9px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:10px;text-transform:uppercase}
+.dtag-gold{background:#fef3c7;color:#92400e}[data-theme="dark"] .dtag-gold{background:rgba(217,119,6,.2);color:#fbbf24}
+.dtag-silver{background:#f1f5f9;color:#475569}[data-theme="dark"] .dtag-silver{background:rgba(148,163,184,.15);color:#94a3b8}
+.dtag-plat{background:#ede9fe;color:#6d28d9}[data-theme="dark"] .dtag-plat{background:rgba(139,92,246,.15);color:#c4b5fd}
+.dtag-coin{background:#dbeafe;color:#1d4ed8}[data-theme="dark"] .dtag-coin{background:rgba(59,130,246,.15);color:#93c5fd}
+.dtag-auction{background:#f3e8ff;color:#7c3aed}[data-theme="dark"] .dtag-auction{background:rgba(139,92,246,.15);color:#c084fc}
+.dtag-copper{background:#fef9ee;color:#92400e}[data-theme="dark"] .dtag-copper{background:rgba(217,119,6,.1);color:#fb923c}
+.dlr-desc{font-size:12px;color:var(--muted);line-height:1.6;flex:1;padding-left:4px}
+.dlr-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#059669;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;text-decoration:none;transition:background .15s;align-self:flex-start;margin-left:4px}
+.dlr-btn:hover{background:#047857}
+.dlr-footer-note{text-align:center;font-size:11px;color:var(--muted2);padding:10px 0 20px}
 /* CONTENT */
 #content{padding-top:224px}
 .section{display:none;max-width:1100px;margin:0 auto;padding:24px 20px 60px;animation:fadeIn .25s ease}
@@ -453,6 +485,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Constitutional<span class="tsub">90% Silver Melt</span></div></button>
     <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">🟤</span><div>Pennies<span class="tsub">Pennies & Copper</span></div></button>
     <button class="tab tnm" onclick="showTab('numismatic')" data-pro="1"><span class="ticon">📚</span><div>Numismatic Guide<span class="tsub">Key Dates · Grading · Errors</span></div></button>
+    <button class="tab tdr" onclick="showTab('dealers')"><span class="ticon">🏪</span><div>Dealers<span class="tsub">Shop · Compare · Find Deals</span></div></button>
     <button class="tab tfx" onclick="showTab('fx')"><span class="ticon">💱</span><div>Currency<span class="tsub">World Exchange Rates</span></div></button>
     <button class="tab ttv" onclick="showTab('trading')" data-pro="1"><span class="ticon">📺</span><div>Trading Sheet<span class="tsub">TV Display Mode</span></div></button>
     <button class="tab tts" onclick="showTab('typeset')" data-pro="1"><span class="ticon">🏛️</span><div>Collector's Corner<span class="tsub">Sets & Currency</span></div></button>
@@ -1140,6 +1173,179 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   </div>
 
 
+</div>
+
+<!-- ═══════════════════ DEALERS TAB ═══════════════════ -->
+<div id="tab-dealers" class="section">
+  <div class="sec-hero hero-dealers">
+    <div>
+      <div class="sh-title">Trusted Bullion Dealers</div>
+      <div class="sh-sub">Vetted dealers for gold, silver, coins &amp; collectibles — compare specialties, shop with confidence</div>
+      <div class="sh-chips">
+        <span class="sh-chip">🥇 Gold</span>
+        <span class="sh-chip">🥈 Silver</span>
+        <span class="sh-chip">🪙 Coins</span>
+        <span class="sh-chip">🏅 Bullion</span>
+        <span class="sh-chip">🔨 Auctions</span>
+      </div>
+    </div>
+    <div class="price-box" style="border-color:rgba(16,185,129,.4)">
+      <div class="pb-label">DEALERS</div>
+      <div class="pb-price" style="color:#6ee7b7;font-size:28px">12</div>
+      <div class="pb-chg" style="color:#6ee7b7">Trusted Partners</div>
+    </div>
+  </div>
+
+  <!-- Featured Partner -->
+  <div class="dlr-featured">
+    <div class="dlr-badge-feat">⭐ FEATURED PARTNER</div>
+    <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div class="dlr-name" style="font-size:22px;margin-bottom:10px">🥇 APMEX</div>
+        <div class="dlr-tags" style="margin-bottom:12px">
+          <span class="dlr-tag dtag-gold">Gold</span>
+          <span class="dlr-tag dtag-silver">Silver</span>
+          <span class="dlr-tag dtag-plat">Platinum</span>
+          <span class="dlr-tag dtag-plat">Palladium</span>
+          <span class="dlr-tag dtag-coin">Coins</span>
+          <span class="dlr-tag dtag-coin">Bullion</span>
+        </div>
+        <div class="dlr-desc" style="font-size:13px">America's largest online precious metals dealer with over 40,000 products. Competitive premiums, fast shipping, and a massive selection of gold, silver, platinum, and rare coins from around the world.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0">
+        <a class="dlr-btn" href="https://www.apmex.com" target="_blank" rel="noopener sponsored" style="padding:13px 28px;font-size:13px">SHOP APMEX →</a>
+        <div style="font-size:11px;color:var(--muted)">America's #1 Online Dealer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dealer Grid -->
+  <div class="dlr-grid">
+    <div class="dlr-card acc-gold">
+      <div class="dlr-name">🥈 JM Bullion</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-plat">Platinum</span>
+        <span class="dlr-tag dtag-plat">Palladium</span>
+      </div>
+      <div class="dlr-desc">Top online bullion dealer with competitive pricing and free shipping over $199. Strong selection of bars and rounds.</div>
+      <a class="dlr-btn" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-silver">
+      <div class="dlr-name">🏅 SD Bullion</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-plat">Platinum</span>
+        <span class="dlr-tag dtag-plat">Palladium</span>
+      </div>
+      <div class="dlr-desc">Known for some of the lowest premiums in the industry. Great for buying silver and gold in quantity with free shipping over $199.</div>
+      <a class="dlr-btn" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-gold">
+      <div class="dlr-name">💰 Money Metals</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-plat">Platinum</span>
+        <span class="dlr-tag dtag-plat">Palladium</span>
+      </div>
+      <div class="dlr-desc">Award-winning dealer offering bullion bars, coins, and rounds. Features a monthly savings plan and vault storage options.</div>
+      <a class="dlr-btn" href="https://www.moneymetals.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-coin">
+      <div class="dlr-name">📦 Gainesville Coins</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-coin">Coins</span>
+        <span class="dlr-tag dtag-coin">Bullion</span>
+      </div>
+      <div class="dlr-desc">Large Florida-based dealer with an excellent coin selection alongside bullion. Great for collectors and stackers alike.</div>
+      <a class="dlr-btn" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-silver">
+      <div class="dlr-name">🏆 BGASC</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-plat">Platinum</span>
+        <span class="dlr-tag dtag-copper">Copper</span>
+      </div>
+      <div class="dlr-desc">Buy Gold and Silver Coins — competitive premiums, free shipping over $149, and a wide range including copper rounds.</div>
+      <a class="dlr-btn" href="https://www.bgasc.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-coin">
+      <div class="dlr-name">🦅 Golden Eagle Coins</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-coin">Coins</span>
+        <span class="dlr-tag dtag-coin">Bullion</span>
+      </div>
+      <div class="dlr-desc">Maryland-based dealer specializing in numismatic coins and bullion. Excellent service and a curated selection for collectors.</div>
+      <a class="dlr-btn" href="https://www.goldeneaglecoin.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-gold">
+      <div class="dlr-name">⭐ Scottsdale Bullion</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-plat">Platinum</span>
+        <span class="dlr-tag dtag-plat">Palladium</span>
+      </div>
+      <div class="dlr-desc">Arizona-based full-service dealer with bullion, IRA services, and secure storage. Known for the proprietary Scottsdale stackable bar.</div>
+      <a class="dlr-btn" href="https://www.scottsdalebullion.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-silver">
+      <div class="dlr-name">🦸 Hero Bullion</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-copper">Copper</span>
+      </div>
+      <div class="dlr-desc">Rising dealer with competitive premiums focused on silver and copper. Growing selection and fast shipping for stackers.</div>
+      <a class="dlr-btn" href="https://www.herobullion.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-silver">
+      <div class="dlr-name">🏙 Bullion Exchanges</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-plat">Platinum</span>
+        <span class="dlr-tag dtag-coin">Bullion</span>
+      </div>
+      <div class="dlr-desc">NYC-based dealer with one of the largest online selections. Accepts crypto and offers competitive pricing across all metals.</div>
+      <a class="dlr-btn" href="https://bullionexchanges.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-coin">
+      <div class="dlr-name">👑 Westminster Mint</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-coin">Coins</span>
+        <span class="dlr-tag dtag-gold">Gold</span>
+        <span class="dlr-tag dtag-silver">Silver</span>
+        <span class="dlr-tag dtag-auction">Collectibles</span>
+      </div>
+      <div class="dlr-desc">Specializing in collectible and commemorative coins alongside bullion. Great for gift-worthy pieces at accessible prices.</div>
+      <a class="dlr-btn" href="https://www.westminstermint.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+    <div class="dlr-card acc-auction">
+      <div class="dlr-name">🪙 GreatCollections</div>
+      <div class="dlr-tags">
+        <span class="dlr-tag dtag-auction">Auctions</span>
+        <span class="dlr-tag dtag-coin">Coins</span>
+        <span class="dlr-tag dtag-plat">Graded</span>
+      </div>
+      <div class="dlr-desc">Leading numismatic auction platform for graded and raw coins. Find rare dates, key coins, and certified PCGS/NGC pieces at fair market value.</div>
+      <a class="dlr-btn" href="https://www.greatcollections.com" target="_blank" rel="noopener sponsored">SHOP NOW →</a>
+    </div>
+  </div>
+
+  <div class="dlr-footer-note">
+    ⚡ Affiliate links — Bullion Dealer Pro may earn a commission on purchases &nbsp;·&nbsp;
+    <a href="/partners" style="color:var(--muted);text-decoration:none">View full dealer profiles →</a>
+  </div>
 </div>
 
 <!-- ═══════════════════ CURRENCY TAB ═══════════════════ -->
