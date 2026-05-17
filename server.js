@@ -550,6 +550,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
 app.get('/pricing', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pricing.html')));
+app.get('/partners', (req, res) => res.sendFile(path.join(__dirname, 'public', 'partners.html')));
 app.get('/reset-password', (req, res) => res.sendFile(path.join(__dirname, 'public', 'reset.html')));
 app.get('/app', (req, res) => {
   res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
