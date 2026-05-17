@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4393926982735047"
-     crossorigin="anonymous"></script>
+<head>
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4393926982735047" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
@@ -14,6 +15,8 @@
 <meta property="og:description" content="Start free with live spot prices. Upgrade to Pro for coin values, inventory tracking, key dates, and all dealer tools. $19/mo or $149/year.">
 <meta property="og:url" content="https://bulliondealerpro.com/pricing">
 <link rel="canonical" href="https://bulliondealerpro.com/pricing">
+<!-- FlexOffers Verification -->
+<meta name="fo-verify" content="528fe00f-3a9a-4a00-b826-57551b0ff3ef" />
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DR4CZFKX8H"></script>
 <script>
@@ -25,43 +28,123 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--gold:#f0b429;--bg:#050508;--bg2:#0b0b12;--bg3:#12121e;--border:rgba(240,180,41,.18);--text:#d4cbb8;--muted:#6b6580;--green:#00e676;--font:'Rajdhani',sans-serif;--display:'Orbitron',sans-serif}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:52px 24px 60px;text-align:center;
-  background-image:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,180,41,.08) 0%,transparent 60%)}
+:root{
+  --gold:#f0b429;--bg:#050508;--bg2:#0b0b12;--bg3:#12121e;
+  --border:rgba(240,180,41,.18);--text:#d4cbb8;--muted:#6b6580;
+  --green:#00e676;--font:'Rajdhani',sans-serif;--display:'Orbitron',sans-serif;
+  --mono:'Share Tech Mono',monospace;
+}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding:52px 24px 80px;text-align:center;
+  background-image:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,180,41,.08) 0%,transparent 60%);
+}
 .brand{font-family:var(--display);font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:12px}
 h1{font-family:var(--display);font-size:clamp(22px,4vw,38px);font-weight:900;color:var(--text);letter-spacing:3px;margin-bottom:10px}
-.sub{color:var(--muted);font-size:15px;letter-spacing:0.5px;margin-bottom:40px;line-height:1.6}
+.sub{color:var(--muted);font-size:15px;letter-spacing:0.5px;margin-bottom:32px;line-height:1.6}
+
 /* Free tier banner */
-.free-tier{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 28px;max-width:660px;width:100%;margin-bottom:36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.free-tier{
+  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  padding:20px 28px;max-width:660px;width:100%;margin-bottom:36px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
 .free-tier-left{text-align:left;}
 .free-tier-label{font-family:var(--display);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:4px;}
 .free-tier-title{font-family:var(--display);font-size:16px;color:var(--text);letter-spacing:2px;}
-.free-tier-desc{font-size:13px;color:var(--muted);margin-top:4px;}
 .free-feats{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
 .free-feat{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;}
 .free-feat span{color:var(--gold);}
-.free-btn{background:transparent;border:1px solid var(--border);color:var(--gold);padding:10px 22px;border-radius:8px;font-family:var(--display);font-size:12px;letter-spacing:2px;cursor:pointer;white-space:nowrap;text-decoration:none;transition:border-color .2s;}
+.free-btn{
+  background:transparent;border:1px solid var(--border);color:var(--gold);
+  padding:10px 22px;border-radius:8px;font-family:var(--display);
+  font-size:12px;letter-spacing:2px;cursor:pointer;white-space:nowrap;
+  text-decoration:none;transition:border-color .2s;
+}
 .free-btn:hover{border-color:var(--gold);}
+
 /* Plans */
 .plans-label{font-family:var(--display);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:20px;}
 .plans{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;max-width:700px;width:100%;}
-.plan{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:36px 28px;width:300px;position:relative;overflow:hidden;transition:border-color .2s;}
-.plan::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(240,180,41,.3),transparent);}
+.plan{
+  background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:36px 28px;width:300px;position:relative;overflow:hidden;transition:border-color .2s;
+}
+.plan::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(240,180,41,.3),transparent);
+}
 .plan.featured{border-color:var(--gold);box-shadow:0 0 40px rgba(240,180,41,.1);}
 .plan.featured::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.badge{position:absolute;top:-1px;right:20px;background:var(--gold);color:#000;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:0 0 10px 10px;}
+.badge{
+  position:absolute;top:-1px;right:20px;
+  background:var(--gold);color:#000;font-family:var(--display);
+  font-size:10px;font-weight:700;letter-spacing:1.5px;
+  padding:5px 14px;border-radius:0 0 10px 10px;
+}
 .plan-name{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px;}
-.plan-price{font-size:52px;font-weight:700;color:var(--gold);font-family:'Share Tech Mono',monospace;line-height:1;}
+.plan-price{font-size:52px;font-weight:700;color:var(--gold);font-family:var(--mono);line-height:1;}
 .plan-per{font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:28px;letter-spacing:1px;}
-.plan-btn{display:block;width:100%;background:linear-gradient(135deg,var(--gold),#c88a00);color:#000;border:none;padding:14px;border-radius:8px;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:opacity .2s;}
+.plan-btn{
+  display:block;width:100%;
+  background:linear-gradient(135deg,var(--gold),#c88a00);
+  color:#000;border:none;padding:14px;border-radius:8px;
+  font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:2px;
+  cursor:pointer;transition:opacity .2s;
+}
 .plan-btn:hover{opacity:.85;}
 .feats{margin-top:24px;text-align:left;font-size:14px;color:var(--muted);line-height:2.1;}
 .feats .ok{color:var(--green);}
 .trial-note{font-size:12px;color:var(--muted);margin-top:12px;letter-spacing:0.5px;}
 .trial-note strong{color:var(--gold);}
-a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;text-decoration:none;letter-spacing:1px;}
-#test-banner{display:none;background:#1a0a00;border:2px solid #ff6600;color:#ff9933;font-family:'Share Tech Mono',monospace;font-size:13px;text-align:center;padding:10px;letter-spacing:1px;margin-bottom:20px;border-radius:8px;max-width:660px;width:100%;}
-#test-card{display:none;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.3);border-radius:8px;padding:12px 20px;margin-top:-16px;margin-bottom:20px;font-family:'Share Tech Mono',monospace;font-size:12px;color:#ff9933;line-height:1.8;max-width:660px;width:100%;}
+a.back{display:inline-block;margin-top:36px;color:var(--gold);font-size:13px;text-decoration:none;letter-spacing:1px;}
+
+/* AdSense units */
+.ad-block{width:100%;max-width:660px;text-align:center;margin:28px 0;}
+
+/* Affiliate section */
+.partner-strip{
+  width:100%;max-width:660px;margin:36px 0 0;
+  border:1px solid var(--border);border-radius:14px;
+  padding:20px 24px;background:var(--bg2);text-align:left;
+}
+.ps-label{
+  font-family:var(--display);font-size:9px;letter-spacing:3px;color:var(--muted);
+  margin-bottom:14px;text-align:center;display:block;
+}
+.ps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.ps-card{
+  border:1px solid var(--border);border-radius:8px;padding:12px;
+  background:var(--bg3);transition:border-color .2s;
+}
+.ps-card:hover{border-color:rgba(240,180,41,.4)}
+.ps-name{font-family:var(--display);font-size:12px;letter-spacing:1px;color:var(--gold);margin-bottom:4px;}
+.ps-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+.ps-link{
+  display:block;text-align:center;font-family:var(--display);font-size:11px;
+  letter-spacing:1px;color:#000;
+  background:linear-gradient(135deg,var(--gold),#c88a00);
+  padding:5px 12px;border-radius:20px;text-decoration:none;transition:opacity .2s;
+}
+.ps-link:hover{opacity:.85}
+
+/* Footer */
+.site-footer{
+  width:100%;max-width:660px;border-top:1px solid var(--border);
+  padding:20px 0 0;margin-top:40px;text-align:center;
+}
+.footer-links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:10px;}
+.footer-aff{
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);
+  text-decoration:none;border:1px solid var(--border);padding:4px 12px;border-radius:20px;transition:all .2s;
+}
+.footer-aff:hover{color:var(--gold);border-color:rgba(240,180,41,.4)}
+.footer-note{font-size:11px;color:rgba(184,175,200,.3);font-family:var(--mono);letter-spacing:1px;}
+
+/* Test mode */
+#test-banner{display:none;background:#1a0a00;border:2px solid #ff6600;color:#ff9933;font-family:var(--mono);font-size:13px;text-align:center;padding:10px;letter-spacing:1px;margin-bottom:20px;border-radius:8px;max-width:660px;width:100%;}
+#test-card{display:none;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.3);border-radius:8px;padding:12px 20px;margin-top:-16px;margin-bottom:20px;font-family:var(--mono);font-size:12px;color:#ff9933;line-height:1.8;max-width:660px;width:100%;}
 </style>
 </head>
 <body>
@@ -75,6 +158,17 @@ a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;tex
     Expiry: any future date (e.g. 12/29)<br>
     CVC: any 3 digits (e.g. 123)<br>
     ZIP: any 5 digits (e.g. 12345)
+  </div>
+
+  <!-- Top AdSense -->
+  <div class="ad-block">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4393926982735047"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <!-- Free Tier -->
@@ -131,6 +225,57 @@ a.back{display:inline-block;margin-top:40px;color:var(--gold);font-size:13px;tex
   </div>
 
   <a class="back" href="/">&#8592; Back to home</a>
+
+  <!-- Mid AdSense -->
+  <div class="ad-block" style="margin-top:40px;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4393926982735047"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Affiliate Partner Strip -->
+  <div class="partner-strip">
+    <span class="ps-label">◆ &nbsp; WHILE YOU DECIDE — BUY FROM TRUSTED DEALERS &nbsp; ◆</span>
+    <div class="ps-grid">
+      <div class="ps-card">
+        <div class="ps-name">🥇 APMEX</div>
+        <div class="ps-desc">Largest selection of gold, silver & platinum. Authorized US Mint dealer.</div>
+        <a class="ps-link" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">SHOP APMEX →</a>
+      </div>
+      <div class="ps-card">
+        <div class="ps-name">🥈 JM BULLION</div>
+        <div class="ps-desc">Competitive pricing, fast shipping, free delivery on $199+.</div>
+        <a class="ps-link" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">SHOP JM →</a>
+      </div>
+      <div class="ps-card">
+        <div class="ps-name">🏅 SD BULLION</div>
+        <div class="ps-desc">Lowest premiums on silver rounds and monster boxes.</div>
+        <a class="ps-link" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SHOP SD →</a>
+      </div>
+      <div class="ps-card">
+        <div class="ps-name">💵 EBAY COINS</div>
+        <div class="ps-desc">Key dates, graded coins, world currency & collectibles.</div>
+        <a class="ps-link" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">SHOP EBAY →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="site-footer">
+    <div class="footer-links">
+      <a class="footer-aff" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">APMEX</a>
+      <a class="footer-aff" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">JM BULLION</a>
+      <a class="footer-aff" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SD BULLION</a>
+      <a class="footer-aff" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">GAINESVILLE</a>
+      <a class="footer-aff" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">EBAY COINS</a>
+      <a class="footer-aff" href="/partners">ALL PARTNERS →</a>
+    </div>
+    <div class="footer-note">© 2025 BullionDealerPro.com · Affiliate links may earn a commission at no extra cost to you</div>
+  </div>
 
 <script>
 fetch('/api/me').then(r=>r.json()).then(u=>{

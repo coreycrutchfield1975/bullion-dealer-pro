@@ -12,6 +12,8 @@
 <meta name="keywords" content="live silver price, live gold price, bullion dealer tools, coin melt value calculator, silver spot price today, gold spot price, coin values, key date coins, Morgan dollar value, silver coin calculator, bullion calculator, dealer buy sell calculator, coin inventory tracker, silver melt calculator, precious metals app">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://bulliondealerpro.com/">
+<!-- FlexOffers Verification -->
+<meta name="fo-verify" content="528fe00f-3a9a-4a00-b826-57551b0ff3ef" />
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://bulliondealerpro.com/">
@@ -31,6 +33,7 @@
   gtag('js', new Date());
   gtag('config', 'G-DR4CZFKX8H');
 </script>
+<!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4393926982735047" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -42,11 +45,7 @@
 }
 html,body{height:100%;overflow-x:hidden}
 body{background:var(--bg);color:var(--text);font-family:var(--font);}
-
-/* ── CANVAS BG ── */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* ── HERO ── */
 .hero{
   position:relative;z-index:1;
   min-height:100vh;
@@ -54,15 +53,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);}
   text-align:center;padding:60px 24px;
   overflow:hidden;
 }
-
-/* Gold shimmer line top */
 .hero::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold2) 50%,var(--gold) 70%,transparent 100%);
   animation:shimmer 3s ease-in-out infinite;
 }
 @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
-
 .eyebrow{
   font-family:var(--mono);font-size:11px;letter-spacing:5px;color:var(--gold);
   border:1px solid rgba(240,180,41,.3);padding:8px 22px;border-radius:30px;
@@ -70,26 +66,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);}
   background:rgba(240,180,41,.05);
   animation:fadeUp .8s ease both;
 }
-
 h1{
   font-family:var(--display);
   font-size:clamp(64px,12vw,140px);
-  line-height:.9;
-  letter-spacing:4px;
-  margin-bottom:24px;
+  line-height:.9;letter-spacing:4px;margin-bottom:24px;
   animation:fadeUp .8s .15s ease both;
 }
 h1 .line1{display:block;color:var(--gold);text-shadow:0 0 60px rgba(240,180,41,.4),0 0 120px rgba(240,180,41,.15)}
 h1 .line2{display:block;color:var(--text);font-size:clamp(40px,7vw,85px)}
 h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
-
 .tagline{
   font-size:clamp(14px,2vw,18px);color:var(--muted);letter-spacing:2px;
-  margin-bottom:52px;max-width:560px;line-height:1.6;
+  margin-bottom:40px;max-width:560px;line-height:1.6;
   animation:fadeUp .8s .3s ease both;
 }
-
-.cta-group{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:100px;animation:fadeUp .8s .45s ease both}
+.cta-group{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;animation:fadeUp .8s .45s ease both}
 .btn-main{
   background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
   color:#000;font-family:var(--display);font-size:20px;letter-spacing:3px;
@@ -106,7 +97,21 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
 }
 .btn-outline:hover{border-color:var(--gold);background:rgba(240,180,41,.08)}
 
-/* ── FEATURES ── */
+/* ── AFFILIATE STRIP ── */
+.affiliate-strip{
+  width:100%;max-width:900px;margin:0 auto 32px;
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  animation:fadeUp .8s .5s ease both;
+}
+.aff-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  border:1px solid rgba(240,180,41,.3);border-radius:30px;
+  padding:7px 18px;text-decoration:none;
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--gold);
+  background:rgba(240,180,41,.05);transition:all .2s;
+}
+.aff-btn:hover{background:rgba(240,180,41,.12);border-color:var(--gold)}
+
 .features{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:2px;max-width:1100px;width:100%;
@@ -124,7 +129,42 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
 .feat-title{font-family:var(--display);font-size:16px;letter-spacing:2px;color:var(--gold);margin-bottom:6px}
 .feat-desc{font-size:13px;color:var(--muted);line-height:1.5}
 
-/* ── TICKER AT BOTTOM ── */
+/* ── PARTNER CARDS ── */
+.partner-section{width:100%;max-width:900px;margin:0 auto 60px;padding:0 24px;}
+.partner-label{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);text-align:center;margin-bottom:20px;}
+.partner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.partner-card{
+  border:1px solid rgba(240,180,41,.2);border-radius:12px;
+  padding:18px;background:rgba(5,5,15,.7);
+  display:flex;flex-direction:column;gap:8px;
+  transition:border-color .2s,background .2s;
+}
+.partner-card:hover{border-color:rgba(240,180,41,.5);background:rgba(240,180,41,.04)}
+.partner-name{font-family:var(--display);font-size:17px;letter-spacing:2px;color:var(--gold)}
+.partner-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.partner-link{
+  display:inline-block;margin-top:4px;
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;color:#000;
+  background:linear-gradient(135deg,var(--gold),var(--gold3));
+  padding:7px 16px;border-radius:20px;text-decoration:none;text-align:center;
+  transition:opacity .2s;
+}
+.partner-link:hover{opacity:.85}
+
+/* ── GLOBAL FOOTER ── */
+.site-footer{
+  background:rgba(5,5,15,.95);border-top:1px solid rgba(240,180,41,.2);
+  padding:32px 24px 60px;text-align:center;position:relative;z-index:1;
+}
+.footer-partners{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px;}
+.footer-aff{
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);
+  text-decoration:none;border:1px solid rgba(240,180,41,.15);
+  padding:5px 14px;border-radius:20px;transition:all .2s;
+}
+.footer-aff:hover{color:var(--gold);border-color:rgba(240,180,41,.4)}
+.footer-note{font-size:11px;color:rgba(184,175,200,.4);font-family:var(--mono);letter-spacing:1px;margin-top:10px;}
+
 .live-bar{
   position:fixed;bottom:0;left:0;right:0;z-index:10;
   height:36px;background:rgba(3,3,10,.9);border-top:1px solid rgba(240,180,41,.25);
@@ -153,7 +193,16 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
     <a class="btn-outline" href="/login">LOG IN</a>
   </div>
 
-  <!-- AdSense Banner Ad — Replace data-ad-slot with your Ad Unit ID from adsense.google.com -->
+  <!-- Affiliate Quick Links -->
+  <div class="affiliate-strip">
+    <a class="aff-btn" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">🥇 APMEX</a>
+    <a class="aff-btn" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">🥈 JM BULLION</a>
+    <a class="aff-btn" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">🏅 SD BULLION</a>
+    <a class="aff-btn" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">📦 GAINESVILLE</a>
+    <a class="aff-btn" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">💵 EBAY COINS</a>
+  </div>
+
+  <!-- AdSense Banner -->
   <div style="width:100%;max-width:728px;margin:0 auto 40px;text-align:center">
     <ins class="adsbygoogle"
          style="display:block"
@@ -174,19 +223,56 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
   </div>
 </div>
 
-<div class="live-bar">
-  <div class="live-label">◈ LIVE</div>
-  <div class="ticker-wrap">
-    <div class="ticker-inner" id="ticker">
-      <span><b>GOLD</b> loading…</span><span><b>SILVER</b> loading…</span>
-      <span><b>PLATINUM</b> loading…</span><span><b>PALLADIUM</b> loading…</span>
-      <span><b>COPPER</b> loading…</span>
+<!-- Partner Cards Section -->
+<section class="partner-section" style="position:relative;z-index:1;margin-top:60px;">
+  <div class="partner-label">◆ &nbsp; TRUSTED BULLION PARTNERS &nbsp; ◆</div>
+  <div class="partner-grid">
+    <div class="partner-card">
+      <div class="partner-name">🥇 APMEX</div>
+      <div class="partner-desc">America's largest online bullion dealer. Authorized US Mint purchaser with 20+ years of experience. Shop gold, silver, platinum & palladium coins, bars, and rounds.</div>
+      <a class="partner-link" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">SHOP APMEX →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🥈 JM BULLION</div>
+      <div class="partner-desc">Free shipping on orders over $199. Competitive pricing on Silver Eagles, Gold Eagles, and silver rounds. BBB accredited with thousands of 5-star reviews.</div>
+      <a class="partner-link" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">SHOP JM BULLION →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🏅 SD BULLION</div>
+      <div class="partner-desc">Low-premium bullion dealer based in Toledo, OH. Known for competitive silver pricing, monster boxes, and a wide selection of gold and silver products.</div>
+      <a class="partner-link" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SHOP SD BULLION →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">📦 GAINESVILLE COINS</div>
+      <div class="partner-desc">Trusted dealer for bullion and numismatic coins. Great selection of junk silver, gold bullion, and collector coins with competitive pricing and fast shipping.</div>
+      <a class="partner-link" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">SHOP GAINESVILLE →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">💵 EBAY COINS</div>
+      <div class="partner-desc">World's largest marketplace for coins, currency, and collectibles. Find key dates, NGC/PCGS graded coins, error coins, and world currency from thousands of sellers.</div>
+      <a class="partner-link" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">SHOP EBAY →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">📚 AMAZON SUPPLIES</div>
+      <div class="partner-desc">Shop coin supplies, storage albums, grading books, loupes, scales, and precious metals reference guides. Everything a dealer or collector needs.</div>
+      <a class="partner-link" href="https://www.amazon.com/s?k=coin+collecting+supplies" target="_blank" rel="noopener sponsored">SHOP AMAZON →</a>
     </div>
   </div>
+</section>
+
+<!-- AdSense Bottom Banner -->
+<div style="width:100%;max-width:728px;margin:0 auto 40px;text-align:center;padding:0 24px;position:relative;z-index:1;">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4393926982735047"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
-<!-- Visible SEO content section -->
-<section style="width:100%;max-width:900px;margin:60px auto 80px;padding:0 24px;text-align:left">
+<!-- SEO Content Section -->
+<section style="width:100%;max-width:900px;margin:0 auto 80px;padding:0 24px;text-align:left;position:relative;z-index:1;">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px">
     <div>
       <h2 style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;color:#f0b429;margin-bottom:10px">LIVE SPOT PRICES</h2>
@@ -206,6 +292,20 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
     </div>
   </div>
 </section>
+
+<!-- Global Footer -->
+<footer class="site-footer">
+  <div class="footer-partners">
+    <a class="footer-aff" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">APMEX</a>
+    <a class="footer-aff" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">JM BULLION</a>
+    <a class="footer-aff" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SD BULLION</a>
+    <a class="footer-aff" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">GAINESVILLE COINS</a>
+    <a class="footer-aff" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">EBAY COINS</a>
+    <a class="footer-aff" href="https://www.amazon.com/s?k=coin+collecting+supplies" target="_blank" rel="noopener sponsored">AMAZON SUPPLIES</a>
+    <a class="footer-aff" href="/partners">ALL PARTNERS →</a>
+  </div>
+  <div class="footer-note">© 2025 BullionDealerPro.com · Affiliate links may earn a small commission at no extra cost to you · <a href="/partners" style="color:rgba(240,180,41,.5);text-decoration:none">Partner Disclosures</a></div>
+</footer>
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -234,8 +334,18 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
 }
 </script>
 
+<div class="live-bar">
+  <div class="live-label">◈ LIVE</div>
+  <div class="ticker-wrap">
+    <div class="ticker-inner" id="ticker">
+      <span><b>GOLD</b> loading…</span><span><b>SILVER</b> loading…</span>
+      <span><b>PLATINUM</b> loading…</span><span><b>PALLADIUM</b> loading…</span>
+      <span><b>COPPER</b> loading…</span>
+    </div>
+  </div>
+</div>
+
 <script>
-// Particle canvas
 const canvas=document.getElementById('bg-canvas');
 const ctx=canvas.getContext('2d');
 let W,H,particles=[];
@@ -245,11 +355,9 @@ function randomParticle(){return{x:Math.random()*W,y:Math.random()*H,r:Math.rand
 for(let i=0;i<120;i++)particles.push(randomParticle());
 function draw(){
   ctx.clearRect(0,0,W,H);
-  // Deep bg gradient
   const g=ctx.createRadialGradient(W/2,0,0,W/2,0,H*.9);
   g.addColorStop(0,'rgba(30,18,0,.6)');g.addColorStop(1,'rgba(3,3,10,1)');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  // particles
   particles.forEach(p=>{
     ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fillStyle=`rgba(240,180,41,${p.opacity})`;ctx.fill();
@@ -260,8 +368,6 @@ function draw(){
   requestAnimationFrame(draw);
 }
 draw();
-
-// Fetch spot for ticker
 async function fetchSpot(){
   try{
     const syms=[['XAU','GOLD'],['XAG','SILVER'],['XPT','PLATINUM'],['XPD','PALLADIUM'],['XCU','COPPER']];

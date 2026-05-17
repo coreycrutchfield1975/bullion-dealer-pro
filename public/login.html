@@ -4,120 +4,263 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
-<link rel="apple-touch-icon" href="/favicon-192.png"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login · Bullion Dealer Pro</title>
-<meta name="description" content="Log in to Bullion Dealer Pro — your professional bullion dealer tools for live spot prices, coin calculators, inventory tracking, and key date values.">
-<link rel="canonical" href="https://bulliondealerpro.com/login">
+<link rel="apple-touch-icon" href="/favicon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login | Bullion Dealer Pro</title>
+<meta name="description" content="Log in to Bullion Dealer Pro — access live spot prices, coin melt calculators, inventory tracker, and professional dealer tools.">
+<meta name="robots" content="noindex, follow">
+<!-- FlexOffers Verification -->
+<meta name="fo-verify" content="528fe00f-3a9a-4a00-b826-57551b0ff3ef" />
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DR4CZFKX8H"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DR4CZFKX8H');</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DR4CZFKX8H');
+</script>
+<!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4393926982735047" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--gold:#f0b429;--gold2:#ffe566;--gold3:#c88a00;--bg:#03030a;--bg2:rgba(10,8,20,.95);--border:rgba(240,180,41,.22);--text:#e8dfc8;--muted:#b8afc8;--red:#ff4b6e;--green:#00e676;--font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace}
-html,body{height:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--text);font-family:var(--font);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+:root{
+  --gold:#f0b429;--gold2:#ffe566;--gold3:#c88a00;
+  --bg:#03030a;--text:#e8dfc8;--muted:#b8afc8;
+  --font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace;
+}
+html,body{min-height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font);padding-bottom:60px;}
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-.wrap{position:relative;z-index:1;display:flex;gap:0;max-width:900px;width:100%;border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 0 80px rgba(240,180,41,.1),0 0 200px rgba(240,180,41,.04)}
-/* LEFT PANEL */
-.panel-left{
-  flex:1;padding:52px 40px;
-  background:linear-gradient(160deg,rgba(240,180,41,.1) 0%,rgba(10,8,20,.98) 50%);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;justify-content:center;
+
+.topnav{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 28px;border-bottom:1px solid rgba(240,180,41,.12);
 }
-.panel-left .brand{font-family:var(--display);font-size:13px;letter-spacing:5px;color:var(--gold);margin-bottom:40px}
-.panel-left h1{font-family:var(--display);font-size:clamp(48px,6vw,80px);line-height:.9;color:var(--gold);text-shadow:0 0 40px rgba(240,180,41,.3);margin-bottom:20px}
-.panel-left p{font-size:15px;color:var(--muted);line-height:1.7;letter-spacing:.5px}
-.panel-left .stat{margin-top:32px;display:flex;flex-direction:column;gap:12px}
-.stat-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
-.stat-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;box-shadow:0 0 6px var(--gold)}
-@media(max-width:640px){.panel-left{display:none}}
-/* RIGHT PANEL — FORM */
-.panel-right{flex:1;padding:52px 40px;background:var(--bg2);display:flex;flex-direction:column;justify-content:center;min-width:300px}
-.form-brand{font-family:var(--display);font-size:12px;letter-spacing:4px;color:var(--gold);margin-bottom:8px;text-align:center}
-h2{font-family:var(--display);font-size:32px;letter-spacing:2px;color:var(--text);margin-bottom:32px;text-align:center}
-label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:7px}
-input{
+.nav-logo{font-family:var(--display);font-size:20px;letter-spacing:4px;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:16px}
+.nav-link{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-link:hover{color:var(--gold)}
+
+/* Center layout */
+.page-wrap{
+  position:relative;z-index:1;
+  max-width:420px;margin:60px auto 0;padding:0 24px;
+}
+
+/* Login card */
+.login-card{
+  border:1px solid rgba(240,180,41,.25);border-radius:16px;
+  padding:40px 36px;background:rgba(5,5,15,.85);
+  backdrop-filter:blur(12px);position:relative;overflow:hidden;
+}
+.login-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);
+}
+.login-title{font-family:var(--display);font-size:34px;letter-spacing:4px;color:var(--gold);text-align:center;margin-bottom:6px;}
+.login-sub{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted);text-align:center;margin-bottom:30px;}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:7px;}
+.field input{
   width:100%;background:rgba(255,255,255,.04);
-  border:1px solid rgba(240,180,41,.2);color:var(--text);
-  padding:13px 16px;border-radius:10px;font-size:15px;font-family:var(--font);
-  outline:none;margin-bottom:18px;transition:all .25s;
+  border:1px solid rgba(240,180,41,.2);border-radius:8px;
+  padding:12px 14px;color:var(--text);font-family:var(--font);font-size:15px;
+  outline:none;transition:border-color .2s;
 }
-input:focus{border-color:var(--gold);background:rgba(240,180,41,.05);box-shadow:0 0 0 4px rgba(240,180,41,.08)}
-.btn{
+.field input:focus{border-color:rgba(240,180,41,.6)}
+.field input::placeholder{color:rgba(184,175,200,.4)}
+
+.forgot{
+  display:block;text-align:right;font-family:var(--mono);font-size:10px;
+  letter-spacing:1px;color:var(--muted);text-decoration:none;
+  margin-top:-10px;margin-bottom:26px;transition:color .2s;
+}
+.forgot:hover{color:var(--gold)}
+
+.btn-login{
   width:100%;background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
-  color:#000;border:none;padding:15px;border-radius:10px;
-  font-family:var(--display);font-size:22px;letter-spacing:3px;
-  cursor:pointer;transition:all .2s;
-  box-shadow:0 6px 24px rgba(240,180,41,.3);
+  color:#000;font-family:var(--display);font-size:22px;letter-spacing:4px;
+  padding:13px;border-radius:50px;border:none;cursor:pointer;
+  box-shadow:0 8px 30px rgba(240,180,41,.3);transition:transform .2s,box-shadow .2s;
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(240,180,41,.4)}
-.msg{text-align:center;font-size:14px;margin-top:14px;min-height:20px;font-family:var(--mono)}
-.ok{color:var(--green)} .err{color:var(--red)}
-.links{text-align:center;margin-top:24px;font-size:13px;color:var(--muted)}
-.links a{color:var(--gold);text-decoration:none;letter-spacing:.5px}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(240,180,41,.4)}
+
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;}
+.divider span{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(240,180,41,.15)}
+
+.register-link{text-align:center;font-size:14px;color:var(--muted);}
+.register-link a{color:var(--gold);text-decoration:none;font-weight:600}
+
+.msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;}
+.msg.error{background:rgba(200,50,50,.15);border:1px solid rgba(200,50,50,.3);color:#f08080}
+.msg.success{background:rgba(50,200,100,.1);border:1px solid rgba(50,200,100,.25);color:#80f0a0}
+
+/* AdSense below card */
+.adsense-below{max-width:420px;margin:28px auto 0;padding:0 24px;text-align:center;position:relative;z-index:1;}
+
+/* Footer */
+.site-footer{
+  background:rgba(5,5,15,.95);border-top:1px solid rgba(240,180,41,.12);
+  padding:20px 24px 60px;text-align:center;position:relative;z-index:1;margin-top:48px;
+}
+.footer-partners{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:14px;}
+.footer-aff{
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);
+  text-decoration:none;border:1px solid rgba(240,180,41,.15);
+  padding:4px 12px;border-radius:20px;transition:all .2s;
+}
+.footer-aff:hover{color:var(--gold);border-color:rgba(240,180,41,.4)}
+.footer-note{font-size:11px;color:rgba(184,175,200,.35);font-family:var(--mono);letter-spacing:1px;}
+
+/* Live bar */
+.live-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  height:36px;background:rgba(3,3,10,.9);border-top:1px solid rgba(240,180,41,.25);
+  display:flex;align-items:center;overflow:hidden;backdrop-filter:blur(10px);
+}
+.live-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);padding:0 16px;border-right:1px solid rgba(240,180,41,.2);white-space:nowrap}
+.ticker-wrap{overflow:hidden;flex:1}
+.ticker-inner{display:inline-flex;gap:48px;white-space:nowrap;animation:tick 40s linear infinite;font-family:var(--mono);font-size:12px;color:#c8bfda}
+.ticker-inner b{color:var(--gold)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
-<div class="wrap">
-  <div class="panel-left">
-    <div class="brand">◆ BULLION DEALER PRO</div>
-    <h1>SIGN<br>IN.</h1>
-    <p>Your professional bullion trading toolkit. Live prices, deal calculators, and inventory tracking — all in one place.</p>
-    <div class="stat">
-      <div class="stat-item"><div class="stat-dot"></div>Live Gold · Silver · Copper · Platinum · Palladium</div>
-      <div class="stat-item"><div class="stat-dot"></div>Deal calculator with custom buy/sell margins</div>
-      <div class="stat-item"><div class="stat-dot"></div>Inventory tracker with real-time P&L</div>
-      <div class="stat-item"><div class="stat-dot"></div>Key dates, mint errors & grading guide</div>
-    </div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">BULLION DEALER PRO</a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">HOME</a>
+    <a class="nav-link" href="/register">REGISTER</a>
+    <a class="nav-link" href="/partners">PARTNERS</a>
   </div>
-  <div class="panel-right">
-    <div class="form-brand">◆ BDP</div>
-    <h2>WELCOME BACK</h2>
-    <label>EMAIL</label>
-    <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
-    <label>PASSWORD</label>
-    <input type="password" id="pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
-    <button class="btn" onclick="login()">LOGIN</button>
-    <div class="msg" id="msg"></div>
-    <div class="links"><a href="/reset">Forgot password?</a> &nbsp;·&nbsp; <a href="/register">Create account</a> &nbsp;·&nbsp; <a href="/">← Back to Website</a></div>
+</nav>
+
+<div class="page-wrap">
+  <div class="login-card">
+    <div class="login-title">SIGN IN</div>
+    <div class="login-sub">◆ &nbsp; BULLION DEALER PRO &nbsp; ◆</div>
+
+    <div class="msg error" id="error-msg"></div>
+    <div class="msg success" id="success-msg"></div>
+
+    <div class="field">
+      <label for="email">EMAIL ADDRESS</label>
+      <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label for="password">PASSWORD</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <a class="forgot" href="/forgot-password">Forgot password?</a>
+
+    <button class="btn-login" id="login-btn" onclick="handleLogin()">LOG IN</button>
+
+    <div class="divider"><span>OR</span></div>
+    <div class="register-link">No account? <a href="/register">Start Free Trial</a></div>
   </div>
 </div>
+
+<!-- Single AdSense unit below login form -->
+<div class="adsense-below">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4393926982735047"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- Global Footer -->
+<footer class="site-footer">
+  <div class="footer-partners">
+    <a class="footer-aff" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">APMEX</a>
+    <a class="footer-aff" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">JM BULLION</a>
+    <a class="footer-aff" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SD BULLION</a>
+    <a class="footer-aff" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">GAINESVILLE</a>
+    <a class="footer-aff" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">EBAY COINS</a>
+    <a class="footer-aff" href="/partners">ALL PARTNERS →</a>
+  </div>
+  <div class="footer-note">© 2025 BullionDealerPro.com · Affiliate links may earn a small commission · <a href="/partners" style="color:rgba(240,180,41,.4);text-decoration:none">Disclosures</a></div>
+</footer>
+
+<div class="live-bar">
+  <div class="live-label">◈ LIVE</div>
+  <div class="ticker-wrap">
+    <div class="ticker-inner" id="ticker">
+      <span><b>GOLD</b> loading…</span><span><b>SILVER</b> loading…</span>
+      <span><b>PLATINUM</b> loading…</span><span><b>PALLADIUM</b> loading…</span>
+      <span><b>COPPER</b> loading…</span>
+    </div>
+  </div>
+</div>
+
 <script>
-const canvas=document.getElementById('bg-canvas');const ctx=canvas.getContext('2d');
-let W,H,parts=[];
+// Particle canvas
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
 function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
 resize();window.addEventListener('resize',resize);
-for(let i=0;i<80;i++)parts.push({x:Math.random()*1e4%1,y:Math.random(),r:Math.random()*1+.2,s:Math.random()*.2+.05,o:Math.random()*.4+.1,dx:(Math.random()-.5)*.2});
+function randomParticle(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.3,speed:Math.random()*.3+.1,opacity:Math.random()*.5+.1,dx:(Math.random()-.5)*.4}}
+for(let i=0;i<120;i++)particles.push(randomParticle());
 function draw(){
   ctx.clearRect(0,0,W,H);
-  const g=ctx.createRadialGradient(W*.3,H*.3,0,W*.3,H*.3,H*.8);
-  g.addColorStop(0,'rgba(20,12,0,.8)');g.addColorStop(1,'rgba(3,3,10,1)');
+  const g=ctx.createRadialGradient(W/2,0,0,W/2,0,H*.9);
+  g.addColorStop(0,'rgba(30,18,0,.6)');g.addColorStop(1,'rgba(3,3,10,1)');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  parts.forEach(p=>{
-    ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(240,180,41,${p.o})`;ctx.fill();
-    p.y-=p.s/H;p.x+=p.dx/W;
-    if(p.y<0){p.y=1;p.x=Math.random();}
+  particles.forEach(p=>{
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(240,180,41,${p.opacity})`;ctx.fill();
+    p.x+=p.dx;p.y-=p.speed;
+    if(p.y<-4)Object.assign(p,randomParticle(),{y:H+4});
+    if(p.x<0||p.x>W)p.dx*=-1;
   });
   requestAnimationFrame(draw);
 }
 draw();
-async function login(){
+
+async function handleLogin(){
   const email=document.getElementById('email').value.trim();
-  const pass=document.getElementById('pass').value;
-  const msg=document.getElementById('msg');
-  msg.innerHTML='';
-  if(!email||!pass){msg.innerHTML='<span class="err">Fill in all fields.</span>';return;}
-  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
-  const d=await r.json();
-  if(r.ok){msg.innerHTML='<span class="ok">✓ Authenticated.</span>';setTimeout(()=>window.location.href='/app',700);}
-  else msg.innerHTML=`<span class="err">${d.error||'Login failed.'}</span>`;
+  const password=document.getElementById('password').value;
+  const errEl=document.getElementById('error-msg');
+  const sucEl=document.getElementById('success-msg');
+  const btn=document.getElementById('login-btn');
+  errEl.style.display='none';sucEl.style.display='none';
+  if(!email||!password){errEl.textContent='Please enter your email and password.';errEl.style.display='block';return;}
+  btn.textContent='SIGNING IN…';btn.disabled=true;
+  try{
+    const res=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await res.json();
+    if(res.ok){
+      sucEl.textContent='Login successful! Redirecting…';sucEl.style.display='block';
+      setTimeout(()=>window.location.href=data.redirect||'/app',1000);
+    } else {
+      errEl.textContent=data.message||'Invalid email or password.';errEl.style.display='block';
+      btn.textContent='LOG IN';btn.disabled=false;
+    }
+  }catch{
+    errEl.textContent='Connection error. Please try again.';errEl.style.display='block';
+    btn.textContent='LOG IN';btn.disabled=false;
+  }
 }
+document.addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
+
+async function fetchSpot(){
+  try{
+    const syms=[['XAU','GOLD'],['XAG','SILVER'],['XPT','PLATINUM'],['XPD','PALLADIUM'],['XCU','COPPER']];
+    const results=await Promise.all(syms.map(([s])=>fetch('/api/metals/'+s).then(r=>r.json()).catch(()=>null)));
+    const seg=syms.map(([s,l],i)=>{const d=results[i];return d?`<span><b>${l}</b> $${d.price.toFixed(2)}</span>`:`<span><b>${l}</b> —</span>`;}).join('');
+    document.getElementById('ticker').innerHTML=seg+'&emsp;&emsp;&emsp;'+seg;
+  }catch{}
+}
+fetchSpot();
 </script>
 </body>
 </html>

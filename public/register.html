@@ -1,21 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" href="/favicon-192.png">
 <title>Register · Bullion Dealer Pro — Start Your Free Trial</title>
 <meta name="description" content="Create a free Bullion Dealer Pro account. Get 14 days of full Pro access — live spot prices, coin calculators, key date values, inventory tracker, and dealer premium comparison.">
 <link rel="canonical" href="https://bulliondealerpro.com/register">
+<!-- FlexOffers Verification -->
+<meta name="fo-verify" content="528fe00f-3a9a-4a00-b826-57551b0ff3ef" />
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DR4CZFKX8H"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DR4CZFKX8H');</script>
+<!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4393926982735047" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--gold:#f0b429;--bg:#050508;--bg2:#0b0b12;--bg3:#12121e;--border:rgba(240,180,41,.18);--text:#d4cbb8;--muted:#6b6580;--red:#ff4b6e;--green:#00e676;--font:'Rajdhani',sans-serif;--display:'Orbitron',sans-serif}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
-  background-image:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,180,41,.08) 0%,transparent 60%)}
-.box{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:44px 36px;width:100%;max-width:440px;box-shadow:0 0 60px rgba(240,180,41,.06);position:relative;overflow:hidden}
+:root{
+  --gold:#f0b429;--gold3:#c88a00;
+  --bg:#050508;--bg2:#0b0b12;--bg3:#12121e;
+  --border:rgba(240,180,41,.18);--text:#d4cbb8;--muted:#6b6580;
+  --red:#ff4b6e;--green:#00e676;
+  --font:'Rajdhani',sans-serif;--display:'Orbitron',sans-serif;--mono:'Share Tech Mono',monospace;
+}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;padding:40px 24px 80px;
+  background-image:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,180,41,.08) 0%,transparent 60%);
+}
+
+/* AdSense above/below */
+.ad-block{width:100%;max-width:440px;text-align:center;margin:20px 0;}
+
+.box{
+  background:var(--bg2);border:1px solid var(--border);border-radius:18px;
+  padding:44px 36px;width:100%;max-width:440px;
+  box-shadow:0 0 60px rgba(240,180,41,.06);position:relative;overflow:hidden;
+}
 .box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .brand{font-family:var(--display);font-size:13px;letter-spacing:3px;color:var(--gold);text-align:center;margin-bottom:6px}
 h2{font-family:var(--display);font-size:20px;font-weight:900;color:var(--text);text-align:center;letter-spacing:2px;margin-bottom:10px}
@@ -30,7 +55,7 @@ h2{font-family:var(--display);font-size:20px;font-weight:900;color:var(--text);t
 label{display:block;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;font-family:var(--display)}
 input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:13px 14px;border-radius:8px;font-size:15px;font-family:var(--font);outline:none;margin-bottom:16px;transition:border-color .2s}
 input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,180,41,.08)}
-.btn{width:100%;background:linear-gradient(135deg,var(--gold),#c88a00);color:#000;border:none;padding:14px;border-radius:8px;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:var(--display);transition:opacity .2s;margin-top:4px}
+.btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;border:none;padding:14px;border-radius:8px;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:var(--display);transition:opacity .2s;margin-top:4px}
 .btn:hover{opacity:.85}
 .fine-print{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;}
 .fine-print a{color:var(--gold);text-decoration:none;}
@@ -40,44 +65,107 @@ input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,180,41,.08)}
 .links a{color:var(--gold);text-decoration:none}
 .trial-note{text-align:center;font-size:12px;color:var(--muted);margin-top:8px;letter-spacing:0.5px;}
 .trial-note strong{color:var(--gold);}
+
+/* Partner strip */
+.partner-strip{
+  width:100%;max-width:440px;margin-top:28px;
+  border:1px solid var(--border);border-radius:14px;
+  padding:18px 20px;background:var(--bg2);
+}
+.ps-label{font-family:var(--display);font-size:9px;letter-spacing:3px;color:var(--muted);text-align:center;display:block;margin-bottom:12px;}
+.ps-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.ps-link{
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--gold);
+  text-decoration:none;border:1px solid var(--border);padding:5px 14px;border-radius:20px;transition:all .2s;
+}
+.ps-link:hover{border-color:rgba(240,180,41,.5);background:rgba(240,180,41,.06)}
+
+/* Footer */
+.site-footer{
+  width:100%;max-width:440px;border-top:1px solid var(--border);
+  padding:18px 0 0;margin-top:28px;text-align:center;
+}
+.footer-note{font-size:11px;color:rgba(184,175,200,.3);font-family:var(--mono);letter-spacing:1px;}
 </style>
 </head>
 <body>
-<div class="box">
-  <div class="brand">&#9670; BULLION DEALER PRO</div>
-  <h2>START FOR FREE</h2>
-  <div class="free-badge">
-    <div class="badge">FREE ACCOUNT</div>
+
+  <!-- Top AdSense -->
+  <div class="ad-block">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4393926982735047"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <div class="perks">
-    <div class="perk-header">&#10003; INCLUDED FREE</div>
-    <div class="perk"><span class="check">&#10003;</span> Live Spot Prices</div>
-    <div class="perk"><span class="check">&#10003;</span> Deal Calculator</div>
-    <div class="perk"><span class="check">&#10003;</span> Silver Melt Calc</div>
-    <div class="perk"><span class="check">&#10003;</span> Pennies Melt Calc</div>
-    <div class="perk-header" style="margin-top:8px">&#128274; PRO — $19/MO</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Gold Karats</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Goldbacks</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Inventory Tracker</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Coin Values</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Key Dates Guide</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Mint Errors</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Currency Exchange</div>
-    <div class="perk pro"><span class="lock">&#128274;</span> Coin Grading</div>
+  <div class="box">
+    <div class="brand">&#9670; BULLION DEALER PRO</div>
+    <h2>START FOR FREE</h2>
+    <div class="free-badge">
+      <div class="badge">FREE ACCOUNT</div>
+    </div>
+
+    <div class="perks">
+      <div class="perk-header">&#10003; INCLUDED FREE</div>
+      <div class="perk"><span class="check">&#10003;</span> Live Spot Prices</div>
+      <div class="perk"><span class="check">&#10003;</span> Deal Calculator</div>
+      <div class="perk"><span class="check">&#10003;</span> Silver Melt Calc</div>
+      <div class="perk"><span class="check">&#10003;</span> Pennies Melt Calc</div>
+      <div class="perk-header" style="margin-top:8px">&#128274; PRO — $19/MO</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Gold Karats</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Goldbacks</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Inventory Tracker</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Coin Values</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Key Dates Guide</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Mint Errors</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Currency Exchange</div>
+      <div class="perk pro"><span class="lock">&#128274;</span> Coin Grading</div>
+    </div>
+
+    <label>EMAIL ADDRESS</label>
+    <input type="email" id="email" placeholder="you@example.com">
+    <label>PASSWORD</label>
+    <input type="password" id="pass" placeholder="Min 8 characters" onkeydown="if(event.key==='Enter')register()">
+    <label>CONFIRM PASSWORD</label>
+    <input type="password" id="pass2" placeholder="Repeat password" onkeydown="if(event.key==='Enter')register()">
+    <button class="btn" onclick="register()">CREATE FREE ACCOUNT</button>
+    <div class="trial-note">&#127381; New accounts also get a <strong>14-day Pro trial</strong> &mdash; no credit card required.</div>
+    <div class="msg" id="msg"></div>
+    <div class="fine-print">By creating an account you agree to our <a href="/privacy">Privacy Policy</a>.</div>
+    <div class="links">Already have an account? <a href="/login">Log in</a></div>
   </div>
 
-  <label>EMAIL ADDRESS</label>
-  <input type="email" id="email" placeholder="you@example.com">
-  <label>PASSWORD</label>
-  <input type="password" id="pass" placeholder="Min 8 characters" onkeydown="if(event.key==='Enter')register()">
-  <label>CONFIRM PASSWORD</label>
-  <input type="password" id="pass2" placeholder="Repeat password" onkeydown="if(event.key==='Enter')register()">
-  <button class="btn" onclick="register()">CREATE FREE ACCOUNT</button>
-  <div class="trial-note">&#127381; New accounts also get a <strong>14-day Pro trial</strong> &mdash; no credit card required.</div>
-  <div class="msg" id="msg"></div>
-  <div class="links">Already have an account? <a href="/login">Log in</a></div>
-</div>
+  <!-- Bottom AdSense -->
+  <div class="ad-block">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4393926982735047"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Partner strip -->
+  <div class="partner-strip">
+    <span class="ps-label">◆ &nbsp; TRUSTED BULLION PARTNERS &nbsp; ◆</span>
+    <div class="ps-links">
+      <a class="ps-link" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">🥇 APMEX</a>
+      <a class="ps-link" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">🥈 JM BULLION</a>
+      <a class="ps-link" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">🏅 SD BULLION</a>
+      <a class="ps-link" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">📦 GAINESVILLE</a>
+      <a class="ps-link" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener sponsored">💵 EBAY COINS</a>
+      <a class="ps-link" href="/partners">ALL PARTNERS →</a>
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="footer-note">© 2025 BullionDealerPro.com · Affiliate links may earn a commission</div>
+  </div>
+
 <script>
 async function register(){
   const email=document.getElementById('email').value.trim();
