@@ -1775,7 +1775,7 @@ let window_pendingTab=null;  // tab to open once auth resolves
 
 async function fm(sym){
   try{
-    const r=await fetch('/api/metals/'+sym);
+    const r=await fetch('/api/metals/'+sym+'?_='+Date.now(),{cache:'no-store'});
     if(!r.ok)return null;
     const d=await r.json();
     // normalize API response fields
@@ -1895,7 +1895,7 @@ function showTab(id){
   if(PRO_TABS.includes(id) && !window_authReady){
     window_pendingTab = id;
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    const tPend = document.querySelector('.tab[onclick="showTab(\'"+id+"\')"]');
+    const tPend = Array.from(document.querySelectorAll('.tab')).find(t=>t.getAttribute('onclick')===`showTab('${id}')`);
     if(tPend) tPend.classList.add('active');
     return;
   }
@@ -1908,7 +1908,7 @@ function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   const sec = $('tab-'+id); if(sec) sec.classList.add('active');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const tBtn = document.querySelector('.tab[onclick="showTab(\'"+id+"\')"]');
+  const tBtn = Array.from(document.querySelectorAll('.tab')).find(t=>t.getAttribute('onclick')===`showTab('${id}')`);
   if(tBtn) tBtn.classList.add('active');
   if(id==='fx') loadFX();
   if(id==='gold'){renderGoldback();renderCoinVals();}
@@ -1924,7 +1924,7 @@ function showProUpgrade(tabId){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   const sec = $('tab-'+tabId); if(sec) sec.classList.add('active');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const tBtn = document.querySelector('.tab[onclick="showTab(\'"+tabId+"\')"]');
+  const tBtn = Array.from(document.querySelectorAll('.tab')).find(t=>t.getAttribute('onclick')===`showTab('${tabId}')`);
   if(tBtn) tBtn.classList.add('active');
   // Inject upgrade prompt at top of section
   if(sec && !sec.querySelector('.upgrade-prompt')){
@@ -4061,8 +4061,8 @@ function tsSyncSpot() {
   // Pull from existing spot prices already loaded on the page
   const g = document.getElementById('ts-spot-gold');
   const s = document.getElementById('ts-spot-silver');
-  if (g && window.prices && prices.XAU) g.textContent = '$' + prices.XAU.toFixed(2);
-  if (s && window.prices && prices.XAG) s.textContent = '$' + prices.XAG.toFixed(2);
+  if (g && spot.XAU) g.textContent = '$' + spot.XAU.toFixed(2);
+  if (s && spot.XAG) s.textContent = '$' + spot.XAG.toFixed(2);
 }
 
 function tsRender() {
@@ -4159,8 +4159,8 @@ function tsTVMode() {
   if (tsTVWindow && !tsTVWindow.closed) { tsTVWindow.focus(); return; }
 
   // Build TV page on the fly as a data URL
-  const gold = (window.prices && prices.XAU) ? '$' + prices.XAU.toFixed(2) : '—';
-  const silver = (window.prices && prices.XAG) ? '$' + prices.XAG.toFixed(2) : '—';
+ const gold = spot.XAU ? '$' + spot.XAU.toFixed(2) : '—';
+  const silver = spot.XAG ? '$' + spot.XAG.toFixed(2) : '—';
   const rows = tsRows;
 
   const rowsHTML = rows.length === 0
