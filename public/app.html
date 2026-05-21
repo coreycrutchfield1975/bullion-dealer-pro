@@ -605,15 +605,6 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <div class="card" style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7">💡 Goldback prices fluctuate daily with gold spot. Always verify at <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold)">goldback.com</a> before purchasing.</div>
   </div>
 
-  
-
-  
-
-  
-
-  
-</div>
-
   <!-- ═══ SCRAP GOLD BUYER ═══ -->
   <div id="gs-scrapgold" style="display:none">
     <div class="sec-hero hero-gold" style="margin-bottom:14px">
@@ -682,8 +673,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     </div>
     <div id="gcl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
   </div>
-
-<!-- ═══════════════════ TRUSTED PARTNERS STRIP ═══════════════════ -->
+  <!-- ═══════════════════ TRUSTED PARTNERS STRIP ═══════════════════ -->
 <div class="card" style="margin-top:18px">
   <div class="card-title">🤝 Trusted Bullion Partners</div>
   <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Shop from these trusted dealers — we may earn a small commission at no extra cost to you. <a href="/partners" style="color:var(--gold);text-decoration:none">View all partners →</a></p>
@@ -749,6 +739,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Bid Now ↗</div>
     </a>
   </div>
+</div>
 </div>
 
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
@@ -2223,73 +2214,7 @@ function renderPremiums(){
     {name:'Westminster',url:'https://www.westminstermint.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=premiums',a:ag+3.99,b:ag+2.79,c:ag+2.29}
   ];
   const cont=$('premiums-container');if(!cont)return;
-  cont.innerHTML=`<div class="card"><div class="card-title">🏪 Dealer Silver Premiums <small style="font-weight:400;color:var(--muted);font-size:11px">vs Spot $${ag.toFixed(2)}</small></div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Dealer</th><th>1 oz ASE</th><th>10 oz Bar</th><th>100 oz Bar</th><th>1 oz Premium</th><th></th></tr></thead><tbody>${dealers.map(d=>`<tr><td style="font-weight:700">${d.name}</td><td class="rv-gold price-col">${fmt(d.a)}</td><td class="price-col">${fmt(d.b)}</td><td class="price-col">${fmt(d.c)}</td><td class="p-col">+${fmt(d.a-ag)}</td><td><a href="${d.url}" target="_blank" rel="sponsored noopener" style="color:var(--blue);font-size:11px;font-weight:600">Shop ↗</a></td></tr>`).join('')}</tbody></table></div><p style="font-size:11px;color:var(--muted);margin-top:9px">⚠ Premiums are estimates — click dealer links for current pricing.</p></div>
-  <div class="card" style="margin-top:14px">
-    <div class="card-title">🛒 Buy from Trusted Dealers</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:14px">We may earn a small commission when you purchase through these links — at no extra cost to you. This helps keep Bullion Dealer Pro free.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
-      <a href="https://www.apmex.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">APMEX</div>
-        <div style="font-size:11px;color:var(--muted)">Largest selection</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.jmbullion.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">JM Bullion</div>
-        <div style="font-size:11px;color:var(--muted)">Fast shipping</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://sdbullion.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">SD Bullion</div>
-        <div style="font-size:11px;color:var(--muted)">Low premiums</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.moneymetals.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Money Metals</div>
-        <div style="font-size:11px;color:var(--muted)">Trusted exchange</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.gainesvillecoins.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Gainesville Coins</div>
-        <div style="font-size:11px;color:var(--muted)">Coin specialists</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.bgasc.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">BGASC</div>
-        <div style="font-size:11px;color:var(--muted)">Low price guarantee</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.goldeneaglecoin.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Golden Eagle Coins</div>
-        <div style="font-size:11px;color:var(--muted)">Family owned</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.scottsdalebullion.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Scottsdale Bullion</div>
-        <div style="font-size:11px;color:var(--muted)">Premium service</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.herobullion.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Hero Bullion</div>
-        <div style="font-size:11px;color:var(--muted)">Competitive prices</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://bullionexchanges.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Bullion Exchanges</div>
-        <div style="font-size:11px;color:var(--muted)">NYC dealer</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.westminstermint.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">Westminster Mint</div>
-        <div style="font-size:11px;color:var(--muted)">Mint direct pricing</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Shop Now ↗</div>
-      </a>
-      <a href="https://www.greatcollections.com/?utm_source=bulliondealerpro&utm_medium=referral&utm_campaign=dealers" target="_blank" rel="sponsored noopener" style="display:block;padding:14px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;text-decoration:none;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:3px">GreatCollections</div>
-        <div style="font-size:11px;color:var(--muted)">Coin auctions</div>
-        <div style="font-size:11px;color:var(--gold);margin-top:6px;font-weight:600">Bid Now ↗</div>
-      </a>
-    </div>
-  </div>`;
+  cont.innerHTML=`<div class="card"><div class="card-title">🏪 Dealer Silver Premiums <small style="font-weight:400;color:var(--muted);font-size:11px">vs Spot $${ag.toFixed(2)}</small></div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Dealer</th><th>1 oz ASE</th><th>10 oz Bar</th><th>100 oz Bar</th><th>1 oz Premium</th><th></th></tr></thead><tbody>${dealers.map(d=>`<tr><td style="font-weight:700">${d.name}</td><td class="rv-gold price-col">${fmt(d.a)}</td><td class="price-col">${fmt(d.b)}</td><td class="price-col">${fmt(d.c)}</td><td class="p-col">+${fmt(d.a-ag)}</td><td><a href="${d.url}" target="_blank" rel="sponsored noopener" style="color:var(--blue);font-size:11px;font-weight:600">Shop ↗</a></td></tr>`).join('')}</tbody></table></div><p style="font-size:11px;color:var(--muted);margin-top:9px">⚠ Premiums are estimates — click dealer links for current pricing.</p></div>`;
 }
 
 // ═══ ROLLS ═══
