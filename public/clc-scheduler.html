@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLC Appointment Scheduler — VA</title>
+<script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pd:#2d1b4e;--pm:#5b2d8e;--pl:#8b5bb8;--pp:#f0e8ff;--pb:#c9a8e8;
+  --gold:#c9a227;--gl:#f5e06e;--gp:#fef9e7;
+  --text:#1a1a2e;--muted:#6b6b8a;--red:#dc2626;--green:#16a34a;--white:#fff;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--pp);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--pd),var(--pm));color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.hdr-title{font-size:19px;font-weight:900;color:var(--gold);letter-spacing:1px}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;letter-spacing:.4px}
+.phi-badge{background:rgba(201,162,39,.18);border:1px solid var(--gold);color:var(--gl);font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.8px}
+
+/* TABS */
+.tab-bar{background:var(--pd);display:flex;padding:0 16px;border-bottom:3px solid var(--gold)}
+.tab-btn{background:none;border:none;color:rgba(255,255,255,.55);padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;letter-spacing:.4px;transition:all .18s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,162,39,.1)}
+
+/* MAIN */
+.main{padding:18px 22px;max-width:1500px;margin:0 auto}
+.pane{display:none}
+.pane.active{display:block}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--pb);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(91,45,142,.07)}
+.card-title{font-size:13px;font-weight:900;color:var(--pd);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:8px}
+
+/* BUTTONS */
+.btn{padding:9px 18px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .18s;letter-spacing:.4px;font-family:inherit}
+.btn-purple{background:var(--pm);color:#fff}.btn-purple:hover{background:var(--pd)}
+.btn-gold{background:var(--gold);color:#000}.btn-gold:hover{background:#b8921f}
+.btn-sm{padding:5px 12px;font-size:11px;border-radius:6px}
+.btn-outline{background:transparent;border:2px solid var(--pm);color:var(--pm)}.btn-outline:hover{background:var(--pp)}
+.btn-red{background:#fef2f2;border:1px solid #fecaca;color:var(--red)}.btn-red:hover{background:#fee2e2}
+.btn-green{background:#f0fdf4;border:1px solid #bbf7d0;color:var(--green)}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.toolbar-left{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* EXCEL NOTICE */
+.excel-notice{background:var(--gp);border:1.5px solid var(--gold);border-radius:10px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.excel-notice strong{font-size:13px}
+
+/* SEARCH */
+.search-wrap{display:flex;gap:8px;margin-bottom:16px}
+.search-input{flex:1;padding:11px 15px;border:2px solid var(--pb);border-radius:10px;font-size:15px;outline:none;font-family:inherit;transition:border-color .2s}
+.search-input:focus{border-color:var(--pm)}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--pb)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead tr{background:var(--pd);color:#fff}
+th{padding:9px 11px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;font-weight:700}
+tbody tr{border-bottom:1px solid #f0e8ff;transition:background .1s}
+tbody tr:hover{background:#f9f5ff}
+tbody tr.changed-row{background:#fffbeb;border-left:3px solid var(--gold)}
+tbody tr.past-row{opacity:.6}
+td{padding:8px 11px;vertical-align:top}
+.badge{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge-travel{background:#dcfce7;color:#15803d}
+.badge-changed{background:#fef9c3;color:#92400e}
+.badge-type{background:var(--pp);color:var(--pm)}
+.leave-time{font-weight:800;color:#92400e;font-size:13px;background:var(--gp);padding:2px 7px;border-radius:6px;white-space:nowrap}
+
+/* DATE NAV */
+.date-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.date-nav input[type=date]{padding:8px 12px;border:2px solid var(--pb);border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s}
+.date-nav input[type=date]:focus{border-color:var(--pm)}
+.date-display{font-size:17px;font-weight:800;color:var(--pd)}
+.date-nav .ml-auto{margin-left:auto;display:flex;gap:8px}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-full{grid-column:1/-1}
+.fg{display:flex;flex-direction:column;gap:4px}
+label.fl{font-size:10px;font-weight:800;color:var(--pd);text-transform:uppercase;letter-spacing:.6px}
+input[type=text],input[type=date],input[type=time],input[type=tel],select,textarea{
+  padding:8px 11px;border:1.5px solid var(--pb);border-radius:7px;font-size:13px;
+  font-family:inherit;outline:none;transition:border-color .2s;width:100%;background:#fff;color:var(--text)}
+input:focus,select:focus,textarea:focus{border-color:var(--pm)}
+textarea{resize:vertical;min-height:65px}
+.cb-row{display:flex;align-items:center;gap:8px;padding:8px 0}
+.cb-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--pm);cursor:pointer;flex-shrink:0}
+.cb-row label{font-size:13px;cursor:pointer;font-weight:600;text-transform:none;letter-spacing:0}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(45,27,78,.65);z-index:500;align-items:center;justify-content:center;padding:14px}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:700px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.modal-hdr{background:linear-gradient(135deg,var(--pd),var(--pm));color:#fff;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;position:sticky;top:0;z-index:1}
+.modal-hdr h2{font-size:15px;font-weight:900;color:var(--gold);letter-spacing:.5px}
+.modal-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-body{padding:18px 20px}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--pp);display:flex;justify-content:flex-end;gap:8px;background:#fafafa;border-radius:0 0 14px 14px;position:sticky;bottom:0}
+
+/* SUMMARY STRIP */
+.sum-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sum-card{background:#fff;border:1.5px solid var(--pb);border-radius:10px;padding:9px 14px;min-width:100px;text-align:center;flex:1}
+.sum-card .sv{font-size:22px;font-weight:900;color:var(--pd)}
+.sum-card .sl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+
+/* SETTINGS */
+.slist{background:var(--pp);border-radius:10px;padding:12px;min-height:40px;max-height:260px;overflow-y:auto}
+.sitem{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:#fff;border-radius:7px;margin-bottom:5px;border:1px solid var(--pb);gap:8px}
+.sitem:last-child{margin-bottom:0}
+.sitem-name{font-size:13px;font-weight:600;flex:1}
+.sadd{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+.sadd input{flex:1;min-width:100px;padding:7px 10px;border:1.5px solid var(--pb);border-radius:7px;font-size:13px;font-family:inherit;outline:none}
+.sadd input:focus{border-color:var(--pm)}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* CHANGE SECTION */
+.change-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px;margin-top:6px}
+
+/* EMPTY */
+.empty{text-align:center;padding:36px 20px;color:var(--muted)}
+.empty-icon{font-size:36px;margin-bottom:8px}
+.empty-text{font-size:14px;font-weight:700}
+.empty-sub{font-size:12px;margin-top:5px}
+
+/* PRINT */
+.print-only{display:none}
+@media print{
+  .no-print{display:none!important}
+  .print-only{display:block}
+  body{background:#fff;font-size:11px}
+  .hdr{background:var(--pd)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:10px 16px}
+  .hdr-title{font-size:15px}
+  thead tr{background:var(--pd)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  tbody tr.changed-row{background:#fffbeb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card{box-shadow:none;border:1px solid #ddd;margin-bottom:10px;padding:12px}
+  .pane{display:none!important}
+  .pane.active{display:block!important}
+  .modal-overlay{display:none!important}
+  .tbl-wrap{border:1px solid #ccc}
+  th{font-size:9px;padding:6px 8px}
+  td{padding:5px 8px;font-size:10px}
+  .sum-card{border:1px solid #ddd}
+}
+@media(max-width:700px){
+  .form-grid{grid-template-columns:1fr}
+  .main{padding:10px 12px}
+  .tab-btn{padding:10px 10px;font-size:11px}
+  .settings-grid{grid-template-columns:1fr}
+  .hdr-title{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr no-print">
+  <div>
+    <div class="hdr-title">⚕ CLC APPOINTMENT SCHEDULER</div>
+    <div class="hdr-sub">Community Living Center &nbsp;·&nbsp; VA Scheduling Tool</div>
+  </div>
+  <div class="phi-badge">🔒 PHI — KEEP CONFIDENTIAL</div>
+</div>
+
+<!-- PRINT HEADER (only visible when printing) -->
+<div class="print-only" style="background:#2d1b4e;color:#fff;padding:10px 18px;display:flex;align-items:center;justify-content:space-between">
+  <div>
+    <div style="font-size:16px;font-weight:900;color:#c9a227;letter-spacing:1px">⚕ CLC APPOINTMENT SCHEDULER</div>
+    <div style="font-size:11px;opacity:.7;margin-top:2px">Community Living Center · VA Scheduling Tool · CONFIDENTIAL PHI</div>
+  </div>
+  <div style="font-size:11px;opacity:.7" id="print-timestamp"></div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar no-print">
+  <button class="tab-btn active" onclick="showTab('search',this)">🔍 Search</button>
+  <button class="tab-btn" onclick="showTab('bydate',this)">📅 By Date</button>
+  <button class="tab-btn" onclick="showTab('byveteran',this)">👤 By Veteran</button>
+  <button class="tab-btn" onclick="showTab('settings',this)">⚙️ Settings</button>
+</div>
+
+<div class="main">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SEARCH PANE                                           -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pane active" id="pane-search">
+
+    <div class="excel-notice no-print">
+      <span style="font-size:20px">📊</span>
+      <div>
+        <strong>Your data stays on this computer.</strong>
+        Use <em>Save to Excel</em> to download your appointments as a .xlsx file. Use <em>Load Excel</em> to reload a previously saved file.
+        Data is also held in this browser session automatically.
+      </div>
+    </div>
+
+    <div class="toolbar no-print">
+      <div class="toolbar-left">
+        <button class="btn btn-gold" onclick="openModal()">＋ Add Appointment</button>
+        <button class="btn btn-green" onclick="saveExcel()" title="Download all appointments as Excel (.xlsx)">📊 Save to Excel</button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('load-excel-file').click()" title="Load appointments from a saved Excel file">📂 Load Excel</button>
+        <input type="file" id="load-excel-file" accept=".xlsx,.xls" style="display:none" onchange="loadExcel(this)">
+        <button class="btn btn-outline btn-sm" onclick="exportCSV()">📄 Export CSV</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔍 Veteran Search</div>
+      <div class="search-wrap">
+        <input type="text" class="search-input" id="search-input" placeholder="Type Veteran's name to search appointments..." oninput="renderSearch()" list="vet-dl">
+        <datalist id="vet-dl"></datalist>
+        <button class="btn btn-purple" onclick="renderSearch()">Search</button>
+        <button class="btn btn-outline" onclick="clearSearch()">Clear</button>
+      </div>
+      <div id="search-results"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📅 Today's Schedule — <span id="today-label" style="color:var(--pm);font-weight:700"></span></div>
+      <div id="today-results"></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- BY DATE PANE                                          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pane" id="pane-bydate">
+    <div class="card">
+      <div class="date-nav no-print">
+        <button class="btn btn-outline btn-sm" onclick="changeDate(-1)">◀ Prev</button>
+        <input type="date" id="date-picker" onchange="renderByDate()">
+        <button class="btn btn-outline btn-sm" onclick="changeDate(1)">Next ▶</button>
+        <div class="date-display" id="date-disp"></div>
+        <div class="ml-auto">
+          <button class="btn btn-gold btn-sm" onclick="openModal(null,document.getElementById('date-picker').value,null)">＋ Add</button>
+          <button class="btn btn-outline btn-sm" onclick="printView()">🖨 Print</button>
+        </div>
+      </div>
+      <div class="print-only" style="margin-bottom:12px">
+        <div style="font-size:16px;font-weight:900;color:#2d1b4e" id="print-date-hdr"></div>
+        <div style="font-size:11px;color:#666;margin-top:2px">Daily Appointment Schedule</div>
+      </div>
+      <div class="sum-strip" id="sum-date"></div>
+      <div id="bydate-results"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- BY VETERAN PANE                                       -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pane" id="pane-byveteran">
+    <div class="card">
+      <div class="date-nav no-print">
+        <select id="vet-sel" onchange="renderByVeteran()" style="min-width:200px;padding:8px 12px;border:2px solid var(--pb);border-radius:8px;font-size:14px;font-family:inherit">
+          <option value="">— Select Veteran —</option>
+        </select>
+        <select id="vet-filter" onchange="renderByVeteran()" style="padding:8px 12px;border:2px solid var(--pb);border-radius:8px;font-size:13px;font-family:inherit">
+          <option value="upcoming">Upcoming Only</option>
+          <option value="all">All Appointments</option>
+          <option value="past">Past Only</option>
+        </select>
+        <div class="ml-auto">
+          <button class="btn btn-gold btn-sm" onclick="openModal(null,null,document.getElementById('vet-sel').value)">＋ Add</button>
+          <button class="btn btn-outline btn-sm" onclick="printView()">🖨 Print</button>
+        </div>
+      </div>
+      <div class="print-only" style="margin-bottom:12px">
+        <div style="font-size:16px;font-weight:900;color:#2d1b4e" id="print-vet-hdr"></div>
+        <div style="font-size:11px;color:#666;margin-top:2px">Individual Appointment Schedule</div>
+      </div>
+      <div class="sum-strip" id="sum-vet" style="margin-top:12px"></div>
+      <div id="byveteran-results"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SETTINGS PANE                                         -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pane" id="pane-settings">
+    <div style="margin-bottom:12px;padding:12px 16px;background:var(--gp);border:1px solid var(--gold);border-radius:10px;font-size:13px;color:#92400e">
+      <strong>⚙️ Manage Lists</strong> — Add or remove items from any dropdown list. Changes take effect immediately everywhere in the scheduler.
+    </div>
+    <div class="settings-grid">
+
+      <div class="card">
+        <div class="card-title">👤 Veterans</div>
+        <div class="slist" id="sl-veterans"></div>
+        <div class="sadd">
+          <input type="text" id="ai-veterans" placeholder="Last, First M." onkeydown="if(event.key==='Enter')addItem('veterans','ai-veterans')">
+          <button class="btn btn-purple btn-sm" onclick="addItem('veterans','ai-veterans')">＋ Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Appointment Types</div>
+        <div class="slist" id="sl-appointmentTypes"></div>
+        <div class="sadd">
+          <input type="text" id="ai-appointmentTypes" placeholder="New type..." onkeydown="if(event.key==='Enter')addItem('appointmentTypes','ai-appointmentTypes')">
+          <button class="btn btn-purple btn-sm" onclick="addItem('appointmentTypes','ai-appointmentTypes')">＋ Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏥 Specialties</div>
+        <div class="slist" id="sl-specialties"></div>
+        <div class="sadd">
+          <input type="text" id="ai-specialties" placeholder="New specialty..." onkeydown="if(event.key==='Enter')addItem('specialties','ai-specialties')">
+          <button class="btn btn-purple btn-sm" onclick="addItem('specialties','ai-specialties')">＋ Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🚐 Transport Types</div>
+        <div class="slist" id="sl-transportTypes"></div>
+        <div class="sadd">
+          <input type="text" id="ai-transportTypes" placeholder="New transport type..." onkeydown="if(event.key==='Enter')addItem('transportTypes','ai-transportTypes')">
+          <button class="btn btn-purple btn-sm" onclick="addItem('transportTypes','ai-transportTypes')">＋ Add</button>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <div class="card-title">📍 Locations <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(selecting a location auto-fills city and phone in the appointment form)</span></div>
+        <div class="slist" id="sl-locations"></div>
+        <div class="sadd">
+          <input type="text" id="ai-loc-name" placeholder="Location / Facility name" style="flex:3">
+          <input type="text" id="ai-loc-city" placeholder="City, State" style="flex:2">
+          <input type="text" id="ai-loc-phone" placeholder="Phone / Extension" style="flex:2">
+          <button class="btn btn-purple btn-sm" onclick="addLocation()">＋ Add</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- APPOINTMENT MODAL                                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="appt-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2 id="modal-title">New Appointment</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="m-id">
+      <div class="form-grid">
+
+        <div class="fg form-full">
+          <label class="fl">Veteran Name *</label>
+          <input type="text" id="m-vet" list="m-vet-dl" placeholder="Last, First M." autocomplete="off">
+          <datalist id="m-vet-dl"></datalist>
+        </div>
+
+        <div class="fg">
+          <label class="fl">Date *</label>
+          <input type="date" id="m-date">
+        </div>
+        <div class="fg">
+          <label class="fl">Appointment Time *</label>
+          <input type="time" id="m-time">
+        </div>
+        <div class="fg">
+          <label class="fl" style="color:var(--gold)">★ Leave Time (when Vet must leave facility)</label>
+          <input type="time" id="m-leave" style="border-color:var(--gold);background:var(--gp)">
+        </div>
+        <div class="fg">
+          <label class="fl">Appointment Type</label>
+          <select id="m-type"><option value="">— Select —</option></select>
+        </div>
+        <div class="fg">
+          <label class="fl">Doctor / NP / Provider</label>
+          <input type="text" id="m-doctor" placeholder="Provider name">
+        </div>
+        <div class="fg">
+          <label class="fl">Specialty</label>
+          <select id="m-spec"><option value="">— Select —</option></select>
+        </div>
+        <div class="fg">
+          <label class="fl">Location / Facility</label>
+          <select id="m-loc" onchange="autoFill()"><option value="">— Select —</option></select>
+        </div>
+        <div class="fg">
+          <label class="fl">City / Town</label>
+          <input type="text" id="m-city" placeholder="Auto-filled or enter manually">
+        </div>
+        <div class="fg">
+          <label class="fl">Facility Phone / Extension</label>
+          <input type="tel" id="m-phone" placeholder="Auto-filled or enter manually">
+        </div>
+        <div class="fg">
+          <label class="fl">Transport</label>
+          <select id="m-transport"><option value="">— Select —</option></select>
+        </div>
+        <div class="fg" style="justify-content:flex-end;padding-top:4px">
+          <div class="cb-row">
+            <input type="checkbox" id="m-travel">
+            <label for="m-travel" class="fl" style="text-transform:none;letter-spacing:0;font-size:14px">✅ Travel Set</label>
+          </div>
+        </div>
+
+        <div class="fg form-full">
+          <label class="fl">Notes</label>
+          <textarea id="m-notes" placeholder="Prep instructions, special needs, wheelchair/ambulance required, fasting instructions, etc."></textarea>
+        </div>
+
+        <div class="fg form-full">
+          <div class="cb-row">
+            <input type="checkbox" id="m-changed" onchange="toggleChange()">
+            <label for="m-changed" class="fl" style="text-transform:none;letter-spacing:0;font-size:13px">⚠️ This appointment was changed or rescheduled</label>
+          </div>
+          <div class="change-box" id="change-box" style="display:none">
+            <label class="fl">Reason for Change</label>
+            <textarea id="m-changereason" placeholder="e.g., Patient request, Provider unavailable, Transportation issue..." style="min-height:50px;margin-top:5px"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-red btn-sm" id="del-btn" onclick="deleteAppt()" style="display:none;margin-right:auto">🗑 Delete</button>
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveAppt()">💾 Save Appointment</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// STORAGE  (localStorage = session cache; Excel = primary save)
+// ══════════════════════════════════════════════════════════
+var KEYS = { a: 'clc_appts', s: 'clc_settings' };
+
+var DEF = {
+  veterans: [],
+  appointmentTypes: [
+    'Outside Medical Appointment','Lab / Blood Draw','Physical Therapy',
+    'Occupational Therapy','Speech Therapy','Telehealth','Procedure',
+    'Radiology / Imaging','Dental','Mental Health / Behavioral Health',
+    'Ophthalmology / Eye Exam','Audiology','Podiatry','On-site CLC Clinic',
+    'Pre-op','Post-op','Follow-up','Wound Care','Nutrition / Dietitian Consult',
+    'Social Work','Palliative / Hospice Care','Pharmacy Consult'
+  ],
+  specialties: [
+    'Primary Care','Cardiology','Orthopedics','Neurology','Oncology','Urology',
+    'Gastroenterology','Pulmonology','Endocrinology','Nephrology','Dermatology',
+    'Ophthalmology','Audiology','Podiatry','Physical Therapy','Occupational Therapy',
+    'Speech Therapy','Mental Health / Psychiatry','Pain Management','Surgery',
+    'Vascular','Hematology','Rheumatology','Wound Care','Nutrition / Dietitian',
+    'Infectious Disease','Geriatrics','Palliative Care','Dentistry','Optometry'
+  ],
+  locations: [
+    {name:'PBRMC', city:'Poplar Bluff, MO', phone:''},
+    {name:'Coppertop Foot and Ankle', city:'Poplar Bluff, MO', phone:''},
+    {name:'Cape Girardeau VA', city:'Cape Girardeau, MO', phone:''},
+    {name:'John J. Pershing VAMC', city:'Poplar Bluff, MO', phone:''},
+    {name:'On-site CLC', city:'Poplar Bluff, MO', phone:'Ext: '}
+  ],
+  transportTypes: [
+    'VTS (Veterans Transportation Service)','DAV','Family / Personal',
+    'Ambulance','Wheelchair Van','Air Transport','No Transport Needed'
+  ]
+};
+
+function getA() { try { return JSON.parse(localStorage.getItem(KEYS.a)||'[]'); } catch(e) { return []; } }
+function setA(d) { localStorage.setItem(KEYS.a, JSON.stringify(d)); }
+function getS() {
+  try {
+    var s = JSON.parse(localStorage.getItem(KEYS.s));
+    if (!s) return JSON.parse(JSON.stringify(DEF));
+    return Object.assign(JSON.parse(JSON.stringify(DEF)), s);
+  } catch(e) { return JSON.parse(JSON.stringify(DEF)); }
+}
+function setS(s) { localStorage.setItem(KEYS.s, JSON.stringify(s)); }
+function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+// ══════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+function fDate(d) {
+  if (!d) return '—';
+  var p = d.split('-');
+  return MONTHS[+p[1]-1]+' '+parseInt(p[2])+', '+p[0];
+}
+function fDateFull(d) {
+  if (!d) return '';
+  var dt = new Date(d+'T12:00:00');
+  return DAYS[dt.getDay()]+', '+fDate(d);
+}
+function fTime(t) {
+  if (!t) return '—';
+  var h=+t.slice(0,2), m=t.slice(3,5), ap=h>=12?'PM':'AM';
+  h=h%12||12;
+  return h+':'+m+' '+ap;
+}
+function today() { return new Date().toISOString().slice(0,10); }
+function sc(v,l) { return '<div class="sum-card"><div class="sv">'+v+'</div><div class="sl">'+l+'</div></div>'; }
+
+// ══════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════
+function showTab(name, btn) {
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('pane-'+name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name==='bydate') renderByDate();
+  if (name==='byveteran') { popVetSel(); renderByVeteran(); }
+  if (name==='settings') renderSettings();
+}
+
+// ══════════════════════════════════════════════════════════
+// DATALISTS
+// ══════════════════════════════════════════════════════════
+function refreshDL() {
+  var s = getS();
+  var html = s.veterans.map(function(v){ return '<option value="'+esc(v)+'">'; }).join('');
+  document.getElementById('vet-dl').innerHTML = html;
+  document.getElementById('m-vet-dl').innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════
+// SEARCH
+// ══════════════════════════════════════════════════════════
+function renderSearch() {
+  var q = (document.getElementById('search-input').value||'').toLowerCase().trim();
+  var el = document.getElementById('search-results');
+  if (!q) { el.innerHTML='<div class="empty"><div class="empty-text">Enter a name above to view appointments</div></div>'; return; }
+  var all = getA();
+  var matches = all.filter(function(a){ return a.veteranName.toLowerCase().includes(q); });
+  if (!matches.length) {
+    el.innerHTML='<div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">No appointments found for "'+q+'"</div></div>';
+    return;
+  }
+  matches.sort(function(a,b){ return a.date.localeCompare(b.date); });
+  var up = matches.filter(function(a){ return a.date>=today(); });
+  var ps = matches.filter(function(a){ return a.date<today(); });
+  var html='';
+  if (up.length) {
+    html+='<div style="font-weight:800;color:var(--pd);margin-bottom:8px;font-size:12px;text-transform:uppercase;letter-spacing:.8px">Upcoming — '+up.length+' appointment'+(up.length!==1?'s':'')+'</div>';
+    html+=buildTable(up,false);
+  }
+  if (ps.length) {
+    html+='<div style="font-weight:800;color:var(--muted);margin:14px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.8px">Past — '+ps.length+' appointment'+(ps.length!==1?'s':'')+'</div>';
+    html+=buildTable(ps,true);
+  }
+  el.innerHTML=html;
+}
+function clearSearch() { document.getElementById('search-input').value=''; document.getElementById('search-results').innerHTML=''; }
+
+// ══════════════════════════════════════════════════════════
+// TODAY
+// ══════════════════════════════════════════════════════════
+function renderToday() {
+  var t=today();
+  document.getElementById('today-label').textContent=fDateFull(t);
+  var a=getA().filter(function(x){return x.date===t;});
+  a.sort(function(x,y){ return (x.leaveTime||x.time||'').localeCompare(y.leaveTime||y.time||''); });
+  document.getElementById('today-results').innerHTML=a.length
+    ? buildTable(a,false)
+    : '<div class="empty"><div class="empty-icon">☀️</div><div class="empty-text">No appointments scheduled for today</div></div>';
+}
+
+// ══════════════════════════════════════════════════════════
+// BY DATE
+// ══════════════════════════════════════════════════════════
+function renderByDate() {
+  var dp=document.getElementById('date-picker');
+  if (!dp.value) dp.value=today();
+  var d=dp.value;
+  document.getElementById('date-disp').textContent=fDateFull(d);
+  document.getElementById('print-date-hdr').textContent=fDateFull(d);
+  var a=getA().filter(function(x){return x.date===d;});
+  a.sort(function(x,y){ return (x.leaveTime||x.time||'').localeCompare(y.leaveTime||y.time||''); });
+  document.getElementById('sum-date').innerHTML=
+    sc(a.length,'Total')+sc(a.filter(function(x){return x.travelSet;}).length,'Travel Set')+
+    sc(a.filter(function(x){return x.transport&&x.transport!=='No Transport Needed';}).length,'Transport')+
+    sc(a.filter(function(x){return x.changed;}).length,'Changed');
+  document.getElementById('bydate-results').innerHTML=a.length
+    ? buildTable(a,false)
+    : '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">No appointments on this date</div>'+
+      '<div class="empty-sub no-print" style="margin-top:10px"><button class="btn btn-gold btn-sm" onclick="openModal(null,\''+d+'\',null)">＋ Add Appointment</button></div></div>';
+}
+function changeDate(n) {
+  var dp=document.getElementById('date-picker');
+  if (!dp.value) dp.value=today();
+  var d=new Date(dp.value+'T12:00:00');
+  d.setDate(d.getDate()+n);
+  dp.value=d.toISOString().slice(0,10);
+  renderByDate();
+}
+
+// ══════════════════════════════════════════════════════════
+// BY VETERAN
+// ══════════════════════════════════════════════════════════
+function popVetSel() {
+  var s=getS(), sel=document.getElementById('vet-sel'), cur=sel.value;
+  sel.innerHTML='<option value="">— Select Veteran —</option>'+
+    s.veterans.map(function(v){ return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+v+'</option>'; }).join('');
+}
+function renderByVeteran() {
+  var name=document.getElementById('vet-sel').value;
+  var filter=document.getElementById('vet-filter').value;
+  var el=document.getElementById('byveteran-results');
+  var strip=document.getElementById('sum-vet');
+  if (!name) { el.innerHTML='<div class="empty"><div class="empty-text">Select a Veteran above</div></div>'; strip.innerHTML=''; return; }
+  document.getElementById('print-vet-hdr').textContent=name+' — Appointment Schedule';
+  var all=getA().filter(function(a){return a.veteranName===name;});
+  var shown=all;
+  if (filter==='upcoming') shown=all.filter(function(a){return a.date>=today();});
+  if (filter==='past') shown=all.filter(function(a){return a.date<today();});
+  shown.sort(function(a,b){return a.date.localeCompare(b.date);});
+  var up=all.filter(function(a){return a.date>=today();});
+  strip.innerHTML=sc(shown.length,'Shown')+sc(up.length,'Upcoming')+sc(all.length,'Total')+sc(all.filter(function(a){return a.travelSet;}).length,'Travel Set');
+  el.innerHTML=shown.length ? buildTable(shown,filter==='past'||filter==='all') :
+    '<div class="empty"><div class="empty-text">No appointments found</div></div>';
+}
+
+// ══════════════════════════════════════════════════════════
+// TABLE BUILDER
+// ══════════════════════════════════════════════════════════
+function buildTable(appts, dimPast) {
+  var t=today();
+  var html='<div class="tbl-wrap"><table><thead><tr>'+
+    '<th>Date</th><th>Leave Time</th><th>Appt Time</th><th>Veteran</th>'+
+    '<th>Type</th><th>Provider</th><th>Specialty</th><th>Location</th>'+
+    '<th>Phone</th><th>Transport</th><th>Travel</th><th>Notes</th>'+
+    '<th class="no-print" style="min-width:70px">Edit</th></tr></thead><tbody>';
+  appts.forEach(function(a) {
+    var past=a.date<t;
+    var cls=(a.changed?' changed-row':'')+(dimPast&&past?' past-row':'');
+    html+='<tr class="'+cls+'">'+
+      '<td style="white-space:nowrap"><strong>'+fDate(a.date)+'</strong>'+(a.changed?'<br><span class="badge badge-changed">CHANGED</span>':'')+'</td>'+
+      '<td>'+(a.leaveTime?'<span class="leave-time">'+fTime(a.leaveTime)+'</span>':'<span style="color:var(--muted)">—</span>')+'</td>'+
+      '<td style="white-space:nowrap">'+fTime(a.time)+'</td>'+
+      '<td><strong>'+esc(a.veteranName||'—')+'</strong></td>'+
+      '<td>'+(a.appointmentType?'<span class="badge badge-type">'+esc(a.appointmentType)+'</span>':'—')+'</td>'+
+      '<td>'+esc(a.doctorNP||'—')+'</td>'+
+      '<td>'+esc(a.specialty||'—')+'</td>'+
+      '<td>'+esc(a.location||'—')+(a.cityTown?'<br><span style="font-size:10px;color:var(--muted)">'+esc(a.cityTown)+'</span>':'')+'</td>'+
+      '<td style="white-space:nowrap;font-size:12px">'+esc(a.phone||'—')+'</td>'+
+      '<td style="font-size:12px">'+esc(a.transport||'—')+'</td>'+
+      '<td>'+(a.travelSet?'<span class="badge badge-travel">✓ Set</span>':'—')+'</td>'+
+      '<td style="max-width:200px;font-size:11px">'+esc(a.notes||'—')+(a.changeReason?'<br><em style="color:#92400e">Chg: '+esc(a.changeReason)+'</em>':'')+'</td>'+
+      '<td class="no-print"><button class="btn btn-sm btn-outline" onclick="openModal(\''+a.id+'\',null,null)">✏️ Edit</button></td>'+
+    '</tr>';
+  });
+  html+='</tbody></table></div>';
+  return html;
+}
+
+// ══════════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════════
+function openModal(id, date, vet) {
+  var s=getS();
+  refreshDL();
+  var opts = function(arr) { return arr.map(function(v){ return '<option value="'+esc(v)+'">'+esc(v)+'</option>'; }).join(''); };
+  document.getElementById('m-type').innerHTML='<option value="">— Select —</option>'+opts(s.appointmentTypes);
+  document.getElementById('m-spec').innerHTML='<option value="">— Select —</option>'+opts(s.specialties);
+  document.getElementById('m-transport').innerHTML='<option value="">— Select —</option>'+opts(s.transportTypes);
+  document.getElementById('m-loc').innerHTML='<option value="">— Select —</option>'+
+    s.locations.map(function(l){ return '<option value="'+esc(l.name)+'">'+esc(l.name)+'</option>'; }).join('');
+  ['m-id','m-vet','m-doctor','m-city','m-phone','m-notes','m-changereason'].forEach(function(f){ document.getElementById(f).value=''; });
+  ['m-type','m-spec','m-transport','m-loc'].forEach(function(f){ document.getElementById(f).value=''; });
+  document.getElementById('m-date').value=date||today();
+  document.getElementById('m-time').value='';
+  document.getElementById('m-leave').value='';
+  document.getElementById('m-travel').checked=false;
+  document.getElementById('m-changed').checked=false;
+  document.getElementById('change-box').style.display='none';
+  document.getElementById('del-btn').style.display='none';
+  document.getElementById('modal-title').textContent='New Appointment';
+  if (vet) document.getElementById('m-vet').value=vet;
+
+  if (id) {
+    var a=getA().find(function(x){return x.id===id;});
+    if (!a) return;
+    document.getElementById('modal-title').textContent='Edit Appointment';
+    document.getElementById('m-id').value=id;
+    document.getElementById('m-vet').value=a.veteranName||'';
+    document.getElementById('m-date').value=a.date||'';
+    document.getElementById('m-time').value=a.time||'';
+    document.getElementById('m-leave').value=a.leaveTime||'';
+    document.getElementById('m-doctor').value=a.doctorNP||'';
+    document.getElementById('m-type').value=a.appointmentType||'';
+    document.getElementById('m-spec').value=a.specialty||'';
+    document.getElementById('m-loc').value=a.location||'';
+    document.getElementById('m-city').value=a.cityTown||'';
+    document.getElementById('m-phone').value=a.phone||'';
+    document.getElementById('m-transport').value=a.transport||'';
+    document.getElementById('m-travel').checked=!!a.travelSet;
+    document.getElementById('m-notes').value=a.notes||'';
+    document.getElementById('m-changed').checked=!!a.changed;
+    document.getElementById('m-changereason').value=a.changeReason||'';
+    if (a.changed) document.getElementById('change-box').style.display='block';
+    document.getElementById('del-btn').style.display='inline-block';
+  }
+
+  document.getElementById('appt-modal').classList.add('open');
+  setTimeout(function(){ document.getElementById('m-vet').focus(); },80);
+}
+
+function closeModal() { document.getElementById('appt-modal').classList.remove('open'); }
+
+function toggleChange() {
+  document.getElementById('change-box').style.display=document.getElementById('m-changed').checked?'block':'none';
+}
+
+function autoFill() {
+  var name=document.getElementById('m-loc').value;
+  var s=getS();
+  var loc=s.locations.find(function(l){return l.name===name;});
+  if (loc) {
+    document.getElementById('m-city').value=loc.city||'';
+    document.getElementById('m-phone').value=loc.phone||'';
+  }
+}
+
+function saveAppt() {
+  var vet=document.getElementById('m-vet').value.trim();
+  var date=document.getElementById('m-date').value;
+  if (!vet) { alert('Veteran name is required.'); document.getElementById('m-vet').focus(); return; }
+  if (!date) { alert('Date is required.'); document.getElementById('m-date').focus(); return; }
+  var id=document.getElementById('m-id').value;
+  var all=getA();
+  var now=new Date().toISOString();
+  var appt={
+    id: id||uid(),
+    veteranName: vet,
+    date: date,
+    time: document.getElementById('m-time').value,
+    leaveTime: document.getElementById('m-leave').value,
+    doctorNP: document.getElementById('m-doctor').value.trim(),
+    appointmentType: document.getElementById('m-type').value,
+    specialty: document.getElementById('m-spec').value,
+    location: document.getElementById('m-loc').value,
+    cityTown: document.getElementById('m-city').value.trim(),
+    phone: document.getElementById('m-phone').value.trim(),
+    transport: document.getElementById('m-transport').value,
+    travelSet: document.getElementById('m-travel').checked,
+    notes: document.getElementById('m-notes').value.trim(),
+    changed: document.getElementById('m-changed').checked,
+    changeReason: document.getElementById('m-changereason').value.trim(),
+    updatedAt: now
+  };
+  if (id) {
+    var idx=all.findIndex(function(x){return x.id===id;});
+    appt.createdAt=idx>-1?all[idx].createdAt:now;
+    if (idx>-1) all[idx]=appt; else all.push(appt);
+  } else {
+    appt.createdAt=now;
+    all.push(appt);
+  }
+  var s=getS();
+  if (vet && !s.veterans.includes(vet)) {
+    s.veterans.push(vet);
+    s.veterans.sort();
+    setS(s);
+  }
+  setA(all);
+  closeModal();
+  refreshAll();
+  refreshDL();
+}
+
+function deleteAppt() {
+  var id=document.getElementById('m-id').value;
+  if (!id) return;
+  var a=getA().find(function(x){return x.id===id;});
+  if (!confirm('Delete appointment for '+(a?a.veteranName:'this Veteran')+' on '+fDate(a?a.date:'')+' ?\n\nThis cannot be undone.')) return;
+  setA(getA().filter(function(x){return x.id!==id;}));
+  closeModal();
+  refreshAll();
+}
+
+// ══════════════════════════════════════════════════════════
+// REFRESH
+// ══════════════════════════════════════════════════════════
+function refreshAll() {
+  renderToday();
+  if (document.getElementById('search-input').value) renderSearch();
+  var active=document.querySelector('.pane.active');
+  if (active) {
+    if (active.id==='pane-bydate') renderByDate();
+    if (active.id==='pane-byveteran') { popVetSel(); renderByVeteran(); }
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════════════
+function renderSettings() {
+  var s=getS();
+  ['veterans','appointmentTypes','specialties','transportTypes'].forEach(function(k) {
+    var el=document.getElementById('sl-'+k);
+    if (!el) return;
+    el.innerHTML=s[k].length
+      ? s[k].map(function(v,i){ return '<div class="sitem"><span class="sitem-name">'+esc(v)+'</span><button class="btn btn-red btn-sm" onclick="removeItem(\''+k+'\','+i+')">✕</button></div>'; }).join('')
+      : '<div style="color:var(--muted);font-size:12px;padding:6px 4px">No items yet. Add one below.</div>';
+  });
+  var le=document.getElementById('sl-locations');
+  le.innerHTML=s.locations.length
+    ? s.locations.map(function(l,i){ return '<div class="sitem"><div><div style="font-weight:700;font-size:13px">'+esc(l.name)+'</div><div style="font-size:11px;color:var(--muted)">'+esc(l.city)+(l.phone?' · '+esc(l.phone):'')+'</div></div><button class="btn btn-red btn-sm" onclick="removeLoc('+i+')">✕</button></div>'; }).join('')
+    : '<div style="color:var(--muted);font-size:12px;padding:6px 4px">No locations yet.</div>';
+}
+
+function addItem(key, inputId) {
+  var val=document.getElementById(inputId).value.trim();
+  if (!val) return;
+  var s=getS();
+  if (!s[key].includes(val)) {
+    s[key].push(val);
+    if (key!=='veterans') s[key].sort();
+    setS(s);
+  }
+  document.getElementById(inputId).value='';
+  renderSettings();
+  refreshDL();
+  popVetSel();
+}
+
+function removeItem(key, idx) {
+  var s=getS();
+  if (!confirm('Remove "'+s[key][idx]+'"?')) return;
+  s[key].splice(idx,1);
+  setS(s);
+  renderSettings();
+  refreshDL();
+}
+
+function addLocation() {
+  var name=document.getElementById('ai-loc-name').value.trim();
+  var city=document.getElementById('ai-loc-city').value.trim();
+  var phone=document.getElementById('ai-loc-phone').value.trim();
+  if (!name) { alert('Location name is required.'); return; }
+  var s=getS();
+  if (!s.locations.find(function(l){return l.name===name;})) {
+    s.locations.push({name:name,city:city,phone:phone});
+    setS(s);
+  }
+  ['ai-loc-name','ai-loc-city','ai-loc-phone'].forEach(function(id){ document.getElementById(id).value=''; });
+  renderSettings();
+}
+
+function removeLoc(idx) {
+  var s=getS();
+  if (!confirm('Remove location "'+s.locations[idx].name+'"?')) return;
+  s.locations.splice(idx,1);
+  setS(s);
+  renderSettings();
+}
+
+// ══════════════════════════════════════════════════════════
+// PRINT
+// ══════════════════════════════════════════════════════════
+function printView() {
+  document.getElementById('print-timestamp').textContent='Printed: '+new Date().toLocaleString();
+  window.print();
+}
+
+// ══════════════════════════════════════════════════════════
+// EXCEL SAVE (downloads .xlsx to local computer)
+// ══════════════════════════════════════════════════════════
+function saveExcel() {
+  var appts = getA().slice().sort(function(a,b){
+    return a.date.localeCompare(b.date) || (a.leaveTime||'').localeCompare(b.leaveTime||'');
+  });
+
+  if (!appts.length) { alert('No appointments to save yet.'); return; }
+
+  var rows = appts.map(function(a) {
+    return {
+      'Date': a.date,
+      'Leave Time': a.leaveTime||'',
+      'Appt Time': a.time||'',
+      'Veteran Name': a.veteranName||'',
+      'Appointment Type': a.appointmentType||'',
+      'Doctor / NP': a.doctorNP||'',
+      'Specialty': a.specialty||'',
+      'Location': a.location||'',
+      'City / Town': a.cityTown||'',
+      'Phone': a.phone||'',
+      'Transport': a.transport||'',
+      'Travel Set': a.travelSet ? 'Yes' : 'No',
+      'Notes': a.notes||'',
+      'Changed': a.changed ? 'Yes' : 'No',
+      'Change Reason': a.changeReason||'',
+      '_id': a.id||''
+    };
+  });
+
+  var wb = XLSX.utils.book_new();
+  var ws = XLSX.utils.json_to_sheet(rows);
+
+  // Column widths
+  ws['!cols'] = [
+    {wch:12},{wch:11},{wch:11},{wch:22},{wch:28},
+    {wch:20},{wch:20},{wch:22},{wch:18},{wch:16},
+    {wch:22},{wch:10},{wch:40},{wch:9},{wch:30},{wch:14}
+  ];
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Appointments');
+
+  // Settings sheet so veteran/location lists are preserved
+  var s = getS();
+  var settingsRows = [];
+  s.veterans.forEach(function(v){ settingsRows.push({Type:'Veteran', Value:v}); });
+  s.appointmentTypes.forEach(function(v){ settingsRows.push({Type:'AppointmentType', Value:v}); });
+  s.specialties.forEach(function(v){ settingsRows.push({Type:'Specialty', Value:v}); });
+  s.transportTypes.forEach(function(v){ settingsRows.push({Type:'Transport', Value:v}); });
+  s.locations.forEach(function(l){ settingsRows.push({Type:'Location', Value:l.name, City:l.city, Phone:l.phone}); });
+
+  var ws2 = XLSX.utils.json_to_sheet(settingsRows);
+  ws2['!cols'] = [{wch:18},{wch:30},{wch:20},{wch:18}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Settings');
+
+  XLSX.writeFile(wb, 'CLC-Appointments-'+today()+'.xlsx');
+}
+
+// ══════════════════════════════════════════════════════════
+// EXCEL LOAD (reads saved .xlsx back into the app)
+// ══════════════════════════════════════════════════════════
+function loadExcel(input) {
+  var file = input.files[0];
+  if (!file) return;
+
+  if (!confirm('Load appointments from "'+file.name+'"?\n\nThis will REPLACE all current appointments with what is in the file.\n\nYour settings (veteran list, locations, etc.) will also be updated from the file.\n\nContinue?')) {
+    input.value=''; return;
+  }
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var wb = XLSX.read(e.target.result, {type:'array'});
+
+      // Load appointments
+      var ws = wb.Sheets['Appointments'];
+      if (!ws) { alert('Could not find the "Appointments" sheet in this file.'); input.value=''; return; }
+      var rows = XLSX.utils.sheet_to_json(ws, {defval:''});
+
+      var appts = rows.map(function(r) {
+        return {
+          id: r['_id'] || uid(),
+          veteranName: r['Veteran Name']||'',
+          date: r['Date']||'',
+          time: r['Appt Time']||'',
+          leaveTime: r['Leave Time']||'',
+          doctorNP: r['Doctor / NP']||'',
+          appointmentType: r['Appointment Type']||'',
+          specialty: r['Specialty']||'',
+          location: r['Location']||'',
+          cityTown: r['City / Town']||'',
+          phone: r['Phone']||'',
+          transport: r['Transport']||'',
+          travelSet: (r['Travel Set']||'').toLowerCase()==='yes',
+          notes: r['Notes']||'',
+          changed: (r['Changed']||'').toLowerCase()==='yes',
+          changeReason: r['Change Reason']||'',
+          updatedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        };
+      }).filter(function(a){ return a.veteranName && a.date; });
+
+      setA(appts);
+
+      // Load settings if Settings sheet exists
+      var ws2 = wb.Sheets['Settings'];
+      if (ws2) {
+        var srows = XLSX.utils.sheet_to_json(ws2, {defval:''});
+        var s = JSON.parse(JSON.stringify(DEF));
+        s.veterans=[]; s.appointmentTypes=[]; s.specialties=[]; s.transportTypes=[]; s.locations=[];
+        srows.forEach(function(r){
+          var t=r['Type'], v=r['Value'];
+          if (!v) return;
+          if (t==='Veteran' && !s.veterans.includes(v)) s.veterans.push(v);
+          else if (t==='AppointmentType' && !s.appointmentTypes.includes(v)) s.appointmentTypes.push(v);
+          else if (t==='Specialty' && !s.specialties.includes(v)) s.specialties.push(v);
+          else if (t==='Transport' && !s.transportTypes.includes(v)) s.transportTypes.push(v);
+          else if (t==='Location') s.locations.push({name:v, city:r['City']||'', phone:r['Phone']||''});
+        });
+        // Fall back to defaults if sheets were empty
+        if (!s.appointmentTypes.length) s.appointmentTypes = DEF.appointmentTypes;
+        if (!s.specialties.length) s.specialties = DEF.specialties;
+        if (!s.transportTypes.length) s.transportTypes = DEF.transportTypes;
+        if (!s.locations.length) s.locations = DEF.locations;
+        setS(s);
+      }
+
+      input.value='';
+      alert('Loaded '+appts.length+' appointment'+(appts.length!==1?'s':'')+' successfully!');
+      location.reload();
+    } catch(err) {
+      alert('Error reading Excel file: '+err.message+'\n\nMake sure you are loading a file that was saved by this app.');
+      input.value='';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ══════════════════════════════════════════════════════════
+// CSV EXPORT
+// ══════════════════════════════════════════════════════════
+function exportCSV() {
+  var appts=getA().slice().sort(function(a,b){ return a.date.localeCompare(b.date)||( a.leaveTime||'').localeCompare(b.leaveTime||''); });
+  var hdr=['Date','Leave Time','Appt Time','Veteran Name','Appointment Type','Doctor/NP','Specialty','Location','City/Town','Phone','Transport','Travel Set','Notes','Changed','Change Reason'];
+  var rows=[hdr.join(',')];
+  appts.forEach(function(a){
+    rows.push([a.date,a.leaveTime,a.time,a.veteranName,a.appointmentType,a.doctorNP,
+      a.specialty,a.location,a.cityTown,a.phone,a.transport,
+      a.travelSet?'Yes':'No',a.notes,a.changed?'Yes':'No',a.changeReason
+    ].map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(','));
+  });
+  var blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='CLC-Appointments-'+today()+'.csv'; a.click();
+}
+
+// ══════════════════════════════════════════════════════════
+// ESCAPE
+// ══════════════════════════════════════════════════════════
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+document.getElementById('date-picker').value = today();
+refreshDL();
+renderToday();
+renderByDate();
+popVetSel();
+renderSearch();
+</script>
+</body>
+</html>
