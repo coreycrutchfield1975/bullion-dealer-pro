@@ -166,6 +166,38 @@ textarea{resize:vertical;min-height:65px}
   .ttr-form-header{background:#2d1b4e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .ttr-lbl{background:#f0f0f0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .ttr-footnote{background:#f0f0f0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* ── TTR single-page print ── */
+  @page{margin:.35in}
+  #pane-ttr .card,#pane-travel .card{box-shadow:none;border:none;padding:0;margin:0}
+  #pane-ttr .card-title,#pane-travel .card-title{display:none}
+  .ttr-form-header{padding:5px 10px}
+  .ttr-form-title{font-size:14px;letter-spacing:1px}
+  .ttr-patient-label{padding:3px 8px;min-width:160px}
+  .ttr-patient-label input{font-size:9px;margin-bottom:1px}
+  .ttr-top-row{border-bottom:1px solid #666}
+  .ttr-top-field{padding:4px 8px}
+  .ttr-top-field label{font-size:7px;margin-bottom:2px}
+  .ttr-top-field input{font-size:10px}
+  .ttr-lbl{min-width:90px;max-width:90px;font-size:7.5px;padding:3px 6px;letter-spacing:0}
+  .ttr-cnt{padding:3px 7px;font-size:9px;gap:2px 8px}
+  .ttr-cnt label{font-size:9px}
+  .ttr-cnt input[type=checkbox]{width:9px;height:9px}
+  .ttr-inline{font-size:9px;width:60px}
+  .ttr-inline.wide{width:110px}
+  .ttr-inline.narrow{width:34px}
+  .ttr-footer-row{padding:4px 8px;font-size:9px;gap:12px}
+  .ttr-footnote{padding:4px 8px;font-size:8px}
+  .ttr-wrap{border:1.5px solid #444}
+  /* ── Travel single-page print ── */
+  .tr-section{padding:6px 10px;margin-bottom:4px;border-radius:4px}
+  .tr-section-title{font-size:8px;margin-bottom:5px;padding-bottom:3px}
+  .tr-field{margin-bottom:5px;gap:6px}
+  .tr-field label.tr-lbl{min-width:120px;font-size:8.5px}
+  .tr-radio-group{gap:3px 10px}
+  .tr-radio-group label{font-size:9.5px}
+  .tr-radio-group input[type=radio]{width:9px;height:9px}
+  #pane-travel input[type=text],#pane-travel input[type=date],#pane-travel input[type=time]{padding:3px 6px;font-size:10px}
+  #pane-travel textarea{min-height:35px;font-size:10px;padding:4px 6px}
 }
 @media(max-width:700px){
   .form-grid{grid-template-columns:1fr}
