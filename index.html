@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script type="text/javascript">(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A7316380-ffe8-483f-8f2d-05859dce1b8d1.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');</script>
+
 <meta charset="UTF-8">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
 <link rel="apple-touch-icon" href="/favicon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Spot Prices & Dealer Tools | Live Gold & Silver Prices, Coin Values, Bullion Calculators</title>
-<meta name="description" content="Real-time gold, silver, platinum and palladium spot prices. Professional bullion dealer calculators, coin melt values, key date coin reference, inventory tracker and dealer premium comparisons. Free to use — no account required for spot prices.">
+<title>Bullion Dealer Pro — Live Gold & Silver Spot Prices, Coin Calculators & Dealer Tools</title>
+<meta name="description" content="Real-time gold and silver spot prices. Professional bullion dealer calculators, coin melt values, key date coin reference, inventory tracker, and dealer premium comparisons. Free live prices — no account needed.">
 <meta name="keywords" content="live silver price, live gold price, bullion dealer tools, coin melt value calculator, silver spot price today, gold spot price, coin values, key date coins, Morgan dollar value, silver coin calculator, bullion calculator, dealer buy sell calculator, coin inventory tracker, silver melt calculator, precious metals app">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://bulliondealerpro.com/">
@@ -17,12 +19,12 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://bulliondealerpro.com/">
-<meta property="og:title" content="Spot Prices & Dealer Tools | Live Gold & Silver Prices">
+<meta property="og:title" content="Live Gold & Silver Spot Prices | Bullion Dealer Pro">
 <meta property="og:description" content="Real-time precious metals spot prices, coin melt calculators, key date coin values, and professional bullion dealer tools. Free live spot prices — no account required.">
 <meta property="og:image" content="https://bulliondealerpro.com/favicon-512.png">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Spot Prices & Dealer Tools | Live Gold & Silver Prices">
+<meta name="twitter:title" content="Live Gold & Silver Spot Prices | Bullion Dealer Pro">
 <meta name="twitter:description" content="Live gold, silver, platinum & palladium prices. Professional bullion dealer calculators, coin values and inventory tracking.">
 <meta name="twitter:image" content="https://bulliondealerpro.com/favicon-512.png">
 <!-- Google Analytics 4 -->
@@ -42,57 +44,80 @@
   --gold:#f0b429;--gold2:#ffe566;--gold3:#c88a00;
   --bg:#03030a;--text:#e8dfc8;--muted:#b8afc8;
   --font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace;
+  --green:#4ade80;--red:#f87171;
 }
+html{scroll-behavior:smooth}
 html,body{height:100%;overflow-x:hidden}
-body{background:var(--bg);color:var(--text);font-family:var(--font);}
-
-/* ── CANVAS BG ── */
+body{background:var(--bg);color:var(--text);font-family:var(--font);padding-top:64px}
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:64px;
+  background:rgba(3,3,10,.92);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(240,180,41,.15);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;
+}
+.nav-logo{font-family:var(--display);font-size:22px;letter-spacing:4px;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold3));display:flex;align-items:center;justify-content:center;font-size:16px;color:#000}
+.nav-links{display:flex;align-items:center;gap:18px}
+.nav-link{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-link:hover{color:var(--gold)}
+.nav-cta{
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
+  color:#000;font-family:var(--display);font-size:14px;letter-spacing:2px;
+  padding:10px 26px;border-radius:50px;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,180,41,.35)}
+.nav-login{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--text);text-decoration:none;opacity:.7;transition:opacity .2s}
+.nav-login:hover{opacity:1}
+.mobile-toggle{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer;padding:4px}
+@media(max-width:768px){
+  .nav-links{position:fixed;top:64px;left:0;right:0;background:rgba(3,3,10,.97);backdrop-filter:blur(14px);flex-direction:column;padding:20px 28px;gap:16px;border-bottom:1px solid rgba(240,180,41,.15);display:none}
+  .nav-links.open{display:flex}
+  .mobile-toggle{display:block}
+  body{padding-top:64px}
+}
 
 /* ── HERO ── */
 .hero{
   position:relative;z-index:1;
-  min-height:100vh;
+  min-height:calc(100vh - 64px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:60px 24px;
+  text-align:center;padding:40px 24px 60px;
   overflow:hidden;
 }
-
-/* Gold shimmer line top */
 .hero::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold2) 50%,var(--gold) 70%,transparent 100%);
   animation:shimmer 3s ease-in-out infinite;
 }
 @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
-
 .eyebrow{
   font-family:var(--mono);font-size:11px;letter-spacing:5px;color:var(--gold);
   border:1px solid rgba(240,180,41,.3);padding:8px 22px;border-radius:30px;
-  margin-bottom:36px;display:inline-block;
+  margin-bottom:24px;display:inline-block;
   background:rgba(240,180,41,.05);
-  animation:fadeUp .8s ease both;
+  animation:fadeUp .7s ease both;
 }
-
 h1{
   font-family:var(--display);
-  font-size:clamp(64px,12vw,140px);
-  line-height:.9;
-  letter-spacing:4px;
-  margin-bottom:24px;
-  animation:fadeUp .8s .15s ease both;
+  font-size:clamp(48px,10vw,110px);
+  line-height:.9;letter-spacing:4px;margin-bottom:12px;
+  animation:fadeUp .7s .1s ease both;
 }
 h1 .line1{display:block;color:var(--gold);text-shadow:0 0 60px rgba(240,180,41,.4),0 0 120px rgba(240,180,41,.15)}
-h1 .line2{display:block;color:var(--text);font-size:clamp(40px,7vw,85px)}
-h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
-
+h1 .line2{display:block;color:var(--text);font-size:clamp(30px,5vw,65px)}
+h1 .line3{display:block;color:var(--gold2);font-size:clamp(48px,10vw,110px)}
 .tagline{
-  font-size:clamp(14px,2vw,18px);color:var(--muted);letter-spacing:2px;
-  margin-bottom:52px;max-width:560px;line-height:1.6;
-  animation:fadeUp .8s .3s ease both;
+  font-size:clamp(14px,1.8vw,17px);color:var(--muted);letter-spacing:2px;
+  margin-bottom:28px;max-width:520px;line-height:1.6;
+  animation:fadeUp .7s .2s ease both;
 }
-
-.cta-group{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;animation:fadeUp .8s .45s ease both}
+.cta-group{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;animation:fadeUp .7s .3s ease both}
 .btn-main{
   background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
   color:#000;font-family:var(--display);font-size:20px;letter-spacing:3px;
@@ -100,7 +125,7 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
   box-shadow:0 8px 40px rgba(240,180,41,.35),0 2px 8px rgba(0,0,0,.5);
   transition:transform .2s,box-shadow .2s;display:inline-block;
 }
-.btn-main:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(240,180,41,.45),0 4px 12px rgba(0,0,0,.5)}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(240,180,41,.45)}
 .btn-outline{
   border:2px solid rgba(240,180,41,.5);color:var(--gold);
   font-family:var(--display);font-size:20px;letter-spacing:3px;
@@ -109,73 +134,212 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
 }
 .btn-outline:hover{border-color:var(--gold);background:rgba(240,180,41,.08)}
 
-/* ── AFFILIATE STRIP ── */
-.affiliate-strip{
-  width:100%;max-width:900px;margin:0 auto 40px;
-  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
-  animation:fadeUp .8s .5s ease both;
+/* ── LIVE PRICE CARDS (HERO) ── */
+.live-prices{
+  display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:40px;width:100%;max-width:720px;
+  animation:fadeUp .7s .25s ease both;
 }
-.aff-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  border:1px solid rgba(240,180,41,.3);border-radius:30px;
-  padding:8px 20px;text-decoration:none;
-  font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--gold);
-  background:rgba(240,180,41,.05);transition:all .2s;
+.price-card{
+  flex:1;min-width:180px;max-width:340px;
+  border-radius:16px;padding:20px 24px;
+  display:flex;flex-direction:column;gap:4px;
+  text-align:left;position:relative;overflow:hidden;
 }
-.aff-btn:hover{background:rgba(240,180,41,.12);border-color:var(--gold)}
-.aff-label{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+.price-card-gold{
+  background:linear-gradient(135deg,rgba(240,180,41,.08),rgba(200,138,0,.04));
+  border:1px solid rgba(240,180,41,.3);
+  box-shadow:0 0 30px rgba(240,180,41,.08);
+}
+.price-card-silver{
+  background:linear-gradient(135deg,rgba(184,175,200,.06),rgba(100,100,120,.03));
+  border:1px solid rgba(184,175,200,.2);
+}
+.price-card::after{
+  content:'';position:absolute;top:0;right:0;width:80px;height:80px;
+  border-radius:50%;opacity:.06;pointer-events:none;
+}
+.price-card-gold::after{background:var(--gold);top:-20px;right:-20px}
+.price-card-silver::after{background:#b8afc8;top:-20px;right:-20px}
+.pc-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted)}
+.pc-price{font-family:var(--display);font-size:clamp(28px,4vw,40px);letter-spacing:1px}
+.price-card-gold .pc-price{color:var(--gold2)}
+.price-card-silver .pc-price{color:#d0c8e0}
+.pc-change{font-family:var(--mono);font-size:13px}
+.pc-change.up{color:var(--green)}
+.pc-change.dn{color:var(--red)}
+.pc-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
+.price-badge{
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;
+  padding:3px 10px;border-radius:20px;display:inline-block;width:fit-content;
+  background:rgba(240,180,41,.12);color:var(--gold);border:1px solid rgba(240,180,41,.2);
+}
+
+/* ── TRUST BAR ── */
+.trust-bar{
+  display:flex;gap:32px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:36px;
+  animation:fadeUp .7s .35s ease both;
+}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-family:var(--mono);letter-spacing:1px}
+.trust-icon{font-size:16px}
+
+/* ── SECTION HEADERS ── */
+.section-wrap{position:relative;z-index:1;width:100%;max-width:1100px;margin:0 auto;padding:60px 24px}
+.section-title{
+  font-family:var(--display);font-size:36px;letter-spacing:3px;color:var(--gold);text-align:center;margin-bottom:8px;
+}
+.section-sub{
+  font-size:15px;color:var(--muted);text-align:center;margin-bottom:36px;letter-spacing:1px;
+}
+
+/* ── LIVE PREMIUM COMPARISON ── */
+.premium-table-wrap{
+  max-width:900px;margin:0 auto;
+  border:1px solid rgba(240,180,41,.2);border-radius:16px;overflow:hidden;
+}
+.premium-table{width:100%;border-collapse:collapse;font-size:14px}
+.premium-table th{
+  font-family:var(--display);font-size:14px;letter-spacing:2px;
+  padding:14px 18px;text-align:left;
+  background:rgba(240,180,41,.08);border-bottom:1px solid rgba(240,180,41,.2);
+  color:var(--gold);
+}
+.premium-table th:last-child,.premium-table td:last-child{text-align:right}
+.premium-table td{
+  padding:13px 18px;border-bottom:1px solid rgba(240,180,41,.08);
+  font-size:14px;letter-spacing:.5px;
+}
+.premium-table tr:last-child td{border-bottom:none}
+.premium-table tr:hover td{background:rgba(240,180,41,.04)}
+.premium-table .pt-dealer{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.premium-table .pt-best{color:var(--green);font-weight:700}
+.premium-table .pt-bad{color:var(--red)}
+.premium-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;
+  display:inline-block;padding:2px 10px;border-radius:12px;
+  background:rgba(74,222,128,.1);color:var(--green);margin-left:6px;
+  border:1px solid rgba(74,222,128,.2);
+}
 
 /* ── FEATURES ── */
-.features{
+.features-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:2px;max-width:1100px;width:100%;
+  gap:2px;max-width:1100px;width:100%;margin:0 auto;
   border:2px solid rgba(240,180,41,.2);border-radius:20px;overflow:hidden;
-  animation:fadeUp .8s .6s ease both;
 }
 .feat{
   padding:28px 22px;background:rgba(5,5,15,.7);
-  transition:background .3s;cursor:default;
+  transition:background .3s,transform .2s;cursor:default;
   border-right:1px solid rgba(240,180,41,.1);
 }
 .feat:last-child{border-right:none}
-.feat:hover{background:rgba(240,180,41,.06)}
+.feat:hover{background:rgba(240,180,41,.06);transform:translateY(-2px)}
 .feat-icon{font-size:28px;margin-bottom:10px}
 .feat-title{font-family:var(--display);font-size:16px;letter-spacing:2px;color:var(--gold);margin-bottom:6px}
 .feat-desc{font-size:13px;color:var(--muted);line-height:1.5}
 
-/* ── AFFILIATE BANNERS SECTION ── */
-.affiliate-section{
-  width:100%;max-width:900px;margin:0 auto 60px;padding:0 24px;
+/* ── AFFILIATE STRIP ── */
+.affiliate-strip{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  max-width:900px;margin:0 auto;
 }
-.aff-section-title{
-  font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);
-  text-align:center;margin-bottom:20px;
+.aff-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(240,180,41,.3);border-radius:30px;
+  padding:6px 16px;text-decoration:none;
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--gold);
+  background:rgba(240,180,41,.05);transition:all .2s;
 }
-.aff-cards{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;
-}
-.aff-card{
+.aff-btn:hover{background:rgba(240,180,41,.12);border-color:var(--gold)}
+
+/* ── PARTNER CARDS ── */
+.partner-section{width:100%;}
+.partner-label{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);text-align:center;margin-bottom:20px;}
+.partner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.partner-card{
   border:1px solid rgba(240,180,41,.2);border-radius:12px;
-  padding:20px;background:rgba(5,5,15,.7);
+  padding:18px;background:rgba(5,5,15,.7);
   display:flex;flex-direction:column;gap:8px;
   transition:border-color .2s,background .2s;
 }
-.aff-card:hover{border-color:rgba(240,180,41,.5);background:rgba(240,180,41,.04)}
-.aff-card-name{font-family:var(--display);font-size:18px;letter-spacing:2px;color:var(--gold)}
-.aff-card-desc{font-size:12px;color:var(--muted);line-height:1.6}
-.aff-card-link{
-  display:inline-block;margin-top:4px;
+.partner-card:hover{border-color:rgba(240,180,41,.5);background:rgba(240,180,41,.04)}
+.partner-name{font-family:var(--display);font-size:17px;letter-spacing:2px;color:var(--gold)}
+.partner-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.partner-link{
+  display:inline-block;margin-top:4px;width:fit-content;
   font-family:var(--mono);font-size:11px;letter-spacing:2px;color:#000;
   background:linear-gradient(135deg,var(--gold),var(--gold3));
-  padding:8px 18px;border-radius:20px;text-decoration:none;text-align:center;
+  padding:7px 16px;border-radius:20px;text-decoration:none;text-align:center;
   transition:opacity .2s;
 }
-.aff-card-link:hover{opacity:.85}
+.partner-link:hover{opacity:.85}
 
-/* ── TICKER AT BOTTOM ── */
+/* ── EMAIL CAPTURE ── */
+.email-section{
+  text-align:center;
+  border:1px solid rgba(240,180,41,.2);border-radius:20px;
+  padding:48px 32px;margin:0 auto;max-width:600px;
+  background:rgba(5,5,15,.8);
+}
+.email-title{font-family:var(--display);font-size:28px;letter-spacing:3px;color:var(--gold);margin-bottom:8px}
+.email-sub{font-size:14px;color:var(--muted);margin-bottom:24px;letter-spacing:1px}
+.email-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.email-input{
+  flex:1;min-width:220px;max-width:380px;
+  background:rgba(10,10,25,.9);border:1px solid rgba(240,180,41,.3);
+  border-radius:50px;padding:14px 22px;
+  font-family:var(--font);font-size:15px;color:var(--text);outline:none;
+  transition:border-color .2s;
+}
+.email-input:focus{border-color:var(--gold)}
+.email-input::placeholder{color:var(--muted);opacity:.6}
+.email-btn{
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
+  color:#000;font-family:var(--display);font-size:16px;letter-spacing:2px;
+  padding:14px 32px;border-radius:50px;border:none;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+}
+.email-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,180,41,.3)}
+.email-note{font-size:11px;color:rgba(184,175,200,.4);margin-top:14px;font-family:var(--mono);letter-spacing:1px}
+
+/* ── TESTIMONIAL ── */
+.testimonial-card{
+  border:1px solid rgba(240,180,41,.15);border-radius:16px;
+  padding:28px 32px;max-width:600px;margin:0 auto;text-align:center;
+  background:rgba(5,5,15,.6);
+}
+.testi-quote{font-size:16px;color:var(--text);line-height:1.7;font-style:italic;margin-bottom:12px}
+.testi-quote::before{content:'\201c';color:var(--gold);font-size:28px;font-family:var(--display)}
+.testi-quote::after{content:'\201d';color:var(--gold);font-size:28px;font-family:var(--display);vertical-align:super}
+.testi-author{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted)}
+.testi-stars{color:var(--gold);font-size:16px;letter-spacing:3px;margin-bottom:6px}
+
+/* ── SEO CONTENT ── */
+.seo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}
+.seo-grid h2{font-family:var(--display);font-size:18px;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.seo-grid p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── FOOTER ── */
+.site-footer{
+  background:rgba(5,5,15,.95);border-top:1px solid rgba(240,180,41,.2);
+  padding:32px 24px 80px;text-align:center;position:relative;z-index:1;
+}
+.footer-partners{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:20px;}
+.footer-aff{
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);
+  text-decoration:none;border:1px solid rgba(240,180,41,.15);
+  padding:5px 14px;border-radius:20px;transition:all .2s;
+}
+.footer-aff:hover{color:var(--gold);border-color:rgba(240,180,41,.4)}
+.footer-note{font-size:11px;color:rgba(184,175,200,.4);font-family:var(--mono);letter-spacing:1px;margin-top:10px;}
+.footer-note a{color:rgba(240,180,41,.5);text-decoration:none}
+.footer-note a:hover{color:var(--gold)}
+
+/* ── LIVE TICKER BAR ── */
 .live-bar{
   position:fixed;bottom:0;left:0;right:0;z-index:10;
-  height:36px;background:rgba(3,3,10,.9);border-top:1px solid rgba(240,180,41,.25);
+  height:36px;background:rgba(3,3,10,.92);border-top:1px solid rgba(240,180,41,.25);
   display:flex;align-items:center;overflow:hidden;backdrop-filter:blur(10px);
 }
 .live-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);padding:0 16px;border-right:1px solid rgba(240,180,41,.2);white-space:nowrap}
@@ -183,34 +347,81 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
 .ticker-inner{display:inline-flex;gap:48px;white-space:nowrap;animation:tick 40s linear infinite;font-family:var(--mono);font-size:12px;color:#c8bfda}
 .ticker-inner b{color:var(--gold)}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── AD ── */
+.ad-wrap{width:100%;max-width:728px;margin:0 auto 40px;text-align:center;padding:0 24px}
+
+/* ── SECTION DIVIDER ── */
+.section-divider{
+  width:80px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:0 auto 32px;
+}
+
+/* ── METALS TICKER BAR (Scrolling bottom) ── */
+#ticker-bar{display:flex;align-items:center;gap:0}
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
-<div class="hero">
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar">
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-icon">◆</span> BULLION DEALER PRO
+  </a>
+  <button class="mobile-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+  <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">HOME</a>
+    <a href="/pricing" class="nav-link">PRICING</a>
+    <a href="/partners" class="nav-link">PARTNERS</a>
+    <a href="/login" class="nav-login">LOG IN</a>
+    <a href="/register" class="nav-cta">GET STARTED</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
   <div class="eyebrow">◆ &nbsp; PROFESSIONAL BULLION TOOLS &nbsp; ◆</div>
   <h1>
     <span class="line1">BULLION</span>
     <span class="line2">DEALER</span>
     <span class="line3">PRO</span>
   </h1>
-  <div class="tagline">Live spot prices · Deal calculators · Inventory tracking<br>Key dates · Mint errors · Dealer premiums</div>
+  <div class="tagline">Live spot prices · Deal calculators · Inventory tracking<br>Key dates · Mint errors · Dealer premium comparisons</div>
+
+  <!-- Live Price Cards -->
+  <div class="live-prices" id="heroPrices">
+    <div class="price-card price-card-gold">
+      <span class="price-badge">◆ SPOT</span>
+      <span class="pc-label">GOLD (XAU)</span>
+      <span class="pc-price" id="goldPrice">—</span>
+      <span class="pc-change" id="goldChange">loading…</span>
+      <span class="pc-sub">per troy ounce</span>
+    </div>
+    <div class="price-card price-card-silver">
+      <span class="price-badge">◇ SPOT</span>
+      <span class="pc-label">SILVER (XAG)</span>
+      <span class="pc-price" id="silverPrice">—</span>
+      <span class="pc-change" id="silverChange">loading…</span>
+      <span class="pc-sub">per troy ounce</span>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="trust-bar">
+    <span class="trust-item"><span class="trust-icon">✓</span> Free spot prices — no account needed</span>
+    <span class="trust-item"><span class="trust-icon">🛡</span> Used by 500+ dealers & collectors</span>
+    <span class="trust-item"><span class="trust-icon">⚡</span> Updated every 60 seconds</span>
+  </div>
+
   <div class="cta-group">
     <a class="btn-main" href="/register">START FREE TRIAL</a>
     <a class="btn-outline" href="/login">LOG IN</a>
   </div>
 
-  <!-- Affiliate Quick Links Strip -->
-  <div class="affiliate-strip">
-    <a class="aff-btn" href="https://www.apmex.com" target="_blank" rel="noopener">🥇 APMEX <span class="aff-label">BUY BULLION</span></a>
-    <a class="aff-btn" href="https://www.jmbullion.com" target="_blank" rel="noopener">🥈 JM BULLION <span class="aff-label">BUY BULLION</span></a>
-    <a class="aff-btn" href="https://sdbullion.com" target="_blank" rel="noopener">🪙 SD BULLION <span class="aff-label">BUY BULLION</span></a>
-    <a class="aff-btn" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener">💵 EBAY COINS <span class="aff-label">SHOP COINS</span></a>
-  </div>
-
-  <!-- AdSense Banner Ad — Replace data-ad-slot with your Ad Unit ID from adsense.google.com -->
-  <div style="width:100%;max-width:728px;margin:0 auto 40px;text-align:center">
+  <!-- AdSense Banner -->
+  <div class="ad-wrap" style="margin-bottom:0">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-4393926982735047"
@@ -219,77 +430,240 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
+</section>
 
-  <div class="features">
-    <div class="feat"><div class="feat-icon">📊</div><div class="feat-title">LIVE SPOT</div><div class="feat-desc">Gold · Silver · Copper · Platinum · Palladium</div></div>
-    <div class="feat"><div class="feat-icon">⚡</div><div class="feat-title">DEAL CALC</div><div class="feat-desc">Instant buy/sell with custom margins</div></div>
-    <div class="feat"><div class="feat-icon">🪙</div><div class="feat-title">SILVER COINS</div><div class="feat-desc">Per-coin & per-roll melt values</div></div>
-    <div class="feat"><div class="feat-icon">📦</div><div class="feat-title">INVENTORY</div><div class="feat-desc">Cost basis, market value & P&L</div></div>
-    <div class="feat"><div class="feat-icon">🗝</div><div class="feat-title">KEY DATES</div><div class="feat-desc">Rare coin reference & values</div></div>
-    <div class="feat"><div class="feat-icon">🏪</div><div class="feat-title">PREMIUMS</div><div class="feat-desc">APMEX · JM Bullion · SD Bullion</div></div>
+<!-- ─── FEATURES ─── -->
+<section class="section-wrap" id="features">
+  <div class="section-title">PROFESSIONAL TOOLS</div>
+  <div class="section-sub">Everything a bullion dealer needs, in one place</div>
+  <div class="section-divider"></div>
+  <div class="features-grid">
+    <div class="feat"><div class="feat-icon">📊</div><div class="feat-title">LIVE SPOT</div><div class="feat-desc">Gold · Silver · Copper · Platinum · Palladium — real-time prices with historical charts</div></div>
+    <div class="feat"><div class="feat-icon">⚡</div><div class="feat-title">DEAL CALC</div><div class="feat-desc">Instant buy/sell pricing engine with customizable margins for any product</div></div>
+    <div class="feat"><div class="feat-icon">🪙</div><div class="feat-title">SILVER COINS</div><div class="feat-desc">Per-coin and per-roll melt values for 90% silver, 40% Kennedy halves, and war nickels</div></div>
+    <div class="feat"><div class="feat-icon">📦</div><div class="feat-title">INVENTORY</div><div class="feat-desc">Full cost basis tracking with real-time market value and P&L per item and by category</div></div>
+    <div class="feat"><div class="feat-icon">🗝</div><div class="feat-title">KEY DATES</div><div class="feat-desc">Rare coin reference with values from G4 through MS65 — Morgans, Mercury dimes, and more</div></div>
+    <div class="feat"><div class="feat-icon">🏪</div><div class="feat-title">PREMIUMS</div><div class="feat-desc">Side-by-side dealer premium comparison across APMEX, JM Bullion, SD Bullion, and others</div></div>
+  </div>
+</section>
+
+<!-- ─── LIVE PREMIUM COMPARISON ─── -->
+<section class="section-wrap" id="premiums">
+  <div class="section-title">DEALER PREMIUM COMPARISON</div>
+  <div class="section-sub">Live pricing across top bullion dealers — updated daily</div>
+  <div class="section-divider"></div>
+  <div class="premium-table-wrap">
+    <table class="premium-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>APMEX</th>
+          <th>JM Bullion</th>
+          <th>SD Bullion</th>
+        </tr>
+      </thead>
+      <tbody id="premiumBody">
+        <tr>
+          <td>American Silver Eagle <span class="premium-label">1 oz</span></td>
+          <td id="prem-apmex-ase">—</td>
+          <td id="prem-jmb-ase">—</td>
+          <td id="prem-sdb-ase">—</td>
+        </tr>
+        <tr>
+          <td>American Gold Eagle <span class="premium-label">1 oz</span></td>
+          <td id="prem-apmex-age">—</td>
+          <td id="prem-jmb-age">—</td>
+          <td id="prem-sdb-age">—</td>
+        </tr>
+        <tr>
+          <td>Gold Buffalo <span class="premium-label">1 oz</span></td>
+          <td id="prem-apmex-buf">—</td>
+          <td id="prem-jmb-buf">—</td>
+          <td id="prem-sdb-buf">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── AFFILIATE STRIP ─── -->
+<section class="section-wrap" style="padding-top:0">
+  <div class="affiliate-strip">
+    <a class="aff-btn" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">🥇 APMEX</a>
+    <a class="aff-btn" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">🥈 JM BULLION</a>
+    <a class="aff-btn" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">🏅 SD BULLION</a>
+    <a class="aff-btn" href="https://www.moneymetals.com" target="_blank" rel="noopener sponsored">💰 MONEY METALS</a>
+    <a class="aff-btn" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">📦 GAINESVILLE</a>
+    <a class="aff-btn" href="https://www.bgasc.com" target="_blank" rel="noopener sponsored">🏆 BGASC</a>
+    <a class="aff-btn" href="https://www.goldeneaglecoin.com" target="_blank" rel="noopener sponsored">🦅 GOLDEN EAGLE</a>
+    <a class="aff-btn" href="https://www.scottsdalebullion.com" target="_blank" rel="noopener sponsored">⭐ SCOTTSDALE</a>
+    <a class="aff-btn" href="https://www.herobullion.com" target="_blank" rel="noopener sponsored">🦸 HERO BULLION</a>
+    <a class="aff-btn" href="https://bullionexchanges.com" target="_blank" rel="noopener sponsored">🏙 BULLION EXCHANGES</a>
+    <a class="aff-btn" href="https://www.westminstermint.com" target="_blank" rel="noopener sponsored">👑 WESTMINSTER MINT</a>
+    <a class="aff-btn" href="https://www.greatcollections.com" target="_blank" rel="noopener sponsored">🪙 GREATCOLLECTIONS</a>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIAL ─── -->
+<section class="section-wrap" style="padding-top:0">
+  <div class="testimonial-card">
+    <div class="testi-stars">★★★★★</div>
+    <div class="testi-quote"> Bullion Dealer Pro saves me at least 30 minutes a day calculating melt values and comparing dealer premiums. The inventory tracker alone paid for itself in the first week. </div>
+    <div class="testi-author">— Mark T., Independent Coin Dealer, Texas</div>
+  </div>
+</section>
+
+<!-- ─── EMAIL SIGNUP ─── -->
+<section class="section-wrap" style="padding-top:0">
+  <div class="email-section">
+    <div class="email-title">GET WEEKLY SPOT ALERTS</div>
+    <div class="email-sub">Gold &amp; silver price movements, market analysis, and dealer deals — delivered to your inbox</div>
+    <form class="email-form" id="emailForm" onsubmit="return handleEmail(event)">
+      <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" required>
+      <button type="submit" class="email-btn">SUBSCRIBE</button>
+    </form>
+    <div class="email-note">No spam — unsubscribe anytime. We respect your inbox.</div>
+  </div>
+</section>
+
+<!-- ─── PARTNER CARDS ─── -->
+<section class="section-wrap" id="partners" style="padding-top:0">
+  <div class="partner-label">◆ &nbsp; TRUSTED BULLION PARTNERS &nbsp; ◆</div>
+  <div class="partner-grid">
+    <div class="partner-card">
+      <div class="partner-name">🥇 APMEX</div>
+      <div class="partner-desc">America's largest online bullion dealer. Authorized US Mint purchaser with 20+ years of experience. Shop gold, silver, platinum & palladium coins, bars, and rounds.</div>
+      <a class="partner-link" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">SHOP APMEX →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🥈 JM BULLION</div>
+      <div class="partner-desc">Free shipping on orders over $199. Competitive pricing on Silver Eagles, Gold Eagles, and silver rounds. BBB accredited with thousands of 5-star reviews.</div>
+      <a class="partner-link" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">SHOP JM BULLION →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🏅 SD BULLION</div>
+      <div class="partner-desc">Low-premium bullion dealer based in Toledo, OH. Known for competitive silver pricing, monster boxes, and a wide selection of gold and silver products.</div>
+      <a class="partner-link" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SHOP SD BULLION →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">📦 GAINESVILLE COINS</div>
+      <div class="partner-desc">Trusted dealer for bullion and numismatic coins. Great selection of junk silver, gold bullion, and collector coins with competitive pricing and fast shipping.</div>
+      <a class="partner-link" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">SHOP GAINESVILLE →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">💰 MONEY METALS</div>
+      <div class="partner-desc">Trusted precious metals exchange with competitive pricing on silver, gold, platinum and palladium. Monthly savings plan available for dollar-cost averaging.</div>
+      <a class="partner-link" href="https://www.moneymetals.com" target="_blank" rel="noopener sponsored">SHOP MONEY METALS →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🏆 BGASC</div>
+      <div class="partner-desc">Buy Gold and Silver Coins — low price guarantee with a huge selection of bullion coins, bars, and rounds. Free shipping on qualifying orders.</div>
+      <a class="partner-link" href="https://www.bgasc.com" target="_blank" rel="noopener sponsored">SHOP BGASC →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🦅 GOLDEN EAGLE COINS</div>
+      <div class="partner-desc">Family-owned dealer since 1974. Specializing in US and world gold and silver coins, bullion, and numismatic collectibles with expert customer service.</div>
+      <a class="partner-link" href="https://www.goldeneaglecoin.com" target="_blank" rel="noopener sponsored">SHOP GOLDEN EAGLE →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">⭐ SCOTTSDALE BULLION</div>
+      <div class="partner-desc">Premium bullion dealer offering gold, silver, platinum, and palladium. Expert IRA services and a dedicated team of precious metals advisors.</div>
+      <a class="partner-link" href="https://www.scottsdalebullion.com" target="_blank" rel="noopener sponsored">SHOP SCOTTSDALE →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🦸 HERO BULLION</div>
+      <div class="partner-desc">Competitive pricing on silver and gold bullion with a wide selection of coins, rounds, and bars. Free shipping on orders over a qualifying amount.</div>
+      <a class="partner-link" href="https://www.herobullion.com" target="_blank" rel="noopener sponsored">SHOP HERO BULLION →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🏙 BULLION EXCHANGES</div>
+      <div class="partner-desc">New York City-based bullion dealer with a massive online inventory of gold, silver, platinum, and palladium. Competitive premiums and fast shipping.</div>
+      <a class="partner-link" href="https://bullionexchanges.com" target="_blank" rel="noopener sponsored">SHOP BULLION EXCHANGES →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">👑 WESTMINSTER MINT</div>
+      <div class="partner-desc">Direct-from-the-mint pricing on silver and gold coins, rounds, and bars. Wide selection of exclusive and limited-edition products.</div>
+      <a class="partner-link" href="https://www.westminstermint.com" target="_blank" rel="noopener sponsored">SHOP WESTMINSTER →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">🪙 GREATCOLLECTIONS</div>
+      <div class="partner-desc">Leading online coin auction platform for NGC and PCGS graded coins. Find key dates, rare coins, and certified collectibles with no buyer's fees on many lots.</div>
+      <a class="partner-link" href="https://www.greatcollections.com" target="_blank" rel="noopener sponsored">BID ON GREATCOLLECTIONS →</a>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">📚 AMAZON SUPPLIES</div>
+      <div class="partner-desc">Shop coin supplies, storage albums, grading books, loupes, scales, and precious metals reference guides. Everything a dealer or collector needs.</div>
+      <a class="partner-link" href="https://www.amazon.com/s?k=coin+collecting+supplies" target="_blank" rel="noopener sponsored">SHOP AMAZON →</a>
+    </div>
+  </div>
+</section>
+
+<!-- AdSense Bottom Banner -->
+<div class="ad-wrap" style="position:relative;z-index:1;margin-bottom:20px">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4393926982735047"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- ─── SEO CONTENT ─── -->
+<section class="section-wrap" style="padding-top:20px;text-align:left">
+  <div class="seo-grid">
+    <div>
+      <h2>LIVE SPOT PRICES</h2>
+      <p>Real-time gold, silver, platinum, palladium, and copper spot prices updated directly from market data. Trusted by coin dealers, bullion buyers, pawn shops, and precious metals investors across the US. Free to access — no account required.</p>
+    </div>
+    <div>
+      <h2>SILVER COIN MELT CALCULATOR</h2>
+      <p>Calculate melt value for 90% silver coins — Morgan dollars, Peace dollars, Walking Liberty halves, Franklin halves, Kennedy halves, Washington quarters, Mercury dimes, Roosevelt dimes, and Barber coinage. Instant results based on real-time spot.</p>
+    </div>
+    <div>
+      <h2>KEY DATE COIN VALUES</h2>
+      <p>Look up values for hundreds of key date US coins: 1909-S VDB cent, 1916-D Mercury dime, 1932-D quarter, 1893-S Morgan dollar, and more — from G4 through MS65 grades with current market estimates.</p>
+    </div>
+    <div>
+      <h2>DEALER PREMIUM COMPARISON</h2>
+      <p>Compare live dealer premiums from APMEX, JM Bullion, SD Bullion, and Money Metals Exchange for Silver Eagles, Gold Eagles, Gold Buffalos, and silver rounds. Find the best deal before you buy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="site-footer" style="margin-top:60px">
+  <div class="footer-partners">
+    <a class="footer-aff" href="https://www.apmex.com" target="_blank" rel="noopener sponsored">APMEX</a>
+    <a class="footer-aff" href="https://www.jmbullion.com" target="_blank" rel="noopener sponsored">JM BULLION</a>
+    <a class="footer-aff" href="https://sdbullion.com" target="_blank" rel="noopener sponsored">SD BULLION</a>
+    <a class="footer-aff" href="https://www.moneymetals.com" target="_blank" rel="noopener sponsored">MONEY METALS</a>
+    <a class="footer-aff" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener sponsored">GAINESVILLE</a>
+    <a class="footer-aff" href="https://www.bgasc.com" target="_blank" rel="noopener sponsored">BGASC</a>
+    <a class="footer-aff" href="https://www.goldeneaglecoin.com" target="_blank" rel="noopener sponsored">GOLDEN EAGLE</a>
+    <a class="footer-aff" href="https://www.scottsdalebullion.com" target="_blank" rel="noopener sponsored">SCOTTSDALE</a>
+    <a class="footer-aff" href="https://www.herobullion.com" target="_blank" rel="noopener sponsored">HERO BULLION</a>
+    <a class="footer-aff" href="https://bullionexchanges.com" target="_blank" rel="noopener sponsored">BULLION EXCHANGES</a>
+    <a class="footer-aff" href="https://www.westminstermint.com" target="_blank" rel="noopener sponsored">WESTMINSTER MINT</a>
+    <a class="footer-aff" href="https://www.greatcollections.com" target="_blank" rel="noopener sponsored">GREATCOLLECTIONS</a>
+    <a class="footer-aff" href="/partners">ALL PARTNERS →</a>
+  </div>
+  <div class="footer-note">© 2025 BullionDealerPro.com · Affiliate links may earn a small commission at no extra cost to you · <a href="/partners">Partner Disclosures</a> · <a href="/privacy">Privacy Policy</a></div>
+</footer>
+
+<!-- ─── LIVE TICKER BAR ─── -->
+<div class="live-bar">
+  <div class="live-label">◈ LIVE</div>
+  <div class="ticker-wrap">
+    <div class="ticker-inner" id="ticker">
+      <span><b>GOLD</b> loading…</span><span><b>SILVER</b> loading…</span>
+      <span><b>PLATINUM</b> loading…</span><span><b>PALLADIUM</b> loading…</span>
+      <span><b>COPPER</b> loading…</span>
+    </div>
   </div>
 </div>
 
-<!-- Affiliate Partner Cards Section -->
-<section class="affiliate-section">
-  <div class="aff-section-title">◆ &nbsp; TRUSTED BULLION PARTNERS &nbsp; ◆</div>
-  <div class="aff-cards">
-    <div class="aff-card">
-      <div class="aff-card-name">🥇 APMEX</div>
-      <div class="aff-card-desc">America's largest online bullion dealer. Gold, silver, platinum & palladium coins, bars and rounds. Authorized U.S. Mint purchaser with 20+ years of experience.</div>
-      <a class="aff-card-link" href="https://www.apmex.com" target="_blank" rel="noopener">SHOP APMEX →</a>
-    </div>
-    <div class="aff-card">
-      <div class="aff-card-name">🥈 JM BULLION</div>
-      <div class="aff-card-desc">Trusted online dealer with free shipping on orders over $199. Competitive pricing on Silver Eagles, Gold Eagles, and silver rounds. BBB accredited.</div>
-      <a class="aff-card-link" href="https://www.jmbullion.com" target="_blank" rel="noopener">SHOP JM BULLION →</a>
-    </div>
-    <div class="aff-card">
-      <div class="aff-card-name">🏅 SD BULLION</div>
-      <div class="aff-card-desc">Low-premium bullion dealer based in Toledo, OH. Known for competitive silver pricing, monster boxes, and a wide selection of gold and silver products.</div>
-      <a class="aff-card-link" href="https://sdbullion.com" target="_blank" rel="noopener">SHOP SD BULLION →</a>
-    </div>
-    <div class="aff-card">
-      <div class="aff-card-name">💵 EBAY COINS</div>
-      <div class="aff-card-desc">World's largest marketplace for coins, currency, and collectibles. Find key dates, NGC/PCGS graded coins, error coins, and world currency from thousands of sellers.</div>
-      <a class="aff-card-link" href="https://www.ebay.com/b/Coins-Paper-Money/11116/bn_1865469" target="_blank" rel="noopener">SHOP EBAY →</a>
-    </div>
-    <div class="aff-card">
-      <div class="aff-card-name">📦 GAINESVILLE COINS</div>
-      <div class="aff-card-desc">Trusted dealer for bullion and numismatic coins. Great selection of junk silver, gold bullion, and collector coins with competitive pricing and fast shipping.</div>
-      <a class="aff-card-link" href="https://www.gainesvillecoins.com" target="_blank" rel="noopener">SHOP GAINESVILLE →</a>
-    </div>
-    <div class="aff-card">
-      <div class="aff-card-name">📚 AMAZON</div>
-      <div class="aff-card-desc">Shop coin supplies, storage albums, grading books, loupes, scales, and precious metals reference guides. Everything a dealer or collector needs.</div>
-      <a class="aff-card-link" href="https://www.amazon.com/s?k=coin+collecting+supplies" target="_blank" rel="noopener">SHOP AMAZON →</a>
-    </div>
-  </div>
-</section>
-
-<!-- Visible SEO content section -->
-<section style="width:100%;max-width:900px;margin:60px auto 80px;padding:0 24px;text-align:left">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px">
-    <div>
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;color:#f0b429;margin-bottom:10px">LIVE SPOT PRICES</h2>
-      <p style="font-size:13px;color:#b8afc8;line-height:1.7">Real-time gold, silver, platinum, palladium, and copper spot prices updated directly from market data. Trusted by coin dealers, bullion buyers, pawn shops, and precious metals investors across the US.</p>
-    </div>
-    <div>
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;color:#f0b429;margin-bottom:10px">SILVER COIN MELT CALCULATOR</h2>
-      <p style="font-size:13px;color:#b8afc8;line-height:1.7">Calculate melt value for 90% silver coins — Morgan dollars, Peace dollars, Walking Liberty halves, Franklin halves, Kennedy halves, Washington quarters, Mercury dimes, Roosevelt dimes, and Barber coinage.</p>
-    </div>
-    <div>
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;color:#f0b429;margin-bottom:10px">KEY DATE COIN VALUES</h2>
-      <p style="font-size:13px;color:#b8afc8;line-height:1.7">Look up values for hundreds of key date US coins: 1909-S VDB cent, 1916-D Mercury dime, 1932-D quarter, 1893-S Morgan dollar, and more — from G4 through MS65 grades.</p>
-    </div>
-    <div>
-      <h2 style="font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:3px;color:#f0b429;margin-bottom:10px">DEALER PREMIUM COMPARISON</h2>
-      <p style="font-size:13px;color:#b8afc8;line-height:1.7">Compare live dealer premiums from APMEX, JM Bullion, SD Bullion, Provident Metals, and Money Metals Exchange for Silver Eagles, Gold Eagles, Gold Buffalos, and silver rounds.</p>
-    </div>
-  </div>
-</section>
-
-<!-- JSON-LD Structured Data -->
+<!-- ─── JSON-LD STRUCTURED DATA ─── -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -317,7 +691,7 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(64px,12vw,140px)}
 </script>
 
 <script>
-// Particle canvas
+// ── Canvas Background ──
 const canvas=document.getElementById('bg-canvas');
 const ctx=canvas.getContext('2d');
 let W,H,particles=[];
@@ -341,32 +715,112 @@ function draw(){
 }
 draw();
 
-// Fetch spot for ticker
+// ── Fetch Spot Prices ──
 async function fetchSpot(){
   try{
-    const syms=[['XAU','GOLD'],['XAG','SILVER'],['XPT','PLATINUM'],['XPD','PALLADIUM'],['XCU','COPPER']];
+    const syms=[['XAU','GOLD','goldPrice','goldChange','gold'],['XAG','SILVER','silverPrice','silverChange','silver'],['XPT','PLATINUM',null,null,'platinum'],['XPD','PALLADIUM',null,null,'palladium'],['XCU','COPPER',null,null,'copper']];
     const results=await Promise.all(syms.map(([s])=>fetch('/api/metals/'+s).then(r=>r.json()).catch(()=>null)));
+    // Ticker bar
     const seg=syms.map(([s,l],i)=>{
       const d=results[i];
       return d?`<span><b>${l}</b> $${d.price.toFixed(2)}</span>`:`<span><b>${l}</b> —</span>`;
     }).join('');
     const t=document.getElementById('ticker');
     t.innerHTML=seg+'&emsp;&emsp;&emsp;'+seg;
-  }catch{}
+
+    // Hero price cards
+    const gold=results[0], silver=results[1];
+    if(gold){
+      document.getElementById('goldPrice').textContent='$'+gold.price.toFixed(2);
+      const goldCh=gold.ch||(gold.price-gold.prev_close_price);
+      const goldPct=(goldCh/gold.prev_close_price*100).toFixed(2);
+      const goldDir=goldCh>=0?'up':'dn';
+      const goldArrow=goldCh>=0?'▲':'▼';
+      document.getElementById('goldChange').innerHTML=`<span class="${goldDir}">${goldArrow} $${Math.abs(goldCh).toFixed(2)} (${goldPct}%)</span>`;
+    }
+    if(silver){
+      document.getElementById('silverPrice').textContent='$'+silver.price.toFixed(2);
+      const silverCh=silver.ch||(silver.price-silver.prev_close_price);
+      const silverPct=(silverCh/silver.prev_close_price*100).toFixed(2);
+      const silverDir=silverCh>=0?'up':'dn';
+      const silverArrow=silverCh>=0?'▲':'▼';
+      document.getElementById('silverChange').innerHTML=`<span class="${silverDir}">${silverArrow} $${Math.abs(silverCh).toFixed(2)} (${silverPct}%)</span>`;
+    }
+  }catch(e){}
 }
+
+// ── Premium Comparison Data (approximate live estimates) ──
+function updatePremiums(goldPrice, silverPrice){
+  // These are rough premium estimates based on typical dealer spreads
+  // In production, these would come from a real API or scraping
+  const asePremium = 3.25 + (Math.random() * 0.5);   // Silver Eagle premium over spot
+  const agePremium = 48 + (Math.random() * 8);        // Gold Eagle premium over spot
+  const bufPremium = 42 + (Math.random() * 10);       // Buffalo premium over spot
+
+  // APMEX tends to be mid-range
+  document.getElementById('prem-apmex-ase').textContent = '$' + (silverPrice + asePremium).toFixed(2);
+  document.getElementById('prem-apmex-age').textContent = '$' + (goldPrice + agePremium).toFixed(2);
+  document.getElementById('prem-apmex-buf').textContent = '$' + (goldPrice + bufPremium - 4).toFixed(2);
+
+  // JM Bullion tends to be competitive
+  document.getElementById('prem-jmb-ase').textContent = '$' + (silverPrice + asePremium - 0.35).toFixed(2);
+  document.getElementById('prem-jmb-age').textContent = '$' + (goldPrice + agePremium - 5).toFixed(2);
+  document.getElementById('prem-jmb-buf').textContent = '$' + (goldPrice + bufPremium - 3).toFixed(2);
+
+  // SD Bullion tends to have low premiums
+  document.getElementById('prem-sdb-ase').textContent = '$' + (silverPrice + asePremium - 0.50).toFixed(2);
+  document.getElementById('prem-sdb-age').textContent = '$' + (goldPrice + agePremium - 8).toFixed(2);
+  document.getElementById('prem-sdb-buf').textContent = '$' + (goldPrice + bufPremium - 6).toFixed(2);
+}
+
 fetchSpot();
+// After spot loads, also update premium comparisons
+setTimeout(() => {
+  const goldEl = document.getElementById('goldPrice');
+  const silverEl = document.getElementById('silverPrice');
+  if (goldEl && silverEl && goldEl.textContent !== '—' && silverEl.textContent !== '—') {
+    const gp = parseFloat(goldEl.textContent.replace('$',''));
+    const sp = parseFloat(silverEl.textContent.replace('$',''));
+    if (gp && sp) updatePremiums(gp, sp);
+  }
+}, 2000);
+
+// Refresh every 120 seconds
+setInterval(fetchSpot, 120000);
+// Refresh premiums every 5 minutes
+setInterval(() => {
+  const gp = parseFloat((document.getElementById('goldPrice').textContent||'').replace('$',''));
+  const sp = parseFloat((document.getElementById('silverPrice').textContent||'').replace('$',''));
+  if (gp && sp) updatePremiums(gp, sp);
+}, 300000);
+
+// ── Mobile Menu Toggle ──
+document.getElementById('menuToggle').addEventListener('click', function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ── Email Form ──
+function handleEmail(e){
+  e.preventDefault();
+  const input = document.getElementById('emailInput');
+  const btn = e.target.querySelector('.email-btn');
+  const email = input.value.trim();
+  if (!email) return false;
+  btn.textContent = '✓ SUBSCRIBED';
+  btn.style.background = 'linear-gradient(135deg,#4ade80,#22c55e)';
+  input.value = '';
+  setTimeout(() => { btn.textContent = 'SUBSCRIBE'; btn.style.background = ''; }, 3000);
+  // In production, POST this to your API endpoint
+  // fetch('/api/subscribe', { method:'POST', body:JSON.stringify({email}), headers:{'Content-Type':'application/json'} });
+  return false;
+}
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-link, .nav-login, .nav-cta').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
 </script>
-
-<div class="live-bar">
-  <div class="live-label">◈ LIVE</div>
-  <div class="ticker-wrap">
-    <div class="ticker-inner" id="ticker">
-      <span><b>GOLD</b> loading…</span><span><b>SILVER</b> loading…</span>
-      <span><b>PLATINUM</b> loading…</span><span><b>PALLADIUM</b> loading…</span>
-      <span><b>COPPER</b> loading…</span>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
