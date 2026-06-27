@@ -42,9 +42,9 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --gold:#f0b429;--gold2:#ffe566;--gold3:#c88a00;
-  --bg:#03030a;--text:#e8dfc8;--muted:#b8afc8;
+  --bg:#03030a;--text:#e8dfc8;--muted:#c4b99a;
   --font:'Rajdhani',sans-serif;--display:'Bebas Neue',cursive;--mono:'Share Tech Mono',monospace;
-  --green:#4ade80;--red:#f87171;
+  --green:#86bb7c;--red:#c46a6a;
 }
 html{scroll-behavior:smooth}
 html,body{height:100%;overflow-x:hidden}
@@ -67,7 +67,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);padding-top:
 .nav-link:hover{color:var(--gold)}
 .nav-cta{
   background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
-  color:#000;font-family:var(--display);font-size:14px;letter-spacing:2px;
+  color:#1a0f00;font-family:var(--display);font-size:14px;letter-spacing:2px;
   padding:10px 26px;border-radius:50px;text-decoration:none;
   transition:transform .2s,box-shadow .2s;
 }
@@ -120,7 +120,7 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(48px,10vw,110px)}
 .cta-group{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;animation:fadeUp .7s .3s ease both}
 .btn-main{
   background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
-  color:#000;font-family:var(--display);font-size:20px;letter-spacing:3px;
+  color:#1a0f00;font-family:var(--display);font-size:20px;letter-spacing:3px;
   padding:16px 44px;border-radius:50px;text-decoration:none;
   box-shadow:0 8px 40px rgba(240,180,41,.35),0 2px 8px rgba(0,0,0,.5);
   transition:transform .2s,box-shadow .2s;display:inline-block;
@@ -152,19 +152,20 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(48px,10vw,110px)}
   box-shadow:0 0 30px rgba(240,180,41,.08);
 }
 .price-card-silver{
-  background:linear-gradient(135deg,rgba(184,175,200,.06),rgba(100,100,120,.03));
-  border:1px solid rgba(184,175,200,.2);
+  background:linear-gradient(135deg,rgba(196,185,154,.06),rgba(120,110,90,.03));
+  border:1px solid rgba(196,185,154,.25);
+  box-shadow:0 0 24px rgba(196,185,154,.05);
 }
 .price-card::after{
   content:'';position:absolute;top:0;right:0;width:80px;height:80px;
   border-radius:50%;opacity:.06;pointer-events:none;
 }
 .price-card-gold::after{background:var(--gold);top:-20px;right:-20px}
-.price-card-silver::after{background:#b8afc8;top:-20px;right:-20px}
+.price-card-silver::after{background:#c4b99a;top:-20px;right:-20px}
 .pc-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted)}
 .pc-price{font-family:var(--display);font-size:clamp(28px,4vw,40px);letter-spacing:1px}
 .price-card-gold .pc-price{color:var(--gold2)}
-.price-card-silver .pc-price{color:#d0c8e0}
+.price-card-silver .pc-price{color:#d4c8a0}
 .pc-change{font-family:var(--mono);font-size:13px}
 .pc-change.up{color:var(--green)}
 .pc-change.dn{color:var(--red)}
@@ -274,7 +275,7 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(48px,10vw,110px)}
 .email-input::placeholder{color:var(--muted);opacity:.6}
 .email-btn{
   background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);
-  color:#000;font-family:var(--display);font-size:16px;letter-spacing:2px;
+  color:#1a0f00;font-family:var(--display);font-size:16px;letter-spacing:2px;
   padding:14px 32px;border-radius:50px;border:none;cursor:pointer;
   transition:transform .2s,box-shadow .2s;
 }
