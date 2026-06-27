@@ -349,6 +349,18 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(48px,10vw,110px)}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
+/* ── SCROLL INDICATOR ── */
+.scroll-hint{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;opacity:.4;transition:opacity .3s;
+  animation:fadeUp .8s .8s ease both;
+}
+.scroll-hint:hover{opacity:.8}
+.scroll-hint span{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted)}
+.scroll-arrow{width:20px;height:20px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);animation:scrollBounce 2s ease-in-out infinite}
+@keyframes scrollBounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+
 /* ── AD ── */
 .ad-wrap{width:100%;max-width:728px;margin:0 auto 40px;text-align:center;padding:0 24px}
 
@@ -429,6 +441,12 @@ h1 .line3{display:block;color:var(--gold2);font-size:clamp(48px,10vw,110px)}
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Scroll Hint -->
+  <div class="scroll-hint" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" title="Scroll to explore">
+    <span>EXPLORE TOOLS</span>
+    <div class="scroll-arrow"></div>
   </div>
 </section>
 
