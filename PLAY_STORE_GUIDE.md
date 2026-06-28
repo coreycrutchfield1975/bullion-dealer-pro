@@ -1,12 +1,46 @@
 # Bullion Dealer Pro — Google Play Store Submission Kit
 
-## Quick Steps (5 mins)
+## Phase 1: Closed Testing (Required for New Accounts)
 
-1. Go to **https://pwabuilder.com**
-2. Enter `https://bulliondealerpro.com` → **Start**
-3. Click **Package For Stores** → **Android**
-4. Choose **No signing key** (Google Play will sign it)
-5. Download the `.aab` file
+Google requires 14 days of closed testing with 12+ testers before you can publish to production.
+
+### Step-by-Step
+
+**1. Generate the .aab**
+Go to **https://pwabuilder.com** → enter `https://bulliondealerpro.com` → **Start** → **Package For Stores** → **Android** → choose **No signing key** → Download the `.aab`
+
+**2. Upload to Closed Testing**
+- In Play Console, go to your existing app → **Testing → Closed testing**
+- Click **Create new track** → name it "Alpha" or "Internal test"
+- Upload the `.aab` you downloaded
+- Fill in the store listing (use the content below)
+- Complete the Content Rating questionnaire
+- Complete Data Safety section
+- Save but don't publish yet
+
+**3. Add testers**
+- Go to **Testers** section in the closed test track
+- Create a Google Group (groups.google.com) and add your 12+ testers' emails
+- Or add emails individually
+- Copy the **Opt-in link** Google provides
+
+**4. Get 12+ people to opt in**
+Send them the invitation message at the bottom of this guide. The 14-day timer starts once 12+ have joined.
+
+**5. After 14 days → Apply for production access**
+- A button appears in Play Console to apply
+- Answer 10 questions about your testing
+- Google reviews in 1-3 business days
+
+**6. After approval**
+- Go to **Setup → App integrity**
+- Copy the **SHA256 certificate fingerprint**
+- Send it to me — I'll update `assetlinks.json` and redeploy
+
+**7. Publish to production**
+- Go to **Production → Create new release**
+- Upload the same `.aab`
+- Submit for review
 
 ---
 
@@ -119,15 +153,26 @@ In Play Console → **App content → Data safety**:
 
 ---
 
-## Deployment Checklist
+## Testing Invitation Message
 
-- [ ] Generate `.aab` from PWABuilder
-- [ ] Upload to Play Console → create new app
-- [ ] Fill in store listing (copy the description above)
-- [ ] Upload screenshots and feature graphic
-- [ ] Complete Financial Features declaration
-- [ ] Complete IARC content rating questionnaire
-- [ ] Link privacy policy
-- [ ] Fill out Data Safety section
-- [ ] After Google signs the app: copy SHA256 fingerprint → update assetlinks.json → redeploy
-- [ ] Submit for review
+Copy and paste this to anyone you can get to help (friends, family, Facebook groups, coin forums, Reddit):
+
+---
+
+**Subject: Help test my app — Bullion Dealer Pro on Google Play**
+
+Hey! I'm releasing a new app called Bullion Dealer Pro — it shows live gold & silver prices, melt calculators, and coin value tools.
+
+To publish on Google Play, I need 12+ testers for 14 days. It takes 2 minutes to join and you can uninstall after 14 days if you want.
+
+**To join:**
+1. Click this link: [PASTE_YOUR_OPT_IN_LINK_HERE]
+2. Tap "Join the program"
+3. Install the app from the Play Store
+4. Open the app once and you're done — that's it!
+
+No personal data is collected. The app is completely free. Thanks for helping out!
+
+---
+
+Replace `[PASTE_YOUR_OPT_IN_LINK_HERE]` with the link Google generates in your Play Console.
