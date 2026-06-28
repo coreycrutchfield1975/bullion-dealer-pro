@@ -5,9 +5,9 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.bulliondealerpro.twa",
+      "package_name": "com.bulliondealerpro.pwa",
       "sha256_cert_fingerprints": [
-        "REPLACE_ME_AFTER_GOOGLE_SIGNS_YOUR_APP"
+        "DB:C5:4D:68:7B:78:B2:34:37:68:26:92:14:7F:23:C0:74:7E:18:E8:C3:1A:70:A6:AE:5D:BF:66:B4:D3:8D:11"
       ]
     }
   }
