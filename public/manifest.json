@@ -1,17 +1,63 @@
 {
   "name": "Bullion Dealer Pro",
   "short_name": "BullionPro",
-  "description": "Live precious metals spot prices, deal calculator, and coin reference tools for bullion dealers.",
+  "description": "Live gold & silver spot prices, coin melt calculators, dealer premium comparisons, and inventory tracking for precious metals dealers and collectors.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0a0a0a",
+  "orientation": "any",
+  "background_color": "#03030a",
   "theme_color": "#f0b429",
+  "lang": "en-US",
+  "categories": ["finance", "business", "shopping"],
   "icons": [
     {
-      "src": "https://media.base44.com/images/public/69eae2a3c39807325aed8509/7d36e61b2_generated_image.png",
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "Spot Prices",
+      "short_name": "Spot",
+      "description": "Live gold and silver spot prices",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/favicon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Tools",
+      "short_name": "Tools",
+      "description": "Melt calculators, inventory, and dealer tools",
+      "url": "/#features"
+    },
+    {
+      "name": "Premium Comparison",
+      "short_name": "Premiums",
+      "description": "Compare dealer premiums side by side",
+      "url": "/#premiums"
     }
   ]
 }

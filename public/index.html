@@ -9,6 +9,12 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
 <link rel="apple-touch-icon" href="/favicon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BullionPro">
+<meta name="application-name" content="Bullion Dealer Pro">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Bullion Dealer Pro — Live Gold & Silver Spot Prices, Coin Calculators & Dealer Tools</title>
 <meta name="description" content="Real-time gold and silver spot prices. Professional bullion dealer calculators, coin melt values, key date coin reference, inventory tracker, and dealer premium comparisons. Free live prices — no account needed.">
 <meta name="keywords" content="live silver price, live gold price, bullion dealer tools, coin melt value calculator, silver spot price today, gold spot price, coin values, key date coins, Morgan dollar value, silver coin calculator, bullion calculator, dealer buy sell calculator, coin inventory tracker, silver melt calculator, precious metals app">
@@ -746,7 +752,17 @@ document.querySelectorAll('.nav-link, .nav-login, .nav-cta').forEach(link => {
   link.addEventListener('click', () => {
     document.getElementById('navLinks').classList.remove('open');
   });
-});
+  });
 </script>
+
+<!-- ── Service Worker Registration ── -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+</script>
+
 </body>
 </html>
