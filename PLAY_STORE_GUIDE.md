@@ -103,7 +103,12 @@ https://bulliondealerpro.com/.well-known/assetlinks.json
 
 **IMPORTANT:** After you generate the `.aab` and Google signs it, you'll get a SHA256 fingerprint from Google Play → **Setup → App integrity**. Copy that fingerprint and update `public/.well-known/assetlinks.json` with it. Without this step, the app will open in a browser tab instead of as a standalone app.
 
-Current placeholder package name: `com.bulliondealerpro.app`
+Current placeholder package name: `com.bulliondealerpro.twa`
+
+### After Google signs the app:
+1. Go to **Play Console → Setup → App integrity**
+2. Copy the **SHA256 certificate fingerprint**
+3. Let me know and I'll update `public/.well-known/assetlinks.json` with it
 
 ### 4. Data Safety Section
 In Play Console → **App content → Data safety**:
