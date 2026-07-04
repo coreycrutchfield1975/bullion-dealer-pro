@@ -296,7 +296,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 .res-card{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:11px;text-align:center}
 .res-label{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}
 .res-value{font-size:17px;font-weight:800;letter-spacing:-.3px}
-.rv-gold{color:var(--gold)}.rv-green{color:var(--green)}.rv-blue{color:var(--blue2)}.rv-muted{color:var(--muted)}
+.rv-gold{color:var(--gold)}.rv-green{color:var(--green)}.rv-red{color:#ef4444}.rv-blue{color:var(--blue2)}.rv-muted{color:var(--muted)}
 .calc-btn{width:100%;background:var(--blue);border:none;color:#fff;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}
 .calc-btn:hover{background:#1a40d0}
 .calc-btn-gold{background:linear-gradient(135deg,#d97706,#f59e0b)}
@@ -862,11 +862,13 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
           <div><div class="ig-label">Quantity</div><input class="ig-input" id="const-qty" type="number" value="10" oninput="calcConst()"></div>
           <div><div class="ig-label">Silver Spot ($/oz)</div><input class="ig-input" id="const-spot" type="number" value="32.45" oninput="calcConst()"></div>
           <div><div class="ig-label">Buy % Below Melt</div><input class="ig-input" id="const-pct" type="number" value="20" oninput="calcConst()"></div>
+          <div><div class="ig-label">Sell % Above Melt</div><input class="ig-input" id="const-sell-pct" type="number" value="10" oninput="calcConst()"></div>
         </div>
         <div class="rgrid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">
           <div class="res-card"><div class="res-label">Total oz</div><div class="res-value rv-blue" id="const-oz">—</div></div>
           <div class="res-card"><div class="res-label">Melt Value</div><div class="res-value rv-gold" id="const-melt">—</div></div>
           <div class="res-card"><div class="res-label">Buy Offer</div><div class="res-value rv-green" id="const-buy">—</div></div>
+          <div class="res-card"><div class="res-label">Sell Price</div><div class="res-value rv-red" id="const-sell">—</div></div>
           <div class="res-card"><div class="res-label">Per Coin</div><div class="res-value rv-muted" id="const-percoin">—</div></div>
         </div>
         <button class="calc-btn" onclick="calcConst()">Calculate Melt Value</button>
@@ -2396,9 +2398,11 @@ function calcConst(){
   if(!$('const-type'))return;
   const t=$('const-type').value||'half_90';const q=parseFloat($('const-qty').value)||10;
   const ag=parseFloat($('const-spot').value)||spot.XAG||32.45;const p=parseFloat($('const-pct').value)||20;
+  var sp=parseFloat($('const-sell-pct').value);if(isNaN(sp))sp=10;
   const oze=CONST_OZ[t]||0.36169;const oz=oze*q;const melt=oz*ag;
   $('const-oz').textContent=oz.toFixed(4)+' oz';$('const-melt').textContent=fmt(melt);
-  $('const-buy').textContent=fmt(melt*(1-p/100));$('const-percoin').textContent=fmt(oze*ag);
+  $('const-buy').textContent=fmt(melt*(1-p/100));$('const-sell').textContent=fmt(melt*(1+sp/100));
+  $('const-percoin').textContent=fmt(oze*ag);
 }
 function calcConstRolls(){
   const t=($('const-roll-type')||{}).value||'half_90_r';
