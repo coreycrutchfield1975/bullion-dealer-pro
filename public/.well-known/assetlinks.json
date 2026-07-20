@@ -1,13 +1,15 @@
 [
   {
     "relation": [
-      "delegate_permission/common.handle_all_urls"
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
     ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.bulliondealerpro.pwa",
       "sha256_cert_fingerprints": [
-        "DB:C5:4D:68:7B:78:B2:34:37:68:26:92:14:7F:23:C0:74:7E:18:E8:C3:1A:70:A6:AE:5D:BF:66:B4:D3:8D:11"
+        "DB:C5:4D:68:7B:78:B2:34:37:68:26:92:14:7F:23:C0:74:7E:18:E8:C3:1A:70:A6:AE:5D:BF:66:B4:D3:8D:11",
+        "A7:06:6E:9E:34:F6:73:1E:31:50:7B:D6:8E:97:E4:0B:63:21:95:F0:24:20:AA:D6:46:34:BE:F5:99:B9:24:B6"
       ]
     }
   }
