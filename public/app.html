@@ -1472,6 +1472,18 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <span id="ts-save-status" style="font-size:11px;color:var(--muted)"></span>
   </div>
   <div class="card">
+    <!-- Fixed Silver Reference Table -->
+    <div style="margin-bottom:16px;border:1px solid var(--gold);border-radius:8px;overflow:hidden">
+      <div style="background:var(--gold2);padding:8px 14px;font-weight:800;font-size:13px;color:#000">🪙 Silver Bullion Reference — Live Melt Values</div>
+      <table class="dtable" id="ts-ref-table" style="margin:0">
+        <thead><tr><th>ITEM</th><th>SILVER (ozt)</th><th>MELT VALUE</th><th style="color:var(--green)">BUY $</th><th style="color:var(--red)">SELL $</th><th>NOTES</th></tr></thead>
+        <tbody id="ts-ref-tbody"></tbody>
+      </table>
+      <div style="padding:6px 14px;font-size:10px;color:var(--muted);background:var(--bg2);border-top:1px solid var(--border)">
+        Melt values update automatically with spot price (Ag: $<span id="ts-ref-ag">—</span>/oz). Buy/sell are manual entry — saved locally.
+      </div>
+    </div>
+    <!-- Editable Trading Sheet -->
     <div class="tbl-wrap" id="ts-table-wrap">
       <table class="dtable" id="ts-table">
         <thead><tr><th>ITEM / NAME</th><th>WEIGHT</th><th>UNIT</th><th>SPOT $</th><th style="color:var(--green)">BUY $</th><th style="color:var(--red)">SELL $</th><th>NOTES</th><th></th></tr></thead>
@@ -4122,6 +4134,7 @@ const TS_KEY = 'bdp_trading_sheet';
 function tsInit() {
   tsLoadFromStorage();
   tsSyncSpot();
+  tsRenderRef();
 }
 
 function tsSyncSpot() {
@@ -4130,8 +4143,54 @@ function tsSyncSpot() {
   const s = document.getElementById('ts-spot-silver');
   if (g && spot.XAU) g.textContent = '$' + spot.XAU.toFixed(2);
   if (s && spot.XAG) s.textContent = '$' + spot.XAG.toFixed(2);
+  tsRenderRef();
 }
 
+/* ── Silver Reference Table (fixed items, live melt) ── */
+const TS_REF_ITEMS = [
+  { name: 'Silver Bullion (.999 fine)', ozt: 1.000, key: 'bullion' },
+  { name: 'Pre-1965 Dime (90%)', ozt: 0.07234, key: 'dime' },
+  { name: 'Pre-1965 Quarter (90%)', ozt: 0.18084, key: 'quarter' },
+  { name: 'Silver Dollar (Morgan/Peace)', ozt: 0.77344, key: 'dollar' },
+  { name: '40% Kennedy Half', ozt: 0.1479, key: 'half40' },
+  { name: '35% War Nickel', ozt: 0.05626, key: 'nickel35' }
+];
+const TS_REF_KEY = 'bdp_silver_ref_prices';
+
+function tsLoadRefPrices() {
+  try { return JSON.parse(localStorage.getItem(TS_REF_KEY) || '{}'); } catch(e) { return {}; }
+}
+function tsSaveRefPrices(data) {
+  try { localStorage.setItem(TS_REF_KEY, JSON.stringify(data)); } catch(e) {}
+}
+function tsRenderRef() {
+  const tbody = document.getElementById('ts-ref-tbody');
+  const agEl = document.getElementById('ts-ref-ag');
+  if (!tbody) return;
+  const ag = spot.XAG || 0;
+  if (agEl) agEl.textContent = ag.toFixed(2);
+  const saved = tsLoadRefPrices();
+  tbody.innerHTML = TS_REF_ITEMS.map(item => {
+    const melt = (ag * item.ozt);
+    const bp = saved[item.key+'_buy'] || '';
+    const sp = saved[item.key+'_sell'] || '';
+    return `<tr>
+      <td style="font-weight:700">${item.name}</td>
+      <td style="font-family:monospace;color:var(--muted)">${item.ozt.toFixed(5)}</td>
+      <td style="font-family:monospace;font-weight:700;color:var(--gold)">$${melt.toFixed(2)}</td>
+      <td class="ts-buy"><span class="ts-dollar">$</span><input class="ts-input" value="${bp}" placeholder="0.00" onchange="tsRefUpdate('${item.key}_buy',this.value)" style="width:85px"></td>
+      <td class="ts-sell"><span class="ts-dollar">$</span><input class="ts-input" value="${sp}" placeholder="0.00" onchange="tsRefUpdate('${item.key}_sell',this.value)" style="width:85px"></td>
+      <td style="font-size:10px;color:var(--muted)">${item.key==='bullion'?'1 oz .999 fine':item.key==='dime'?'$1 face = $'+ (ag*0.7234).toFixed(2):item.key==='quarter'?'$1 face = $'+ (ag*0.7234).toFixed(2):item.key==='dollar'?'$1 face ≈ $'+ (ag*0.77344).toFixed(2):''}</td>
+    </tr>`;
+  }).join('');
+}
+function tsRefUpdate(key, val) {
+  const data = tsLoadRefPrices();
+  data[key] = val;
+  tsSaveRefPrices(data);
+}
+
+/* ── Original Trading Sheet ── */
 function tsRender() {
   const tbody = document.getElementById('ts-tbody');
   if (!tbody) return;
