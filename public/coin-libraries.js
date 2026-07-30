@@ -1,4 +1,4 @@
-/* ── Silver Coin Library ── */
+/* Silver & Platinum Coin Libraries */
 var SILVER_COINS=[
   {name:'American Silver Eagle 1 oz',country:'USA',asw:1.0,series:'Silver Eagle'},
   {name:'Canadian Silver Maple Leaf 1 oz',country:'Canada',asw:1.0,series:'Maple Leaf'},
@@ -24,6 +24,17 @@ var SILVER_COINS=[
   {name:'1 Kilo Silver Bar (.999)',country:'USA',asw:32.15,series:'Bullion Bar'}
 ];
 
+var SILVER_COIN_IMG={
+  'Silver Eagle':'https://www.herobullion.com/wp-content/uploads/2020/03/2020-American-Silver-Eagle-1-oz-Coin-Obverse.jpg',
+  'Maple Leaf':'https://www.herobullion.com/wp-content/uploads/2020/03/2020-Canadian-Silver-Maple-Leaf-1-oz-Coin-Obverse.jpg',
+  'Philharmonic':'https://www.herobullion.com/wp-content/uploads/2020/12/2021-1-oz-Austria-Silver-Philharmonic-Coin.jpg',
+  'Britannia':'https://www.herobullion.com/wp-content/uploads/2020/11/2021-1-oz-British-Silver-Britannia-Coin-Obverse.jpg',
+  'Kangaroo':'https://www.herobullion.com/wp-content/uploads/2024/02/2024-1-oz-Australian-Silver-Kangaroo-Coin.jpg',
+  'Libertad':'https://www.herobullion.com/wp-content/uploads/2021/03/2020-1-oz-Mexican-Silver-Libertad-Coin-1.jpg',
+  'Panda':'https://www.herobullion.com/wp-content/uploads/2021/05/1-oz-Chinese-Silver-Panda-Coin-Random-Year.jpg',
+  'Krugerrand':'https://www.herobullion.com/wp-content/uploads/2020/07/2020-1-oz-South-African-Silver-Krugerrand-Coin-Obverse.jpg'
+};
+
 function renderSilverCoins(){
   var ag=spot.XAG||0;
   var spotEl=document.getElementById('scl-spot');
@@ -38,8 +49,9 @@ function renderSilverCoins(){
     var buy=melt*(buyPct/100);
     var card=document.createElement('div');
     card.style.cssText='background:#0d1117;border:1px solid rgba(148,163,184,0.2);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px';
+    var imgSrc=SILVER_COIN_IMG[coin.series]||'';
     card.innerHTML='<div style="display:flex;gap:12px;align-items:center">'+
-      '<div style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(148,163,184,0.3);background:rgba(148,163,184,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px">🪙</div>'+
+      (imgSrc?'<img src="'+imgSrc+'" alt="" style="width:64px;height:64px;object-fit:contain;border-radius:50%;border:2px solid rgba(148,163,184,0.35);background:#111;flex-shrink:0" onerror="this.style.display=\'none\'">':'<div style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(148,163,184,0.3);background:rgba(148,163,184,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px">🪙</div>')+
       '<div style="flex:1;min-width:0">'+
         '<div style="font-size:13px;font-weight:700;color:#c0d4e8;line-height:1.3;margin-bottom:2px">'+coin.name+'</div>'+
         '<div style="font-size:10px;color:var(--muted)">'+coin.country+'</div>'+
@@ -61,7 +73,7 @@ function renderSilverCoins(){
   });
 }
 
-/* ── Platinum & Palladium Coin Library ── */
+/* Platinum & Palladium Coin Library */
 var PLATINUM_COINS=[
   {name:'American Platinum Eagle 1 oz',country:'USA',apw:1.0,series:'Platinum Eagle'},
   {name:'American Platinum Eagle 1/2 oz',country:'USA',apw:0.5,series:'Platinum Eagle'},
