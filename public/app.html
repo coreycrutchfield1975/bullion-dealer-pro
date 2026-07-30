@@ -1950,7 +1950,7 @@ function showTab(id){
   if(id==='gold'){renderGoldback();renderCoinVals();}
   if(id==='pennies') renderPennyCoinVals();
   if(id==='numismatic') renderAllKeyDates();
-  if(id==='trading'){tsLoadFromStorage();tsSyncSpot();}
+  if(id==='trading'){tsInit();}
   if(id==='typeset'){tsRenderSet(tsCurrentSet);tsUpdateOverall();}
   if(id==='admin'){renderInventory();renderSlabs();renderAlerts();presetLoad();}
 }
