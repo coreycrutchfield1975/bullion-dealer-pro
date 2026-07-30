@@ -2535,8 +2535,10 @@ function renderPennyKeyDates(){
   tb.innerHTML=kd.map(k=>`<tr><td style="font-weight:700">${k.y}</td><td>${k.n}</td><td style="font-size:11px;color:var(--muted)">${k.d}</td><td><span class="kd-badge kd-${k.r}">${k.r}</span></td><td class="green-col">${k.v}</td></tr>`).join('');
 }
 function renderPennyCoinVals(){
-  const q=($('penny-cv-search').value||'').toLowerCase();
-  const ser=$('penny-cv-series').value||'';
+  const searchEl=$('penny-cv-search');
+  const seriesEl=$('penny-cv-series');
+  const q=(searchEl?.value||'').toLowerCase();
+  const ser=seriesEl?.value||'';
   let rows=CV.filter(c=>c.s.toLowerCase().includes('cent'));
   if(ser)rows=rows.filter(c=>c.s===ser);
   if(q)rows=rows.filter(c=>c.d.toLowerCase().includes(q));
