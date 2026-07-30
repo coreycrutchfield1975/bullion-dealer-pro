@@ -755,6 +755,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   <div class="sub-nav">
     <button class="seg active" onclick="silverSec('calc',this)">🧮 Silver Bullion</button>
     <button class="seg" onclick="silverSec('premiums',this)">🏪 Premiums</button>
+    <button class="seg" onclick="silverSec('coins',this)">🪙 Coin Library</button>
     <button class="seg" onclick="silverSec('platpal',this)">⚗️ Plat/Pal</button>
   </div>
 
@@ -781,6 +782,17 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
   </div>
 
   <div id="ss-premiums" style="display:none"><div id="premiums-container"></div></div>
+
+  <!-- Silver Coin Library -->
+  <div id="ss-coins" style="display:none">
+    <div class="card" style="padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="font-size:13px;font-weight:600;color:var(--text)">Your Buy % of Melt:</div>
+      <input class="ig-input" id="scl-buy-pct" type="number" value="85" min="1" max="110" style="width:80px" oninput="renderSilverCoins()">
+      <div style="font-size:11px;color:var(--muted)">e.g. 85 = buy at 85% of melt value</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;padding:0 2px">Silver Spot: <span id="scl-spot" style="color:var(--gold);font-weight:700">—</span></div>
+    <div id="scl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+  </div>
 
   <div id="ss-platpal" style="display:none">
     <!-- Platinum Card -->
@@ -812,6 +824,15 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
         </div>
         <button class="calc-btn" style="margin-top:14px" onclick="calcPlatPal()">Calculate Palladium</button>
       </div>
+    </div>
+    <!-- Platinum & Palladium Coin Library -->
+    <div style="margin-top:14px">
+      <div class="card" style="padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="font-size:13px;font-weight:600;color:var(--text)">Your Buy % of Melt:</div>
+        <input class="ig-input" id="ptl-buy-pct" type="number" value="85" min="1" max="110" style="width:80px" oninput="renderPlatinumCoins()">
+        <div style="font-size:11px;color:var(--muted)">e.g. 85 = buy at 85% of melt value</div>
+      </div>
+      <div id="ptl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
     </div>
   </div>
 </div>
@@ -1974,7 +1995,7 @@ function showProUpgrade(tabId){
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals','scrapgold','goldcoins'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));
   if(s==='scrapgold'){loadScrapPresets();calcScrapGold();}
   if(s==='goldcoins'){renderGoldCoins();}if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
-function silverSec(s,btn){['calc','premiums','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();}
+function silverSec(s,btn){['calc','premiums','coins','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='premiums')renderPremiums();if(s==='coins')renderSilverCoins();if(s==='platpal')renderPlatinumCoins();}
 function constSec(s,btn){['calc','rolls','ref','melt'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='ref')renderConstRef();if(s==='rolls')calcConstRolls();}
 function pennySec(s,btn){['calc'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 function numSec(s,btn){['keydate','grading','errors','coinvals','coinspecs'].forEach(k=>{const e=$('nm-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-numismatic .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='errors')renderErrors('nm-errors-grid');if(s==='grading')renderNmGrading();if(s==='keydate')renderAllKeyDates();if(s==='coinvals')renderNmCoinVals();if(s==='coinspecs')renderCoinSpecs();}
@@ -5347,5 +5368,6 @@ function injectDailyFacts(){
 
 injectDailyFacts();
 </script>
+<script src="coin-libraries.js"></script>
 </body>
 </html>
