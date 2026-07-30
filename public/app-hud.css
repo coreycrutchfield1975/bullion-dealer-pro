@@ -1,0 +1,186 @@
+/* ═══════════════════════════════════════════════════════
+   Bullion Dealer Pro — HUD Terminal Override v2.0
+   Dark space · Neon accents · Glass panels · Live data aesthetic
+   Loaded AFTER inline styles — only overrides visuals
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Override CSS variables for both themes ── */
+:root,[data-theme="light"],[data-theme="dark"]{
+  --bg:#020510 !important;
+  --bg2:#060d1f !important;
+  --bg3:rgba(255,255,255,.025) !important;
+  --bg4:rgba(255,255,255,.04) !important;
+  --text:#dbe4f0 !important;
+  --text2:#a0b4cc !important;
+  --muted:#5a6d82 !important;
+  --muted2:#3d4f63 !important;
+  --border:rgba(255,255,255,.04) !important;
+  --border2:rgba(255,255,255,.08) !important;
+  --card-bg:rgba(8,15,36,.78) !important;
+  --input-bg:rgba(255,255,255,.03) !important;
+  --header-bg:rgba(2,5,16,.94) !important;
+  --tab-bg:#060d1f !important;
+  --gold:#e2b044 !important;
+  --gold2:#ffd060 !important;
+  --gold3:rgba(226,176,68,.08) !important;
+  --green:#3fb950 !important;
+  --green2:rgba(63,185,80,.06) !important;
+  --red:#f85149 !important;
+  --red2:rgba(248,81,73,.06) !important;
+  --blue:#4d94ff !important;
+  --blue2:#4d94ff !important;
+  --blue3:rgba(77,148,255,.06) !important;
+  --shadow:0 4px 24px rgba(0,0,0,.4) !important;
+  --shadow-md:0 2px 12px rgba(0,0,0,.4) !important;
+}
+
+/* ── Space background ── */
+html,body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg) !important;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 300px at 20% 15%,rgba(226,176,68,.04),transparent),
+    radial-gradient(ellipse 400px 250px at 80% 10%,rgba(77,148,255,.03),transparent),
+    radial-gradient(ellipse 500px 200px at 50% 80%,rgba(167,139,250,.02),transparent);
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.025;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:52px 52px;
+}
+
+/* ── Header ── */
+#header{
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(226,176,68,.15) !important;
+  box-shadow:0 4px 24px rgba(0,0,0,.5),0 0 40px rgba(226,176,68,.04) !important;
+}
+.hdr-banner-center img{filter:drop-shadow(0 0 20px rgba(226,176,68,.3))}
+
+/* ── Spot ticker ── */
+#spot-ticker-bar{
+  background:rgba(6,13,31,.8) !important;
+  border-bottom:1px solid var(--border) !important;
+  border-top:1px solid var(--border) !important;
+  height:34px;
+}
+.stb-label{
+  color:var(--gold2) !important;
+  font-family:'Rajdhani',sans-serif !important;
+  letter-spacing:2px;
+  border-right:1px solid rgba(226,176,68,.18) !important;
+}
+
+/* ── News bar ── */
+#news-bar{background:rgba(6,13,31,.6) !important;border-bottom:1px solid var(--border) !important}
+#news-label{color:#22d3ee !important;font-family:'Rajdhani',sans-serif !important;letter-spacing:2px}
+
+/* ── Tab bar ── */
+#tab-bar{
+  background:rgba(6,13,31,.92) !important;
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border2) !important;
+}
+.tab.active.tg{color:var(--gold2) !important;border-bottom-color:var(--gold) !important;background:var(--gold3) !important}
+.tab.active.ts2{color:#9aaec9 !important;border-bottom-color:#9aaec9 !important;background:rgba(154,174,201,.06) !important}
+.tab.active.tc{color:var(--blue) !important;border-bottom-color:var(--blue) !important;background:var(--blue3) !important}
+.tab.active.tp{color:var(--gold) !important;border-bottom-color:var(--gold) !important;background:var(--gold3) !important}
+.tab.active.tfx{color:#a78bfa !important;border-bottom-color:#a78bfa !important;background:rgba(167,139,250,.06) !important}
+.tab.active.ttv{color:#22d3ee !important;border-bottom-color:#22d3ee !important;background:rgba(34,211,238,.06) !important}
+
+/* ── Cards ── */
+.card{
+  backdrop-filter:blur(12px);
+  border:1px solid var(--border2) !important;
+  border-radius:14px;
+  box-shadow:0 2px 12px rgba(0,0,0,.3) !important;
+}
+.sec-hero{border:1px solid;backdrop-filter:blur(16px)}
+.sec-hero::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 70% 30%,rgba(255,255,255,.03),transparent 70%);
+}
+.sec-hero>*{position:relative;z-index:1}
+.hero-gold{border-color:rgba(226,176,68,.18) !important;box-shadow:0 0 32px rgba(226,176,68,.12),0 0 64px rgba(226,176,68,.04) !important}
+.hero-gold .sh-title{color:var(--gold2) !important}
+.hero-silver{border-color:rgba(154,174,201,.15) !important;box-shadow:0 0 32px rgba(154,174,201,.1) !important}
+.hero-const{border-color:rgba(77,148,255,.18) !important;box-shadow:0 0 32px rgba(77,148,255,.12) !important}
+
+/* ── Spotlight cards ── */
+.spot-card{border:1px solid;backdrop-filter:blur(12px)}
+.spot-card-gold{border-color:rgba(226,176,68,.18) !important;box-shadow:0 0 24px rgba(226,176,68,.12),inset 0 0 30px rgba(226,176,68,.02) !important}
+.spot-card-silver{border-color:rgba(154,174,201,.12) !important;box-shadow:0 0 24px rgba(154,174,201,.08),inset 0 0 30px rgba(154,174,201,.02) !important}
+.sc-price{font-family:'Rajdhani',sans-serif !important}
+.spot-card-gold .sc-price{text-shadow:0 0 20px rgba(255,208,96,.45) !important}
+
+/* ── Price boxes ── */
+.price-box{
+  background:rgba(0,0,0,.35) !important;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.08) !important;
+}
+.pb-label{font-family:'Rajdhani',sans-serif !important}
+.pb-price{font-family:'Rajdhani',sans-serif !important}
+
+/* ── Tables ── */
+.dtable th{
+  font-family:'Rajdhani',sans-serif !important;
+  color:var(--gold) !important;
+  letter-spacing:1.5px;
+}
+
+/* ── Tool cards ── */
+.tool-card:hover{border-color:var(--gold) !important;box-shadow:0 8px 24px rgba(0,0,0,.3) !important}
+
+/* ── Dealers ── */
+.dlr-card:hover{border-color:var(--green) !important;box-shadow:0 4px 16px rgba(63,185,80,.08) !important}
+
+/* ── Trading sheet silver ref ── */
+#tab-trading .ts-input:focus{border-bottom-color:var(--gold) !important}
+
+/* ── Labels ── */
+.sec-label{color:var(--gold) !important;font-family:'Rajdhani',sans-serif !important}
+
+/* ── Logos/buttons ── */
+.logo-icon{background:linear-gradient(135deg,var(--gold),var(--gold2)) !important}
+.calc-btn{background:var(--gold) !important;color:#000 !important}
+.calc-btn:hover{background:var(--gold2) !important;box-shadow:0 4px 16px rgba(226,176,68,.25)}
+.calc-btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2)) !important}
+.btn-outline:hover{border-color:var(--gold) !important;background:var(--gold3) !important;color:var(--gold) !important}
+
+/* ── Inputs ── */
+.ig-input:focus,.ig-select:focus{border-color:var(--gold) !important;box-shadow:0 0 0 3px rgba(226,176,68,.06)}
+
+/* ── Paywall ── */
+.pw-card{
+  background:rgba(8,18,36,.97) !important;
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(226,176,68,.18) !important;
+  box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 40px rgba(226,176,68,.15) !important;
+}
+.pw-btn{background:var(--gold) !important;color:#000 !important}
+
+/* ── Ticker price fix ── */
+#ts-spot-gold,#ts-spot-silver{font-family:'Share Tech Mono',monospace !important;color:var(--gold2) !important}
+
+/* ── Scrap buyer cards ── */
+.res-value{font-family:'Rajdhani',sans-serif !important}
+
+/* ── Gold:Silver ratio bar ── */
+#gs-ratio{font-family:'Share Tech Mono',monospace !important}
+
+/* ── Hamburger menu ── */
+.ham-menu{
+  background:rgba(6,13,31,.97) !important;
+  backdrop-filter:blur(16px);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar-thumb{background:var(--muted2) !important}
