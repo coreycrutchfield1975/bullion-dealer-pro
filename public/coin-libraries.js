@@ -24,16 +24,7 @@ var SILVER_COINS=[
   {name:'1 Kilo Silver Bar (.999)',country:'USA',asw:32.15,series:'Bullion Bar'}
 ];
 
-var SILVER_COIN_IMG={
-  'Silver Eagle':'https://www.herobullion.com/wp-content/uploads/2020/03/2020-American-Silver-Eagle-1-oz-Coin-Obverse.jpg',
-  'Maple Leaf':'https://www.herobullion.com/wp-content/uploads/2020/03/2020-Canadian-Silver-Maple-Leaf-1-oz-Coin-Obverse.jpg',
-  'Philharmonic':'https://www.herobullion.com/wp-content/uploads/2020/12/2021-1-oz-Austria-Silver-Philharmonic-Coin.jpg',
-  'Britannia':'https://www.herobullion.com/wp-content/uploads/2020/11/2021-1-oz-British-Silver-Britannia-Coin-Obverse.jpg',
-  'Kangaroo':'https://www.herobullion.com/wp-content/uploads/2024/02/2024-1-oz-Australian-Silver-Kangaroo-Coin.jpg',
-  'Libertad':'https://www.herobullion.com/wp-content/uploads/2021/03/2020-1-oz-Mexican-Silver-Libertad-Coin-1.jpg',
-  'Panda':'https://www.herobullion.com/wp-content/uploads/2021/05/1-oz-Chinese-Silver-Panda-Coin-Random-Year.jpg',
-  'Krugerrand':'https://www.herobullion.com/wp-content/uploads/2020/07/2020-1-oz-South-African-Silver-Krugerrand-Coin-Obverse.jpg'
-};
+var SILVER_COIN_IMG={};
 
 function renderSilverCoins(){
   var ag=spot.XAG||0;
