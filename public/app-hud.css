@@ -145,13 +145,13 @@ body::after{
   background:rgba(4,14,32,.72) !important;
   backdrop-filter:blur(20px) !important;
   -webkit-backdrop-filter:blur(20px);
-  border:1px solid rgba(34,211,238,.15) !important;
+  border:1px solid rgba(34,211,238,.3) !important;
   border-radius:16px !important;
-  box-shadow:0 4px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(34,211,238,.08),0 0 20px rgba(34,211,238,.08),0 0 40px rgba(34,211,238,.04) !important;
+  box-shadow:0 4px 50px rgba(0,0,0,.6),inset 0 1px 0 rgba(34,211,238,.15),0 0 40px rgba(34,211,238,.2),0 0 80px rgba(34,211,238,.1),0 0 140px rgba(34,211,238,.05) !important;
 }
 .card:hover{
-  border-color:rgba(34,211,238,.25) !important;
-  box-shadow:0 4px 40px rgba(0,0,0,.6),inset 0 1px 0 rgba(34,211,238,.1),0 0 30px rgba(34,211,238,.12),0 0 60px rgba(34,211,238,.06) !important;
+  border-color:rgba(34,211,238,.5) !important;
+  box-shadow:0 4px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(34,211,238,.2),0 0 50px rgba(34,211,238,.3),0 0 100px rgba(34,211,238,.15),0 0 160px rgba(34,211,238,.06) !important;
 }
 
 /* ── Hero banners ── */
@@ -162,25 +162,25 @@ body::after{
 }
 .hero-gold{
   background:rgba(2,8,20,.92) !important;
-  border-color:rgba(226,176,68,.25) !important;
-  box-shadow:0 0 60px rgba(226,176,68,.12),inset 0 0 50px rgba(226,176,68,.03),0 0 0 1px rgba(226,176,68,.08),0 0 100px rgba(226,176,68,.04) !important;
+  border-color:rgba(226,176,68,.4) !important;
+  box-shadow:0 0 100px rgba(226,176,68,.22),inset 0 0 60px rgba(226,176,68,.05),0 0 0 1px rgba(226,176,68,.15),0 0 180px rgba(226,176,68,.08) !important;
 }
-.hero-gold .sh-title{color:var(--gold2) !important;text-shadow:0 0 20px rgba(255,224,144,.35)}
+.hero-gold .sh-title{color:var(--gold2) !important;text-shadow:0 0 30px rgba(255,224,144,.6)}
 .hero-gold .sh-sub{color:rgba(226,176,68,.55) !important}
 .hero-silver{
   background:rgba(2,8,20,.92) !important;
-  border-color:rgba(154,174,201,.18) !important;
-  box-shadow:0 0 60px rgba(154,174,201,.08),0 0 0 1px rgba(154,174,201,.05),0 0 80px rgba(154,174,201,.03) !important;
+  border-color:rgba(154,174,201,.3) !important;
+  box-shadow:0 0 100px rgba(154,174,201,.15),0 0 0 1px rgba(154,174,201,.1),0 0 160px rgba(154,174,201,.06) !important;
 }
 .hero-const{
   background:rgba(2,8,20,.92) !important;
-  border-color:rgba(77,148,255,.2) !important;
-  box-shadow:0 0 60px rgba(77,148,255,.1),0 0 0 1px rgba(77,148,255,.06),0 0 80px rgba(77,148,255,.04) !important;
+  border-color:rgba(77,148,255,.35) !important;
+  box-shadow:0 0 100px rgba(77,148,255,.2),0 0 0 1px rgba(77,148,255,.12),0 0 160px rgba(77,148,255,.08) !important;
 }
 .hero-dealers{
   background:rgba(2,12,16,.92) !important;
-  border-color:rgba(63,185,80,.25) !important;
-  box-shadow:0 0 60px rgba(63,185,80,.1),0 0 0 1px rgba(63,185,80,.06),0 0 80px rgba(63,185,80,.04) !important;
+  border-color:rgba(63,185,80,.4) !important;
+  box-shadow:0 0 100px rgba(63,185,80,.2),0 0 0 1px rgba(63,185,80,.12),0 0 160px rgba(63,185,80,.08) !important;
 }
 
 /* ── Spotlight cards ── */
@@ -192,13 +192,13 @@ body::after{
 }
 .spot-card-gold{
   background:rgba(2,8,20,.9) !important;
-  border-color:rgba(226,176,68,.2) !important;
-  box-shadow:0 0 50px rgba(226,176,68,.15),inset 0 0 50px rgba(226,176,68,.025),0 0 0 1px rgba(226,176,68,.06),0 0 80px rgba(226,176,68,.04) !important;
+  border-color:rgba(226,176,68,.35) !important;
+  box-shadow:0 0 90px rgba(226,176,68,.25),inset 0 0 70px rgba(226,176,68,.04),0 0 0 1px rgba(226,176,68,.12),0 0 150px rgba(226,176,68,.08) !important;
 }
 .spot-card-silver{
   background:rgba(2,8,20,.9) !important;
-  border-color:rgba(34,211,238,.14) !important;
-  box-shadow:0 0 50px rgba(34,211,238,.1),inset 0 0 40px rgba(34,211,238,.02),0 0 0 1px rgba(34,211,238,.05),0 0 80px rgba(34,211,238,.03) !important;
+  border-color:rgba(34,211,238,.25) !important;
+  box-shadow:0 0 90px rgba(34,211,238,.2),inset 0 0 50px rgba(34,211,238,.04),0 0 0 1px rgba(34,211,238,.1),0 0 150px rgba(34,211,238,.06) !important;
 }
 .sc-price{
   font-family:'Rajdhani',sans-serif !important;
@@ -208,11 +208,11 @@ body::after{
 }
 .spot-card-gold .sc-price{
   color:var(--gold2) !important;
-  text-shadow:0 0 30px rgba(255,224,144,.45) !important;
+  text-shadow:0 0 40px rgba(255,224,144,.6),0 0 80px rgba(255,224,144,.2) !important;
 }
 .spot-card-silver .sc-price{
   color:#e0e8f5 !important;
-  text-shadow:0 0 20px rgba(34,211,238,.3) !important;
+  text-shadow:0 0 30px rgba(34,211,238,.4),0 0 60px rgba(34,211,238,.15) !important;
 }
 .sc-label{
   font-family:'Rajdhani',sans-serif !important;
@@ -225,30 +225,30 @@ body::after{
 .calc-card{
   background:rgba(4,14,32,.72) !important;
   backdrop-filter:blur(16px) !important;
-  border:1px solid rgba(34,211,238,.12) !important;
+  border:1px solid rgba(34,211,238,.2) !important;
   border-radius:16px !important;
-  box-shadow:0 4px 28px rgba(0,0,0,.45),0 0 0 1px rgba(34,211,238,.04),0 0 20px rgba(34,211,238,.06) !important;
+  box-shadow:0 4px 40px rgba(0,0,0,.55),0 0 0 1px rgba(34,211,238,.08),0 0 40px rgba(34,211,238,.15) !important;
 }
 
 /* ── Tool cards ── */
 .tool-card{
   background:rgba(4,14,32,.6) !important;
-  border:1px solid rgba(34,211,238,.08) !important;
+  border:1px solid rgba(34,211,238,.14) !important;
   border-radius:14px !important;
   transition:all .3s !important;
-  box-shadow:0 2px 16px rgba(0,0,0,.3) !important;
+  box-shadow:0 2px 24px rgba(0,0,0,.4) !important;
 }
 .tool-card:hover{
   border-color:var(--cyan) !important;
   background:rgba(4,14,32,.85) !important;
-  box-shadow:0 8px 40px rgba(0,0,0,.6),0 0 0 1px rgba(34,211,238,.12),0 0 30px rgba(34,211,238,.1) !important;
+  box-shadow:0 8px 60px rgba(0,0,0,.8),0 0 0 1px rgba(34,211,238,.22),0 0 50px rgba(34,211,238,.2) !important;
   transform:translateY(-2px) !important;
 }
 
 /* ── Results cards ── */
 .res-card{
-  background:rgba(34,211,238,.03) !important;
-  border:1px solid rgba(34,211,238,.08) !important;
+  background:rgba(34,211,238,.06) !important;
+  border:1px solid rgba(34,211,238,.14) !important;
   border-radius:10px !important;
   box-shadow:0 2px 8px rgba(0,0,0,.25),0 0 8px rgba(34,211,238,.04) !important;
 }
