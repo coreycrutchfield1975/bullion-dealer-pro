@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="palladium" cx="38%" cy="32%">
+      <stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#7c3aed"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="url(#palladium)" stroke="#5b21b6" stroke-width="3"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+  <text x="60" y="72" text-anchor="middle" font-size="28" font-weight="800" fill="#3b0764" font-family="Inter,sans-serif">PD</text>
+</svg>

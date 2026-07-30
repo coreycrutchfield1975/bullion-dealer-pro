@@ -24,7 +24,27 @@ var SILVER_COINS=[
   {name:'1 Kilo Silver Bar (.999)',country:'USA',asw:32.15,series:'Bullion Bar'}
 ];
 
-var SILVER_COIN_IMG={};
+var SILVER_COIN_IMG={
+  'Silver Eagle':'/img/coins/silver.svg',
+  'Maple Leaf':'/img/coins/silver.svg',
+  'Philharmonic':'/img/coins/silver.svg',
+  'Britannia':'/img/coins/silver.svg',
+  'Kangaroo':'/img/coins/silver.svg',
+  'Libertad':'/img/coins/silver.svg',
+  'Panda':'/img/coins/silver.svg',
+  'Krugerrand':'/img/coins/silver.svg',
+  'Morgan':'/img/coins/silver.svg',
+  'Peace':'/img/coins/silver.svg',
+  'Walking Liberty':'/img/coins/silver.svg',
+  'Franklin':'/img/coins/silver.svg',
+  'Kennedy':'/img/coins/silver.svg',
+  'Kennedy 40%':'/img/coins/silver.svg',
+  'War Nickel':'/img/coins/silver.svg',
+  'Washington':'/img/coins/silver.svg',
+  'Mercury':'/img/coins/silver.svg',
+  'Roosevelt':'/img/coins/silver.svg',
+  'Bullion Bar':'/img/coins/silver.svg'
+};
 
 function renderSilverCoins(){
   var ag=spot.XAG||0;
@@ -103,7 +123,7 @@ function renderPlatinumCoins(){
     var card=document.createElement('div');
     card.style.cssText='background:#0d1117;border:1px solid rgba(34,211,238,.12);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px';
     card.innerHTML='<div style="display:flex;gap:12px;align-items:center">'+
-      '<div style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(34,211,238,.3);background:rgba(34,211,238,.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px">⚗️</div>'+
+      '<img src="/img/coins/platinum.svg" style="width:64px;height:64px;border-radius:50%;flex-shrink:0">'+
       '<div style="flex:1;min-width:0">'+
         '<div style="font-size:13px;font-weight:700;color:var(--cyan);line-height:1.3;margin-bottom:2px">'+coin.name+'</div>'+
         '<div style="font-size:10px;color:var(--muted)">'+coin.country+'</div>'+
@@ -134,7 +154,7 @@ function renderPlatinumCoins(){
     var card=document.createElement('div');
     card.style.cssText='background:#0d1117;border:1px solid rgba(167,139,250,.12);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px';
     card.innerHTML='<div style="display:flex;gap:12px;align-items:center">'+
-      '<div style="width:64px;height:64px;border-radius:50%;border:2px solid rgba(167,139,250,.3);background:rgba(167,139,250,.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px">⚛️</div>'+
+      '<img src="/img/coins/palladium.svg" style="width:64px;height:64px;border-radius:50%;flex-shrink:0">'+
       '<div style="flex:1;min-width:0">'+
         '<div style="font-size:13px;font-weight:700;color:var(--violet);line-height:1.3;margin-bottom:2px">'+coin.name+'</div>'+
         '<div style="font-size:10px;color:var(--muted)">'+coin.country+'</div>'+
