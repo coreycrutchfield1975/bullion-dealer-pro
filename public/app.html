@@ -25,6 +25,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4393926982735047" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app-hud.css">
+<link rel="stylesheet" href="bdp-visual-finish.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root,[data-theme="light"]{
@@ -482,7 +483,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 <!-- TAB NAV -->
 <div id="tab-bar">
   <div class="tabs">
-    <button class="tab tg active" onclick="showTab('gold')"><span class="ticon">🥇</span><div>Gold Center<span class="tsub">Prices · Karats · Goldbacks</span></div></button>
+    <button class="tab tg active" onclick="showTab('gold')"><span class="ticon">Au</span><div>Gold Center<span class="tsub">Prices · Karats · Coins</span></div></button>
+    <button class="tab tgb" onclick="showTab('goldback')"><span class="ticon">GB</span><div>Goldback Center<span class="tsub">Rates · Denominations</span></div></button>
     <button class="tab ts2" onclick="showTab('silver')"><span class="ticon">🪙</span><div>Silver Center<span class="tsub">Silver · Platinum · Palladium</span></div></button>
     <button class="tab tc" onclick="showTab('const')" data-pro="1"><span class="ticon">⚖️</span><div>Silver Coin Center<span class="tsub">Constitutional Melt</span></div></button>
     <button class="tab tp" onclick="showTab('pennies')"><span class="ticon">Cu</span><div>Copper Center<span class="tsub">Pennies · Copper Melt</span></div></button>
@@ -558,11 +560,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button id="copy-prices-btn" onclick="copySpotPrices()" style="background:var(--gold);color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:5px">📋 Copy Prices</button>
     <span style="font-size:11px;color:var(--muted);line-height:1.4">Copies current Gold, Silver &amp; ratio to your clipboard — handy for texting or messaging customers a quick quote.</span>
   </div>
-  <div class="sub-nav center-actions" aria-label="Gold Center tools">
+  <div class="sub-nav center-actions three" aria-label="Gold Center tools">
     <button class="seg active" onclick="goldSec('karat',this)"><span>01</span><b>Karat Calculator</b><small>Purity · Melt · Offer</small></button>
-    <button class="seg" onclick="goldSec('goldback',this)"><span>02</span><b>Goldbacks</b><small>Rates · Denominations</small></button>
-    <button class="seg" onclick="goldSec('scrapgold',this)"><span>03</span><b>Scrap Buyer</b><small>Lots · Payouts · Margin</small></button>
-    <button class="seg" onclick="goldSec('goldcoins',this)"><span>04</span><b>Gold Coins</b><small>AGW · Melt · Buy Offer</small></button>
+    <button class="seg" onclick="goldSec('scrapgold',this)"><span>02</span><b>Scrap Buyer</b><small>Lots · Payouts · Margin</small></button>
+    <button class="seg" onclick="goldSec('goldcoins',this)"><span>03</span><b>Gold Coins</b><small>AGW · Melt · Buy Offer</small></button>
   </div>
 
   <div id="gs-karat">
@@ -608,20 +609,6 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       </div>
     </div>
     <div class="card"><div class="card-title">📋 Live Karat Reference</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Karat</th><th>Purity</th><th>Melt/gram</th><th>Offer @70%</th><th>Melt/troy oz</th><th>Per grain</th></tr></thead><tbody id="karat-tbody"></tbody></table></div></div>
-  </div>
-
-  <div id="gs-goldback" style="display:none">
-    <div class="card" style="margin-bottom:12px"><p style="font-size:12px;color:var(--muted);margin-bottom:5px">📡 Official exchange rates from <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold)">goldback.com</a> — updated daily 10 AM MST</p><p id="gb-updated" style="font-size:11px;color:var(--muted)"></p></div>
-    <!-- Denomination Price Cards -->
-    <div style="margin-bottom:14px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💛 Current Average Prices by Denomination</div>
-      <div id="gb-denom-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px"></div>
-      <div class="card"><div class="card-title">📊 Denomination Detail</div>
-        <div class="tbl-wrap"><table class="dtable"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Spot Value</th><th>Market Est.</th><th>Premium</th></tr></thead><tbody id="gb-denom-tbody"></tbody></table></div>
-      </div>
-    </div>
-    <div id="gb-retailers"></div>
-    <div class="card" style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7">💡 Goldback prices fluctuate daily with gold spot. Always verify at <a href="https://goldback.com/exchange-rates/" target="_blank" style="color:var(--gold)">goldback.com</a> before purchasing.</div>
   </div>
 
   <!-- ═══ SCRAP GOLD BUYER ═══ -->
@@ -692,6 +679,22 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     </div>
     <div id="gcl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
   </div>
+</div>
+
+<!-- ═══════════════════ GOLDBACK CENTER TAB ═══════════════════ -->
+<div id="tab-goldback" class="section">
+  <div class="center-titlebar center-titlebar-goldback">
+    <div class="ct-kicker"><span>GB</span> VOLUNTARY LOCAL CURRENCY</div>
+    <div class="ct-main"><div><h1>Goldback Center</h1><p>Daily exchange rates, denomination values, embedded gold content and practical dealer references.</p></div><div class="ct-live"><i></i><span>RATE DATA</span><b>DAILY</b></div></div>
+    <div class="ct-fact"><span>RATE SOURCE</span><p>Official published exchange rates are checked against Goldback’s daily pricing. Spot-derived values are estimates for comparison.</p></div>
+  </div>
+  <div class="gb-source-bar"><div><span>OFFICIAL SOURCE</span><b>Goldback Exchange Rates</b><small id="gb-updated">Checking latest update…</small></div><a href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">VERIFY CURRENT RATES ↗</a></div>
+  <div class="gb-section-heading"><div><span>01</span><h2>Denomination Values</h2></div><p>Live estimates by embedded gold weight and current market pricing.</p></div>
+  <div id="gb-denom-cards" class="gb-denom-grid"></div>
+  <div class="card gb-detail-card"><div class="card-title">Denomination Detail</div><div class="tbl-wrap"><table class="dtable"><thead><tr><th>Denomination</th><th>Gold oz</th><th>Spot Value</th><th>Market Est.</th><th>Premium</th></tr></thead><tbody id="gb-denom-tbody"></tbody></table></div></div>
+  <div class="gb-section-heading"><div><span>02</span><h2>Dealer Sources</h2></div><p>External retailers and official resources for comparison.</p></div>
+  <div id="gb-retailers"></div>
+  <div class="gb-disclosure">Goldback prices fluctuate with gold spot and local exchange conditions. Verify published rates before completing a transaction.</div>
 </div>
 
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
@@ -1745,13 +1748,14 @@ function showTab(id){
   const tBtn = Array.from(document.querySelectorAll('.tab')).find(t=>t.getAttribute('onclick')===`showTab('${id}')`);
   if(tBtn) tBtn.classList.add('active');
   if(id==='fx') loadFX();
-  if(id==='gold'){renderGoldback();renderCoinVals();}
+  if(id==='gold')renderCoinVals();
+  if(id==='goldback')renderGoldback();
   if(id==='pennies') renderPennyCoinVals();
   if(id==='numismatic') renderAllKeyDates();
   if(id==='trading'){tsInit();}
   if(id==='typeset'){tsRenderSet(tsCurrentSet);tsUpdateOverall();}
   if(id==='admin'){renderInventory();renderSlabs();renderAlerts();presetLoad();}
-  const centerNames={gold:'Gold Center',silver:'Silver Center',const:'Silver Coin Center',pennies:'Copper Center',numismatic:'Coin Center',fx:'Markets & Currency',trading:'Dealer Display',typeset:'Collector Center',admin:'Dealer Tools'};
+  const centerNames={gold:'Gold Center',goldback:'Goldback Center',silver:'Silver Center',const:'Silver Coin Center',pennies:'Copper Center',numismatic:'Coin Center',fx:'Markets & Currency',trading:'Dealer Display',typeset:'Collector Center',admin:'Dealer Tools'};
   if(centerNames[id]){
     document.title=centerNames[id]+' | Bullion Dealer Pro';
     history.replaceState(null,'','#'+id);
@@ -1774,10 +1778,10 @@ function showProUpgrade(tabId){
     sec.insertBefore(div, sec.firstChild);
   }
 }
-function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals','scrapgold','goldcoins'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));
+function goldSec(s,btn){['karat','grading','keydate','errors','coinvals','scrapgold','goldcoins'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));
   if(s==='scrapgold'){loadScrapPresets();calcScrapGold();}
-  if(s==='goldcoins'){renderGoldCoins();}if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();
-  const hashes={karat:'gold',goldback:'goldback',scrapgold:'gold-scrap',goldcoins:'gold-coins'};if(hashes[s])history.replaceState(null,'','#'+hashes[s]);}
+  if(s==='goldcoins'){renderGoldCoins();}if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();
+  const hashes={karat:'gold',scrapgold:'gold-scrap',goldcoins:'gold-coins'};if(hashes[s])history.replaceState(null,'','#'+hashes[s]);}
 function silverSec(s,btn){['calc','coins','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coins')renderSilverCoins();if(s==='platpal')renderPlatinumCoins();}
 function constSec(s,btn){['calc','rolls','ref','melt'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='ref')renderConstRef();if(s==='rolls')calcConstRolls();}
 function pennySec(s,btn){['calc'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
@@ -5122,11 +5126,8 @@ injectDailyFacts();
 // Let public Center links open the matching workspace directly.
 function openCenterFromHash(){
   const target=location.hash.slice(1).toLowerCase();
-  const tabs=['gold','silver','const','pennies','numismatic','fx','trading','typeset','admin'];
-  if(target==='goldback'){
-    showTab('gold');
-    setTimeout(()=>{const button=Array.from(document.querySelectorAll('#tab-gold .seg')).find(el=>el.textContent.includes('Goldbacks'));goldSec('goldback',button);history.replaceState(null,'','#goldback')},0);
-  }else if(target==='gold-scrap'||target==='gold-coins'){
+  const tabs=['gold','goldback','silver','const','pennies','numismatic','fx','trading','typeset','admin'];
+  if(target==='gold-scrap'||target==='gold-coins'){
     showTab('gold');
     const section=target==='gold-scrap'?'scrapgold':'goldcoins';
     const label=target==='gold-scrap'?'Scrap Buyer':'Gold Coins';
