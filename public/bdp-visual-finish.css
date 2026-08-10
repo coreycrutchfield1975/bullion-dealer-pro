@@ -401,3 +401,65 @@ footer,.footer,#footer{
 }
 @keyframes cyberPulse{0%,100%{text-shadow:none}50%{text-shadow:none}}
 @keyframes constellationDrift{0%,100%{transform:none}}
+
+/* ==== FULL NEW-LOOK: remaining blue/violet/purple survivors ====
+   (audit-found gaps — closes the last holes in the black/gold/silver
+   identity so no legacy alien-cyan/blue/violet flavor remains) ==== */
+
+/* Coin Center tab (numeric library): purple -> graphite/gold */
+.tnm{
+  background:linear-gradient(135deg,#1a1d22 0%,#0c0e11 100%)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  color:#c3c0b8!important;
+}
+.tnm.active,.tnm:hover{
+  background:linear-gradient(135deg,rgba(219,164,42,.12),#0c0e11 100%)!important;
+  border-color:rgba(219,164,42,.4)!important;
+  color:#efc766!important;
+}
+
+/* Hero / center banners: replace blue (hero-const/collect) and violet
+   (hero-fx/hero-numis) borders, glows, and titles with gold/silver. */
+.hero-const,.hero-fx,.hero-collect,.hero-numis{
+  background:#050607!important;
+  border:1px solid rgba(219,164,42,.34)!important;
+  box-shadow:0 0 26px rgba(0,0,0,.4),0 0 22px rgba(219,164,42,.08)!important;
+  color:#f0eee8!important;
+}
+.hero-const .sh-title,.hero-fx .sh-title,.hero-collect .sh-title,.hero-numis .sh-title{
+  color:#efc766!important;
+}
+.hero-const .sh-sub,.hero-fx .sh-sub,.hero-collect .sh-sub,.hero-numis .sh-sub{
+  color:rgba(215,212,201,.7)!important;
+}
+.hero-numis .pb-price,.hero-fx .pb-price{
+  color:#f0c968!important;
+}
+
+/* Generic hero titles: green -> warm gold (default safe) */
+.sh-title{color:#efc766!important}
+
+/* Dealer cards: hover cyan/green glow -> gold surface */
+.dlr-card:hover{
+  border-color:rgba(219,164,42,.5)!important;
+  box-shadow:0 4px 18px rgba(0,0,0,.34)!important;
+}
+
+/* Premium / PRO badge: cyan tint -> gold wash */
+.premium-badge{
+  background:rgba(219,164,42,.08)!important;
+  border:1px solid rgba(219,164,42,.22)!important;
+  color:#d6b25f!important;
+}
+
+/* Dealer Display progress bar: blue->violet gradient -> gold */
+#ts-progress-bar{
+  background:linear-gradient(90deg,#dba42a,#a97718)!important;
+  border-color:rgba(255,255,255,.12)!important;
+}
+
+/* Coin-listing price box: ensure graphite card instead of white glass */
+.price-box{
+  background:rgba(10,12,14,.88)!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+}
