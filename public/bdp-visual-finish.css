@@ -178,10 +178,7 @@ body::before{
 /* Core panel system */
 .card,
 .tool-card,
-.panel,
-.price-card,
-.calc-card,
-.info-card{
+.calc-card{
   background:linear-gradient(145deg,rgba(16,18,20,.985),rgba(8,10,11,.985))!important;
   border:1px solid rgba(255,255,255,.075)!important;
   border-radius:7px!important;
@@ -192,8 +189,7 @@ body::before{
   box-shadow:none!important;
 }
 .card:hover,
-.tool-card:hover,
-.panel:hover{
+.tool-card:hover{
   border-color:rgba(219,164,42,.22)!important;
   box-shadow:0 15px 34px rgba(0,0,0,.34)!important;
 }
@@ -310,7 +306,7 @@ input:focus,select:focus,textarea:focus{
 }
 
 /* Buttons */
-.btn-primary,.primary,.calc-btn,.gold-btn{
+.calc-btn{
   background:linear-gradient(125deg,#efca67,#a97718)!important;
   border:1px solid #e5bd58!important;
   color:#171106!important;
@@ -318,7 +314,7 @@ input:focus,select:focus,textarea:focus{
   box-shadow:0 7px 18px rgba(150,95,5,.12)!important;
   text-shadow:none!important;
 }
-.btn-primary:hover,.primary:hover,.calc-btn:hover,.gold-btn:hover{
+.calc-btn:hover{
   filter:brightness(1.07)!important;
 }
 
@@ -344,8 +340,8 @@ input:focus,select:focus,textarea:focus{
 }
 
 /* Functional signal colors remain clear */
-.up,.positive,.profit{color:#59c77b!important}
-.dn,.down,.negative,.loss{color:#df6c64!important}
+.up{color:#59c77b!important}
+.dn{color:#df6c64!important}
 
 /* Scrollbars */
 ::-webkit-scrollbar{width:7px;height:7px}
@@ -355,7 +351,7 @@ input:focus,select:focus,textarea:focus{
 
 /* Mobile polish */
 @media(max-width:767px){
-  .card,.tool-card,.panel{border-radius:6px!important}
+  .card,.tool-card{border-radius:6px!important}
   .tab{padding-inline:9px!important}
   .center-titlebar{border-radius:6px!important}
 }
@@ -373,17 +369,17 @@ input:focus,select:focus,textarea:focus{
 /* Avoid emoji / candy-color visual dominance in legacy tool labels. */
 .card-title,.seg,.tab{font-variant-emoji:text}
 
-/* Make workspaces feel like a financial terminal, not a game UI. */
-.result,.result-box,.value-box,.stat-box,.metric-box{
+/* Calculator result cards — financial-terminal surface */
+.res-card{
   background:#090b0c!important;
-  border-color:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(255,255,255,.07)!important;
   box-shadow:none!important;
   border-radius:5px!important;
 }
-.result strong,.result-box strong,.value-box strong,.metric-box strong{
-  color:#e9c562!important;
-  text-shadow:none!important;
-}
+.res-value{color:#e9c562!important;text-shadow:none!important}
+.res-label{color:#8b8f89!important}
+.rv-gold{color:#f0c968!important}
+.rv-muted{color:#8b8f89!important}
 
 /* Premium section separators */
 .section>.card + .card,
