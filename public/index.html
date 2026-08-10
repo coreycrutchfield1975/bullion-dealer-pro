@@ -1,97 +1,289 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#080a0d">
-  <title>Bullion Dealer Pro | Prices. Tools. Knowledge. Profit.</title>
-  <meta name="description" content="Live precious-metal prices, accurate melt calculators, inventory tools and professional dealer intelligence in one powerful platform.">
-  <link rel="canonical" href="https://bulliondealerpro.com/">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/site.css">
+<script type="text/javascript">(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A7316380-ffe8-483f-8f2d-05859dce1b8d1.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon.ico">
+<link rel="manifest" href="/manifest.json">
+<title>Bullion Dealer Pro — Live Metals, Calculators & Dealer Tools</title>
+<meta name="description" content="Live gold and silver prices, bullion calculators, Goldback tools, coin melt values, dealer pricing and precious-metals knowledge in one professional workspace.">
+<link rel="canonical" href="https://bulliondealerpro.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bulliondealerpro.com/">
+<meta property="og:title" content="Bullion Dealer Pro | Prices. Tools. Knowledge.">
+<meta property="og:description" content="Live precious-metals prices and professional bullion tools for buyers, sellers, dealers and collectors.">
+<meta property="og:image" content="https://bulliondealerpro.com/favicon-512.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DR4CZFKX8H"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());
+gtag('config','G-DR4CZFKX8H');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js?client=ca-pub-4393926982735047" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#050505;--panel:#0d0d0e;--panel2:#111214;--line:#27282a;
+ --gold:#d6a63a;--gold2:#f0c766;--silver:#c7cbd0;--white:#f5f2eb;
+ --muted:#a5a39f;--green:#58c781;--red:#e06b70;--blue:#68a9e8;
+ --radius:18px;--shadow:0 24px 70px rgba(0,0,0,.45)
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+ radial-gradient(circle at 70% 16%,rgba(214,166,58,.11),transparent 28rem),
+ linear-gradient(180deg,#040404,#090909 46%,#050505);
+ color:var(--white);font-family:Inter,system-ui,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:
+ linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+ background-size:44px 44px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
+a{color:inherit}
+.topline{height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--silver),var(--gold),transparent)}
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:28px;padding:15px clamp(18px,4vw,64px);background:rgba(5,5,5,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.07)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;margin-right:auto}
+.brand-mark{width:40px;height:40px;border:1px solid rgba(214,166,58,.55);border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#17130b,#090909);box-shadow:inset 0 0 0 4px #080808}
+.brand-mark b{font-family:Rajdhani,sans-serif;letter-spacing:-2px;color:var(--gold2);font-size:16px}
+.brand-copy strong{display:block;font-family:Rajdhani,sans-serif;letter-spacing:1.8px;font-size:19px}
+.brand-copy small{display:block;color:#8d8d8d;font-size:9px;letter-spacing:2.4px;margin-top:1px}
+.navlinks{display:flex;align-items:center;gap:24px}
+.navlinks a{text-decoration:none;color:#b7b5af;font-size:12px;font-weight:600;letter-spacing:.08em}
+.navlinks a:hover{color:var(--gold2)}
+.navcta{border:1px solid rgba(214,166,58,.55)!important;color:var(--gold2)!important;border-radius:999px;padding:10px 16px}
+.menu{display:none;background:none;border:0;color:white;font-size:24px}
+.shell{width:min(1240px,calc(100% - 36px));margin:auto}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:56px;align-items:center;min-height:720px;padding:76px 0 54px}
+.kicker{display:inline-flex;align-items:center;gap:9px;color:var(--gold2);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(214,166,58,.23);background:rgba(214,166,58,.05);padding:8px 12px;border-radius:999px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+.hero h1{font-family:Rajdhani,sans-serif;font-size:clamp(48px,6.6vw,86px);line-height:.96;letter-spacing:-.04em;margin:24px 0 20px;max-width:760px}
+.hero h1 em{font-style:normal;color:var(--gold2)}
+.hero p{font-size:17px;line-height:1.7;color:#aaa7a0;max-width:670px;margin:0}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 34px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:700;font-size:13px;padding:14px 20px;border-radius:10px;border:1px solid #333;transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(135deg,#f0c766,#b9831e);color:#181106;border:0;box-shadow:0 12px 34px rgba(214,166,58,.18)}
+.btn-secondary{background:#101011;color:#ece8df}
+.price-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:650px}
+.price{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012));border-radius:14px;padding:15px 17px}
+.price-head{display:flex;align-items:center;justify-content:space-between;color:#92918d;font-size:10px;text-transform:uppercase;letter-spacing:.14em}
+.live{color:var(--green)}
+.price-main{display:flex;align-items:end;gap:12px;margin-top:8px}
+.price-main strong{font-family:Rajdhani,sans-serif;font-size:30px;line-height:1}
+.change{font-size:12px;font-weight:700;padding-bottom:3px}.up{color:var(--green)}.down{color:var(--red)}
+.price small{display:block;color:#6e6d6a;margin-top:7px;font-size:10px}
+.hero-visual{position:relative;min-height:560px;display:grid;place-items:center}
+.hero-visual:before{content:"";position:absolute;width:84%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(214,166,58,.2);box-shadow:0 0 0 34px rgba(214,166,58,.02),0 0 90px rgba(214,166,58,.09)}
+.hero-visual:after{content:"MARKET INTELLIGENCE";position:absolute;right:0;bottom:22%;font-size:9px;letter-spacing:.28em;color:#6f6b60;writing-mode:vertical-rl}
+.emblem{position:relative;width:min(510px,94%);filter:drop-shadow(0 28px 50px rgba(0,0,0,.7));border-radius:50%}
+.visual-chip{position:absolute;background:rgba(10,10,10,.86);border:1px solid #2d2b27;border-radius:12px;padding:10px 12px;font-size:10px;color:#aaa;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.visual-chip b{color:var(--gold2);font-family:Rajdhani;font-size:15px;display:block}
+.chip-a{left:1%;top:18%}.chip-b{right:1%;bottom:15%}
+.question{padding:22px 0 74px}
+.section-eyebrow{color:var(--gold2);text-align:center;text-transform:uppercase;letter-spacing:.2em;font-size:10px;font-weight:700}
+.question h2,.section h2{font-family:Rajdhani,sans-serif;text-align:center;font-size:clamp(34px,4.3vw,55px);letter-spacing:-.025em;margin:12px 0}
+.question .lead,.section .lead{max-width:720px;margin:0 auto;color:#8f8e8a;text-align:center;line-height:1.65}
+.intent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.intent{position:relative;text-decoration:none;background:linear-gradient(145deg,#0e0e0f,#090909);border:1px solid #242426;border-radius:16px;padding:22px;min-height:175px;overflow:hidden;transition:.22s}
+.intent:before{content:"";position:absolute;left:0;top:0;height:2px;width:42%;background:linear-gradient(90deg,var(--gold),transparent);opacity:.65}
+.intent:hover{transform:translateY(-4px);border-color:#4a4029;background:#12110e}
+.intent .num{font-family:Rajdhani;color:#5b564b;font-size:12px}
+.intent h3{font-family:Rajdhani;font-size:23px;margin:20px 0 7px}
+.intent p{color:#85837f;font-size:12px;line-height:1.6;margin:0}
+.intent .go{position:absolute;right:18px;bottom:16px;color:var(--gold2);font-size:18px}
+.section{padding:72px 0}
+.section-dark{border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.012)}
+.command-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:32px}
+.command-card{background:#0c0c0d;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.command-card h3{font-family:Rajdhani;font-size:24px;margin:0 0 4px}.command-card>p{color:#85837f;font-size:12px;margin:0 0 22px}
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tool{border:1px solid #242426;border-radius:12px;padding:16px;background:#0a0a0b;text-decoration:none}
+.tool strong{display:block;font-family:Rajdhani;font-size:18px}.tool span{font-size:11px;color:#74736f}.tool:hover{border-color:#4c4027}
+.market-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #202022}
+.market-row:last-child{border:0}
+.metal-icon{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#151515;border:1px solid #333;font-family:Rajdhani;font-weight:700;color:var(--gold2)}
+.market-row strong{font-family:Rajdhani;font-size:18px}.market-row small{display:block;color:#777;font-size:9px}.market-price{text-align:right;font-family:Rajdhani;font-weight:700}
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px}
+.trust div{border:1px solid #242426;background:#0b0b0c;border-radius:12px;padding:17px;text-align:center}
+.trust b{display:block;font-family:Rajdhani;color:var(--gold2);font-size:20px}.trust span{font-size:10px;color:#787672}
+.cta-band{margin:70px auto;border:1px solid rgba(214,166,58,.28);background:linear-gradient(120deg,rgba(214,166,58,.08),rgba(255,255,255,.02));border-radius:22px;padding:36px;display:flex;justify-content:space-between;align-items:center;gap:30px}
+.cta-band h3{font-family:Rajdhani;font-size:32px;margin:0}.cta-band p{color:#8d8a83;margin:4px 0 0;font-size:13px}
+footer{border-top:1px solid #202022;padding:32px 0 48px;color:#6f6d68;font-size:11px}
+.footerrow{display:flex;align-items:center;justify-content:space-between;gap:20px}.footerlinks{display:flex;gap:16px}.footerlinks a{text-decoration:none;color:#888}
+.ticker{position:fixed;bottom:0;left:0;right:0;z-index:40;height:32px;display:flex;align-items:center;background:rgba(5,5,5,.94);border-top:1px solid rgba(214,166,58,.22);backdrop-filter:blur(10px);font-size:10px;overflow:hidden}
+.ticker-label{color:var(--gold2);font-weight:700;letter-spacing:.15em;padding:0 14px;border-right:1px solid #29271f;white-space:nowrap}
+.ticker-track{display:flex;gap:32px;white-space:nowrap;padding-left:24px;color:#85837f;animation:slide 30s linear infinite}.ticker-track b{color:#d6d2c8}
+@keyframes slide{to{transform:translateX(-45%)}}
+@media(max-width:900px){
+ .hero{grid-template-columns:1fr;min-height:auto;padding-top:58px}.hero-visual{min-height:430px;order:-1}
+ .emblem{width:min(380px,82vw)}.intent-grid{grid-template-columns:1fr 1fr}.command-grid{grid-template-columns:1fr}.trust{grid-template-columns:1fr 1fr}
+ .navlinks{display:none;position:absolute;top:70px;left:16px;right:16px;background:#0b0b0b;border:1px solid #292929;border-radius:14px;padding:18px;flex-direction:column;align-items:flex-start}
+ .navlinks.open{display:flex}.menu{display:block}.cta-band{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:560px){.intent-grid,.price-strip,.tool-grid,.trust{grid-template-columns:1fr}.hero-visual{min-height:350px}.visual-chip{display:none}.shell{width:min(100% - 24px,1240px)}}
+</style>
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-  <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Bullion Dealer Pro home">
-      <span class="brand-mark" aria-hidden="true"><b>B</b><i>D</i><b>P</b><em>↗</em></span>
-      <span class="brand-copy"><strong>BULLION DEALER PRO</strong><small>PRICES · TOOLS · KNOWLEDGE · PROFIT</small></span>
-    </a>
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><span class="sr-only">Menu</span></button>
-    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
-      <a href="#markets">Markets</a><a href="#centers">Centers</a><a href="#platform">Platform</a><a href="/pricing">Pricing</a>
-      <a class="login-link" href="/login">Log in</a><a class="gold-button small" href="/register">Start free</a>
-    </nav>
-  </header>
+<div class="topline"></div>
+<nav class="nav">
+ <a class="brand" href="/">
+   <span class="brand-mark"><b>BDP</b></span>
+   <span class="brand-copy"><strong>BULLION DEALER PRO</strong><small>PRECIOUS METALS INTELLIGENCE</small></span>
+ </a>
+ <button class="menu" id="menu" aria-label="Open navigation">☰</button>
+ <div class="navlinks" id="navlinks">
+   <a href="/">HOME</a>
+   <a href="/app">TOOLS</a>
+   <a href="#explore">EXPLORE</a>
+   <a href="/pricing">PRICING</a>
+   <a href="/login">LOG IN</a>
+   <a class="navcta" href="/register">GET STARTED</a>
+ </div>
+</nav>
 
-  <main>
-    <section class="hero">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="hero-content">
-        <p class="eyebrow"><span></span> Built for bullion professionals</p>
-        <h1><span class="white-line">Know the <i>market.</i></span><br><span>Make the deal.</span></h1>
-        <p class="hero-lead">Live precious-metal prices, instant melt values and the dealer tools you need to buy smarter, sell confidently and protect every margin.</p>
-        <div class="hero-actions"><a class="gold-button" href="/register">Build your edge <span>→</span></a><a class="text-button" href="#tools">Explore the platform <span>↓</span></a></div>
-        <div class="trust-row"><span><b>✓</b> No card required</span><span><b>✓</b> Live market data</span><span><b>✓</b> Works on any device</span></div>
-      </div>
-      <div class="hero-emblem" aria-label="Bullion Dealer Pro">
-        <img class="hero-logo-art" src="/bdp-primary-logo.png" alt="BDP mountain emblem in metallic gold and silver">
-      </div>
-    </section>
+<main>
+<section class="shell hero">
+ <div>
+   <span class="kicker"><span class="dot"></span> LIVE METALS · DEALER TOOLS · KNOWLEDGE</span>
+   <h1>Know the market.<br><em>Price the deal.</em><br>Trade smarter.</h1>
+   <p>Bullion Dealer Pro puts live metals, practical calculators, coin values, Goldbacks and dealer pricing in one focused workspace — built for people who actually buy, sell and collect precious metals.</p>
+   <div class="hero-actions">
+     <a class="btn btn-primary" href="/app">OPEN BDP TOOLS →</a>
+     <a class="btn btn-secondary" href="#explore">EXPLORE THE PLATFORM</a>
+   </div>
+   <div class="price-strip">
+     <div class="price">
+       <div class="price-head"><span>GOLD · XAU</span><span class="live">● LIVE</span></div>
+       <div class="price-main"><strong id="goldPrice">—</strong><span id="goldChange" class="change">loading…</span></div>
+       <small>USD · per troy ounce</small>
+     </div>
+     <div class="price">
+       <div class="price-head"><span>SILVER · XAG</span><span class="live">● LIVE</span></div>
+       <div class="price-main"><strong id="silverPrice">—</strong><span id="silverChange" class="change">loading…</span></div>
+       <small>USD · per troy ounce</small>
+     </div>
+   </div>
+ </div>
+ <div class="hero-visual">
+   <img class="emblem" src="/bdp-emblem.png" alt="BDP Bullion Dealer Pro emblem">
+   <div class="visual-chip chip-a"><b>LIVE SPOT</b>market-linked pricing</div>
+   <div class="visual-chip chip-b"><b>DEALER EDGE</b>price with confidence</div>
+ </div>
+</section>
 
-    <section class="market-strip" id="markets" aria-label="Live market prices">
-      <div class="market-heading"><span class="pulse"></span><div><small>MARKET STATUS</small><strong>LIVE PRICES</strong></div><time id="market-time">Updating…</time></div>
-      <div class="market-grid">
-        <article class="market-card gold"><div><span>Au</span><p>GOLD <small>USD / OZ</small></p></div><strong id="price-XAU">—</strong><em id="change-XAU">Loading</em></article>
-        <article class="market-card silver"><div><span>Ag</span><p>SILVER <small>USD / OZ</small></p></div><strong id="price-XAG">—</strong><em id="change-XAG">Loading</em></article>
-        <article class="market-card platinum"><div><span>Pt</span><p>PLATINUM <small>USD / OZ</small></p></div><strong id="price-XPT">—</strong><em id="change-XPT">Loading</em></article>
-        <article class="market-card palladium"><div><span>Pd</span><p>PALLADIUM <small>USD / OZ</small></p></div><strong id="price-XPD">—</strong><em id="change-XPD">Loading</em></article>
-      </div>
-      <p class="market-note">Indicative delayed futures data. Prices update automatically.</p>
-    </section>
+<section class="shell question" id="explore">
+ <div class="section-eyebrow">START WITH WHAT YOU NEED</div>
+ <h2>What would you like to know more about today?</h2>
+ <p class="lead">Jump straight into the part of the precious-metals market you care about. BDP keeps the tools practical and the information easy to find.</p>
+ <div class="intent-grid">
+   <a class="intent" href="/app#gold"><span class="num">01</span><h3>Gold</h3><p>Spot, weights, karats, melt values and dealer pricing.</p><span class="go">↗</span></a>
+   <a class="intent" href="/app#silver"><span class="num">02</span><h3>Silver</h3><p>Constitutional silver, rolls, melt and premium calculations.</p><span class="go">↗</span></a>
+   <a class="intent" href="/app#goldback"><span class="num">03</span><h3>Goldbacks</h3><p>Values, denominations and useful dealer reference tools.</p><span class="go">↗</span></a>
+   <a class="intent" href="/app#gold"><span class="num">04</span><h3>What's it worth?</h3><p>Turn weight, purity and spot into a fast working value.</p><span class="go">↗</span></a>
+   <a class="intent" href="/app#admin"><span class="num">05</span><h3>Dealer Tools</h3><p>Buy/sell targets, margins, premiums and decision support.</p><span class="go">↗</span></a>
+   <a class="intent" href="/app#fx"><span class="num">06</span><h3>Market Data</h3><p>Metals pricing, ratios and the information behind the move.</p><span class="go">↗</span></a>
+ </div>
+</section>
 
-    <section class="section centers-section" id="centers">
-      <div class="section-intro centered"><p class="eyebrow"><span></span> Choose your workspace</p><h2>Every market has a center.<br><span>Every number has a purpose.</span></h2><p>Move directly into a focused workspace for the metal, coin or task in front of you.</p></div>
-      <div class="center-grid">
-        <a class="center-card center-gold" href="/app#gold"><span class="center-symbol">Au</span><small>THE FLAGSHIP WORKSPACE</small><h3>Gold Center</h3><p>Spot prices, karat and scrap calculations, Goldbacks, gold coins, grading and key-date references.</p><b>Enter Gold Center <i>→</i></b></a>
-        <a class="center-card center-silver" href="/app#silver"><span class="center-symbol">Ag</span><small>BULLION &amp; WHITE METALS</small><h3>Silver Center</h3><p>Silver melt values, bullion tools, coin libraries, platinum and palladium references.</p><b>Enter Silver Center <i>→</i></b></a>
-        <a class="center-card" href="/app#numismatic"><span class="center-symbol">¢</span><small>COINS &amp; COLLECTING</small><h3>Coin &amp; Numismatic Center</h3><p>Key dates, grading, errors, specifications, collection progress and coin values.</p><b>Explore coins <i>→</i></b></a>
-        <a class="center-card center-green" href="/app#goldback"><span class="center-symbol">GB</span><small>LOCAL CURRENCY TOOLS</small><h3>Goldback Center</h3><p>Current exchange rates, denomination values and quick dealer calculations.</p><b>Open Goldbacks <i>→</i></b></a>
-        <a class="center-card" href="#markets"><span class="center-symbol">↗</span><small>THE BIGGER PICTURE</small><h3>Markets</h3><p>Live precious-metal pricing, movements and the data behind every transaction.</p><b>View markets <i>→</i></b></a>
-        <a class="center-card" href="/app#admin"><span class="center-symbol">%</span><small>RUN THE DEAL</small><h3>Dealer Tools</h3><p>Spreads, inventory, profit tracking, calculators and practical workflow tools.</p><b>Open dealer tools <i>→</i></b></a>
-      </div>
-    </section>
+<section class="section section-dark">
+ <div class="shell">
+   <div class="section-eyebrow">THE BDP COMMAND CENTER</div>
+   <h2>Useful first. Premium by design.</h2>
+   <p class="lead">Live pricing stays visible while the deeper tools are organized around the decisions dealers and collectors make every day.</p>
+   <div class="command-grid">
+     <div class="command-card">
+       <h3>Dealer tools without the clutter</h3>
+       <p>Fast paths into the calculations you use most.</p>
+       <div class="tool-grid">
+         <a class="tool" href="/app"><strong>Deal Calculator</strong><span>Buy / sell targets & margins</span></a>
+         <a class="tool" href="/app"><strong>Coin Melt Values</strong><span>Per coin and per roll</span></a>
+         <a class="tool" href="/app"><strong>Karat Gold</strong><span>Gram & purity calculations</span></a>
+         <a class="tool" href="/app"><strong>Inventory</strong><span>Cost basis & market value</span></a>
+         <a class="tool" href="/app"><strong>Key Dates</strong><span>Fast numismatic reference</span></a>
+         <a class="tool" href="/app"><strong>Dealer Premiums</strong><span>Compare market offers</span></a>
+       </div>
+     </div>
+     <div class="command-card">
+       <h3>Market pulse</h3>
+       <p>A quick read before you price a deal.</p>
+       <div class="market-row"><span class="metal-icon">Au</span><div><strong>Gold</strong><small>XAU · TROY OUNCE</small></div><div class="market-price" id="goldMini">—</div></div>
+       <div class="market-row"><span class="metal-icon">Ag</span><div><strong>Silver</strong><small>XAG · TROY OUNCE</small></div><div class="market-price" id="silverMini">—</div></div>
+       <div class="market-row"><span class="metal-icon">G:S</span><div><strong>Gold / Silver</strong><small>LIVE RATIO</small></div><div class="market-price" id="ratioMini">—</div></div>
+       <div class="market-row"><span class="metal-icon">Cu</span><div><strong>Copper</strong><small>MARKET REFERENCE</small></div><div class="market-price" id="copperMini">—</div></div>
+     </div>
+   </div>
+   <div class="trust">
+     <div><b>LIVE</b><span>market-linked metals</span></div>
+     <div><b>FAST</b><span>dealer calculations</span></div>
+     <div><b>FOCUSED</b><span>no spreadsheet maze</span></div>
+     <div><b>BDP</b><span>prices · tools · knowledge</span></div>
+   </div>
+ </div>
+</section>
 
-    <section class="platform-section" id="platform">
-      <div class="platform-copy"><p class="eyebrow"><span></span> One operating picture</p><h2>Built to answer the next question.</h2><p>Check the market, price the item, verify the coin and protect the margin without bouncing between disconnected tools.</p><ul><li><b>Live context</b><span>Metal prices stay visible while you work.</span></li><li><b>Fast calculations</b><span>Move from weight and purity to a usable offer.</span></li><li><b>Dealer intelligence</b><span>Keep specifications and references close to the deal.</span></li></ul><a class="gold-button" href="/register">Start using BDP <span>→</span></a></div>
-      <div class="dashboard-preview" aria-label="Bullion Dealer Pro dashboard preview">
-        <div class="preview-bar"><span></span><span></span><span></span><b>GOLD CENTER</b><em>LIVE</em></div>
-        <div class="preview-prices"><div><small>GOLD / OZ</small><strong id="preview-gold">—</strong><i>Au</i></div><div><small>SILVER / OZ</small><strong id="preview-silver">—</strong><i>Ag</i></div><div><small>PLATINUM / OZ</small><strong>Market</strong><i>Pt</i></div></div>
-        <div class="preview-body"><div class="preview-chart"><small>GOLD MARKET</small><div class="chart-line"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="chart-labels"><span>OPEN</span><span>NOW</span></div></div><div class="preview-calc"><small>KARAT CALCULATOR</small><label>Weight <span>18.50 g</span></label><label>Purity <span>14K</span></label><hr><p>ESTIMATED MELT</p><strong>Live value</strong></div></div>
-      </div>
-    </section>
+<section class="shell">
+ <div class="cta-band">
+   <div><h3>Ready to price your next deal?</h3><p>Open the full Bullion Dealer Pro workspace and get to the numbers.</p></div>
+   <div class="hero-actions" style="margin:0"><a class="btn btn-primary" href="/app">OPEN THE APP →</a><a class="btn btn-secondary" href="/register">CREATE ACCOUNT</a></div>
+ </div>
+</section>
+</main>
 
-    <section class="section tools-section" id="tools">
-      <div class="section-intro"><p class="eyebrow"><span></span> One platform. Every advantage.</p><h2>Dealer-grade tools.<br><span>Without the clutter.</span></h2><p>From the first quote to the final sale, BDP keeps the numbers you rely on accurate, fast and close at hand.</p></div>
-      <div class="tool-grid">
-        <article class="tool-card featured"><div class="tool-number">01</div><div class="tool-icon chart-icon"><i></i><i></i><i></i><i></i></div><div><small>FLAGSHIP DESTINATION</small><h3>Gold Center</h3><p>Live gold prices, karat and melt calculators, Goldback rates, coin values, reference tools and market intelligence in one focused workspace.</p><a href="/app">Open Gold Center →</a></div></article>
-        <article class="tool-card"><div class="tool-number">02</div><div class="tool-icon calc-icon">×<span>+</span></div><div><small>FAST & ACCURATE</small><h3>Melt Calculator</h3><p>Calculate intrinsic values across coins, rounds, bars and scrap in seconds.</p></div></article>
-        <article class="tool-card"><div class="tool-number">03</div><div class="tool-icon stack-icon"><i></i><i></i><i></i></div><div><small>KNOW YOUR POSITION</small><h3>Inventory Tracker</h3><p>Track cost basis, metal weight, premiums and potential profit in one place.</p></div></article>
-        <article class="tool-card"><div class="tool-number">04</div><div class="tool-icon coin-icon">★</div><div><small>BUILT-IN REFERENCE</small><h3>Coin Library</h3><p>Quickly reference specifications, key dates, compositions and melt values.</p></div></article>
-        <article class="tool-card"><div class="tool-number">05</div><div class="tool-icon spread-icon">↔</div><div><small>PROTECT THE MARGIN</small><h3>Buy / Sell Spreads</h3><p>Model premiums and dealer spreads before you commit to a transaction.</p></div></article>
-      </div>
-    </section>
+<footer>
+ <div class="shell footerrow">
+   <span>© <span id="year"></span> Bullion Dealer Pro. Market data is informational and not financial advice.</span>
+   <span class="footerlinks"><a href="/pricing">Pricing</a><a href="/login">Login</a><a href="/app">Tools</a></span>
+ </div>
+</footer>
 
-    <section class="why-section" id="why"><div class="why-copy"><p class="eyebrow"><span></span> Built around the deal</p><h2>Less guessing.<br><span>More knowing.</span></h2><p>Bullion Dealer Pro turns scattered numbers and slow calculations into a clear operating picture—so you can spend less time working the math and more time serving customers.</p><div class="stats"><div><strong>4</strong><span>LIVE METALS</span></div><div><strong>24/7</strong><span>ACCESS</span></div><div><strong>1</strong><span>CONNECTED TOOLKIT</span></div></div></div><div class="quote-card"><span>“</span><blockquote>Every ounce has a number.<br>Every deal has a margin.<br><b>Know both.</b></blockquote><small>THE BULLION DEALER PRO STANDARD</small></div></section>
+<div class="ticker" aria-label="Live metals ticker">
+ <span class="ticker-label">BDP MARKET</span>
+ <div class="ticker-track" id="tickerTrack">
+   <span>GOLD <b id="tickerGold">—</b></span><span>SILVER <b id="tickerSilver">—</b></span><span>G:S <b id="tickerRatio">—</b></span><span>COPPER <b id="tickerCopper">—</b></span>
+   <span>GOLD <b>LIVE</b></span><span>SILVER <b>LIVE</b></span><span>DEALER TOOLS <b>READY</b></span>
+ </div>
+</div>
 
-    <section class="cta-section"><p class="eyebrow"><span></span> Your next advantage</p><h2>Trade with more confidence.</h2><p>Bring your pricing, calculations and inventory into one professional workspace.</p><a class="gold-button" href="/register">Start using BDP <span>→</span></a></section>
-  </main>
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+const menu=document.getElementById('menu'),navlinks=document.getElementById('navlinks');
+menu.addEventListener('click',()=>navlinks.classList.toggle('open'));
+navlinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navlinks.classList.remove('open')));
 
-  <footer><a class="brand footer-brand" href="#top"><span class="brand-mark"><b>B</b><i>D</i><b>P</b></span><span class="brand-copy"><strong>BULLION DEALER PRO</strong><small>PRICES · TOOLS · KNOWLEDGE · PROFIT</small></span></a><div class="footer-links"><a href="/pricing">Pricing</a><a href="/privacy">Privacy</a><a href="/login">Login</a></div><p>© <span id="year"></span> Bullion Dealer Pro. All rights reserved.</p></footer>
-  <script src="/site.js"></script>
+function money(n,d=2){return Number.isFinite(n)?'$'+n.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}):'—'}
+function changeText(data,el){
+ const ch=Number(data?.ch||0),prev=Number(data?.prev_close_price||0);
+ const pct=prev?ch/prev*100:0;
+ el.textContent=(ch>=0?'+':'')+ch.toFixed(2)+' ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';
+ el.className='change '+(ch>=0?'up':'down');
+}
+async function metal(sym){
+ const r=await fetch('/api/metals/'+sym,{headers:{Accept:'application/json'}});
+ if(!r.ok)throw new Error(sym+' unavailable');
+ return r.json();
+}
+async function loadMarkets(){
+ try{
+   const [g,s,c]=await Promise.allSettled([metal('XAU'),metal('XAG'),metal('XCU')]);
+   if(g.status==='fulfilled'){
+     const p=Number(g.value.price); goldPrice.textContent=money(p); goldMini.textContent=money(p); tickerGold.textContent=money(p); changeText(g.value,goldChange);
+   } else {goldChange.textContent='temporarily unavailable'}
+   if(s.status==='fulfilled'){
+     const p=Number(s.value.price); silverPrice.textContent=money(p); silverMini.textContent=money(p); tickerSilver.textContent=money(p); changeText(s.value,silverChange);
+   } else {silverChange.textContent='temporarily unavailable'}
+   if(g.status==='fulfilled'&&s.status==='fulfilled'){
+     const ratio=Number(g.value.price)/Number(s.value.price); ratioMini.textContent=ratio.toFixed(2); tickerRatio.textContent=ratio.toFixed(2);
+   }
+   if(c.status==='fulfilled'){
+     const p=Number(c.value.price); copperMini.textContent=money(p,4); tickerCopper.textContent=money(p,4);
+   }
+ }catch(e){console.warn('Market data load:',e)}
+}
+loadMarkets();
+setInterval(loadMarkets,60000);
+</script>
 </body>
 </html>
