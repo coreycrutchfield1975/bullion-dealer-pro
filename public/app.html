@@ -498,6 +498,14 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- ═══════════════════ GOLD TAB ═══════════════════ -->
 <div id="tab-gold" class="section active">
+  <div class="center-titlebar center-titlebar-gold">
+    <div class="ct-kicker"><span>Au</span> FLAGSHIP WORKSPACE</div>
+    <div class="ct-main">
+      <div><h1>Gold Center</h1><p>Live pricing, karat and melt calculations, Goldbacks, bullion coins and dealer reference tools.</p></div>
+      <div class="ct-live"><i></i><span>MARKET DATA</span><b>LIVE</b></div>
+    </div>
+    <div class="ct-fact"><span>GOLD INTELLIGENCE</span><p id="gold-daily-fact"></p></div>
+  </div>
   <!-- SPOTLIGHT: Gold + Silver prominent cards -->
   <div class="spotlight-row">
     <div class="spot-card spot-card-gold">
@@ -525,6 +533,22 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
       </div>
     </div>
   </div>
+  <div class="gold-unit-strip" aria-label="Live gold price by weight">
+    <div class="gus-heading"><span>Au</span><div><b>24K GOLD</b><small>LIVE UNIT VALUES</small></div></div>
+    <div class="gus-value"><small>TROY OUNCE</small><strong id="gold-unit-ounce">—</strong><span>31.1035 g</span></div>
+    <div class="gus-value"><small>GRAM</small><strong id="gold-unit-gram">—</strong><span>24K pure</span></div>
+    <div class="gus-value"><small>PENNYWEIGHT</small><strong id="gold-unit-dwt">—</strong><span>1.55517 g</span></div>
+    <div class="gus-value"><small>GRAIN</small><strong id="gold-unit-grain">—</strong><span>1/480 oz</span></div>
+    <div class="gus-value"><small>KILOGRAM</small><strong id="gold-unit-kilo">—</strong><span>32.1507 oz</span></div>
+  </div>
+  <div class="gold-benchmark-strip" aria-label="Gold dealer benchmarks per ounce">
+    <div class="gbs-heading"><b>DEALER BENCHMARKS</b><span>PER TROY OUNCE</span></div>
+    <div class="gbs-value buy"><small>BUY 10% UNDER</small><strong id="gold-buy-10">—</strong></div>
+    <div class="gbs-value buy"><small>BUY 5% UNDER</small><strong id="gold-buy-5">—</strong></div>
+    <div class="gbs-value spot"><small>LIVE SPOT</small><strong id="gold-benchmark-spot">—</strong></div>
+    <div class="gbs-value sell"><small>SELL 5% OVER</small><strong id="gold-sell-5">—</strong></div>
+    <div class="gbs-value sell"><small>SELL 10% OVER</small><strong id="gold-sell-10">—</strong></div>
+  </div>
   <div style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:9px 16px;margin:10px 0 4px;font-size:13px">
     <span style="color:var(--muted)">Gold:Silver Ratio</span>
     <span id="gs-ratio" style="font-weight:700;font-size:16px;color:var(--gold)">—</span>
@@ -534,17 +558,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
     <button id="copy-prices-btn" onclick="copySpotPrices()" style="background:var(--gold);color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:5px">📋 Copy Prices</button>
     <span style="font-size:11px;color:var(--muted);line-height:1.4">Copies current Gold, Silver &amp; ratio to your clipboard — handy for texting or messaging customers a quick quote.</span>
   </div>
-  <div class="sec-hero hero-gold" style="margin-top:12px">
-    <div><div class="sh-title">Gold Center</div><div class="sh-sub">Live gold prices · Karat and melt calculators · Goldbacks · Coins and reference tools</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
-        <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="gold-daily-fact"></span>
-      </div></div>
-  </div>
-  <div class="sub-nav">
-    <button class="seg active" onclick="goldSec('karat',this)">⚖️ Karat Calc</button>
-    <button class="seg" onclick="goldSec('goldback',this)">💛 Goldbacks</button>
-    <button class="seg" onclick="goldSec('scrapgold',this)">🔥 Scrap Buyer</button>
-    <button class="seg" onclick="goldSec('goldcoins',this)">🪙 Gold Coins</button>
+  <div class="sub-nav center-actions" aria-label="Gold Center tools">
+    <button class="seg active" onclick="goldSec('karat',this)"><span>01</span><b>Karat Calculator</b><small>Purity · Melt · Offer</small></button>
+    <button class="seg" onclick="goldSec('goldback',this)"><span>02</span><b>Goldbacks</b><small>Rates · Denominations</small></button>
+    <button class="seg" onclick="goldSec('scrapgold',this)"><span>03</span><b>Scrap Buyer</b><small>Lots · Payouts · Margin</small></button>
+    <button class="seg" onclick="goldSec('goldcoins',this)"><span>04</span><b>Gold Coins</b><small>AGW · Melt · Buy Offer</small></button>
   </div>
 
   <div id="gs-karat">
@@ -678,17 +696,15 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- ═══════════════════ SILVER BULLION TAB ═══════════════════ -->
 <div id="tab-silver" class="section">
-  <div class="sec-hero hero-silver">
-    <div><div class="sh-title">Silver Center</div><div class="sh-sub">Silver bullion · Platinum · Palladium · Coin library · Live spot prices</div><div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
-        <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="silver-daily-fact"></span>
-      </div></div>
-    <div class="price-box"><div class="pb-label">Silver Spot</div><div class="pb-price" id="silver-hero-price">—</div><div class="pb-chg" id="silver-hero-chg">Loading…</div></div>
+  <div class="center-titlebar center-titlebar-silver">
+    <div class="ct-kicker"><span>Ag</span> BULLION &amp; WHITE METALS</div>
+    <div class="ct-main"><div><h1>Silver Center</h1><p>Live silver pricing, bullion calculations, sovereign coins, platinum and palladium references.</p></div><div class="ct-metric"><small>SILVER SPOT</small><strong id="silver-hero-price">—</strong><span id="silver-hero-chg">Loading…</span></div></div>
+    <div class="ct-fact"><span>SILVER INTELLIGENCE</span><p id="silver-daily-fact"></p></div>
   </div>
-  <div class="sub-nav">
-    <button class="seg active" onclick="silverSec('calc',this)">🧮 Silver Bullion</button>
-    <button class="seg" onclick="silverSec('coins',this)">🪙 Coin Library</button>
-    <button class="seg" onclick="silverSec('platpal',this)">⚗️ Plat/Pal</button>
+  <div class="sub-nav center-actions three" aria-label="Silver Center tools">
+    <button class="seg active" onclick="silverSec('calc',this)"><span>01</span><b>Silver Bullion</b><small>Melt · Buy · Sell</small></button>
+    <button class="seg" onclick="silverSec('coins',this)"><span>02</span><b>Silver Coins</b><small>Library · AGW · Offers</small></button>
+    <button class="seg" onclick="silverSec('platpal',this)"><span>03</span><b>Platinum &amp; Palladium</b><small>Prices · Coins · Melt</small></button>
   </div>
 
   <div id="ss-calc">
@@ -954,25 +970,18 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14p
 
 <!-- ═══════════════════ NUMISMATIC GUIDE TAB ═══════════════════ -->
 <div id="tab-numismatic" class="section">
-  <div class="sec-hero hero-numis">
-    <div>
-      <div class="sh-title">📚 Numismatic Guide</div>
-      <div class="sh-sub">Key Dates · Grading · Errors · Coin Values — All series in one place</div>
-      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin-top:10px;display:flex;gap:9px;align-items:flex-start">
-        <span style="font-size:16px;flex-shrink:0;margin-top:1px">📅</span>
-        <span style="font-size:13px;color:inherit;line-height:1.6;font-weight:400;opacity:0.9" id="numis-daily-fact"></span>
-      </div>
-        <a href="https://en.numista.com" target="_blank" class="sh-chip" style="text-decoration:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-weight:700">🌐 Numista.com ↗</a>
-    </div>
-    <div class="price-box"><div class="pb-label">Reference</div><div class="pb-price" style="font-size:20px">📖</div><div class="pb-chg">All Series</div></div>
+  <div class="center-titlebar center-titlebar-coin">
+    <div class="ct-kicker"><span>¢</span> COINS &amp; NUMISMATICS</div>
+    <div class="ct-main"><div><h1>Coin Center</h1><p>Key dates, grading standards, errors, specifications and values across major United States coin series.</p></div><a class="ct-resource" href="https://en.numista.com" target="_blank" rel="noopener">NUMISTA CATALOG <b>↗</b></a></div>
+    <div class="ct-fact"><span>NUMISMATIC INTELLIGENCE</span><p id="numis-daily-fact"></p></div>
   </div>
 
-  <div class="sub-nav">
-    <button class="seg active" onclick="numSec('keydate',this)">🔑 Key Dates</button>
-    <button class="seg" onclick="numSec('grading',this)">🏅 Grading</button>
-    <button class="seg" onclick="numSec('errors',this)">⚠️ Errors</button>
-    <button class="seg" onclick="numSec('coinvals',this)">💎 Coin Values</button>
-    <button class="seg" onclick="numSec('coinspecs',this)">⚖️ Coin Specs</button>
+  <div class="sub-nav center-actions five" aria-label="Coin Center tools">
+    <button class="seg active" onclick="numSec('keydate',this)"><span>01</span><b>Key Dates</b><small>Rarity · Mintage</small></button>
+    <button class="seg" onclick="numSec('grading',this)"><span>02</span><b>Grading</b><small>Standards · Services</small></button>
+    <button class="seg" onclick="numSec('errors',this)"><span>03</span><b>Errors</b><small>Types · References</small></button>
+    <button class="seg" onclick="numSec('coinvals',this)"><span>04</span><b>Coin Values</b><small>Series · Date · Grade</small></button>
+    <button class="seg" onclick="numSec('coinspecs',this)"><span>05</span><b>Specifications</b><small>Weight · Metal · Purity</small></button>
   </div>
   <div style="padding:0 0 10px">
     <a href="https://en.numista.com" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,#1e3a5f22,#2563eb22);border:1px solid #2563eb55;border-radius:10px;text-decoration:none;transition:all .18s" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#2563eb55'">
@@ -1673,6 +1682,16 @@ function updateHeroPrices(){
     const gPerDwt=(spot.XAU/20).toFixed(2);
     const gpg=$('gold-per-gram');if(gpg)gpg.textContent='$'+gPerG+' / g';
     const dpg=$('gold-per-dwt');if(dpg)dpg.textContent='$'+gPerDwt+' / dwt';
+    const unitValues={
+      'gold-unit-ounce':spot.XAU,
+      'gold-unit-gram':spot.XAU/31.1035,
+      'gold-unit-dwt':spot.XAU/20,
+      'gold-unit-grain':spot.XAU/480,
+      'gold-unit-kilo':spot.XAU*32.1507466
+    };
+    Object.entries(unitValues).forEach(([id,value])=>{const el=$(id);if(el)el.textContent='$'+value.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})});
+    const benchmarkValues={'gold-buy-10':spot.XAU*.90,'gold-buy-5':spot.XAU*.95,'gold-benchmark-spot':spot.XAU,'gold-sell-5':spot.XAU*1.05,'gold-sell-10':spot.XAU*1.10};
+    Object.entries(benchmarkValues).forEach(([id,value])=>{const el=$(id);if(el)el.textContent='$'+value.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})});
     // Auto-populate karat calculator spot input if user hasn't changed it
     const gkSpotEl=$('gk-spot');
     if(gkSpotEl&&(!gkSpotEl.value||parseFloat(gkSpotEl.value)===0))gkSpotEl.value=spot.XAU.toFixed(2);
@@ -1757,7 +1776,8 @@ function showProUpgrade(tabId){
 }
 function goldSec(s,btn){['karat','goldback','grading','keydate','errors','coinvals','scrapgold','goldcoins'].forEach(k=>{const e=$('gs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-gold .sub-nav .seg').forEach(b=>b.classList.remove('active'));
   if(s==='scrapgold'){loadScrapPresets();calcScrapGold();}
-  if(s==='goldcoins'){renderGoldCoins();}if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();}
+  if(s==='goldcoins'){renderGoldCoins();}if(btn)btn.classList.add('active');if(s==='coinvals')renderCoinVals();if(s==='goldback')renderGoldback();
+  const hashes={karat:'gold',goldback:'goldback',scrapgold:'gold-scrap',goldcoins:'gold-coins'};if(hashes[s])history.replaceState(null,'','#'+hashes[s]);}
 function silverSec(s,btn){['calc','coins','platpal'].forEach(k=>{const e=$('ss-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-silver .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='coins')renderSilverCoins();if(s==='platpal')renderPlatinumCoins();}
 function constSec(s,btn){['calc','rolls','ref','melt'].forEach(k=>{const e=$('cs-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-const .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(s==='ref')renderConstRef();if(s==='rolls')calcConstRolls();}
 function pennySec(s,btn){['calc'].forEach(k=>{const e=$('ps-'+k);if(e)e.style.display=k===s?'':'none';});document.querySelectorAll('#tab-pennies .sub-nav .seg').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
@@ -5106,6 +5126,11 @@ function openCenterFromHash(){
   if(target==='goldback'){
     showTab('gold');
     setTimeout(()=>{const button=Array.from(document.querySelectorAll('#tab-gold .seg')).find(el=>el.textContent.includes('Goldbacks'));goldSec('goldback',button);history.replaceState(null,'','#goldback')},0);
+  }else if(target==='gold-scrap'||target==='gold-coins'){
+    showTab('gold');
+    const section=target==='gold-scrap'?'scrapgold':'goldcoins';
+    const label=target==='gold-scrap'?'Scrap Buyer':'Gold Coins';
+    setTimeout(()=>{const button=Array.from(document.querySelectorAll('#tab-gold .seg')).find(el=>el.textContent.includes(label));goldSec(section,button)},0);
   }else if(tabs.includes(target)) showTab(target);
 }
 window.addEventListener('DOMContentLoaded',openCenterFromHash);
