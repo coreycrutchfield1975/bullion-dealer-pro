@@ -463,3 +463,33 @@ footer,.footer,#footer{
   background:rgba(10,12,14,.88)!important;
   border:1px solid rgba(255,255,255,.09)!important;
 }
+
+/* ==== GOLD CENTER REALISM (photoreal hero + metal polish) ==== */
+#tab-gold .center-titlebar-gold{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.30) 45%,rgba(5,5,5,.82) 100%),
+    url('/img/newlook/gold-hero.png') center/cover no-repeat!important;
+  border-color:rgba(219,164,42,.5)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(219,164,42,.12)!important;
+  min-height:150px;
+}
+#tab-gold .center-titlebar-gold .ct-kicker span{
+  border-color:rgba(219,164,42,.6)!important;
+  color:#f0c968!important;
+  background:rgba(5,5,5,.55)!important;
+}
+#tab-gold .center-titlebar-gold h1{
+  text-shadow:0 2px 18px rgba(0,0,0,.85),0 0 30px rgba(219,164,42,.25)!important;
+}
+#tab-gold .center-titlebar-gold .ct-main p{
+  color:#e7e2d6!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
+}
+#tab-gold .center-titlebar-gold .ct-live{
+  background:rgba(5,5,5,.6)!important;
+  border-color:rgba(219,164,42,.35)!important;
+}
+#tab-gold .center-titlebar-gold .ct-fact{
+  background:rgba(5,5,5,.55)!important;
+  border-color:rgba(219,164,42,.25)!important;
+}
