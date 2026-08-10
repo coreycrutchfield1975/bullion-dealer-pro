@@ -418,19 +418,47 @@ footer,.footer,#footer{
   color:#efc766!important;
 }
 
-/* Hero / center banners: replace blue (hero-const/collect) and violet
-   (hero-fx/hero-numis) borders, glows, and titles with gold/silver. */
-.hero-const,.hero-fx,.hero-collect,.hero-numis{
-  background:#050607!important;
-  border:1px solid rgba(219,164,42,.34)!important;
-  box-shadow:0 0 26px rgba(0,0,0,.4),0 0 22px rgba(219,164,42,.08)!important;
+/* Hero / center banners: replace blue/violet with photoreal 3D metal
+   backdrops + dark overlay so titles stay crisp. */
+.hero-const{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/silver-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(215,220,225,.35)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
   color:#f0eee8!important;
 }
-.hero-const .sh-title,.hero-fx .sh-title,.hero-collect .sh-title,.hero-numis .sh-title{
-  color:#efc766!important;
+.hero-penny{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/copper-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(201,162,39,.38)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
+  color:#f0eee8!important;
 }
-.hero-const .sh-sub,.hero-fx .sh-sub,.hero-collect .sh-sub,.hero-numis .sh-sub{
-  color:rgba(215,212,201,.7)!important;
+.hero-fx{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/fx-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(219,164,42,.4)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
+  color:#f0eee8!important;
+}
+.hero-collect,.hero-numis{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/coins-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(190,153,76,.42)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
+  color:#f0eee8!important;
+}
+.hero-const .sh-title,.hero-fx .sh-title,.hero-collect .sh-title,.hero-numis .sh-title,.hero-penny .sh-title{
+  color:#efc766!important;
+  text-shadow:0 2px 14px rgba(0,0,0,.85)!important;
+}
+.hero-const .sh-sub,.hero-fx .sh-sub,.hero-collect .sh-sub,.hero-numis .sh-sub,.hero-penny .sh-sub{
+  color:rgba(245,242,235,.88)!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
 }
 .hero-numis .pb-price,.hero-fx .pb-price{
   color:#f0c968!important;
