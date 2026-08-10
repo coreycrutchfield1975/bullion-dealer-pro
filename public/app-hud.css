@@ -536,3 +536,42 @@ body::after{
   .sc-price{font-size:26px !important}
   .spot-card{padding:16px 18px !important}
 }
+
+/* ═══════════════════════════════════════════════════════
+   BDP 2026 — professional precious-metals finish
+   Keeps the calculator layout while removing the sci-fi treatment.
+   ═══════════════════════════════════════════════════════ */
+:root,[data-theme="light"],[data-theme="dark"]{
+  --bg:#07090b !important;--bg2:#0d1013 !important;--bg3:#111519 !important;--bg4:#151a1f !important;
+  --text:#eceeed !important;--text2:#bdc1c3 !important;--muted:#747b80 !important;--muted2:#4b5257 !important;
+  --border:rgba(255,255,255,.08) !important;--border2:rgba(219,164,42,.22) !important;
+  --card-bg:linear-gradient(145deg,rgba(20,24,28,.96),rgba(10,13,16,.98)) !important;
+  --input-bg:#090c0f !important;--header-bg:rgba(7,9,11,.98) !important;--tab-bg:#090c0f !important;
+  --gold:#dba42a !important;--gold2:#f6d06b !important;--gold3:rgba(219,164,42,.08) !important;
+  --cyan:#c9cfd4 !important;--blue:#9aa4ae !important;--blue2:#9aa4ae !important;--violet:#b2a88f !important;
+}
+body::before{background:radial-gradient(ellipse 850px 420px at 12% 5%,rgba(219,164,42,.08),transparent 62%),radial-gradient(ellipse 650px 350px at 90% 15%,rgba(200,205,210,.035),transparent 60%) !important}
+body::after,#tab-bar::before,#tab-bar::after,#content::before{display:none !important}
+#header{background:rgba(7,9,11,.98) !important;border-bottom:1px solid rgba(219,164,42,.3) !important;border-image:none !important;box-shadow:0 8px 30px rgba(0,0,0,.55) !important}
+.bdp-app-brand{display:flex !important;align-items:center;gap:13px;color:#fff;text-decoration:none;min-width:0}
+.bdp-app-brand img{width:52px !important;height:52px !important;object-fit:contain !important;object-position:center !important;filter:drop-shadow(0 4px 10px rgba(219,164,42,.2)) !important;border-radius:0 !important}
+.bdp-app-brand>span{display:flex;flex-direction:column;text-align:left}.bdp-app-brand strong{font:800 17px/1 'Rajdhani',sans-serif;letter-spacing:2px}.bdp-app-brand small{color:#7b8083;font-size:7px;letter-spacing:1.25px;margin-top:5px}
+#spot-ticker-bar{background:#0b0e11 !important;border-color:rgba(255,255,255,.07) !important}.stb-label{background:rgba(219,164,42,.08) !important;color:var(--gold) !important;border-right-color:rgba(219,164,42,.25) !important;animation:none !important}
+#news-bar{background:#080a0c !important;border-bottom-color:rgba(255,255,255,.06) !important}#news-label{color:#aeb4b8 !important;border-right-color:rgba(255,255,255,.1) !important}
+#tab-bar{background:rgba(9,12,15,.98) !important;border-bottom-color:rgba(255,255,255,.08) !important;box-shadow:0 5px 20px rgba(0,0,0,.4) !important}.tab:hover{color:var(--gold2) !important;background:rgba(219,164,42,.04) !important}.tab.active{color:var(--gold2) !important;border-bottom-color:var(--gold) !important;background:rgba(219,164,42,.07) !important;text-shadow:none !important}
+.card,.panel,.spot-card,.tool-card{background:linear-gradient(145deg,rgba(20,24,28,.96),rgba(10,13,16,.98)) !important;border-color:rgba(255,255,255,.09) !important;box-shadow:0 12px 28px rgba(0,0,0,.24) !important;backdrop-filter:none !important}.card:hover,.spot-card:hover{border-color:rgba(219,164,42,.26) !important}
+input,select,textarea{background:#090c0f !important;border-color:rgba(255,255,255,.12) !important}input:focus,select:focus,textarea:focus{border-color:rgba(219,164,42,.6) !important;box-shadow:0 0 0 3px rgba(219,164,42,.08) !important}
+.btn,.btn-primary{border-radius:4px !important}.btn-primary{background:linear-gradient(120deg,#f0c75a,#b97c0d) !important;color:#171006 !important;border-color:#e9c154 !important}
+.ham-menu{background:#0d1013 !important;border-color:rgba(219,164,42,.2) !important;box-shadow:0 12px 32px rgba(0,0,0,.6) !important}.ham-btn:hover,.theme-btn:hover{border-color:var(--gold) !important}
+@media(max-width:600px){.bdp-app-brand img{width:58px !important;height:36px !important}.bdp-app-brand strong{font-size:13px;letter-spacing:1px}.bdp-app-brand small{display:none}}
+
+/* Center navigation: clear product architecture, compact enough for working screens. */
+#tab-bar{border-top:1px solid rgba(219,164,42,.08) !important}
+.tabs{padding:0 12px !important;gap:2px !important}
+.tab{height:58px !important;min-width:max-content !important;padding:0 13px !important;border-left:1px solid transparent !important;border-right:1px solid transparent !important}
+.tab>div{text-align:left !important;white-space:nowrap !important;line-height:1.15 !important}
+.tab .ticon{display:grid !important;place-items:center !important;width:27px !important;height:27px !important;flex:0 0 27px !important;border:1px solid rgba(255,255,255,.12) !important;background:rgba(255,255,255,.025) !important;color:#aeb4b8 !important;border-radius:2px !important;font:700 12px/1 'Rajdhani',sans-serif !important}
+.tab.active .ticon{color:#f5cd6b !important;border-color:rgba(219,164,42,.46) !important;background:rgba(219,164,42,.09) !important}
+.tab.active{border-left-color:rgba(219,164,42,.12) !important;border-right-color:rgba(219,164,42,.12) !important}
+.tab .tsub{margin-top:4px !important;letter-spacing:.02em !important;color:#7e858a !important;opacity:1 !important}
+@media(max-width:720px){.tabs{padding:0 6px !important}.tab{height:52px !important;padding:0 10px !important}.tab .ticon{width:24px !important;height:24px !important;flex-basis:24px !important}.tab .tsub{display:none !important}}
