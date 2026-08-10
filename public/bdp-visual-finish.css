@@ -493,3 +493,33 @@ footer,.footer,#footer{
   background:rgba(5,5,5,.55)!important;
   border-color:rgba(219,164,42,.25)!important;
 }
+
+/* ==== SILVER CENTER REALISM (photoreal hero + metal polish) ==== */
+#tab-silver .center-titlebar-silver{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.30) 45%,rgba(5,5,5,.82) 100%),
+    url('/img/newlook/silver-hero.png') center/cover no-repeat!important;
+  border-color:rgba(215,220,225,.42)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(215,220,225,.1)!important;
+  min-height:150px;
+}
+#tab-silver .center-titlebar-silver .ct-kicker span{
+  border-color:rgba(215,220,225,.55)!important;
+  color:#e3e7ea!important;
+  background:rgba(5,5,5,.55)!important;
+}
+#tab-silver .center-titlebar-silver h1{
+  text-shadow:0 2px 18px rgba(0,0,0,.85),0 0 30px rgba(215,220,225,.2)!important;
+}
+#tab-silver .center-titlebar-silver .ct-main p{
+  color:#e7e2d6!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
+}
+#tab-silver .center-titlebar-silver .ct-live{
+  background:rgba(5,5,5,.6)!important;
+  border-color:rgba(215,220,225,.3)!important;
+}
+#tab-silver .center-titlebar-silver .ct-fact{
+  background:rgba(5,5,5,.55)!important;
+  border-color:rgba(215,220,225,.2)!important;
+}
