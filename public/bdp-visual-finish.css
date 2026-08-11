@@ -418,19 +418,47 @@ footer,.footer,#footer{
   color:#efc766!important;
 }
 
-/* Hero / center banners: replace blue (hero-const/collect) and violet
-   (hero-fx/hero-numis) borders, glows, and titles with gold/silver. */
-.hero-const,.hero-fx,.hero-collect,.hero-numis{
-  background:#050607!important;
-  border:1px solid rgba(219,164,42,.34)!important;
-  box-shadow:0 0 26px rgba(0,0,0,.4),0 0 22px rgba(219,164,42,.08)!important;
+/* Hero / center banners: replace blue/violet with photoreal 3D metal
+   backdrops + dark overlay so titles stay crisp. */
+.hero-const{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/silver-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(215,220,225,.35)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
   color:#f0eee8!important;
 }
-.hero-const .sh-title,.hero-fx .sh-title,.hero-collect .sh-title,.hero-numis .sh-title{
-  color:#efc766!important;
+.hero-penny{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/copper-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(201,162,39,.38)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
+  color:#f0eee8!important;
 }
-.hero-const .sh-sub,.hero-fx .sh-sub,.hero-collect .sh-sub,.hero-numis .sh-sub{
-  color:rgba(215,212,201,.7)!important;
+.hero-fx{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/fx-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(219,164,42,.4)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
+  color:#f0eee8!important;
+}
+.hero-collect,.hero-numis{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.32) 45%,rgba(5,5,5,.84) 100%),
+    url('/img/newlook/coins-hero.png') center/cover no-repeat!important;
+  border:1px solid rgba(190,153,76,.42)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.45)!important;
+  color:#f0eee8!important;
+}
+.hero-const .sh-title,.hero-fx .sh-title,.hero-collect .sh-title,.hero-numis .sh-title,.hero-penny .sh-title{
+  color:#efc766!important;
+  text-shadow:0 2px 14px rgba(0,0,0,.85)!important;
+}
+.hero-const .sh-sub,.hero-fx .sh-sub,.hero-collect .sh-sub,.hero-numis .sh-sub,.hero-penny .sh-sub{
+  color:rgba(245,242,235,.88)!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
 }
 .hero-numis .pb-price,.hero-fx .pb-price{
   color:#f0c968!important;
@@ -462,4 +490,120 @@ footer,.footer,#footer{
 .price-box{
   background:rgba(10,12,14,.88)!important;
   border:1px solid rgba(255,255,255,.09)!important;
+}
+
+/* ==== GOLD CENTER REALISM (photoreal hero + metal polish) ==== */
+#tab-gold .center-titlebar-gold{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.30) 45%,rgba(5,5,5,.82) 100%),
+    url('/img/newlook/gold-hero.png') center/cover no-repeat!important;
+  border-color:rgba(219,164,42,.5)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(219,164,42,.12)!important;
+  min-height:150px;
+}
+#tab-gold .center-titlebar-gold .ct-kicker span{
+  border-color:rgba(219,164,42,.6)!important;
+  color:#f0c968!important;
+  background:rgba(5,5,5,.55)!important;
+}
+#tab-gold .center-titlebar-gold h1{
+  text-shadow:0 2px 18px rgba(0,0,0,.85),0 0 30px rgba(219,164,42,.25)!important;
+}
+#tab-gold .center-titlebar-gold .ct-main p{
+  color:#e7e2d6!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
+}
+#tab-gold .center-titlebar-gold .ct-live{
+  background:rgba(5,5,5,.6)!important;
+  border-color:rgba(219,164,42,.35)!important;
+}
+#tab-gold .center-titlebar-gold .ct-fact{
+  background:rgba(5,5,5,.55)!important;
+  border-color:rgba(219,164,42,.25)!important;
+}
+
+/* ==== SILVER CENTER REALISM (photoreal hero + metal polish) ==== */
+#tab-silver .center-titlebar-silver{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.62) 0%,rgba(5,5,5,.30) 45%,rgba(5,5,5,.82) 100%),
+    url('/img/newlook/silver-hero.png') center/cover no-repeat!important;
+  border-color:rgba(215,220,225,.42)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(215,220,225,.1)!important;
+  min-height:150px;
+}
+#tab-silver .center-titlebar-silver .ct-kicker span{
+  border-color:rgba(215,220,225,.55)!important;
+  color:#e3e7ea!important;
+  background:rgba(5,5,5,.55)!important;
+}
+#tab-silver .center-titlebar-silver h1{
+  text-shadow:0 2px 18px rgba(0,0,0,.85),0 0 30px rgba(215,220,225,.2)!important;
+}
+#tab-silver .center-titlebar-silver .ct-main p{
+  color:#e7e2d6!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
+}
+#tab-silver .center-titlebar-silver .ct-live{
+  background:rgba(5,5,5,.6)!important;
+  border-color:rgba(215,220,225,.3)!important;
+}
+#tab-silver .center-titlebar-silver .ct-fact{
+  background:rgba(5,5,5,.55)!important;
+  border-color:rgba(215,220,225,.2)!important;
+}
+
+/* ==== GOLDBACKS CENTER REALISM (photoreal hero) ==== */
+#tab-goldback .center-titlebar-goldback{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.60) 0%,rgba(5,5,5,.28) 45%,rgba(5,5,5,.82) 100%),
+    url('/img/newlook/goldback-hero.png') center/cover no-repeat!important;
+  border-color:rgba(196,151,48,.5)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(196,151,48,.12)!important;
+  min-height:150px;
+}
+#tab-goldback .center-titlebar-goldback .ct-kicker span{
+  border-color:rgba(196,151,48,.6)!important;
+  color:#eac868!important;
+  background:rgba(5,5,5,.55)!important;
+}
+#tab-goldback .center-titlebar-goldback h1{
+  text-shadow:0 2px 18px rgba(0,0,0,.85),0 0 30px rgba(196,151,48,.25)!important;
+}
+#tab-goldback .center-titlebar-goldback .ct-main p{
+  color:#e7e2d6!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
+}
+#tab-goldback .center-titlebar-goldback .ct-live{
+  background:rgba(5,5,5,.6)!important;
+  border-color:rgba(196,151,48,.35)!important;
+}
+#tab-goldback .center-titlebar-goldback .ct-fact{
+  background:rgba(5,5,5,.55)!important;
+  border-color:rgba(196,151,48,.25)!important;
+}
+
+/* ==== COIN CENTER REALISM (photoreal hero) ==== */
+#tab-numismatic .center-titlebar-coin{
+  background:
+    linear-gradient(180deg,rgba(5,5,5,.60) 0%,rgba(5,5,5,.28) 45%,rgba(5,5,5,.82) 100%),
+    url('/img/newlook/coins-hero.png') center/cover no-repeat!important;
+  border-color:rgba(190,153,76,.45)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(190,153,76,.12)!important;
+  min-height:150px;
+}
+#tab-numismatic .center-titlebar-coin .ct-kicker span{
+  border-color:rgba(190,153,76,.6)!important;
+  color:#e0c078!important;
+  background:rgba(5,5,5,.55)!important;
+}
+#tab-numismatic .center-titlebar-coin h1{
+  text-shadow:0 2px 18px rgba(0,0,0,.85),0 0 30px rgba(190,153,76,.22)!important;
+}
+#tab-numismatic .center-titlebar-coin .ct-main p{
+  color:#e7e2d6!important;
+  text-shadow:0 1px 8px rgba(0,0,0,.8)!important;
+}
+#tab-numismatic .center-titlebar-coin .ct-fact{
+  background:rgba(5,5,5,.55)!important;
+  border-color:rgba(190,153,76,.22)!important;
 }
