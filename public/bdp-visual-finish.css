@@ -464,6 +464,16 @@ footer,.footer,#footer{
   color:#f0c968!important;
 }
 
+/* Make the photoreal hero banners taller and more prominent */
+.hero-const,.hero-penny,.hero-fx,.hero-collect,.hero-numis{
+  min-height:168px!important;
+  padding:34px 34px!important;
+  border-radius:14px!important;
+}
+.hero-const .sh-title,.hero-penny .sh-title,.hero-fx .sh-title,.hero-collect .sh-title,.hero-numis .sh-title{
+  font-size:clamp(24px,3.2vw,34px)!important;
+}
+
 /* Generic hero titles: green -> warm gold (default safe) */
 .sh-title{color:#efc766!important}
 
@@ -499,7 +509,8 @@ footer,.footer,#footer{
     url('/img/newlook/gold-hero.png') center/cover no-repeat!important;
   border-color:rgba(219,164,42,.5)!important;
   box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(219,164,42,.12)!important;
-  min-height:150px;
+  min-height:215px;
+  padding:34px 30px 28px;
 }
 #tab-gold .center-titlebar-gold .ct-kicker span{
   border-color:rgba(219,164,42,.6)!important;
@@ -529,7 +540,8 @@ footer,.footer,#footer{
     url('/img/newlook/silver-hero.png') center/cover no-repeat!important;
   border-color:rgba(215,220,225,.42)!important;
   box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(215,220,225,.1)!important;
-  min-height:150px;
+  min-height:215px;
+  padding:34px 30px 28px;
 }
 #tab-silver .center-titlebar-silver .ct-kicker span{
   border-color:rgba(215,220,225,.55)!important;
@@ -559,7 +571,8 @@ footer,.footer,#footer{
     url('/img/newlook/goldback-hero.png') center/cover no-repeat!important;
   border-color:rgba(196,151,48,.5)!important;
   box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(196,151,48,.12)!important;
-  min-height:150px;
+  min-height:215px;
+  padding:34px 30px 28px;
 }
 #tab-goldback .center-titlebar-goldback .ct-kicker span{
   border-color:rgba(196,151,48,.6)!important;
@@ -589,7 +602,8 @@ footer,.footer,#footer{
     url('/img/newlook/coins-hero.png') center/cover no-repeat!important;
   border-color:rgba(190,153,76,.45)!important;
   box-shadow:0 22px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(190,153,76,.12)!important;
-  min-height:150px;
+  min-height:215px;
+  padding:34px 30px 28px;
 }
 #tab-numismatic .center-titlebar-coin .ct-kicker span{
   border-color:rgba(190,153,76,.6)!important;
