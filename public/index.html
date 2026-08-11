@@ -46,7 +46,8 @@ a{color:inherit}
 .topline{height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--silver),var(--gold),transparent)}
 .nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:28px;padding:15px clamp(18px,4vw,64px);background:rgba(5,5,5,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.07)}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;margin-right:auto}
-.brand-mark{width:40px;height:40px;border:1px solid rgba(214,166,58,.55);border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#17130b,#090909);box-shadow:inset 0 0 0 4px #080808}
+.brand-mark{width:40px;height:40px;border:1px solid rgba(214,166,58,.55);border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#17130b,#090909);box-shadow:inset 0 0 0 4px #080808;overflow:hidden;padding:3px}
+.brand-mark .brand-logo{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .brand-mark b{font-family:Rajdhani,sans-serif;letter-spacing:-2px;color:var(--gold2);font-size:16px}
 .brand-copy strong{display:block;font-family:Rajdhani,sans-serif;letter-spacing:1.8px;font-size:19px}
 .brand-copy small{display:block;color:#8d8d8d;font-size:9px;letter-spacing:2.4px;margin-top:1px}
@@ -78,7 +79,7 @@ a{color:inherit}
 .hero-visual{position:relative;min-height:560px;display:grid;place-items:center}
 .hero-visual:before{content:"";position:absolute;width:84%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(214,166,58,.2);box-shadow:0 0 0 34px rgba(214,166,58,.02),0 0 90px rgba(214,166,58,.09)}
 .hero-visual:after{content:"MARKET INTELLIGENCE";position:absolute;right:0;bottom:22%;font-size:9px;letter-spacing:.28em;color:#6f6b60;writing-mode:vertical-rl}
-.hero-metal{position:relative;width:min(520px,94%);aspect-ratio:9/11;object-fit:cover;border-radius:22px;border:1px solid rgba(214,166,58,.32);box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 0 1px rgba(214,166,58,.14),0 0 60px rgba(214,166,58,.08)}
+.hero-logo{position:relative;width:min(440px,90%);aspect-ratio:1;object-fit:contain;border-radius:50%;filter:drop-shadow(0 30px 60px rgba(0,0,0,.7)) drop-shadow(0 0 50px rgba(214,166,58,.14));animation:heroGlow 6s ease-in-out infinite}
 .visual-chip{position:absolute;background:rgba(10,10,10,.86);border:1px solid #2d2b27;border-radius:12px;padding:10px 12px;font-size:10px;color:#aaa;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
 .visual-chip b{color:var(--gold2);font-family:Rajdhani;font-size:15px;display:block}
 .chip-a{left:1%;top:18%}.chip-b{right:1%;bottom:15%}
@@ -119,9 +120,10 @@ footer{border-top:1px solid #202022;padding:32px 0 48px;color:#6f6d68;font-size:
 .ticker-label{color:var(--gold2);font-weight:700;letter-spacing:.15em;padding:0 14px;border-right:1px solid #29271f;white-space:nowrap}
 .ticker-track{display:flex;gap:32px;white-space:nowrap;padding-left:24px;color:#85837f;animation:slide 30s linear infinite}.ticker-track b{color:#d6d2c8}
 @keyframes slide{to{transform:translateX(-45%)}}
+@keyframes heroGlow{0%,100%{filter:drop-shadow(0 30px 60px rgba(0,0,0,.7)) drop-shadow(0 0 40px rgba(214,166,58,.12))}50%{filter:drop-shadow(0 30px 70px rgba(0,0,0,.72)) drop-shadow(0 0 65px rgba(214,166,58,.2))}}
 @media(max-width:900px){
  .hero{grid-template-columns:1fr;min-height:auto;padding-top:58px}.hero-visual{min-height:430px;order:-1}
- .hero-metal{width:min(380px,82vw)}.intent-grid{grid-template-columns:1fr 1fr}.command-grid{grid-template-columns:1fr}.trust{grid-template-columns:1fr 1fr}
+ .hero-logo{width:min(320px,80vw)}.intent-grid{grid-template-columns:1fr 1fr}.command-grid{grid-template-columns:1fr}.trust{grid-template-columns:1fr 1fr}
  .navlinks{display:none;position:absolute;top:70px;left:16px;right:16px;background:#0b0b0b;border:1px solid #292929;border-radius:14px;padding:18px;flex-direction:column;align-items:flex-start}
  .navlinks.open{display:flex}.menu{display:block}.cta-band{align-items:flex-start;flex-direction:column}
 }
@@ -132,7 +134,7 @@ footer{border-top:1px solid #202022;padding:32px 0 48px;color:#6f6d68;font-size:
 <div class="topline"></div>
 <nav class="nav">
  <a class="brand" href="/">
-   <span class="brand-mark"><b>BDP</b></span>
+   <span class="brand-mark"><img src="/bdp-primary-logo.png" alt="BDP Bullion Dealer Pro logo" class="brand-logo"></span>
    <span class="brand-copy"><strong>BULLION DEALER PRO</strong><small>PRECIOUS METALS INTELLIGENCE</small></span>
  </a>
  <button class="menu" id="menu" aria-label="Open navigation">☰</button>
@@ -170,7 +172,7 @@ footer{border-top:1px solid #202022;padding:32px 0 48px;color:#6f6d68;font-size:
    </div>
  </div>
  <div class="hero-visual">
-   <img class="hero-metal" src="/img/newlook/hero.png" alt="Photoreal gold bars and silver coins">
+   <img class="hero-logo" src="/bdp-primary-logo.png" alt="BDP Bullion Dealer Pro emblem">
    <div class="visual-chip chip-a"><b>LIVE SPOT</b>market-linked pricing</div>
    <div class="visual-chip chip-b"><b>DEALER EDGE</b>price with confidence</div>
  </div>
