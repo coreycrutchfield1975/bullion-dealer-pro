@@ -648,3 +648,13 @@ body.drawer-open{overflow:hidden}
 .util-menu-dropdown button svg{width:17px;height:17px;stroke:var(--gold2);fill:none}
 .util-menu-dropdown .pro-pill{display:block;text-align:center;margin-top:4px}
 @media(max-width:900px){.market-strip{grid-template-columns:repeat(2,minmax(140px,1fr));overflow-x:auto;flex-wrap:nowrap}}
+
+/* === V3.32 CLEAN DASHBOARD === */
+.dash-duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dash-panel{padding:14px;border:1px solid rgba(219,164,42,.3);border-radius:9px;background:linear-gradient(145deg,rgba(5,6,7,.55),rgba(5,6,7,.85));backdrop-filter:blur(4px)}
+.dash-panel small{display:block;color:#caaa55;font:700 10px Rajdhani;letter-spacing:.08em}
+.dash-panel strong{display:block;font:700 28px Rajdhani;color:#f1eee7;margin:4px 0 2px}
+.dash-panel strong span{font-size:16px;color:#8a8770}
+.dash-panel span{font-size:11px}
+.dash-panel .module-open{margin-top:8px;display:inline-block}
+@media(max-width:800px){.dash-duo{grid-template-columns:1fr}}

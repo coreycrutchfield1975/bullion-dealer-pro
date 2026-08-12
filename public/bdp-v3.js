@@ -943,21 +943,37 @@ function alertTriggered(a){
 }
 
 function renderDashboard(){
- const inv=inventorySummary(),al=activeAlertSummary(),pnl=inv.current-inv.cost,ratio=prices.XAU/prices.XAG;
+ const inv=inventorySummary(),al=activeAlertSummary(),pnl=inv.current-inv.cost;
  page.innerHTML=`<section class="hero dashboard-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>DASHBOARD</h1><p>Your precious-metals command center — live pricing, quick actions, dealer benchmarks, alerts and portfolio value.</p></section>
  <div class="page">
-  <div class="dashboard-kpis">
-   ${[['GOLD',fmt(prices.XAU),'up'],['SILVER',fmt(prices.XAG),'up'],['G/S RATIO',ratio.toFixed(2),'up'],['PORTFOLIO',fmt(inv.current),pnl>=0?'up':'down'],['ALERTS',String(al.triggered)+' / '+String(al.count),al.triggered?'down':'up']].map(x=>`<article><small>${x[0]}</small><strong>${x[1]}</strong><span class="${x[2]}">${x[0]==='PORTFOLIO'?(pnl>=0?'+':'')+fmt(pnl).replace('$','')+' P/L':x[0]==='ALERTS'?'triggered / total':x[0]==='G/S RATIO'?(ratioPct()===null?'REFERENCE':'LIVE'):(x[0]==='GOLD'?(feedState.XAU.state.toUpperCase()):x[0]==='SILVER'?feedState.XAG.state.toUpperCase():'LIVE')}</span></article>`).join('')}
+  <div class="grid two">
+   <section class="card intel-card"><div class="card-head">QUICK ACTIONS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-quickactions.png" alt="">
+    <div class="trend-overlay">
+     <div class="dash-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${[['i-bars','Gold Deal','gold'],['i-coins','Silver Deal','silver'],['i-calc','Calculators','calculators'],['i-note','Goldbacks','goldbacks'],['i-tools','Dealer Tools','dealer'],['i-box','Inventory','inventory']].map(x=>`<button onclick="go('${x[2]}')">${icon(x[0])}<span>${x[1]}</span></button>`).join('')}</div>
+    </div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">DEALER OPPORTUNITY</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-dealerboard.png" alt="">
+    <div class="trend-overlay"><table><thead><tr><th>METAL</th><th>5% UNDER</th><th>SPOT</th><th>5% OVER</th></tr></thead><tbody><tr><td>Gold</td><td>${fmt(prices.XAU*.95)}</td><td>${fmt(prices.XAU)}</td><td>${fmt(prices.XAU*1.05)}</td></tr><tr><td>Silver</td><td>${fmt(prices.XAG*.95)}</td><td>${fmt(prices.XAG)}</td><td>${fmt(prices.XAG*1.05)}</td></tr><tr><td>Platinum</td><td>${fmt(prices.XPT*.95)}</td><td>${fmt(prices.XPT)}</td><td>${fmt(prices.XPT*1.05)}</td></tr><tr><td>Palladium</td><td>${fmt(prices.XPD*.95)}</td><td>${fmt(prices.XPD)}</td><td>${fmt(prices.XPD*1.05)}</td></tr></tbody></table><button class="gold-btn" onclick="go('dealer')">OPEN DEALER TOOLS ↗</button></div>
+   </div></section>
   </div>
-  <div class="grid three">
-   <section class="card"><div class="card-head">MARKET SNAPSHOT</div><div class="card-body">${chartSVG()}<div class="statbar"><div><small>GOLD</small><strong>${fmt(prices.XAU)}</strong></div><div><small>SILVER</small><strong>${fmt(prices.XAG)}</strong></div><div><small>PLATINUM</small><strong>${fmt(prices.XPT)}</strong></div><div><small>PALLADIUM</small><strong>${fmt(prices.XPD)}</strong></div></div><button class="module-open" onclick="go('markets')">OPEN LIVE MARKETS ↗</button></div></section>
-   <section class="card"><div class="card-head">QUICK ACTIONS</div><div class="card-body"><div class="dash-actions">${[['i-bars','Price Gold Deal','gold'],['i-coins','Price Silver Deal','silver'],['i-calc','Calculator Center','calculators'],['i-note','Goldbacks','goldbacks'],['i-tools','Dealer Tools','dealer'],['i-box','Inventory','inventory']].map(x=>`<button onclick="go('${x[2]}')">${icon(x[0])}<span>${x[1]}</span></button>`).join('')}</div></div></section>
-   <section class="card"><div class="card-head">DEALER OPPORTUNITY</div><div class="card-body"><table><thead><tr><th>METAL</th><th>5% UNDER</th><th>SPOT</th><th>5% OVER</th></tr></thead><tbody><tr><td>Gold</td><td>${fmt(prices.XAU*.95)}</td><td>${fmt(prices.XAU)}</td><td>${fmt(prices.XAU*1.05)}</td></tr><tr><td>Silver</td><td>${fmt(prices.XAG*.95)}</td><td>${fmt(prices.XAG)}</td><td>${fmt(prices.XAG*1.05)}</td></tr></tbody></table><button class="module-open" onclick="go('dealer')">OPEN DEALER TOOLS ↗</button></div></section>
-  </div>
-  <div class="grid three" style="margin-top:12px">
-   <section class="card"><div class="card-head">PORTFOLIO / INVENTORY</div><div class="card-body"><div class="portfolio-big"><small>CURRENT METAL VALUE</small><strong>${fmt(inv.current)}</strong><span class="${pnl>=0?'up':'down'}">${pnl>=0?'+':''}${fmt(pnl)} vs cost basis</span></div><div class="statbar"><div><small>ITEMS</small><strong>${inv.count}</strong></div><div><small>COST</small><strong>${fmt(inv.cost)}</strong></div><div><small>VALUE</small><strong>${fmt(inv.current)}</strong></div><div><small>P/L</small><strong class="${pnl>=0?'up':'down'}">${fmt(pnl)}</strong></div></div><button class="module-open" onclick="go('inventory')">MANAGE INVENTORY ↗</button></div></section>
-   <section class="card"><div class="card-head">PRICE ALERTS</div><div class="card-body"><div class="alert-summary-ring"><strong>${al.triggered}</strong><span>TRIGGERED</span></div><p class="module-copy">${al.count?`${al.count} local alert${al.count===1?'':'s'} configured.`:'No alerts configured yet.'}</p><button class="module-open" onclick="go('alerts')">MANAGE ALERTS ↗</button></div></section>
-   <section class="card"><div class="card-head">BDP PRO</div><div class="card-body"><div class="pro-dashboard-card"><small>PREMIUM TOOLKIT</small><strong>BDP PRO</strong><span>See current plans and pricing</span><p>Inventory, alerts, saved workflow and advanced dealer features.</p><button onclick="go('account')">VIEW PRO OPTIONS ↗</button></div></div></section>
+  <div class="grid two" style="margin-top:12px">
+   <section class="card intel-card"><div class="card-head">PORTFOLIO & PRICE ALERTS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-portfolio.png" alt="">
+    <div class="trend-overlay">
+     <div class="dash-duo">
+      <div class="dash-panel"><small>METAL VALUE</small><strong>${fmt(inv.current)}</strong><span class="${pnl>=0?'up':'down'}">${pnl>=0?'+':''}${fmt(pnl)} vs cost</span><button class="module-open" onclick="go('inventory')">MANAGE INVENTORY ↗</button></div>
+      <div class="dash-panel"><small>ALERTS</small><strong>${al.triggered}<span>/</span>${al.count}</strong><span class="${al.triggered?'down':'up'}">${al.triggered?'triggered':'all clear'}</span><button class="module-open" onclick="go('alerts')">MANAGE ALERTS ↗</button></div>
+     </div>
+    </div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">BDP PRO</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+    <div class="trend-overlay">
+     <div class="pro-dashboard-card"><small>PREMIUM TOOLKIT</small><strong>BDP PRO</strong><span>Inventory, alerts, saved workflow and advanced dealer features.</span><button class="gold-btn" onclick="go('account')">VIEW PRO OPTIONS ↗</button></div>
+    </div>
+   </div></section>
   </div>
  </div>`;
 }
