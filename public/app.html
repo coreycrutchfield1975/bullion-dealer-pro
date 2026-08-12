@@ -59,11 +59,16 @@
   <button class="mobile-menu" id="menuBtn" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">☰</button>
   <div class="market-strip" id="marketStrip"></div>
   <div class="utilities">
-    <button onclick="go('alerts')" title="Price Alerts"><svg><use href="#i-bell"/></svg><span>Alerts</span></button>
-    <button onclick="openUtility('watchlist')" title="Metal Watchlist"><svg><use href="#i-star"/></svg><span>Watchlist</span></button>
-    <button onclick="openUtility('converter')" title="Weight Converter"><span>⇄</span><span>Converter</span></button>
-    <button onclick="go('account')" title="Account & Settings"><svg><use href="#i-settings"/></svg><span>Settings</span></button>
-    <a class="pro-pill" href="/pricing">◇ PRO</a>
+    <div class="util-menu" id="utilMenu">
+      <button class="util-menu-btn" onclick="toggleUtilMenu(event)" aria-label="Settings and tools" aria-expanded="false">☰<span>Menu</span></button>
+      <div class="util-menu-dropdown" id="utilMenuDropdown">
+        <button onclick="closeUtilMenu();go('alerts')"><svg><use href="#i-bell"/></svg><span>Price Alerts</span></button>
+        <button onclick="closeUtilMenu();openUtility('watchlist')"><svg><use href="#i-star"/></svg><span>Metal Watchlist</span></button>
+        <button onclick="closeUtilMenu();openUtility('converter')"><span>⇄</span><span>Weight Converter</span></button>
+        <button onclick="closeUtilMenu();go('account')"><svg><use href="#i-settings"/></svg><span>Settings</span></button>
+        <a class="pro-pill" href="/pricing">◇ PRO</a>
+      </div>
+    </div>
   </div>
 </header>
 <main id="page"></main>

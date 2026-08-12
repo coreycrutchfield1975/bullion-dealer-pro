@@ -100,22 +100,40 @@ async function loadMarkets(){
  else if(current==='inventory')renderInventory();
  else if(current==='alerts')renderAlerts();
 }
+const MARKET_ART={XAU:'/img/newlook/mkt-gold.png',XAG:'/img/newlook/mkt-silver.png',XPT:'/img/newlook/mkt-platinum.png',XPD:'/img/newlook/mkt-palladium.png',XCU:'/img/newlook/mkt-copper.png',RATIO:'/img/newlook/mkt-ratio.png'};
 function drawMarket(){
  const ratio=prices.XAU/prices.XAG;
- marketStrip.innerHTML=marketDefs.map(([s,n])=>{
+ marketStrip.innerHTML=marketDefs.map(([s,n],idx)=>{
   const val=s==='RATIO'?ratio:prices[s];
   let change;
   if(s==='RATIO'){
    const pct=ratioPct();
    change=pct===null?`<span class="feed-state feed-reference">REFERENCE</span>`:`<span class="${pct>=0?'up':'down'}">${pct>=0?'+':''}${pct.toFixed(2)}%</span>`;
   }else change=feedChangeMarkup(s);
-  return `<div class="market-tile"><small>${n}</small><strong>${s==='RATIO'?val.toFixed(2):fmt(val)}</strong><em>${change}</em></div>`;
+  return `<div class="market-command-card market-strip-card" style="--market-art:url('${MARKET_ART[s]}')" onclick="go('${s==='RATIO'?'markets':s.toLowerCase()}')"><small>${n}</small><strong>${s==='RATIO'?val.toFixed(2):fmt(val)}</strong>${change}<div class="micro-spark">${miniSpark(idx)}</div></div>`;
  }).join('');
 }
 
 const WATCH_KEY='bdp-v3-watchlist';
 let lastUtilityFocus=null;
 let lastEngineFocus=null;
+function toggleUtilMenu(e){
+ e.stopPropagation();
+ const dd=document.getElementById('utilMenuDropdown');
+ const btn=document.querySelector('.util-menu-btn');
+ const was=dd.classList.contains('open');
+ dd.classList.toggle('open');btn.setAttribute('aria-expanded',!was);
+}
+function closeUtilMenu(){
+ const dd=document.getElementById('utilMenuDropdown');
+ if(dd)dd.classList.remove('open');
+ const btn=document.querySelector('.util-menu-btn');
+ if(btn)btn.setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',e=>{
+ const m=document.getElementById('utilMenu');
+ if(m&&!m.contains(e.target))closeUtilMenu();
+});
 function openUtility(type){
  lastUtilityFocus=document.activeElement;
  utilityTitle.textContent=type==='converter'?'WEIGHT CONVERTER':'WATCHLIST';
@@ -604,21 +622,8 @@ const GOLDBACK_DENOMS=[
 
 function renderMarkets(){
  const ratio=prices.XAU/prices.XAG;
- const cards=[
-  ['GOLD','XAU',prices.XAU,'/img/newlook/mkt-gold.png'],
-  ['SILVER','XAG',prices.XAG,'/img/newlook/mkt-silver.png'],
-  ['PLATINUM','XPT',prices.XPT,'/img/newlook/mkt-platinum.png'],
-  ['PALLADIUM','XPD',prices.XPD,'/img/newlook/mkt-palladium.png'],
-  ['COPPER','XCU',prices.XCU,'/img/newlook/mkt-copper.png'],
-  ['GOLD / SILVER','RATIO',ratio,'/img/newlook/mkt-ratio.png']
- ];
  page.innerHTML=`<section class="hero markets-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>LIVE MARKETS</h1><p>Precious-metals pricing, ratios and dealer benchmarks in one high-visibility command center.</p></section>
  <div class="page">
-  <div class="market-command-grid">${cards.map((c,i)=>`<section class="market-command-card" style="--market-art:url('${c[3]}')">
-   <small>${c[0]} · ${marketBasis(c[1])}</small><strong>${c[1]==='RATIO'?Number(c[2]).toFixed(2):fmt(c[2])}</strong>
-   ${c[1]==='RATIO'?(ratioPct()===null?'<span class="feed-state feed-reference">REFERENCE</span>':`<span class="${ratioPct()>=0?'up':'down'}">${ratioPct()>=0?'+':''}${ratioPct().toFixed(2)}%</span>`):feedChangeMarkup(c[1])}
-   <div class="micro-spark">${miniSpark(i)}</div>
-  </section>`).join('')}</div>
   <div class="grid two markets-main">
    <section class="card intel-card" id="marketTrend"><div class="card-head">PRECIOUS METALS TREND</div><div class="card-body">
     <img class="card-bg" src="/img/newlook/card-trend.png" alt="">
