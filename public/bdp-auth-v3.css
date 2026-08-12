@@ -1,0 +1,125 @@
+
+/* Bullion Dealer Pro V3.6 — shared cinematic account / auth / pricing finish */
+:root{
+  --v3-gold:#dba42a;--v3-gold2:#f2ca62;--v3-bg:#050607;--v3-panel:#0b0d0f;
+  --v3-line:rgba(219,164,42,.30);--v3-text:#f3f0e8;--v3-muted:#92958f;
+}
+html{background:#050607!important}
+body{
+  background:
+    radial-gradient(circle at 80% 18%,rgba(219,164,42,.055),transparent 32rem),
+    #050607!important;
+  color:var(--v3-text)!important;
+  min-height:100vh!important;
+}
+
+/* Full-length cinematic identity banner */
+.page-hero{
+  position:relative!important;
+  width:100vw!important;
+  max-width:none!important;
+  min-height:190px!important;
+  margin:0!important;
+  margin-left:calc(50% - 50vw)!important;
+  padding:0!important;
+  border:0!important;
+  border-bottom:1px solid rgba(219,164,42,.46)!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+  display:block!important;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.02),rgba(0,0,0,.08)),
+    url('/bdp-cinematic-banner.png') center/cover no-repeat!important;
+  box-shadow:0 16px 48px rgba(0,0,0,.5),inset 0 -22px 38px rgba(0,0,0,.24)!important;
+}
+.page-hero:before{
+  content:""!important;position:absolute!important;inset:0!important;
+  background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.25))!important;
+  opacity:1!important;mask-image:none!important;pointer-events:none!important;
+}
+.page-hero:after{
+  content:""!important;position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:2px!important;
+  background:linear-gradient(90deg,transparent,#9b6c14,#f3cb66,#9b6c14,transparent)!important;
+  box-shadow:0 0 14px rgba(243,203,102,.4)!important;
+}
+.page-hero-logo{display:none!important}
+.page-hero>div{
+  position:absolute!important;z-index:3!important;left:clamp(22px,5vw,78px)!important;bottom:14px!important;
+  padding:9px 14px 8px!important;border-left:2px solid rgba(242,202,98,.72)!important;
+  background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.20),transparent)!important;
+  text-align:left!important;
+}
+.page-hero-h1{
+  margin:0!important;color:#f3eee2!important;
+  font-family:'Rajdhani',serif!important;font-weight:700!important;
+  font-size:clamp(22px,3vw,34px)!important;line-height:1!important;letter-spacing:.015em!important;
+  text-shadow:0 3px 16px rgba(0,0,0,.88)!important;
+}
+.page-hero-h1 em{font-style:normal!important;color:#f2ca62!important}
+.page-hero-sub{
+  display:block!important;margin-top:5px!important;color:#d3cec2!important;
+  font-size:10px!important;letter-spacing:.03em!important;text-shadow:0 2px 10px rgba(0,0,0,.9)!important;
+}
+
+/* Cards / boxes */
+.login-card,.box,.plan,.free-tier,.partner-strip,.pricing-shell .card{
+  background:linear-gradient(145deg,rgba(16,18,20,.97),rgba(7,8,9,.97))!important;
+  border:1px solid rgba(219,164,42,.26)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.02)!important;
+}
+.login-card,.box,.plan,.free-tier{border-radius:12px!important}
+.plan.featured{
+  border-color:rgba(242,202,98,.58)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.5),0 0 24px rgba(219,164,42,.055)!important;
+}
+
+/* Form controls */
+input,select,textarea{
+  background:#07090a!important;color:#f0ede6!important;border:1px solid rgba(255,255,255,.11)!important;
+  box-shadow:none!important;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:rgba(242,202,98,.62)!important;
+  box-shadow:0 0 0 3px rgba(219,164,42,.07)!important;
+}
+
+/* Primary CTAs */
+.btn,.btn-login,.plan-btn,.free-btn{
+  border:1px solid #f1ca66!important;
+  background:linear-gradient(180deg,#f2cc68,#aa6e10)!important;
+  color:#171106!important;font-weight:800!important;
+  box-shadow:0 7px 20px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.35)!important;
+}
+.btn:hover,.btn-login:hover,.plan-btn:hover,.free-btn:hover{filter:brightness(1.06)!important}
+
+/* Gold typography */
+.brand,.nav-logo,.login-title,.plan-price,.tier-kicker,.plan-name,.plans-label{
+  color:#efc766!important;text-shadow:0 2px 12px rgba(0,0,0,.65)!important;
+}
+.badge{background:linear-gradient(#f2cb62,#af7212)!important;color:#171106!important}
+.features li:before,.feature-line span:before{color:#efc766!important}
+
+/* Pricing needs full-width banner despite legacy body padding */
+body:has(.pricing-shell){
+  padding:0 22px 80px!important;display:flex!important;flex-direction:column!important;align-items:center!important;
+}
+body:has(.pricing-shell) .page-hero{flex:none!important}
+.pricing-shell{margin-top:30px!important}
+
+/* Auth spacing under banner */
+.page-wrap{position:relative!important;z-index:2!important}
+.topnav{position:relative!important;z-index:5!important;background:rgba(5,6,7,.9)!important;border-color:rgba(219,164,42,.18)!important}
+.adsense-below,.ad-block{opacity:.72}
+.site-footer{border-color:rgba(219,164,42,.13)!important}
+
+@media(max-width:700px){
+  .page-hero{min-height:126px!important;background-position:42% center!important}
+  .page-hero>div{left:12px!important;right:12px!important;bottom:7px!important;padding:7px 10px!important}
+  .page-hero-h1{font-size:19px!important}.page-hero-sub{font-size:8px!important}
+  body:has(.pricing-shell){padding:0 12px 70px!important}
+  .pricing-shell{margin-top:18px!important}
+}
+@media(max-width:450px){
+  .page-hero{min-height:100px!important}
+  .page-hero-h1{font-size:16px!important}.page-hero-sub{display:none!important}
+}

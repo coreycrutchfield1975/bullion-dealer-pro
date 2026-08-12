@@ -30,37 +30,6 @@ const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 const TEST_MODE = process.env.TEST_MODE === 'true';
 const STRIPE_TEST_MONTHLY = process.env.STRIPE_TEST_MONTHLY_PRICE_ID;
 const STRIPE_TEST_ANNUAL  = process.env.STRIPE_TEST_ANNUAL_PRICE_ID;
-// BDP_SERVER_HARDENING_V325
-if (!JWT_SECRET && !TEST_MODE) {
-  console.error('FATAL: JWT_SECRET environment variable is required outside TEST_MODE.');
-  process.exit(1);
-}
-const JWT_KEY = JWT_SECRET || 'bdp_test_mode_only_secret';
-const TOKEN_COOKIE = {
-  httpOnly: true,
-  secure: !TEST_MODE,
-  sameSite: 'lax',
-  maxAge: 7 * 24 * 60 * 60 * 1000
-};
-const TOKEN_CLEAR_COOKIE = { httpOnly: true, secure: !TEST_MODE, sameSite: 'lax' };
-
-const CORS_ORIGINS = String(process.env.CORS_ORIGINS || '')
-  .split(',')
-  .map(v => v.trim())
-  .filter(Boolean);
-const CSP_REPORT_ONLY = process.env.CSP_REPORT_ONLY === 'true';
-const CSP_REPORT_ONLY_VALUE = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://utt.impactcdn.com https://www.googletagmanager.com https://pagead2.googlesyndication.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com data:",
-  "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com",
-  "frame-src 'self' https://checkout.stripe.com https://*.googlesyndication.com https://*.doubleclick.net",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self' https://checkout.stripe.com"
-].join('; ');
 const rssParser = new Parser();
 
 // ── MONGOOSE MODELS ──────────────────────────────────────────────────────────
@@ -97,109 +66,19 @@ const Promo = mongoose.model('Promo', promoSchema);
 app.set('trust proxy', 1);
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(compression());
-if (CORS_ORIGINS.length) {
-  app.use(cors({
-    origin(origin, callback) {
-      if (!origin || CORS_ORIGINS.includes(origin)) return callback(null, true);
-      return callback(null, false);
-    },
-    credentials: true
-  }));
-} else {
-  app.use(cors());
-  console.warn('[security] CORS_ORIGINS is not configured; permissive CORS remains active.');
-}
-app.use((req, res, next) => {
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  if (CSP_REPORT_ONLY) {
-    res.setHeader('Content-Security-Policy-Report-Only', CSP_REPORT_ONLY_VALUE);
-  }
-  next();
-});
-
-async function stripeWebhookHandler(req, res) {
-  if (!stripe || !STRIPE_WEBHOOK_SECRET) {
-    console.error('[stripe-webhook] Stripe webhook configuration is incomplete.');
-    return res.status(503).send('Webhook unavailable');
-  }
-
-  let event;
-  try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      req.headers['stripe-signature'],
-      STRIPE_WEBHOOK_SECRET
-    );
-  } catch (e) {
-    console.warn('[stripe-webhook] signature verification failed:', e.message);
-    return res.status(400).send('Webhook error');
-  }
-
-  try {
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-      const customer = await stripe.customers.retrieve(session.customer);
-      const customerEmail = String(customer?.email || '').trim().toLowerCase();
-      if (!customerEmail) throw new Error('Stripe customer email missing');
-
-      const user = await User.findOne({ email: customerEmail });
-      if (user) {
-        const sub = await stripe.subscriptions.retrieve(session.subscription);
-        const annualPriceId = TEST_MODE ? STRIPE_TEST_ANNUAL : STRIPE_ANNUAL_PRICE_ID;
-        const actualPriceId = sub?.items?.data?.[0]?.price?.id;
-        if (!actualPriceId) throw new Error('Stripe subscription price missing');
-        user.plan = actualPriceId === annualPriceId ? 'annual' : 'monthly';
-        user.stripeSubId = session.subscription;
-        await user.save();
-      }
-    }
-
-    if (event.type === 'customer.subscription.deleted') {
-      const sub = event.data.object;
-      const user = await User.findOne({ stripeSubId: sub.id });
-      if (user) {
-        user.plan = 'trial';
-        user.trialEnd = new Date();
-        await user.save();
-      }
-    }
-
-    return res.json({ received: true });
-  } catch (e) {
-    console.error('[stripe-webhook] processing failed:', e.message);
-    return res.status(500).send('Webhook processing failed');
-  }
-}
-
-app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), stripeWebhookHandler);
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const loginLimiter = rateLimit({ windowMs: 15*60*1000, max: 20, standardHeaders: true, legacyHeaders: false });
-const accountLimiter = rateLimit({ windowMs: 15*60*1000, max: 10, standardHeaders: true, legacyHeaders: false });
-
-function normalizeEmail(value) {
-  return typeof value === 'string' ? value.trim().toLowerCase() : '';
-}
-function validEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
-}
-function validNewPassword(value) {
-  return typeof value === 'string' && value.length >= 8 && value.length <= 128;
-}
-function safeServerError(res, status, publicMessage, err, scope) {
-  console.error(`[${scope}]`, err?.message || err);
-  return res.status(status).json({ error: publicMessage });
-}
 
 // ── AUTH MIDDLEWARE ───────────────────────────────────────────────────────────
 function auth(req, res, next) {
   const token = req.cookies.token || (req.headers.authorization || '').replace('Bearer ', '');
   if (!token) return res.status(401).json({ error: 'Not authenticated' });
   try {
-    req.user = jwt.verify(token, JWT_KEY);
+    req.user = jwt.verify(token, JWT_SECRET || 'dev_secret');
     next();
   } catch { res.status(401).json({ error: 'Session expired' }); }
 }
@@ -268,54 +147,44 @@ async function sendResetEmail(to, token) {
 // ════════════════════════════════════════════════════════════════════════════════
 // AUTH ROUTES
 // ════════════════════════════════════════════════════════════════════════════════
-app.post('/api/register', accountLimiter, async (req, res) => {
+app.post('/api/register', async (req, res) => {
   try {
-    const email = normalizeEmail(req.body?.email);
-    const password = req.body?.password;
-    if (!validEmail(email)) return res.status(400).json({ error: 'A valid email is required' });
-    if (!validNewPassword(password)) return res.status(400).json({ error: 'Password must be 8-128 characters' });
-    const existing = await User.findOne({ email });
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return res.status(409).json({ error: 'Email already registered' });
     const passwordHash = await bcrypt.hash(password, 12);
     const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
-    const user = await User.create({ email, passwordHash, plan: 'trial', trialEnd });
-    const token = jwt.sign({ id: user._id, email: user.email, plan: user.plan, trialEnd }, JWT_KEY, { expiresIn: '7d' });
-    res.cookie('token', token, TOKEN_COOKIE);
+    const user = await User.create({ email: email.toLowerCase(), passwordHash, plan: 'trial', trialEnd });
+    const token = jwt.sign({ id: user._id, email: user.email, plan: user.plan, trialEnd }, JWT_SECRET || 'dev_secret', { expiresIn: '7d' });
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 7*24*60*60*1000 });
     res.json({ ok: true, plan: user.plan, trialEnd });
-  } catch (e) {
-    return safeServerError(res, 500, 'Registration failed', e, 'register');
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/login', loginLimiter, async (req, res) => {
   try {
-    const email = normalizeEmail(req.body?.email);
-    const password = req.body?.password;
-    if (!validEmail(email) || typeof password !== 'string') {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    const user = await User.findOne({ email });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
     const token = jwt.sign(
-      { id: user._id, email: user.email, plan: user.plan, trialEnd: user.trialEnd }, JWT_KEY, { expiresIn: '7d' }
+      { id: user._id, email: user.email, plan: user.plan, trialEnd: user.trialEnd },
+      JWT_SECRET || 'dev_secret', { expiresIn: '7d' }
     );
-    res.cookie('token', token, TOKEN_COOKIE);
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 7*24*60*60*1000 });
     res.json({ ok: true, plan: user.plan, trialEnd: user.trialEnd });
-  } catch (e) {
-    return safeServerError(res, 500, 'Login failed', e, 'login');
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/logout', (req, res) => {
-  res.clearCookie('token', TOKEN_CLEAR_COOKIE);
+  res.clearCookie('token');
   res.json({ ok: true });
 });
 
 app.get('/api/me', auth, async (req, res) => {
   const user = await User.findById(req.user.id).select('-passwordHash -resetToken');
-  if (!user) return res.status(401).json({ error: 'Account not found' });
   const userData = user.toObject();
   userData.testMode = TEST_MODE;
   // isPro: true if on paid plan, admin, or active trial
@@ -329,46 +198,30 @@ app.get('/api/me', auth, async (req, res) => {
   res.json(userData);
 });
 
-app.post('/api/forgot-password', accountLimiter, async (req, res) => {
+app.post('/api/forgot-password', async (req, res) => {
   try {
-    const email = normalizeEmail(req.body?.email);
-    if (!validEmail(email)) return res.json({ ok: true });
-    const user = await User.findOne({ email });
-    if (!user) return res.json({ ok: true });
+    const user = await User.findOne({ email: req.body.email?.toLowerCase() });
+    if (!user) return res.json({ ok: true }); // silent
     const token = crypto.randomBytes(32).toString('hex');
-    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-    user.resetToken = tokenHash;
+    user.resetToken = token;
     user.resetExpires = new Date(Date.now() + 60 * 60 * 1000);
     await user.save();
     await sendResetEmail(user.email, token);
     res.json({ ok: true });
-  } catch (e) {
-    console.error('[forgot-password]', e.message);
-    return res.json({ ok: true });
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/reset-password', accountLimiter, async (req, res) => {
+app.post('/api/reset-password', async (req, res) => {
   try {
-    const token = typeof req.body?.token === 'string' ? req.body.token : '';
-    const password = req.body?.password;
-    if (!token || !validNewPassword(password)) {
-      return res.status(400).json({ error: 'Invalid reset request' });
-    }
-    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-    const user = await User.findOne({
-      resetToken: { $in: [tokenHash, token] },
-      resetExpires: { $gt: new Date() }
-    });
+    const { token, password } = req.body;
+    const user = await User.findOne({ resetToken: token, resetExpires: { $gt: new Date() } });
     if (!user) return res.status(400).json({ error: 'Invalid or expired token' });
     user.passwordHash = await bcrypt.hash(password, 12);
     user.resetToken = undefined;
     user.resetExpires = undefined;
     await user.save();
     res.json({ ok: true });
-  } catch (e) {
-    return safeServerError(res, 500, 'Password reset failed', e, 'reset-password');
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 // ════════════════════════════════════════════════════════════════════════════════
@@ -488,17 +341,11 @@ app.get('/api/fx', auth, async (req, res) => {
 // ════════════════════════════════════════════════════════════════════════════════
 app.post('/api/create-checkout', auth, async (req, res) => {
   try {
-    if (!stripe) return res.status(503).json({ error: 'Billing is temporarily unavailable' });
-    const { plan } = req.body || {};
-    if (!['monthly','annual'].includes(plan)) {
-      return res.status(400).json({ error: 'Invalid billing plan' });
-    }
+    const { plan } = req.body;
     const priceId = TEST_MODE
       ? (plan === 'annual' ? STRIPE_TEST_ANNUAL : STRIPE_TEST_MONTHLY)
       : (plan === 'annual' ? STRIPE_ANNUAL_PRICE_ID : STRIPE_MONTHLY_PRICE_ID);
-    if (!priceId) return res.status(503).json({ error: 'Billing plan is not configured' });
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(401).json({ error: 'Account not found' });
     let customerId = user.stripeCustomerId;
     if (!customerId) {
       const c = await stripe.customers.create({ email: user.email });
@@ -521,9 +368,7 @@ app.post('/api/create-checkout', auth, async (req, res) => {
     }
     const session = await stripe.checkout.sessions.create(sessionParams);
     res.json({ url: session.url });
-  } catch (e) {
-    return safeServerError(res, 500, 'Checkout could not be created', e, 'create-checkout');
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 
@@ -537,8 +382,8 @@ app.get('/api/goldback-rate', async (req, res) => {
     // goldback.com and all Goldback retailer sites are JS-rendered and block server scraping.
     // Instead: calculate directly from live gold spot price.
     // 1 Goldback = 1/1000 troy oz of 24k gold (by design).
-    // BDP shows intrinsic spot value separately from a modeled transaction estimate.
-    // The model is not the official Goldback exchange rate; published rates must be verified separately.
+    // Official market price typically runs 20-30% over gold spot value.
+    // We show both: spot value and estimated market value (~25% over spot).
 
     // Get live gold spot from our own Yahoo proxy
     const goldReq = await fetch('https://bulliondealerpro.com/api/metals/XAU');
@@ -547,7 +392,7 @@ app.get('/api/goldback-rate', async (req, res) => {
 
     if (!spotPerOz || spotPerOz < 100) throw new Error('Invalid gold spot price');
 
-    const MODEL_MULTIPLIER = 1.94; // BDP model only; not an official Goldback exchange rate
+    const PREMIUM = 1.94; // spot + 94% = typical dealer purchase price
     const denoms = [
       { label: '¼ Goldback',   mult: 0.25,  oz: 0.00025 },
       { label: '½ Goldback',   mult: 0.5,   oz: 0.0005  },
@@ -565,18 +410,17 @@ app.get('/api/goldback-rate', async (req, res) => {
       label: d.label,
       oz: d.oz,
       spotValue: +(spotPerOz * d.oz).toFixed(4),
-      marketValue: +(spotPerOz * d.oz * MODEL_MULTIPLIER).toFixed(4),
-      rate: +(spotPerOz * d.oz * MODEL_MULTIPLIER).toFixed(4), // backward compat
+      marketValue: +(spotPerOz * d.oz * PREMIUM).toFixed(4),
+      rate: +(spotPerOz * d.oz * PREMIUM).toFixed(4), // backward compat
     }));
 
     const result = {
       base,
       goldSpot: spotPerOz,
-      premium: MODEL_MULTIPLIER,
-      modelMultiplier: MODEL_MULTIPLIER,
+      premium: PREMIUM,
       rates,
       source: 'calculated',
-      note: 'BDP modeled estimate based on live gold spot × 1.94. This is not the official Goldback exchange rate; verify published rates separately.',
+      note: 'Values calculated from live gold spot. Purchase price ≈ spot × 1.94 (spot + 94% — typical dealer buy rate).',
       updated: new Date().toISOString()
     };
 
@@ -588,6 +432,32 @@ app.get('/api/goldback-rate', async (req, res) => {
     return res.json({ base: null, rates: null, error: e.message });
   }
 });
+app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], STRIPE_WEBHOOK_SECRET);
+  } catch (e) { return res.status(400).send('Webhook error'); }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const customer = await stripe.customers.retrieve(session.customer);
+    const user = await User.findOne({ email: customer.email.toLowerCase() });
+    if (user) {
+      const sub = await stripe.subscriptions.retrieve(session.subscription);
+      const plan = sub.items.data[0].price.id === STRIPE_ANNUAL_PRICE_ID ? 'annual' : 'monthly';
+      user.plan = plan;
+      user.stripeSubId = session.subscription;
+      await user.save();
+    }
+  }
+  if (event.type === 'customer.subscription.deleted') {
+    const sub = event.data.object;
+    const user = await User.findOne({ stripeSubId: sub.id });
+    if (user) { user.plan = 'trial'; user.trialEnd = new Date(); await user.save(); }
+  }
+  res.json({ received: true });
+});
+
 // ════════════════════════════════════════════════════════════════════════════════
 // PROMO CODES
 // ════════════════════════════════════════════════════════════════════════════════
@@ -650,15 +520,7 @@ app.get('/api/admin/users', adminAuth, async (req, res) => {
 });
 
 app.patch('/api/admin/users/:id', adminAuth, async (req, res) => {
-  const plan = req.body?.plan;
-  const allowedPlans = ['trial','monthly','annual','admin'];
-  if (!allowedPlans.includes(plan)) return res.status(400).json({ error: 'Invalid plan' });
-  const user = await User.findByIdAndUpdate(
-    req.params.id,
-    { $set: { plan } },
-    { new: true, runValidators: true }
-  ).select('-passwordHash -resetToken');
-  if (!user) return res.status(404).json({ error: 'User not found' });
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select('-passwordHash');
   res.json(user);
 });
 
