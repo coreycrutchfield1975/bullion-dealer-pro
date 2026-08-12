@@ -64,7 +64,7 @@ a{color:inherit}
     radial-gradient(ellipse 800px 400px at 6% 15%,rgba(214,166,58,.06),transparent 55%),
     linear-gradient(180deg,#030303,#070707 55%,#050505);
   box-shadow:0 -1px 0 rgba(214,166,58,.18),0 30px 90px rgba(0,0,0,.35)}
-.hero-full .shell{position:relative;z-index:2}
+.hero-full .shell{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:56px;align-items:center}
 .hero-full:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:
   linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
   linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
@@ -133,7 +133,7 @@ footer{border-top:1px solid #202022;padding:32px 0 48px;color:#6f6d68;font-size:
 @keyframes slide{to{transform:translateX(-45%)}}
 @keyframes heroGlow{0%,100%{filter:drop-shadow(0 30px 60px rgba(0,0,0,.7)) drop-shadow(0 0 40px rgba(214,166,58,.12))}50%{filter:drop-shadow(0 30px 70px rgba(0,0,0,.72)) drop-shadow(0 0 65px rgba(214,166,58,.2))}}
 @media(max-width:900px){
- .hero{grid-template-columns:1fr;min-height:auto;padding-top:58px}.hero-visual{min-height:430px;order:-1}
+ .hero{grid-template-columns:1fr;min-height:auto;padding-top:58px}.hero-full .shell{grid-template-columns:1fr;gap:24px}.hero-visual{min-height:430px;order:-1}
  .hero-logo{width:min(320px,80vw)}.intent-grid{grid-template-columns:1fr 1fr}.command-grid{grid-template-columns:1fr}.trust{grid-template-columns:1fr 1fr}
  .navlinks{display:none;position:absolute;top:70px;left:16px;right:16px;background:#0b0b0b;border:1px solid #292929;border-radius:14px;padding:18px;flex-direction:column;align-items:flex-start}
  .navlinks.open{display:flex}.menu{display:block}.cta-band{align-items:flex-start;flex-direction:column}

@@ -613,7 +613,6 @@ function renderMarkets(){
   ['GOLD / SILVER','RATIO',ratio,'/img/newlook/mkt-ratio.png']
  ];
  page.innerHTML=`<section class="hero markets-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>LIVE MARKETS</h1><p>Precious-metals pricing, ratios and dealer benchmarks in one high-visibility command center.</p></section>
- <div class="subnav"><button class="active">MARKET OVERVIEW</button><button onclick="scrollToModule('marketDealerBoard')">DEALER BOARD</button><button onclick="scrollToModule('marketIntelligence')">INTELLIGENCE</button><button onclick="go('news')">MARKET NEWS</button></div>
  <div class="page">
   <div class="market-command-grid">${cards.map((c,i)=>`<section class="market-command-card" style="--market-art:url('${c[3]}')">
    <small>${c[0]} · ${marketBasis(c[1])}</small><strong>${c[1]==='RATIO'?Number(c[2]).toFixed(2):fmt(c[2])}</strong>
