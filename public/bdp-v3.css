@@ -425,3 +425,20 @@ body.drawer-open{overflow:hidden}
   outline:1px solid rgba(242,202,98,.55);
   outline-offset:-1px;
 }
+
+/* === V3.27 PHOTOREALISTIC SIDEBAR NAVIGATION === */
+.nav-item{min-height:62px;padding:6px 9px;gap:11px;overflow:hidden;position:relative;isolation:isolate}
+.nav-item:before{content:"";position:absolute;inset:4px;border-radius:10px;background:linear-gradient(90deg,rgba(219,164,42,0),rgba(219,164,42,.035));opacity:0;transition:opacity .2s ease;z-index:-1}
+.nav-item:hover:before,.nav-item.active:before{opacity:1}
+.nav-photo-wrap{position:relative;display:grid;place-items:center;width:50px;height:50px;flex:0 0 50px;border:1px solid rgba(219,164,42,.26);border-radius:10px;background:#07090a;overflow:hidden;box-shadow:inset 0 0 14px rgba(0,0,0,.6);transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.nav-photo{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.92) brightness(.88) contrast(1.06);transition:filter .2s ease,transform .25s ease}
+.nav-photo-wrap>svg{position:absolute;width:18px!important;height:18px!important;right:2px;bottom:2px;padding:3px;border-radius:50%;background:rgba(4,6,7,.82);color:rgba(242,202,98,.82);stroke:currentColor!important;opacity:.72;filter:drop-shadow(0 1px 2px #000);transition:opacity .2s ease}
+.nav-item:hover .nav-photo{filter:saturate(1.08) brightness(1.08) contrast(1.08);transform:scale(1.055)}
+.nav-item:hover .nav-photo-wrap{border-color:rgba(242,202,98,.7);box-shadow:0 0 16px rgba(219,164,42,.14),inset 0 0 14px rgba(0,0,0,.52)}
+.nav-item.active .nav-photo{filter:saturate(1.12) brightness(1.13) contrast(1.08);transform:scale(1.045)}
+.nav-item.active .nav-photo-wrap{border-color:rgba(242,202,98,.95);box-shadow:0 0 18px rgba(219,164,42,.24),inset 0 0 14px rgba(0,0,0,.44)}
+.nav-item.active .nav-photo-wrap>svg{opacity:1;color:#f2ca62}
+.nav-label{min-width:0;line-height:1.15}
+.nav-item .badge{position:relative;z-index:2}
+@media(max-width:800px){.nav-item{min-height:58px}.nav-photo-wrap{width:46px;height:46px;flex-basis:46px}.nav-photo-wrap>svg{width:16px!important;height:16px!important}}
+@media(prefers-reduced-motion:reduce){.nav-photo,.nav-photo-wrap,.nav-item:before{transition:none!important}}
