@@ -625,22 +625,30 @@ app.post('/api/promo/redeem', auth, async (req, res) => {
 // ── Cloud Sync ──
 app.get('/api/sync', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('syncInventory syncSlabs syncTypesets syncPresets syncAlerts');
-    res.json({ inventory: user.syncInventory||[], slabs: user.syncSlabs||[], typesets: user.syncTypesets||{}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
+    const user = await User.findById(req.user.id).select('plan trialEnd syncInventory syncSlabs syncTypesets syncPresets syncAlerts');
+    if (!user) return res.status(401).json({ error: 'Account not found' });
+    const inventoryAllowed = user.plan === 'monthly' || user.plan === 'annual' || user.plan === 'admin' ||
+      (user.plan === 'trial' && new Date(user.trialEnd) > new Date());
+    res.json({ inventory: inventoryAllowed ? (user.syncInventory||[]) : [], inventoryAllowed, slabs: user.syncSlabs||[], typesets: user.syncTypesets||{}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
   } catch(e) { res.status(500).json({ error: 'Sync read failed' }); }
 });
 
 app.post('/api/sync', auth, async (req, res) => {
   try {
     const { inventory, slabs, typesets, presets, alerts } = req.body;
-    await User.findByIdAndUpdate(req.user.id, {
-      syncInventory: inventory || [],
+    const user = await User.findById(req.user.id).select('plan trialEnd');
+    if (!user) return res.status(401).json({ error: 'Account not found' });
+    const inventoryAllowed = user.plan === 'monthly' || user.plan === 'annual' || user.plan === 'admin' ||
+      (user.plan === 'trial' && new Date(user.trialEnd) > new Date());
+    const updates = {
       syncSlabs:     slabs     || [],
       syncTypesets:  typesets  || {},
       syncPresets:   presets   || {},
       syncAlerts:    alerts    || []
-    });
-    res.json({ ok: true });
+    };
+    if (inventoryAllowed) updates.syncInventory = Array.isArray(inventory) ? inventory : [];
+    await User.findByIdAndUpdate(req.user.id, updates);
+    res.json({ ok: true, inventoryAllowed });
   } catch(e) { res.status(500).json({ error: 'Sync write failed' }); }
 });
 

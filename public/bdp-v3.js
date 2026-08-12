@@ -826,6 +826,7 @@ let fxState='idle';
 const FX_CURRENCIES=['USD','EUR','GBP','CAD','AUD','JPY','CHF','CNY','MXN'];
 
 function syncSlotForKey(key){return key===INV_KEY?'inventory':key===ALERT_KEY?'alerts':null}
+function inventoryEntitled(){return Boolean(currentUser?.isPro)}
 function localLoad(key,fallback=[]){
  try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback}catch(e){return fallback}
 }
@@ -885,6 +886,7 @@ function inventoryValue(item){
  return oz*metalSpot(item.metal)*purity;
 }
 function inventorySummary(){
+ if(!inventoryEntitled())return {cost:0,current:0,count:0};
  const inv=loadJson(INV_KEY,[]);
  return inv.reduce((a,x)=>{
   const current=inventoryValue(x),cost=Math.max(0,Number(x.cost||0));
@@ -892,6 +894,7 @@ function inventorySummary(){
  },{cost:0,current:0,count:0});
 }
 function inventoryByMetal(){
+ if(!inventoryEntitled())return {};
  const inv=loadJson(INV_KEY,[]);
  const groups={};
  inv.forEach(x=>{
@@ -908,6 +911,7 @@ function csvCell(v){
  return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s;
 }
 function exportInventoryCsv(){
+ if(!inventoryEntitled())return;
  const inv=loadJson(INV_KEY,[]);
  if(!inv.length)return;
  const rows=[['Item','Metal','Quantity','Ozt Each','Purity %','Cost Basis','Live Value','P/L']];
@@ -977,6 +981,11 @@ function renderDashboard(){
 }
 
 function renderInventory(){
+ if(!inventoryEntitled()){
+  const signedIn=Boolean(currentUser);
+  page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>INVENTORY</h1><p>A premium collection workspace for holdings, sets, cost basis and live metal value.</p></section><div class="page"><section class="inventory-paywall"><small>BDP PRO FEATURE</small><h2>Your collection deserves a real workspace.</h2><p>Inventory tracking, collection starters, cloud sync, portfolio value and CSV export are available with BDP Pro. Existing browser and cloud inventory is preserved while access is inactive.</p><div>${signedIn?`<a href="/pricing">VIEW PRO PRICING →</a><button onclick="go('account')">VIEW ACCOUNT</button>`:`<a href="/login">SIGN IN →</a><a href="/pricing">VIEW PRO PRICING</a>`}</div></section></div>`;
+  return;
+ }
  const inv=loadJson(INV_KEY,[]),sum=inventorySummary(),pnl=sum.current-sum.cost;
  page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
  <div class="inventory-actions"><button class="module-open" onclick="exportInventoryCsv()">⬇ EXPORT CSV</button><span data-sync-badge>${syncBadge()}</span></div>
@@ -1000,16 +1009,18 @@ function renderInventory(){
  </div>`;
 }
 function prefillInventory(name){
+ if(!inventoryEntitled())return;
  const el=document.querySelector('#invName');if(!el)return;
  el.value=name;document.querySelector('#inventoryAdd')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{el.focus();el.select()},350);
 }
 function addInventory(){
+ if(!inventoryEntitled())return;
  const nameEl=document.querySelector('#invName'),metalEl=document.querySelector('#invMetal'),qtyEl=document.querySelector('#invQty'),weightEl=document.querySelector('#invWeight'),purityEl=document.querySelector('#invPurity'),costEl=document.querySelector('#invCost');
  if(!nameEl||!metalEl||!qtyEl||!weightEl||!purityEl||!costEl)return;
  const item={name:(nameEl.value||'').trim()||'Unnamed item',metal:metalEl.value,qty:Math.max(0,Number(qtyEl.value||0)),weight:Math.max(0,Number(weightEl.value||0)),purity:Math.max(0,Math.min(100,Number(purityEl.value||100))),cost:Math.max(0,Number(costEl.value||0))};
  const inv=loadJson(INV_KEY,[]);inv.push(item);saveJson(INV_KEY,inv);renderInventory();
 }
-function removeInventory(i){const inv=loadJson(INV_KEY,[]);inv.splice(i,1);saveJson(INV_KEY,inv);renderInventory()}
+function removeInventory(i){if(!inventoryEntitled())return;const inv=loadJson(INV_KEY,[]);inv.splice(i,1);saveJson(INV_KEY,inv);renderInventory()}
 function metalName(sym){return {XAU:'Gold',XAG:'Silver',XPT:'Platinum',XPD:'Palladium',XCU:'Copper',RATIO:'Gold/Silver Ratio'}[sym]||sym}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
