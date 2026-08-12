@@ -625,7 +625,7 @@ app.post('/api/promo/redeem', auth, async (req, res) => {
 // ── Cloud Sync ──
 app.get('/api/sync', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('syncInventory syncSlabs syncTypesets');
+    const user = await User.findById(req.user.id).select('syncInventory syncSlabs syncTypesets syncPresets syncAlerts');
     res.json({ inventory: user.syncInventory||[], slabs: user.syncSlabs||[], typesets: user.syncTypesets||{}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
   } catch(e) { res.status(500).json({ error: 'Sync read failed' }); }
 });
