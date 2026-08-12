@@ -991,14 +991,12 @@ function renderInventory(){
  page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
  <div class="inventory-actions"><button class="module-open" onclick="exportInventoryCsv()">⬇ EXPORT CSV</button><span data-sync-badge>${syncBadge()}</span></div>
  <div class="page">
-  <section class="collection-starters"><div><small>BDP PRO COLLECTION WORKSPACES</small><h2>Build sets, not just a list.</h2><p>Open a guided series checklist to see what belongs in the set, mark owned coins, and track what is still missing.</p></div><div class="collection-starter-grid">${[
-   ['Indian Head Cents','Indian Head Cent — date / mint / grade'],['Lincoln Cents','Lincoln Cent — date / mint / grade'],['Buffalo Nickels','buffalo'],['Mercury Dimes','Mercury Dime — date / mint / grade'],['Morgan Dollars','Morgan Dollar — date / mint / grade'],['Peace Dollars','Peace Dollar — date / mint / grade'],['American Eagles','American Eagle — year / mint / finish'],['U.S. Type Set','U.S. Type Set — denomination / type'],['World Coins','World Coin — country / denomination / year'],['Bullion Stack','Bullion — product / mint / size']
-  ].map(x=>`<button class="${x[1]==='buffalo'?'featured':''}" onclick="${x[1]==='buffalo'?"openCollection('buffalo')":`prefillInventory('${x[1].replace(/'/g,"\\'")}')`}"><b>${x[0]}</b><span>${x[1]==='buffalo'?'OPEN 64-COIN SET →':'QUICK ADD →'}</span></button>`).join('')}</div></section>
-  <section class="buffalo-collection" id="buffaloCollection">
-   <div class="buffalo-collection-hero"><img src="/img/newlook/collection-buffalo-nickels-v334.png" alt="Buffalo nickel collection"><div><small>FEATURED COLLECTION</small><h2>Buffalo Nickels</h2><p>A complete 1913–1938 date-and-mint checklist, with major varieties tracked separately.</p><button onclick="openCollection('buffalo')">VIEW THE CHECKLIST ↓</button></div></div>
-   <div class="buffalo-collection-stats" id="buffaloCollectionStats"></div>
-   <div class="buffalo-checklist" id="buffaloChecklist" tabindex="-1"></div>
+  <section class="collection-library" id="collectionLibrary">
+   <div class="collection-library-hero"><div><small>BDP PRO COLLECTION WORKSPACES</small><h2>Build the collection you always wanted.</h2><p>Every set opens into a guided checklist with owned and missing coins, completion progress, and cloud saving.</p></div></div>
+   <div class="collection-library-head"><div><small>CHOOSE A COLLECTION</small><h3>Your digital coin albums</h3></div><span>Open any set to view its complete checklist →</span></div>
+   <div class="collection-library-grid" id="collectionStarterGrid"></div>
   </section>
+  <section class="collection-detail" id="collectionDetail" hidden></section>
   <div class="inventory-summary">${[['ITEMS',sum.count],['COST BASIS',fmt(sum.cost)],['CURRENT VALUE',fmt(sum.current)],['UNREALIZED P/L',fmt(pnl)]].map((x,i)=>`<article><small>${x[0]}</small><strong class="${i===3?(pnl>=0?'up':'down'):''}">${x[1]}</strong></article>`).join('')}</div>
   <div class="inventory-allocation">${Object.entries(inventoryByMetal()).length?Object.entries(inventoryByMetal()).map(([metal,g])=>`<article><small>${metal.toUpperCase()}</small><strong>${fmt(g.current)}</strong><span>${g.count} item${g.count===1?'':'s'} · ${sum.current?((g.current/sum.current)*100).toFixed(1):'0.0'}%</span></article>`).join(''):`<article class="allocation-empty"><small>PORTFOLIO ALLOCATION</small><span>Add holdings to see allocation by metal.</span></article>`}</div>
   <div class="grid two">
@@ -1013,7 +1011,7 @@ function renderInventory(){
   </div>
   <section class="card" id="inventoryHoldings" style="margin-top:12px"><div class="card-head">HOLDINGS</div><div class="card-body"><div class="inventory-table-wrap">${inv.length?`<table><thead><tr><th>ITEM</th><th>METAL</th><th>QTY</th><th>OZT EACH</th><th>PURITY</th><th>COST</th><th>LIVE VALUE</th><th>P/L</th><th></th></tr></thead><tbody>${inv.map((x,i)=>{const v=inventoryValue(x),pl=v-Number(x.cost||0);return `<tr><td>${escapeHtml(x.name||'Unnamed')}</td><td>${metalName(x.metal)}</td><td>${x.qty}</td><td>${Number(x.weight).toFixed(5)}</td><td>${Number(x.purity).toFixed(2)}%</td><td>${fmt(x.cost)}</td><td>${fmt(v)}</td><td class="${pl>=0?'up':'down'}">${fmt(pl)}</td><td><button class="row-delete" onclick="removeInventory(${i})">×</button></td></tr>`}).join('')}</tbody></table>`:`<div class="empty-state">No inventory yet. Add your first holding above. CSV export becomes available when holdings exist.</div>`}</div></div></section>
  </div>`;
- drawBuffaloCollectionCard();drawBuffaloChecklist();
+ drawCollectionCards();
 }
 
 const BUFFALO_REGULAR_ISSUES=(()=>{
@@ -1037,6 +1035,45 @@ const BUFFALO_VARIETIES=[
  {id:'bnv_1937d_3leg',label:'1937-D 3-Legged',note:'Famous missing-leg variety'}
 ];
 let collectionFilter='all';
+let activeCollection='buffalo';
+const COLLECTION_CATALOG=[
+ {id:'indian',title:'Indian Head Cents',subtitle:'1859–1909 date set',source:'indian',art:'card-coins.png'},
+ {id:'lincoln',title:'Lincoln Cents',subtitle:'Key types and issues',source:'lincoln',art:'coins-hero.png'},
+ {id:'buffalo',title:'Buffalo Nickels',subtitle:'64-coin date & mint set',source:'buffalo',art:'collection-buffalo-nickels-v334.png'},
+ {id:'mercury',title:'Mercury Dimes',subtitle:'Key dates & mint issues',source:'mercury',art:'card-silver.png'},
+ {id:'morgan',title:'Morgan Dollars',subtitle:'Mint-by-mint collector set',source:'morgan',art:'coins-hero.png'},
+ {id:'peace',title:'Peace Dollars',subtitle:'1921–1935 date & mint set',source:'peace',art:'card-silver.png'},
+ {id:'eagles',title:'American Eagles',subtitle:'Gold Eagle denominations',source:'gae',art:'gold-coin-eagle.png'},
+ {id:'typeset',title:'U.S. Type Set',subtitle:'20th-century designs',source:'20th',art:'card-portfolio.png'},
+ {id:'world',title:'World Coins',subtitle:'Custom collecting goals',source:'world',art:'fx-hero.png'},
+ {id:'bullion',title:'Bullion Stack',subtitle:'Custom stack goals',source:'bullion',art:'card-gold.png'}
+];
+function indianHeadSet(){
+ const coins=[];for(let y=1859;y<=1909;y++)coins.push({id:`ih_${y}`,name:String(y),years:String(y),note:y===1877?'Key date':y===1908||y===1909?'Philadelphia issue':''});
+ coins.push({id:'ih_1908s',name:'1908-S',years:'1908-S',note:'First branch-mint cent'},{id:'ih_1909s',name:'1909-S',years:'1909-S',note:'Key final-year issue'});
+ return {title:'Indian Head Cent Set',desc:'Complete date set 1859–1909 plus the two San Francisco issues.',sections:[{heading:'Regular Issues',coins}]};
+}
+function customGoalSet(id){
+ const presets=id==='world'?[['North America','United States · Canada · Mexico'],['Europe','United Kingdom · France · Germany · Italy'],['Asia & Pacific','Japan · China · Australia'],['Ancient / Historic','Collector-defined goal']]:[['Gold','Bars · rounds · sovereign bullion'],['Silver','Rounds · bars · government bullion'],['Platinum','Coins · bars'],['Constitutional','90% · 40% · 35% silver']];
+ return {title:id==='world'?'World Coin Goals':'Bullion Stack Goals',desc:'Customizable goal categories for an open-ended collection.',sections:[{heading:'Starter Goals',coins:presets.map((x,i)=>({id:`${id}_${i}`,name:x[0],years:x[1],note:'Custom goal'}))}]};
+}
+function collectionSet(id){
+ if(id==='buffalo')return {title:'Buffalo Nickel Set',desc:'Complete 1913–1938 regular date-and-mint set.',sections:[{heading:'Regular Issues',coins:BUFFALO_REGULAR_ISSUES.map(x=>({id:x.id,name:x.label,years:x.year,note:''}))}],varieties:BUFFALO_VARIETIES};
+ if(id==='indian')return indianHeadSet();if(id==='world'||id==='bullion')return customGoalSet(id);
+ const source=COLLECTION_CATALOG.find(x=>x.id===id)?.source;return window.BDP_COLLECTION_SETS?.[source]||null;
+}
+function flatCollectionCoins(set){return (set?.sections||[]).flatMap(s=>s.coins||[])}
+function collectionOwned(id){const entry=typesetData()[id]||{};return entry.owned&&typeof entry.owned==='object'?entry.owned:entry}
+function collectionProgress(id){const set=collectionSet(id),coins=flatCollectionCoins(set),owned=collectionOwned(id),have=coins.filter(x=>owned[x.id]).length;return {have,total:coins.length,pct:coins.length?Math.round(have/coins.length*100):0}}
+function drawCollectionCards(){const host=document.querySelector('#collectionStarterGrid');if(!host)return;host.innerHTML=COLLECTION_CATALOG.map(c=>{const p=collectionProgress(c.id);return `<button class="collection-library-card" style="--collection-art:url('/img/newlook/${c.art}')" onclick="openCollection('${c.id}')"><span><small>${c.subtitle}</small><b>${c.title}</b><em>${p.have} / ${p.total} · ${p.pct}%</em><i><u style="width:${p.pct}%"></u></i></span></button>`}).join('')}
+function toggleCollectionIssue(setId,coinId){if(!inventoryEntitled())return;const data=typesetData();data[setId]=data[setId]||{owned:{}};data[setId].owned=data[setId].owned||{};data[setId].owned[coinId]=!data[setId].owned[coinId];saveJson(TYPESET_KEY,data);drawCollectionDetail();drawCollectionCards()}
+function drawCollectionDetail(){
+ const host=document.querySelector('#collectionDetail'),set=collectionSet(activeCollection),cat=COLLECTION_CATALOG.find(x=>x.id===activeCollection);if(!host||!set||!cat)return;
+ const owned=collectionOwned(activeCollection),p=collectionProgress(activeCollection),sections=set.sections||[];
+ const coin=(x,advanced=false)=>`<button class="collection-coin ${owned[x.id]?'owned':''} ${advanced?'key':''}" onclick="toggleCollectionIssue('${activeCollection}','${x.id}')"><i>${owned[x.id]?'✓':''}</i><span><b>${x.name||x.label}</b><small>${x.note||x.years||'REGULAR ISSUE'}</small></span></button>`;
+ host.innerHTML=`<div class="collection-detail-hero" style="--detail-art:url('/img/newlook/${cat.art}')"><div><button onclick="closeCollection()">← ALL COLLECTIONS</button><small>${cat.subtitle}</small><h2>${set.title}</h2><p>${set.desc||''}</p></div></div><div class="buffalo-collection-stats"><div><strong>${p.have} <span>/ ${p.total}</span></strong><small>ISSUES OWNED</small></div><div class="collection-progress"><i style="width:${p.pct}%"></i></div><b>${p.pct}% COMPLETE</b><span>${p.total-p.have} remaining</span></div><div class="buffalo-checklist"><div class="collection-check-head"><div><small>COLLECTION CHECKLIST</small><h3>${p.total} tracked issues</h3></div><div><button class="${collectionFilter==='all'?'active':''}" onclick="setCollectionFilter('all')">ALL</button><button class="${collectionFilter==='missing'?'active':''}" onclick="setCollectionFilter('missing')">MISSING ONLY</button></div></div>${sections.map(s=>`<h4>${s.heading}</h4><div class="collection-coin-grid">${(s.coins||[]).filter(x=>collectionFilter!=='missing'||!owned[x.id]).map(x=>coin(x)).join('')||'<p class="collection-complete">Section complete.</p>'}</div>`).join('')}${set.varieties?`<h4>ADVANCED VARIETIES <span>Tracked separately from regular-set completion</span></h4><div class="collection-coin-grid advanced">${set.varieties.filter(x=>collectionFilter!=='missing'||!owned[x.id]).map(x=>coin(x,true)).join('')}</div>`:''}</div>`;
+}
+function closeCollection(){document.querySelector('#collectionDetail').hidden=true;document.querySelector('#collectionLibrary').hidden=false;document.querySelector('#collectionLibrary').scrollIntoView({behavior:'smooth',block:'start'})}
 function typesetData(){const d=loadJson(TYPESET_KEY,{});return d&&typeof d==='object'?d:{}}
 function buffaloOwned(){return typesetData().buffalo?.owned||{}}
 function toggleBuffaloIssue(id){
@@ -1044,8 +1081,8 @@ function toggleBuffaloIssue(id){
  const data=typesetData();data.buffalo=data.buffalo||{owned:{}};data.buffalo.owned=data.buffalo.owned||{};
  data.buffalo.owned[id]=!data.buffalo.owned[id];saveJson(TYPESET_KEY,data);drawBuffaloChecklist();drawBuffaloCollectionCard();
 }
-function openCollection(id){if(id!=='buffalo'||!inventoryEntitled())return;document.querySelector('#buffaloCollection')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>document.querySelector('#buffaloChecklist')?.focus(),350)}
-function setCollectionFilter(filter){collectionFilter=filter;drawBuffaloChecklist()}
+function openCollection(id){if(!inventoryEntitled()||!collectionSet(id))return;activeCollection=id;collectionFilter='all';document.querySelector('#collectionLibrary').hidden=true;const detail=document.querySelector('#collectionDetail');detail.hidden=false;drawCollectionDetail();detail.scrollIntoView({behavior:'smooth',block:'start'})}
+function setCollectionFilter(filter){collectionFilter=filter;drawCollectionDetail()}
 function drawBuffaloCollectionCard(){
  const host=document.querySelector('#buffaloCollectionStats');if(!host)return;
  const owned=buffaloOwned(),have=BUFFALO_REGULAR_ISSUES.filter(x=>owned[x.id]).length,total=BUFFALO_REGULAR_ISSUES.length,pct=Math.round(have/total*100);
