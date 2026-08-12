@@ -442,3 +442,85 @@ body.drawer-open{overflow:hidden}
 .nav-item .badge{position:relative;z-index:2}
 @media(max-width:800px){.nav-item{min-height:58px}.nav-photo-wrap{width:46px;height:46px;flex-basis:46px}.nav-photo-wrap>svg{width:16px!important;height:16px!important}}
 @media(prefers-reduced-motion:reduce){.nav-photo,.nav-photo-wrap,.nav-item:before{transition:none!important}}
+
+
+/* === V3.27 REAL-LOGO MOUNTAIN BANNER ===
+   The canonical repository logo remains a separate HTML <img>.
+*/
+.bdp-mountain-banner{
+  position:relative;
+  width:100%;
+  height:220px;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.02) 35%,rgba(0,0,0,.02) 65%,rgba(0,0,0,.18)),
+    url('/bdp-mountain-banner-v327.png') center center / cover no-repeat !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-bottom:1px solid rgba(219,164,42,.55);
+  box-shadow:0 18px 52px rgba(0,0,0,.62),inset 0 -30px 50px rgba(0,0,0,.35);
+}
+.bdp-mountain-banner .banner-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(0,0,0,.05),rgba(0,0,0,.28) 74%),
+    linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.15));
+  pointer-events:none;
+}
+.banner-brand-lockup{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  width:min(42vw,560px);
+  padding:16px 28px 14px;
+  border-radius:18px;
+  background:radial-gradient(ellipse at center,rgba(2,4,5,.72),rgba(2,4,5,.35) 60%,transparent 78%);
+  text-align:center;
+}
+.banner-brand-lockup img{
+  display:block;
+  width:min(100%,440px);
+  max-height:130px;
+  object-fit:contain;
+  filter:drop-shadow(0 5px 18px rgba(0,0,0,.78));
+}
+.banner-brand-lockup span{
+  color:#f2ca62;
+  font:600 13px/1.1 Rajdhani,Inter,sans-serif;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  text-shadow:0 2px 12px #000;
+  white-space:nowrap;
+}
+.bdp-mountain-banner .banner-cta{
+  display:none!important;
+}
+.app{min-height:calc(100vh - 220px);}
+.sidebar{top:220px!important;height:calc(100vh - 220px)!important;}
+.main{min-height:calc(100vh - 220px);}
+
+@media(max-width:900px){
+  .bdp-mountain-banner{height:132px;background-position:center center!important;}
+  .banner-brand-lockup{width:min(64vw,360px);padding:8px 14px;gap:4px;}
+  .banner-brand-lockup img{max-height:82px;}
+  .banner-brand-lockup span{font-size:9px;letter-spacing:.15em;}
+  .app{min-height:calc(100vh - 132px);}
+  .sidebar{top:132px!important;height:calc(100vh - 132px)!important;}
+  .main{min-height:calc(100vh - 132px);}
+}
+@media(max-width:520px){
+  .bdp-mountain-banner{height:112px;}
+  .banner-brand-lockup{width:72vw;padding:6px 10px;}
+  .banner-brand-lockup img{max-height:68px;}
+  .banner-brand-lockup span{font-size:8px;letter-spacing:.10em;}
+  .app{min-height:calc(100vh - 112px);}
+  .sidebar{top:112px!important;height:calc(100vh - 112px)!important;}
+  .main{min-height:calc(100vh - 112px);}
+}
+
