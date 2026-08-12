@@ -474,7 +474,7 @@ function calcCopperPennies(){
 function renderDealer(){
  const au=prices.XAU,ag=prices.XAG;
  page.innerHTML=`<section class="hero" style="--hero:url('/img/newlook/card-dealer.png')"><h1>DEALER TOOLS</h1><p>Quote a deal, check margins, compare benchmarks and jump directly into the working dealer engine.</p></section>
- <div class="subnav"><button class="active" onclick="scrollToModule('dealerDealSheet')">DEAL SHEET</button><button data-classic="#admin" data-title="Full Dealer Workspace">FULL DEALER WORKSPACE</button><button onclick="scrollToModule('dealerPremiumCard')">PREMIUMS</button><button onclick="go('markets')">MARKETS</button></div>
+ <div class="subnav"><button class="active" onclick="scrollToModule('dealerDealSheet')">DEAL SHEET</button><button onclick="scrollToModule('dealerTradingCard')">ALL TOOLS</button><button onclick="scrollToModule('dealerPremiumCard')">PREMIUMS</button><button onclick="go('markets')">MARKETS</button></div>
  <div class="page">
   <div class="grid three">
    <section class="card" id="dealerDealSheet"><div class="card-head">QUICK DEAL SHEET</div><div class="card-body">
@@ -505,7 +505,7 @@ function renderDealer(){
     <div class="premium-results"><div><small>MELT VALUE</small><strong id="pmMelt">—</strong></div><div><small>PREMIUM $</small><strong id="pmDollars">—</strong></div><div><small>PREMIUM %</small><strong id="pmPercent">—</strong></div><div><small>PRICE / OZT</small><strong id="pmPerOzt">—</strong></div></div>
     <p class="local-note">Premium is calculated from the dealer price you enter versus live/reference BDP spot for the selected metal and fine-metal content.</p>
    </div></section>
-   <section class="card" id="dealerTradingCard"><div class="card-head">TRADING / PURCHASE SHEET</div><div class="card-body"><p class="module-copy">Keep the current working purchase sheet available during the V3 migration.</p><button class="gold-btn" data-classic="#trading" data-title="Trading / Purchase Sheet">OPEN SHEET ↗</button></div></section>
+   <section class="card" id="dealerTradingCard"><div class="card-head">TRADING / PURCHASE SHEET</div><div class="card-body"><p class="module-copy">Use the native V3 quick deal sheet above for purchase pricing. The legacy trading sheet is being migrated.</p><button class="gold-btn" onclick="scrollToModule('dealerDealSheet')">OPEN DEAL SHEET ↑</button></div></section>
   </div>
  </div>`;
  dealerCalc();premiumCalc();dealerCompare();
@@ -634,7 +634,7 @@ function renderMarkets(){
    </div></section>
   </div>
   <div class="grid three" style="margin-top:12px">
-   <section class="card"><div class="card-head">MARKET SESSION REFERENCE</div><div class="card-body"><div class="status-list">${['New York','London','Shanghai','Tokyo'].map(x=>`<div><span class="status-dot idle"></span><b>${x}</b><small>SESSION REFERENCE · OPEN/CLOSED NOT INFERRED</small></div>`).join('')}</div><button class="module-open" data-classic="#fx" data-title="Market Hours">OPEN CLASSIC MARKET HOURS ↗</button></div></section>
+   <section class="card"><div class="card-head">MARKET SESSION REFERENCE</div><div class="card-body"><div class="status-list">${['New York','London','Shanghai','Tokyo'].map(x=>`<div><span class="status-dot idle"></span><b>${x}</b><small>SESSION REFERENCE · OPEN/CLOSED NOT INFERRED</small></div>`).join('')}</div><button class="module-open" onclick="scrollToModule('marketDealerBoard')">OPEN MARKET DATA BOARD →</button></div></section>
    <section class="card"><div class="card-head">KEY RATIOS</div><div class="card-body">${ratioRows()}</div></section>
    <section class="card" id="marketIntelligence"><div class="card-head">MARKET INTELLIGENCE</div><div class="card-body"><div class="intel-list"><div><small>GOLD / SILVER</small><strong>${ratio.toFixed(2)}</strong></div><div><small>GOLD / PLATINUM</small><strong>${(prices.XAU/prices.XPT).toFixed(2)}</strong></div><div><small>PLATINUM / PALLADIUM</small><strong>${(prices.XPT/prices.XPD).toFixed(2)}</strong></div></div><button class="gold-btn" onclick="scrollToModule('marketDealerBoard')">OPEN MARKET DATA BOARD →</button></div></section>
   </div>
@@ -700,7 +700,7 @@ function renderCoins(){
     <a href="https://www.pcgs.com/coinfacts" target="_blank" rel="noopener"><small>PCGS</small><b>CoinFacts</b><span>Coin and variety reference ↗</span></a>
     <a href="https://en.numista.com" target="_blank" rel="noopener"><small>NUMISTA</small><b>Catalog</b><span>World coin catalog ↗</span></a>
    </div></div></section>
-   <section class="card" id="coinReferenceHub"><div class="card-head">BDP NUMISMATIC DATABASE</div><div class="card-body"><p class="module-copy">The existing BDP database contains deeper key-date, series, grading, error, specification, and coin-value tables. V3 keeps one controlled fallback to that database while the larger reference library is migrated.</p><button class="gold-btn" data-classic="#numismatic" data-title="Numismatic Database">OPEN BDP NUMISMATIC DATABASE ↗</button></div></section>
+   <section class="card" id="coinReferenceHub"><div class="card-head">BDP NUMISMATIC DATABASE</div><div class="card-body"><p class="module-copy">The existing BDP database contains deeper key-date, series, grading, error, specification, and coin-value tables. V3 keeps one controlled fallback to that database while the larger reference library is migrated.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER ↗</button></div></section>
   </div>
  </div>`;
  drawCoinLibrary();
@@ -756,7 +756,7 @@ function renderGoldbacks(){
   </div>
   <div class="grid two" style="margin-top:12px">
    <section class="card"><div class="card-head">EXCHANGE VALUE VS MELT</div><div class="card-body"><p class="module-copy">Goldbacks contain defined fractions of a troy ounce of 24K gold. The intrinsic melt value follows gold spot; the exchange or retail value is a separate number. V3 keeps those values visibly separate.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER →</button></div></section>
-   <section class="card" id="goldbackRetailerCard"><div class="card-head">RETAILER / DEALER LINKS</div><div class="card-body"><div class="goldback-art"><img src="/img/newlook/card-goldbacks.png" alt="Goldbacks"><div><b>GOLDBACK DEALER WORKSPACE</b><p>Open the existing retailer and dealer-link tools while they are migrated into V3.</p><div class="gb-link-row"><button data-classic="#goldback" data-title="Goldback Retailers">OPEN RETAILERS ↗</button><a href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">OFFICIAL RATES ↗</a></div></div></div></div></section>
+   <section class="card" id="goldbackRetailerCard"><div class="card-head">RETAILER / DEALER LINKS</div><div class="card-body"><div class="goldback-art"><img src="/img/newlook/card-goldbacks.png" alt="Goldbacks"><div><b>GOLDBACK DEALER WORKSPACE</b><p>Open the existing retailer and dealer-link tools while they are migrated into V3.</p><div class="gb-link-row"><button onclick="go('resources')">OPEN RETAILERS ↗</button><a href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">OFFICIAL RATES ↗</a></div></div></div></div></section>
   </div>
  </div>`;
  drawGbDenoms();
@@ -948,7 +948,7 @@ function renderDashboard(){
 function renderInventory(){
  const inv=loadJson(INV_KEY,[]),sum=inventorySummary(),pnl=sum.current-sum.cost;
  page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/img/newlook/card-coins.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
- <div class="subnav"><button class="active" onclick="scrollToModule('inventoryHoldings')">HOLDINGS</button><button onclick="scrollToModule('inventoryAdd')">ADD ITEM</button><button onclick="exportInventoryCsv()">EXPORT CSV</button><button data-classic="#admin" data-title="Classic Inventory / Admin Tools">CLASSIC TOOLS</button><div class="subnav-status" data-sync-badge>${syncBadge()}</div></div>
+ <div class="subnav"><button class="active" onclick="scrollToModule('inventoryHoldings')">HOLDINGS</button><button onclick="scrollToModule('inventoryAdd')">ADD ITEM</button><button onclick="exportInventoryCsv()">EXPORT CSV</button><button onclick="go('account')">ACCOUNT TOOLS</button><div class="subnav-status" data-sync-badge>${syncBadge()}</div></div>
  <div class="page">
   <div class="inventory-summary">${[['ITEMS',sum.count],['COST BASIS',fmt(sum.cost)],['CURRENT VALUE',fmt(sum.current)],['UNREALIZED P/L',fmt(pnl)]].map((x,i)=>`<article><small>${x[0]}</small><strong class="${i===3?(pnl>=0?'up':'down'):''}">${x[1]}</strong></article>`).join('')}</div>
   <div class="inventory-allocation">${Object.entries(inventoryByMetal()).length?Object.entries(inventoryByMetal()).map(([metal,g])=>`<article><small>${metal.toUpperCase()}</small><strong>${fmt(g.current)}</strong><span>${g.count} item${g.count===1?'':'s'} · ${sum.current?((g.current/sum.current)*100).toFixed(1):'0.0'}%</span></article>`).join(''):`<article class="allocation-empty"><small>PORTFOLIO ALLOCATION</small><span>Add holdings to see allocation by metal.</span></article>`}</div>
@@ -1116,7 +1116,7 @@ function renderNews(){
   <div class="section-line"><span>TRUSTED SPECIALIST SOURCES</span><small>OPENS AT SOURCE</small></div>
   <div id="newsSourceGrid" class="news-source-grid"></div>
   <div class="grid three" style="margin-top:12px">
-   <section class="card"><div class="card-head">MARKET TOPICS</div><div class="card-body"><div class="topic-pills"><button onclick="go('markets')">Gold Spot</button><button onclick="go('markets')">Silver Spot</button><button onclick="go('markets')">G/S Ratio</button><button data-classic="#fx" data-title="Futures">Futures</button><button data-classic="#fx" data-title="Macro Markets">Macro</button></div></div></section>
+   <section class="card"><div class="card-head">MARKET TOPICS</div><div class="card-body"><div class="topic-pills"><button onclick="go('markets')">Gold Spot</button><button onclick="go('markets')">Silver Spot</button><button onclick="go('markets')">G/S Ratio</button><button onclick="go('markets')">Futures</button><button onclick="go('markets')">Macro</button></div></div></section>
    <section class="card"><div class="card-head">FROM NEWS TO ACTION</div><div class="card-body"><p class="module-copy">After reading the market, move directly into the tool you need.</p><div class="dash-actions"><button onclick="go('gold')">${icon('i-bars')}<span>Gold Center</span></button><button onclick="go('silver')">${icon('i-coins')}<span>Silver Center</span></button><button onclick="go('dealer')">${icon('i-tools')}<span>Dealer Tools</span></button><button onclick="go('alerts')">${icon('i-bell')}<span>Set Alert</span></button></div></div></section>
    <section class="card"><div class="card-head">SOURCE STANDARD</div><div class="card-body"><p class="module-copy">V3 only labels information as live when it comes from an actual connected data endpoint. External news sources are clearly identified and opened at the publisher.</p><button class="module-open" onclick="go('resources')">VIEW RESOURCE CENTER ↗</button></div></section>
   </div>
