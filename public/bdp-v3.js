@@ -158,8 +158,8 @@ function renderWatchlist(){
  const selected=watchlistItems();
  utilityBody.innerHTML=`<p class="utility-copy">Choose the metals you want at a glance. Watchlist preferences stay in this browser.</p><div class="watch-grid">${syms.map(([s,n])=>`<button class="${selected.includes(s)?'selected':''}" onclick="toggleWatch('${s}')"><span>${selected.includes(s)?'★':'☆'}</span><div><small>${n.toUpperCase()} · ${marketBasis(s)}</small><strong>${fmt(prices[s])}</strong>${feedChangeMarkup(s)}</div></button>`).join('')}</div><div class="utility-foot">Market labels show LIVE only after a successful BDP API response.</div>`;
 }
-const UNIT_TO_GRAMS={g:1,ozt:31.1034768,dwt:1.55517384,grain:.06479891,kg:1000};
-const UNIT_NAMES={g:'Grams',ozt:'Troy Ounces',dwt:'Pennyweight',grain:'Grains',kg:'Kilograms'};
+const UNIT_TO_GRAMS={g:1,ozt:31.1034768,dwt:1.55517384,grain:.06479891,kg:1000,oz:28.349523125,lb:453.59237,tola:11.6638038,baht:15.244,tael:37.429,ct:.2,mg:.001};
+const UNIT_NAMES={g:'Grams',ozt:'Troy Ounces',dwt:'Pennyweight',grain:'Grains',kg:'Kilograms',oz:'Ounces (Avoirdupois)',lb:'Pounds (Avoirdupois)',tola:'Tola',baht:'Baht',tael:'Tael',ct:'Carats',mg:'Milligrams'};
 function renderConverter(){
  utilityBody.innerHTML=`<p class="utility-copy">Precious-metals weight converter. Troy ounces are used—not avoirdupois ounces.</p><div class="converter-box"><label>AMOUNT<input id="cvAmount" type="number" value="1" min="0" step="any" oninput="convertWeight()"></label><div class="converter-units"><label>FROM<select id="cvFrom" onchange="convertWeight()">${Object.entries(UNIT_NAMES).map(([v,n])=>`<option value="${v}">${n}</option>`).join('')}</select></label><span>→</span><label>TO<select id="cvTo" onchange="convertWeight()">${Object.entries(UNIT_NAMES).map(([v,n])=>`<option value="${v}" ${v==='g'?'selected':''}>${n}</option>`).join('')}</select></label></div><div class="converter-result"><small>CONVERTED VALUE</small><strong id="cvResult">—</strong><span id="cvFormula"></span></div></div>`;
  convertWeight();
