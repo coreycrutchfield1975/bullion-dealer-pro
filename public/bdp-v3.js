@@ -605,15 +605,15 @@ const GOLDBACK_DENOMS=[
 function renderMarkets(){
  const ratio=prices.XAU/prices.XAG;
  const cards=[
-  ['GOLD','XAU',prices.XAU,'/img/newlook/card-gold.png'],
-  ['SILVER','XAG',prices.XAG,'/img/newlook/card-silver.png'],
-  ['PLATINUM','XPT',prices.XPT,'/img/newlook/fx-hero.png'],
-  ['PALLADIUM','XPD',prices.XPD,'/img/newlook/fx-hero.png'],
-  ['COPPER','XCU',prices.XCU,'/img/newlook/copper-hero.png'],
-  ['GOLD / SILVER','RATIO',ratio,'/img/newlook/card-market.png']
+  ['GOLD','XAU',prices.XAU,'/img/newlook/mkt-gold.png'],
+  ['SILVER','XAG',prices.XAG,'/img/newlook/mkt-silver.png'],
+  ['PLATINUM','XPT',prices.XPT,'/img/newlook/mkt-platinum.png'],
+  ['PALLADIUM','XPD',prices.XPD,'/img/newlook/mkt-palladium.png'],
+  ['COPPER','XCU',prices.XCU,'/img/newlook/mkt-copper.png'],
+  ['GOLD / SILVER','RATIO',ratio,'/img/newlook/mkt-ratio.png']
  ];
  page.innerHTML=`<section class="hero markets-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>LIVE MARKETS</h1><p>Precious-metals pricing, ratios and dealer benchmarks in one high-visibility command center.</p></section>
- <div class="subnav"><button class="active">MARKET OVERVIEW</button><button onclick="scrollToModule('marketDealerBoard')">FULL MARKET DATA</button><button onclick="scrollToModule('dealerTradingCard')">TRADING SHEET</button><button onclick="go('news')">MARKET NEWS</button></div>
+ <div class="subnav"><button class="active">MARKET OVERVIEW</button><button onclick="scrollToModule('marketDealerBoard')">DEALER BOARD</button><button onclick="scrollToModule('marketIntelligence')">INTELLIGENCE</button><button onclick="go('news')">MARKET NEWS</button></div>
  <div class="page">
   <div class="market-command-grid">${cards.map((c,i)=>`<section class="market-command-card" style="--market-art:url('${c[3]}')">
    <small>${c[0]} · ${marketBasis(c[1])}</small><strong>${c[1]==='RATIO'?Number(c[2]).toFixed(2):fmt(c[2])}</strong>
@@ -621,23 +621,36 @@ function renderMarkets(){
    <div class="micro-spark">${miniSpark(i)}</div>
   </section>`).join('')}</div>
   <div class="grid two markets-main">
-   <section class="card"><div class="card-head">PRECIOUS METALS TREND</div><div class="card-body">
-    <div class="market-tabs">${[['XAU','GOLD'],['XAG','SILVER'],['XPT','PLATINUM'],['XPD','PALLADIUM']].map((x,i)=>`<button class="${i===0?'active':''}" onclick="selectMarketChart('${x[0]}',this)">${x[1]}</button>`).join('')}</div>
-    <div id="marketChartPrice" class="price-big">${fmt(prices.XAU)}</div>
-    <div id="marketChart">${sessionMoveSVG('XAU')}</div>
-    <div class="market-range"><button class="active">1D</button><button>5D</button><button>1M</button><button>3M</button><button>1Y</button></div>
+   <section class="card intel-card" id="marketTrend"><div class="card-head">PRECIOUS METALS TREND</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-trend.png" alt="">
+    <div class="trend-overlay">
+     <div class="market-tabs">${[['XAU','GOLD'],['XAG','SILVER'],['XPT','PLATINUM'],['XPD','PALLADIUM']].map((x,i)=>`<button class="${i===0?'active':''}" onclick="selectMarketChart('${x[0]}',this)">${x[1]}</button>`).join('')}</div>
+     <div id="marketChartPrice" class="price-big">${fmt(prices.XAU)}</div>
+     <div id="marketChart">${sessionMoveSVG('XAU')}</div>
+     <div class="market-range"><button class="active">1D</button><button>5D</button><button>1M</button><button>3M</button><button>1Y</button></div>
+    </div>
    </div></section>
-   <section class="card" id="marketDealerBoard"><div class="card-head">DEALER MARKET BOARD</div><div class="card-body"><table><thead><tr><th>METAL</th><th>10% UNDER</th><th>5% UNDER</th><th>SPOT</th><th>5% OVER</th><th>10% OVER</th></tr></thead><tbody>
-    ${[['Gold',prices.XAU],['Silver',prices.XAG],['Platinum',prices.XPT],['Palladium',prices.XPD]].map(x=>`<tr><td>${x[0]}</td><td>${fmt(x[1]*.90)}</td><td>${fmt(x[1]*.95)}</td><td>${fmt(x[1])}</td><td>${fmt(x[1]*1.05)}</td><td>${fmt(x[1]*1.10)}</td></tr>`).join('')}
-   </tbody></table>
-   <div class="ratio-panel"><small>GOLD / SILVER RATIO</small><strong>${ratio.toFixed(2)}</strong><span>oz silver per oz gold</span></div>
+   <section class="card intel-card" id="marketDealerBoard"><div class="card-head">DEALER MARKET BOARD</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-dealerboard.png" alt="">
+    <div class="trend-overlay"><table><thead><tr><th>METAL</th><th>10% UNDER</th><th>5% UNDER</th><th>SPOT</th><th>5% OVER</th><th>10% OVER</th></tr></thead><tbody>
+     ${[['Gold',prices.XAU],['Silver',prices.XAG],['Platinum',prices.XPT],['Palladium',prices.XPD]].map(x=>`<tr><td>${x[0]}</td><td>${fmt(x[1]*.90)}</td><td>${fmt(x[1]*.95)}</td><td>${fmt(x[1])}</td><td>${fmt(x[1]*1.05)}</td><td>${fmt(x[1]*1.10)}</td></tr>`).join('')}
+    </tbody></table>
+    <div class="ratio-panel"><small>GOLD / SILVER RATIO</small><strong>${ratio.toFixed(2)}</strong><span>oz silver per oz gold</span></div>
+    </div>
    </div></section>
   </div>
-  <div class="grid three" style="margin-top:12px">
-   <section class="card"><div class="card-head">MARKET SESSION REFERENCE</div><div class="card-body"><div class="status-list">${['New York','London','Shanghai','Tokyo'].map(x=>`<div><span class="status-dot idle"></span><b>${x}</b><small>SESSION REFERENCE · OPEN/CLOSED NOT INFERRED</small></div>`).join('')}</div><button class="module-open" onclick="scrollToModule('marketDealerBoard')">OPEN MARKET DATA BOARD →</button></div></section>
-   <section class="card"><div class="card-head">KEY RATIOS</div><div class="card-body">${ratioRows()}</div></section>
-   <section class="card" id="marketIntelligence"><div class="card-head">MARKET INTELLIGENCE</div><div class="card-body"><div class="intel-list"><div><small>GOLD / SILVER</small><strong>${ratio.toFixed(2)}</strong></div><div><small>GOLD / PLATINUM</small><strong>${(prices.XAU/prices.XPT).toFixed(2)}</strong></div><div><small>PLATINUM / PALLADIUM</small><strong>${(prices.XPT/prices.XPD).toFixed(2)}</strong></div></div><button class="gold-btn" onclick="scrollToModule('marketDealerBoard')">OPEN MARKET DATA BOARD →</button></div></section>
-  </div>
+  <section class="card intel-card intel-wide" id="marketIntelligence" style="margin-top:12px"><div class="card-head">MARKET INTELLIGENCE</div><div class="card-body">
+   <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+   <div class="intel-overlay">
+    <div class="intel-metrics">
+     <div><small>GOLD / SILVER</small><strong>${ratio.toFixed(2)}</strong><span>${ratioPct()===null?'—':(ratioPct()>=0?'+':'')+ratioPct().toFixed(2)+'%'}</span></div>
+     <div><small>GOLD / PLATINUM</small><strong>${(prices.XAU/prices.XPT).toFixed(2)}</strong><span>oz Au per oz Pt</span></div>
+     <div><small>PLATINUM / PALLADIUM</small><strong>${(prices.XPT/prices.XPD).toFixed(2)}</strong><span>oz Pt per oz Pd</span></div>
+     <div><small>GOLD / COPPER</small><strong>${(prices.XAU/(prices.XCU*16)).toFixed(0)}</strong><span>oz Au per lb Cu</span></div>
+    </div>
+    <div class="intel-note">Ratios update live with market feed. Use them to judge relative value between metals before pricing a deal.</div>
+   </div>
+  </div></section>
  </div>`;
 }
 function miniSpark(i){
