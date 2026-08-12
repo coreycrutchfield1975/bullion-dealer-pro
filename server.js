@@ -629,7 +629,7 @@ app.get('/api/sync', auth, async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Account not found' });
     const inventoryAllowed = user.plan === 'monthly' || user.plan === 'annual' || user.plan === 'admin' ||
       (user.plan === 'trial' && new Date(user.trialEnd) > new Date());
-    res.json({ inventory: inventoryAllowed ? (user.syncInventory||[]) : [], inventoryAllowed, slabs: user.syncSlabs||[], typesets: user.syncTypesets||{}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
+    res.json({ inventory: inventoryAllowed ? (user.syncInventory||[]) : [], inventoryAllowed, slabs: user.syncSlabs||[], typesets: inventoryAllowed ? (user.syncTypesets||{}) : {}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
   } catch(e) { res.status(500).json({ error: 'Sync read failed' }); }
 });
 
@@ -642,11 +642,13 @@ app.post('/api/sync', auth, async (req, res) => {
       (user.plan === 'trial' && new Date(user.trialEnd) > new Date());
     const updates = {
       syncSlabs:     slabs     || [],
-      syncTypesets:  typesets  || {},
       syncPresets:   presets   || {},
       syncAlerts:    alerts    || []
     };
-    if (inventoryAllowed) updates.syncInventory = Array.isArray(inventory) ? inventory : [];
+    if (inventoryAllowed) {
+      updates.syncInventory = Array.isArray(inventory) ? inventory : [];
+      updates.syncTypesets = typesets && typeof typesets === 'object' && !Array.isArray(typesets) ? typesets : {};
+    }
     await User.findByIdAndUpdate(req.user.id, updates);
     res.json({ ok: true, inventoryAllowed });
   } catch(e) { res.status(500).json({ error: 'Sync write failed' }); }

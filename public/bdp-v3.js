@@ -816,6 +816,7 @@ function calcGbTxn(){
 
 const INV_KEY='bdp-v3-inventory';
 const ALERT_KEY='bdp-v3-alerts';
+const TYPESET_KEY='bdp-v3-typesets';
 let currentUser=null;
 let cloudSync=null;
 let syncMode='local';
@@ -825,14 +826,14 @@ let fxData=null;
 let fxState='idle';
 const FX_CURRENCIES=['USD','EUR','GBP','CAD','AUD','JPY','CHF','CNY','MXN'];
 
-function syncSlotForKey(key){return key===INV_KEY?'inventory':key===ALERT_KEY?'alerts':null}
+function syncSlotForKey(key){return key===INV_KEY?'inventory':key===ALERT_KEY?'alerts':key===TYPESET_KEY?'typesets':null}
 function inventoryEntitled(){return Boolean(currentUser?.isPro)}
 function localLoad(key,fallback=[]){
  try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback}catch(e){return fallback}
 }
 function loadJson(key,fallback=[]){
  const slot=syncSlotForKey(key);
- if(slot&&cloudSync&&Array.isArray(cloudSync[slot])) return cloudSync[slot];
+ if(slot&&cloudSync&&cloudSync[slot]!=null) return cloudSync[slot];
  return localLoad(key,fallback);
 }
 function saveJson(key,value){
@@ -990,9 +991,14 @@ function renderInventory(){
  page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
  <div class="inventory-actions"><button class="module-open" onclick="exportInventoryCsv()">⬇ EXPORT CSV</button><span data-sync-badge>${syncBadge()}</span></div>
  <div class="page">
-  <section class="collection-starters"><div><small>BDP PRO COLLECTION WORKSPACES</small><h2>Start with the collection you actually own.</h2><p>Choose a series to prefill a structured inventory entry, then record date, mint, grade and cost in the item name and holding fields.</p></div><div class="collection-starter-grid">${[
-   ['Indian Head Cents','Indian Head Cent — date / mint / grade'],['Lincoln Cents','Lincoln Cent — date / mint / grade'],['Buffalo Nickels','Buffalo Nickel — date / mint / grade'],['Mercury Dimes','Mercury Dime — date / mint / grade'],['Morgan Dollars','Morgan Dollar — date / mint / grade'],['Peace Dollars','Peace Dollar — date / mint / grade'],['American Eagles','American Eagle — year / mint / finish'],['U.S. Type Set','U.S. Type Set — denomination / type'],['World Coins','World Coin — country / denomination / year'],['Bullion Stack','Bullion — product / mint / size']
-  ].map(x=>`<button onclick="prefillInventory('${x[1].replace(/'/g,"\\'")}')"><b>${x[0]}</b><span>ADD TO COLLECTION →</span></button>`).join('')}</div></section>
+  <section class="collection-starters"><div><small>BDP PRO COLLECTION WORKSPACES</small><h2>Build sets, not just a list.</h2><p>Open a guided series checklist to see what belongs in the set, mark owned coins, and track what is still missing.</p></div><div class="collection-starter-grid">${[
+   ['Indian Head Cents','Indian Head Cent — date / mint / grade'],['Lincoln Cents','Lincoln Cent — date / mint / grade'],['Buffalo Nickels','buffalo'],['Mercury Dimes','Mercury Dime — date / mint / grade'],['Morgan Dollars','Morgan Dollar — date / mint / grade'],['Peace Dollars','Peace Dollar — date / mint / grade'],['American Eagles','American Eagle — year / mint / finish'],['U.S. Type Set','U.S. Type Set — denomination / type'],['World Coins','World Coin — country / denomination / year'],['Bullion Stack','Bullion — product / mint / size']
+  ].map(x=>`<button class="${x[1]==='buffalo'?'featured':''}" onclick="${x[1]==='buffalo'?"openCollection('buffalo')":`prefillInventory('${x[1].replace(/'/g,"\\'")}')`}"><b>${x[0]}</b><span>${x[1]==='buffalo'?'OPEN 64-COIN SET →':'QUICK ADD →'}</span></button>`).join('')}</div></section>
+  <section class="buffalo-collection" id="buffaloCollection">
+   <div class="buffalo-collection-hero"><img src="/img/newlook/collection-buffalo-nickels-v334.png" alt="Buffalo nickel collection"><div><small>FEATURED COLLECTION</small><h2>Buffalo Nickels</h2><p>A complete 1913–1938 date-and-mint checklist, with major varieties tracked separately.</p><button onclick="openCollection('buffalo')">VIEW THE CHECKLIST ↓</button></div></div>
+   <div class="buffalo-collection-stats" id="buffaloCollectionStats"></div>
+   <div class="buffalo-checklist" id="buffaloChecklist" tabindex="-1"></div>
+  </section>
   <div class="inventory-summary">${[['ITEMS',sum.count],['COST BASIS',fmt(sum.cost)],['CURRENT VALUE',fmt(sum.current)],['UNREALIZED P/L',fmt(pnl)]].map((x,i)=>`<article><small>${x[0]}</small><strong class="${i===3?(pnl>=0?'up':'down'):''}">${x[1]}</strong></article>`).join('')}</div>
   <div class="inventory-allocation">${Object.entries(inventoryByMetal()).length?Object.entries(inventoryByMetal()).map(([metal,g])=>`<article><small>${metal.toUpperCase()}</small><strong>${fmt(g.current)}</strong><span>${g.count} item${g.count===1?'':'s'} · ${sum.current?((g.current/sum.current)*100).toFixed(1):'0.0'}%</span></article>`).join(''):`<article class="allocation-empty"><small>PORTFOLIO ALLOCATION</small><span>Add holdings to see allocation by metal.</span></article>`}</div>
   <div class="grid two">
@@ -1007,6 +1013,52 @@ function renderInventory(){
   </div>
   <section class="card" id="inventoryHoldings" style="margin-top:12px"><div class="card-head">HOLDINGS</div><div class="card-body"><div class="inventory-table-wrap">${inv.length?`<table><thead><tr><th>ITEM</th><th>METAL</th><th>QTY</th><th>OZT EACH</th><th>PURITY</th><th>COST</th><th>LIVE VALUE</th><th>P/L</th><th></th></tr></thead><tbody>${inv.map((x,i)=>{const v=inventoryValue(x),pl=v-Number(x.cost||0);return `<tr><td>${escapeHtml(x.name||'Unnamed')}</td><td>${metalName(x.metal)}</td><td>${x.qty}</td><td>${Number(x.weight).toFixed(5)}</td><td>${Number(x.purity).toFixed(2)}%</td><td>${fmt(x.cost)}</td><td>${fmt(v)}</td><td class="${pl>=0?'up':'down'}">${fmt(pl)}</td><td><button class="row-delete" onclick="removeInventory(${i})">×</button></td></tr>`}).join('')}</tbody></table>`:`<div class="empty-state">No inventory yet. Add your first holding above. CSV export becomes available when holdings exist.</div>`}</div></div></section>
  </div>`;
+ drawBuffaloCollectionCard();drawBuffaloChecklist();
+}
+
+const BUFFALO_REGULAR_ISSUES=(()=>{
+ const issues=[];
+ const add=(year,mints,type='')=>mints.forEach(mint=>issues.push({id:`bn_${year}_${mint.toLowerCase()}${type?`_${type.toLowerCase()}`:''}`,label:`${year}-${mint}${type?` ${type}`:''}`,year:String(year),mint,type,note:''}));
+ add(1913,['P','D','S'],'Type 1');add(1913,['P','D','S'],'Type 2');
+ for(let y=1914;y<=1920;y++)add(y,['P','D','S']);
+ add(1921,['P','S']);add(1923,['P','S']);
+ for(let y=1924;y<=1929;y++)add(y,['P','D','S']);
+ add(1930,['P','S']);add(1931,['S']);add(1934,['P','D']);
+ for(let y=1935;y<=1937;y++)add(y,['P','D','S']);
+ add(1938,['D']);
+ return issues;
+})();
+const BUFFALO_VARIETIES=[
+ {id:'bnv_1914_4over3',label:'1914/3',note:'Overdate variety'},
+ {id:'bnv_1916_ddo',label:'1916 DDO',note:'Doubled-die obverse'},
+ {id:'bnv_1918_7d',label:'1918/7-D',note:'Major overdate'},
+ {id:'bnv_1935_ddr',label:'1935 DDR',note:'Doubled-die reverse'},
+ {id:'bnv_1936d_3half',label:'1936-D 3½ Legs',note:'Advanced die-polish variety'},
+ {id:'bnv_1937d_3leg',label:'1937-D 3-Legged',note:'Famous missing-leg variety'}
+];
+let collectionFilter='all';
+function typesetData(){const d=loadJson(TYPESET_KEY,{});return d&&typeof d==='object'?d:{}}
+function buffaloOwned(){return typesetData().buffalo?.owned||{}}
+function toggleBuffaloIssue(id){
+ if(!inventoryEntitled())return;
+ const data=typesetData();data.buffalo=data.buffalo||{owned:{}};data.buffalo.owned=data.buffalo.owned||{};
+ data.buffalo.owned[id]=!data.buffalo.owned[id];saveJson(TYPESET_KEY,data);drawBuffaloChecklist();drawBuffaloCollectionCard();
+}
+function openCollection(id){if(id!=='buffalo'||!inventoryEntitled())return;document.querySelector('#buffaloCollection')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>document.querySelector('#buffaloChecklist')?.focus(),350)}
+function setCollectionFilter(filter){collectionFilter=filter;drawBuffaloChecklist()}
+function drawBuffaloCollectionCard(){
+ const host=document.querySelector('#buffaloCollectionStats');if(!host)return;
+ const owned=buffaloOwned(),have=BUFFALO_REGULAR_ISSUES.filter(x=>owned[x.id]).length,total=BUFFALO_REGULAR_ISSUES.length,pct=Math.round(have/total*100);
+ const keyIds=['bn_1913_s_type 2','bn_1913_d_type 2','bn_1914_d','bn_1921_s','bn_1924_s','bn_1926_s'];
+ host.innerHTML=`<div><strong>${have} <span>/ ${total}</span></strong><small>REGULAR ISSUES OWNED</small></div><div class="collection-progress"><i style="width:${pct}%"></i></div><b>${pct}% COMPLETE</b><span>${keyIds.filter(id=>!owned[id]).length} highlighted key dates missing</span>`;
+}
+function drawBuffaloChecklist(){
+ const host=document.querySelector('#buffaloChecklist');if(!host)return;
+ const owned=buffaloOwned(),keyIds=new Set(['bn_1913_s_type 2','bn_1913_d_type 2','bn_1914_d','bn_1921_s','bn_1924_s','bn_1926_s']);
+ const renderIssue=(x,advanced=false)=>`<button class="collection-coin ${owned[x.id]?'owned':''} ${keyIds.has(x.id)||advanced?'key':''}" onclick="toggleBuffaloIssue('${x.id}')"><i>${owned[x.id]?'✓':''}</i><span><b>${x.label}</b><small>${advanced?x.note:(keyIds.has(x.id)?'KEY / SEMI-KEY':'REGULAR ISSUE')}</small></span></button>`;
+ const regular=BUFFALO_REGULAR_ISSUES.filter(x=>collectionFilter!=='missing'||!owned[x.id]);
+ const varieties=BUFFALO_VARIETIES.filter(x=>collectionFilter!=='missing'||!owned[x.id]);
+ host.innerHTML=`<div class="collection-check-head"><div><small>COMPLETE DATE &amp; MINT SET</small><h3>1913–1938 · ${BUFFALO_REGULAR_ISSUES.length} regular issues</h3></div><div><button class="${collectionFilter==='all'?'active':''}" onclick="setCollectionFilter('all')">ALL</button><button class="${collectionFilter==='missing'?'active':''}" onclick="setCollectionFilter('missing')">MISSING ONLY</button></div></div><h4>REGULAR ISSUES</h4><div class="collection-coin-grid">${regular.map(x=>renderIssue(x)).join('')||'<p class="collection-complete">Regular set complete.</p>'}</div><h4>ADVANCED VARIETIES <span>Tracked separately from regular-set completion</span></h4><div class="collection-coin-grid advanced">${varieties.map(x=>renderIssue(x,true)).join('')||'<p class="collection-complete">Advanced varieties complete.</p>'}</div>`;
 }
 function prefillInventory(name){
  if(!inventoryEntitled())return;
