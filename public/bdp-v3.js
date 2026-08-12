@@ -212,18 +212,32 @@ function renderGold(){
  const au=prices.XAU, gram=au/31.1034768, auFeed=feedState.XAU, auPrev=Number(auFeed.prev||au), auCh=Number(auFeed.ch||0), gbPreviewRate=goldbackWorkingRate();
  const karats=[[24,.9999],[22,.9167],[18,.75],[14,.5833],[10,.4167]];
  page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>GOLD CENTER</h1><p>Real-time gold prices, calculators, Goldbacks, and tools to help you buy, sell and profit with confidence.</p></section>
- <div class="subnav"><button class="active">▰ OVERVIEW</button><button onclick="scrollToModule('goldKaratCard')">KARAT CALCULATOR</button><button onclick="go('goldbacks')">GOLDBACKS</button><button onclick="go('coins')">BULLION & COINS</button><button onclick="scrollToModule('goldKaratCard')">SCRAP GOLD</button><button onclick="go('markets')">HISTORICAL CHARTS</button></div>
  <div class="page">
- <div class="grid three">
- <section class="card"><div class="card-head">GOLD SPOT PRICE ${feedBadge('XAU')}</div><div class="card-body"><div class="price-big">${fmt(au)}</div><div class="${auCh>=0?'up':'down'}">${feedChangeText('XAU')}</div>${sessionMoveSVG('XAU')}<div class="statbar"><div><small>CURRENT</small><strong>${fmt(au)}</strong></div><div><small>PREV CLOSE</small><strong>${fmt(auPrev)}</strong></div><div><small>CHANGE</small><strong class="${auCh>=0?'up':'down'}">${auFeed.state==='live'?(auCh>=0?'+':'')+fmt(auCh):'—'}</strong></div><div><small>BASIS</small><strong>USD/OZT</strong></div></div></div></section>
- <section class="card"><div class="card-head">GOLD BY PURITY <small>(MELT VALUE PER GRAM)</small></div><div class="card-body"><table><thead><tr><th>KARAT</th><th>PURITY</th><th>GRAM PRICE</th><th>OZT PRICE</th></tr></thead><tbody>${karats.map(k=>`<tr><td>${k[0]}K</td><td>${(k[1]*100).toFixed(2)}%</td><td>${fmt(gram*k[1])}</td><td>${fmt(au*k[1])}</td></tr>`).join('')}</tbody></table></div></section>
- <section class="card" id="goldKaratCard"><div class="card-head">QUICK GOLD / SCRAP CALCULATOR</div><div class="card-body"><div class="form-row"><div class="field"><label>WEIGHT</label><input id="gWeight" type="number" value="10"></div><div class="field"><label>UNIT</label><select id="gUnit"><option>Grams</option><option>Troy Ounces</option></select></div></div><div class="form-row"><div class="field"><label>KARAT</label><select id="gKarat"><option value=".5833">14K (58.33%)</option><option value=".75">18K (75%)</option><option value=".9167">22K (91.67%)</option><option value=".9999">24K (99.99%)</option></select></div><div class="field"><label>PAYOUT %</label><input id="gPay" type="number" value="80"></div></div><div class="calc-result"><div><small>MELT VALUE</small><strong id="rMelt">—</strong></div><div><small>PAYOUT</small><strong class="up" id="rPay">—</strong></div><div><small>DEALER SPREAD</small><strong id="rSpread" style="color:var(--gold2)">—</strong></div></div><button class="gold-btn" onclick="goldCalc()">▣ CALCULATE NOW</button></div></section>
- </div>
- <div class="grid three" style="margin-top:12px">
- <section class="card"><div class="card-head">GOLDBACKS · LIVE VALUES</div><div class="card-body"><div class="tile-row">${[1,5,10,25,50].map(n=>`<div class="image-tile"><img src="/img/newlook/card-goldbacks.png"><b>${n} GOLDBACK</b><small>${fmt(n*gbPreviewRate)}</small></div>`).join('')}</div></div></section>
- <section class="card"><div class="card-head">POPULAR GOLD COINS · MELT VALUE</div><div class="card-body"><div class="tile-row">${[['EAGLE','gold-coin-eagle.png'],['BUFFALO','gold-coin-buffalo.png'],['KRUGERRAND','gold-coin-krugerrand.png'],['MAPLE','gold-coin-maple.png']].map(c=>`<div class="image-tile"><img src="/img/newlook/${c[1]}"><b>${c[0]}</b><small>${fmt(au)}</small></div>`).join('')}</div></div></section>
- <section class="card"><div class="card-head">GOLD TOOLS</div><div class="card-body"><div class="tool-grid">${[['i-bars','Scrap Gold Calculator','scroll','goldKaratCard'],['i-calc','Karat Calculator','scroll','goldKaratCard'],['i-coin','Gold Jewelry Value','scroll','goldKaratCard'],['i-bell','Gold Price Alerts','go','alerts'],['i-tools','Compare Dealers','go','dealer'],['i-chart','Historical Charts','go','markets']].map(t=>t[2]==='scroll'?`<button class="tool tool-button" onclick="scrollToModule('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`:`<button class="tool tool-button" onclick="go('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`).join('')}</div></div></section>
- </div></div>`;
+  <div class="grid two">
+   <section class="card intel-card" id="goldKaratCard"><div class="card-head">QUICK GOLD / SCRAP CALCULATOR</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-gold.png" alt="">
+    <div class="trend-overlay"><div class="form-row"><div class="field"><label>WEIGHT</label><input id="gWeight" type="number" value="10"></div><div class="field"><label>UNIT</label><select id="gUnit"><option>Grams</option><option>Troy Ounces</option></select></div></div><div class="form-row"><div class="field"><label>KARAT</label><select id="gKarat"><option value=".5833">14K (58.33%)</option><option value=".75">18K (75%)</option><option value=".9167">22K (91.67%)</option><option value=".9999">24K (99.99%)</option></select></div><div class="field"><label>PAYOUT %</label><input id="gPay" type="number" value="80"></div></div><div class="calc-result"><div><small>MELT VALUE</small><strong id="rMelt">—</strong></div><div><small>PAYOUT</small><strong class="up" id="rPay">—</strong></div><div><small>DEALER SPREAD</small><strong id="rSpread" style="color:var(--gold2)">—</strong></div></div><button class="gold-btn" onclick="goldCalc()">▣ CALCULATE NOW</button></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">GOLD BY PURITY <small>(MELT PER GRAM)</small></div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/mkt-gold.png" alt="">
+    <div class="trend-overlay"><table><thead><tr><th>KARAT</th><th>PURITY</th><th>GRAM PRICE</th><th>OZT PRICE</th></tr></thead><tbody>${karats.map(k=>`<tr><td>${k[0]}K</td><td>${(k[1]*100).toFixed(2)}%</td><td>${fmt(gram*k[1])}</td><td>${fmt(au*k[1])}</td></tr>`).join('')}</tbody></table></div>
+   </div></section>
+  </div>
+  <div class="grid three" style="margin-top:12px">
+   <section class="card intel-card"><div class="card-head">GOLDBACKS · SERIES AT A GLANCE</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-goldbacks.png" alt="">
+    <div class="trend-overlay"><div class="tile-row">${[1,5,10,25,50].map(n=>`<div class="image-tile"><img src="/img/newlook/card-goldbacks.png"><b>${n}</b><small>${fmt(n*gbPreviewRate)}</small></div>`).join('')}</div><button class="module-open" onclick="go('goldbacks')">FULL GOLDBACK CENTER →</button></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">POPULAR GOLD COINS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-coins.png" alt="">
+    <div class="trend-overlay"><div class="tile-row">${[['EAGLE','gold-coin-eagle.png'],['BUFFALO','gold-coin-buffalo.png'],['KRUGERRAND','gold-coin-krugerrand.png'],['MAPLE','gold-coin-maple.png']].map(c=>`<div class="image-tile"><img src="/img/newlook/${c[1]}"><b>${c[0]}</b><small>${fmt(au)}</small></div>`).join('')}</div><button class="module-open" onclick="go('coins')">COIN CENTER →</button></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">GOLD TOOLS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+    <div class="trend-overlay"><div class="tool-grid" style="grid-template-columns:1fr 1fr">${[['i-calc','Karat Calc','scroll','goldKaratCard'],['i-tools','Dealer Tools','go','dealer'],['i-bell','Price Alerts','go','alerts'],['i-chart','Live Markets','go','markets']].map(t=>t[2]==='scroll'?`<button class="tool tool-button" onclick="scrollToModule('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`:`<button class="tool tool-button" onclick="go('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`).join('')}</div></div>
+   </div></section>
+  </div>
+ </div>`;
  goldCalc();
 }
 function goldCalc(){
@@ -279,36 +293,36 @@ function renderSilver(){
   ['Dime Roll',50,0.07234],['Quarter Roll',40,0.18084],['Half Roll',20,0.36169]
  ];
  page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>SILVER CENTER</h1><p>Live silver, constitutional values, rolls, bullion and dealer pricing in one compact workspace.</p></section>
- <div class="subnav"><button class="active">OVERVIEW</button><button onclick="scrollToModule('silverConstitutional')">CONSTITUTIONAL</button><button onclick="scrollToModule('silverBullion')">BULLION</button><button onclick="scrollToModule('silverRolls')">ROLLS</button><button onclick="go('markets')">HISTORICAL CHARTS</button></div>
  <div class="page">
-  <div class="grid three">
-   <section class="card"><div class="card-head">SILVER SPOT ${feedBadge('XAG')}</div><div class="card-body"><div class="price-big silver-price">${fmt(ag)}</div><div class="${agCh>=0?'up':'down'}">${feedChangeText('XAG')}</div>${sessionMoveSVG('XAG')}<div class="statbar"><div><small>PER GRAM</small><strong>${fmt(ag/31.1034768)}</strong></div><div><small>5% UNDER</small><strong>${fmt(ag*.95)}</strong></div><div><small>SPOT</small><strong>${fmt(ag)}</strong></div><div><small>5% OVER</small><strong>${fmt(ag*1.05)}</strong></div></div></div></section>
-   <section class="card" id="silverConstitutional"><div class="card-head">CONSTITUTIONAL SILVER</div><div class="card-body"><table><thead><tr><th>TYPE</th><th>FINE OZT</th><th>FINE GRAMS</th><th>MELT</th><th>5% UNDER</th></tr></thead><tbody>${coins.map(c=>`<tr><td>${c[0]}</td><td>${c[1].toFixed(5)}</td><td>${(c[1]*31.1034768).toFixed(3)} g</td><td>${fmt(c[1]*ag)}</td><td>${fmt(c[1]*ag*.95)}</td></tr>`).join('')}</tbody></table><button class="module-open" onclick="scrollToModule(\'constitutionalCalc\')">CALCULATE A QUANTITY ↓</button></div></section>
-   <section class="card"><div class="card-head">QUICK SILVER DEAL</div><div class="card-body">
-    <div class="form-row">
-      <div class="field"><label>SILVER WEIGHT</label><input id="sWeight" type="number" min="0" step="any" value="10" oninput="silverCalc()"></div>
-      <div class="field"><label>WEIGHT UNIT</label><select id="sUnit" onchange="silverCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div>
-    </div>
+  <div class="grid two">
+   <section class="card intel-card" id="silverConstitutional"><div class="card-head">CONSTITUTIONAL SILVER</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-silver.png" alt="">
+    <div class="trend-overlay"><table><thead><tr><th>TYPE</th><th>FINE OZT</th><th>FINE GRAMS</th><th>MELT</th><th>5% UNDER</th></tr></thead><tbody>${coins.map(c=>`<tr><td>${c[0]}</td><td>${c[1].toFixed(5)}</td><td>${(c[1]*31.1034768).toFixed(3)} g</td><td>${fmt(c[1]*ag)}</td><td>${fmt(c[1]*ag*.95)}</td></tr>`).join('')}</tbody></table></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">QUICK SILVER DEAL</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/mkt-silver.png" alt="">
+    <div class="trend-overlay">
+    <div class="form-row"><div class="field"><label>SILVER WEIGHT</label><input id="sWeight" type="number" min="0" step="any" value="10" oninput="silverCalc()"></div><div class="field"><label>WEIGHT UNIT</label><select id="sUnit" onchange="silverCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div></div>
     <div class="form-row"><div class="field"><label>SILVER SPOT / TROY OZ</label><input id="sSpot" type="number" value="${ag.toFixed(2)}" oninput="silverCalc()"></div><div class="field"><label>SPOT / GRAM</label><input id="sGramSpot" type="text" value="${(ag/31.1034768).toFixed(4)}" readonly></div></div>
     <div class="form-row"><div class="field"><label>BUY % UNDER</label><input id="sUnder" type="number" value="5" oninput="silverCalc()"></div><div class="field"><label>SELL % OVER</label><input id="sOver" type="number" value="5" oninput="silverCalc()"></div></div>
-    <div class="silver-weight-conversion">
-      <div><small>TROY OUNCES</small><strong id="sOztEquivalent">—</strong></div>
-      <div><small>GRAMS</small><strong id="sGramEquivalent">—</strong></div>
-      <div><small>PRICE / GRAM</small><strong id="sPerGram">—</strong></div>
-    </div>
     <div class="calc-result"><div><small>MELT</small><strong id="sMelt">—</strong></div><div><small>BUY TARGET</small><strong id="sBuy" class="up">—</strong></div><div><small>SELL TARGET</small><strong id="sSell" style="color:var(--gold2)">—</strong></div></div>
     <button class="gold-btn" onclick="silverCalc()">CALCULATE SILVER DEAL</button>
+    </div>
    </div></section>
   </div>
-  <section class="card" id="constitutionalCalc" style="margin-top:12px"><div class="card-head">CONSTITUTIONAL SILVER QUANTITY CALCULATOR</div><div class="card-body">
-   <div class="form-row"><div class="field"><label>COIN TYPE</label><select id="csType" onchange="constitutionalCalc()"><option value=".07234">90% Dime</option><option value=".18084">90% Quarter</option><option value=".36169">90% Half Dollar</option><option value=".77344">Silver Dollar</option></select></div><div class="field"><label>QUANTITY</label><input id="csQty" type="number" min="0" step="1" value="10" oninput="constitutionalCalc()"></div></div>
-   <div class="constitutional-results"><div><small>FINE SILVER OZT</small><strong id="csOzt">—</strong></div><div><small>FINE SILVER GRAMS</small><strong id="csGrams">—</strong></div><div><small>MELT VALUE</small><strong id="csMelt">—</strong></div><div><small>5% UNDER / OVER</small><strong id="csRange">—</strong></div></div>
-   <p class="local-note">Fine-silver content uses the same BDP constitutional-silver weights shown above.</p>
-  </div></section>
   <div class="grid three" style="margin-top:12px">
-   <section class="card" id="silverRolls"><div class="card-head">ROLL VALUES</div><div class="card-body"><table><thead><tr><th>ROLL</th><th>COINS</th><th>FINE OZT</th><th>FINE GRAMS</th><th>MELT</th></tr></thead><tbody>${rolls.map(r=>{const ozt=r[1]*r[2];return `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${ozt.toFixed(4)}</td><td>${(ozt*31.1034768).toFixed(2)} g</td><td>${fmt(ozt*ag)}</td></tr>`}).join('')}</tbody></table></div></section>
-   <section class="card" id="silverBullion"><div class="card-head">SILVER BULLION</div><div class="card-body"><div class="silver-art"><img src="/img/newlook/card-silver.png" alt="Silver bullion"><div><b>STACKER WORKSPACE</b><span>Eagles · rounds · bars · premium tools</span><button onclick="scrollToModule('silverBullion')">OPEN SILVER BULLION TOOLS →</button></div></div></div></section>
-   <section class="card"><div class="card-head">SILVER TOOLS</div><div class="card-body"><div class="tool-grid">${[['i-calc','Melt Calculator','scroll','silverConstitutional'],['i-coins','Roll Values','scroll','silverRolls'],['i-tools','Dealer Spread','go','dealer'],['i-chart','Historical Charts','go','markets'],['i-star','Premium Tools','go','dealer'],['i-news','Silver Reference','go','resources']].map(t=>t[2]==='scroll'?`<button class="tool tool-button" onclick="scrollToModule('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`:`<button class="tool tool-button" onclick="go('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`).join('')}</div></div></section>
+   <section class="card intel-card" id="constitutionalCalc"><div class="card-head">CONSTITUTIONAL QUANTITY CALC</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-coins.png" alt="">
+    <div class="trend-overlay"><div class="form-row"><div class="field"><label>COIN TYPE</label><select id="csType" onchange="constitutionalCalc()"><option value=".07234">90% Dime</option><option value=".18084">90% Quarter</option><option value=".36169">90% Half Dollar</option><option value=".77344">Silver Dollar</option></select></div><div class="field"><label>QUANTITY</label><input id="csQty" type="number" min="0" step="1" value="10" oninput="constitutionalCalc()"></div></div><div class="constitutional-results"><div><small>FINE OZT</small><strong id="csOzt">—</strong></div><div><small>FINE GRAMS</small><strong id="csGrams">—</strong></div><div><small>MELT</small><strong id="csMelt">—</strong></div><div><small>5% RANGE</small><strong id="csRange">—</strong></div></div></div>
+   </div></section>
+   <section class="card intel-card" id="silverRolls"><div class="card-head">ROLL VALUES</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-silver.png" alt="">
+    <div class="trend-overlay"><table><thead><tr><th>ROLL</th><th>COINS</th><th>FINE OZT</th><th>FINE GRAMS</th><th>MELT</th></tr></thead><tbody>${rolls.map(r=>{const ozt=r[1]*r[2];return `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${ozt.toFixed(4)}</td><td>${(ozt*31.1034768).toFixed(2)} g</td><td>${fmt(ozt*ag)}</td></tr>`}).join('')}</tbody></table></div>
+   </div></section>
+   <section class="card intel-card" id="silverBullion"><div class="card-head">SILVER TOOLS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+    <div class="trend-overlay"><div class="tool-grid" style="grid-template-columns:1fr 1fr">${[['i-calc','Melt Calc','scroll','silverConstitutional'],['i-coins','Roll Values','scroll','silverRolls'],['i-tools','Dealer Spread','go','dealer'],['i-chart','Live Markets','go','markets']].map(t=>t[2]==='scroll'?`<button class="tool tool-button" onclick="scrollToModule('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`:`<button class="tool tool-button" onclick="go('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`).join('')}</div></div>
+   </div></section>
   </div>
  </div>`;
  silverCalc();constitutionalCalc();
@@ -339,12 +353,12 @@ function silverCalc(){
  const meltEl=document.querySelector('#sMelt');
  if(meltEl){
   meltEl.textContent=fmt(melt);
-  document.querySelector('#sBuy').textContent=fmt(melt*(1-under/100));
-  document.querySelector('#sSell').textContent=fmt(melt*(1+over/100));
-  document.querySelector('#sOztEquivalent').textContent=oz.toLocaleString(undefined,{maximumFractionDigits:6})+' ozt';
-  document.querySelector('#sGramEquivalent').textContent=grams.toLocaleString(undefined,{maximumFractionDigits:4})+' g';
-  document.querySelector('#sPerGram').textContent=fmt(perGram);
-  document.querySelector('#sGramSpot').value=perGram.toFixed(4);
+  const buyEl=document.querySelector('#sBuy');if(buyEl)buyEl.textContent=fmt(melt*(1-under/100));
+  const sellEl=document.querySelector('#sSell');if(sellEl)sellEl.textContent=fmt(melt*(1+over/100));
+  const oztEl=document.querySelector('#sOztEquivalent');if(oztEl)oztEl.textContent=oz.toLocaleString(undefined,{maximumFractionDigits:6})+' ozt';
+  const gramEl=document.querySelector('#sGramEquivalent');if(gramEl)gramEl.textContent=grams.toLocaleString(undefined,{maximumFractionDigits:4})+' g';
+  const perGramEl=document.querySelector('#sPerGram');if(perGramEl)perGramEl.textContent=fmt(perGram);
+  const spotGram=document.querySelector('#sGramSpot');if(spotGram)spotGram.value=perGram.toFixed(4);
  }
 }
 
@@ -424,26 +438,37 @@ function swapFx(){
 
 function renderCalculators(){
  page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>CALCULATOR CENTER</h1><p>One workspace for metals, dealer pricing, coin math and unit conversion.</p></section>
- <div class="subnav"><button class="active" onclick="scrollToModule('universalCalc')">UNIVERSAL METAL CALCULATOR</button><button onclick="go('gold')">KARAT GOLD</button><button onclick="go('silver')">SILVER / ROLLS</button><button onclick="go('dealer')">DEALER PRICING</button><button onclick="scrollToModule('fxCard');loadFxRates()">CURRENCY EXCHANGE</button></div>
  <div class="page"><div class="grid two">
-  <section class="card" id="universalCalc"><div class="card-head">UNIVERSAL METAL VALUE</div><div class="card-body">
+  <section class="card intel-card" id="universalCalc"><div class="card-head">UNIVERSAL METAL VALUE</div><div class="card-body">
+   <img class="card-bg" src="/img/newlook/card-gold.png" alt="">
+   <div class="trend-overlay">
    <div class="form-row"><div class="field"><label>METAL</label><select id="cMetal" onchange="multiCalc();updateCalcBasis()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="XCU">Copper</option></select><small id="cBasis" class="input-basis">SPOT BASIS: USD / OZT</small></div><div class="field"><label>WEIGHT</label><input id="cWeight" type="number" value="1" oninput="multiCalc()"></div></div>
    <div class="form-row"><div class="field"><label>UNIT</label><select id="cUnit" onchange="multiCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div><div class="field"><label>PURITY %</label><input id="cPurity" type="number" value="100" oninput="multiCalc()"></div></div>
    <div class="form-row"><div class="field"><label>BUY % UNDER</label><input id="cUnder" type="number" value="5" oninput="multiCalc()"></div><div class="field"><label>SELL % OVER</label><input id="cOver" type="number" value="5" oninput="multiCalc()"></div></div>
    <div class="calc-result four-result"><div><small>MELT</small><strong id="cMelt">—</strong></div><div><small>BUY</small><strong id="cBuy" class="up">—</strong></div><div><small>SELL</small><strong id="cSell">—</strong></div><div><small>SPREAD</small><strong id="cSpread">—</strong></div></div>
    <button class="gold-btn" onclick="multiCalc()">CALCULATE</button>
+   </div>
   </div></section>
-  <section class="card"><div class="card-head">CALCULATOR LIBRARY</div><div class="card-body"><div class="calculator-launchers">
+  <section class="card intel-card"><div class="card-head">CALCULATOR LIBRARY</div><div class="card-body">
+   <img class="card-bg" src="/img/newlook/card-quickactions.png" alt="">
+   <div class="trend-overlay"><div class="calculator-launchers">
    ${[['Gold Karat','go','gold'],['Scrap Gold','go','gold'],['Constitutional Silver','go','silver'],['Coin Rolls','go','silver'],['Dealer Spread','go','dealer'],['Premium Calculator','go','dealer'],['Copper Pennies','scroll','copperPenniesCard'],['Market Ratios','go','markets']].map(x=>x[1]==='scroll'?`<button onclick="scrollToModule('${x[2]}')">${x[0]}<span>↓</span></button>`:`<button onclick="go('${x[2]}')">${x[0]}<span>→</span></button>`).join('')}
-  </div></div></section>
+   </div></div>
+  </div></section>
  </div>
- <section class="card" id="copperPenniesCard" style="margin-top:12px"><div class="card-head">PRE-1982 COPPER PENNIES <span class="copper-basis">95% COPPER · 3.11G</span></div><div class="card-body">
+ <section class="card intel-card" id="copperPenniesCard" style="margin-top:12px"><div class="card-head">PRE-1982 COPPER PENNIES <span class="copper-basis">95% COPPER · 3.11G</span></div><div class="card-body">
+  <img class="card-bg" src="/img/newlook/mkt-copper.png" alt="">
+  <div class="trend-overlay">
   <div class="form-row"><div class="field"><label>PENNY QUANTITY</label><input id="cpQty" type="number" min="0" step="1" value="50" oninput="calcCopperPennies()"></div><div class="field"><label>COPPER PRICE / LB</label><input id="cpSpot" type="number" min="0" step=".0001" value="${prices.XCU.toFixed(4)}" oninput="calcCopperPennies()"></div></div>
-  <div class="copper-penny-stats"><div><small>COPPER VALUE / PENNY</small><strong id="cpEach">—</strong></div><div><small>TOTAL COPPER VALUE</small><strong id="cpTotal">—</strong></div><div><small>TOTAL COIN WEIGHT</small><strong id="cpWeight">—</strong></div><div><small>COPPER CONTENT</small><strong id="cpCopperWeight">—</strong></div></div>
+  <div class="copper-penny-stats"><div><small>VALUE / PENNY</small><strong id="cpEach">—</strong></div><div><small>TOTAL VALUE</small><strong id="cpTotal">—</strong></div><div><small>COIN WEIGHT</small><strong id="cpWeight">—</strong></div><div><small>COPPER CONTENT</small><strong id="cpCopperWeight">—</strong></div></div>
   <p class="local-note">Uses the BDP pre-1982 reference: 3.11 g coin weight and 95% copper. This reports copper-content value only and does not add the 5% zinc component.</p>
+  </div>
  </div></section>
 
- <section class="card" id="fxCard" style="margin-top:12px"><div class="card-head">CURRENCY EXCHANGE <span class="fx-lock-note">ACCOUNT DATA</span></div><div class="card-body"><div id="fxConverter"><button class="gold-btn" onclick="loadFxRates()">LOAD CURRENCY RATES</button></div></div></section>
+ <section class="card intel-card" id="fxCard" style="margin-top:12px"><div class="card-head">CURRENCY EXCHANGE <span class="fx-lock-note">ACCOUNT DATA</span></div><div class="card-body">
+  <img class="card-bg" src="/img/newlook/card-market.png" alt="">
+  <div class="trend-overlay"><div id="fxConverter"><button class="gold-btn" onclick="loadFxRates()">LOAD CURRENCY RATES</button></div></div>
+ </div></section>
  </div>`;
  multiCalc();updateCalcBasis();calcCopperPennies();
  if(fxData)drawFxConverter();
@@ -492,9 +517,8 @@ function calcCopperPennies(){
 function renderDealer(){
  const au=prices.XAU,ag=prices.XAG;
  page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>DEALER TOOLS</h1><p>Quote a deal, check margins, compare benchmarks and jump directly into the working dealer engine.</p></section>
- <div class="subnav"><button class="active" onclick="scrollToModule('dealerDealSheet')">DEAL SHEET</button><button onclick="scrollToModule('dealerTradingCard')">ALL TOOLS</button><button onclick="scrollToModule('dealerPremiumCard')">PREMIUMS</button><button onclick="go('markets')">MARKETS</button></div>
  <div class="page">
-  <div class="grid three">
+ <div class="grid three">
    <section class="card" id="dealerDealSheet"><div class="card-head">QUICK DEAL SHEET</div><div class="card-body">
     <div class="form-row"><div class="field"><label>METAL</label><select id="dMetal" onchange="dealerCalc()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option></select></div><div class="field"><label>WEIGHT</label><input id="dWeight" type="number" min="0" step="any" value="1" oninput="dealerCalc()"></div></div>
     <div class="form-row"><div class="field"><label>WEIGHT UNIT</label><select id="dUnit" onchange="dealerCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div><div class="field"><label>PURITY %</label><input id="dPurity" type="number" value="100" oninput="dealerCalc()"></div></div>
@@ -691,7 +715,6 @@ const COIN_LIBRARY=[
 
 function renderCoins(){
  page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>COIN CENTER</h1><p>Bullion coins, constitutional silver and numismatic reference presented as a visual research workspace.</p></section>
- <div class="subnav"><button class="active">COIN OVERVIEW</button><button onclick="scrollToModule('coinReferenceHub')">NUMISMATIC GUIDE</button><button onclick="go('silver')">MELT VALUES</button><button onclick="scrollToModule('coinReferenceHub')">KEY DATES</button><button onclick="scrollToModule('coinGradingHub')">GRADING</button></div>
  <div class="page">
   <section class="coin-search-panel">
    <div><small>COIN SEARCH</small><h2>Find a bullion or melt reference</h2></div>
@@ -699,25 +722,38 @@ function renderCoins(){
   </section>
   <div id="coinLibrary" class="coin-library"></div>
   <div class="grid three" style="margin-top:12px">
-   <section class="card"><div class="card-head">MELT VS COLLECTOR VALUE</div><div class="card-body"><p class="module-copy">BDP keeps intrinsic metal value separate from numismatic value. Melt is computed here; collector value should be checked against numismatic references and current market information.</p><button class="gold-btn" onclick="scrollToModule('coinReferenceHub')">OPEN COIN REFERENCE HUB →</button></div></section>
-   <section class="card"><div class="card-head">CONSTITUTIONAL SILVER</div><div class="card-body"><table><tbody><tr><td>Dime</td><td>${fmt(prices.XAG*.07234)}</td></tr><tr><td>Quarter</td><td>${fmt(prices.XAG*.18084)}</td></tr><tr><td>Half</td><td>${fmt(prices.XAG*.36169)}</td></tr><tr><td>Silver Dollar</td><td>${fmt(prices.XAG*.77344)}</td></tr></tbody></table></div></section>
-   <section class="card"><div class="card-head">COIN TOOLS</div><div class="card-body"><div class="tool-grid">${[
- ['i-calc','Coin Melt','go','silver'],
- ['i-book','Key Dates','scroll','coinReferenceHub'],
- ['i-star','Grading','scroll','coinGradingHub'],
- ['i-tools','Dealer Spread','go','dealer'],
- ['i-coins','Roll Values','go','silver'],
- ['i-chart','Metal Markets','go','markets']
-].map(t=>t[2]==='scroll'?`<button class="tool tool-button" onclick="scrollToModule('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`:`<button class="tool tool-button" onclick="go('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`).join('')}</div></div></section>
+   <section class="card intel-card"><div class="card-head">MELT VS COLLECTOR VALUE</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-coins.png" alt="">
+    <div class="trend-overlay"><p class="module-copy">BDP keeps intrinsic metal value separate from numismatic value. Melt is computed live; collector value should be checked against numismatic references.</p></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">CONSTITUTIONAL SILVER</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-silver.png" alt="">
+    <div class="trend-overlay"><table><tbody><tr><td>Dime</td><td>${fmt(prices.XAG*.07234)}</td></tr><tr><td>Quarter</td><td>${fmt(prices.XAG*.18084)}</td></tr><tr><td>Half</td><td>${fmt(prices.XAG*.36169)}</td></tr><tr><td>Silver Dollar</td><td>${fmt(prices.XAG*.77344)}</td></tr></tbody></table></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">COIN TOOLS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+    <div class="trend-overlay"><div class="tool-grid" style="grid-template-columns:1fr 1fr">${[
+     ['i-calc','Coin Melt','go','silver'],
+     ['i-book','Grading','scroll','coinGradingHub'],
+     ['i-tools','Dealer Spread','go','dealer'],
+     ['i-chart','Live Markets','go','markets']
+    ].map(t=>t[2]==='scroll'?`<button class="tool tool-button" onclick="scrollToModule('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`:`<button class="tool tool-button" onclick="go('${t[3]}')">${icon(t[0])}<span>${t[1]}</span></button>`).join('')}</div></div>
+   </div></section>
   </div>
   <div class="grid two" style="margin-top:12px">
-   <section class="card" id="coinGradingHub"><div class="card-head">GRADING & ATTRIBUTION SOURCES</div><div class="card-body"><div class="coin-source-grid">
+   <section class="card intel-card" id="coinGradingHub"><div class="card-head">GRADING & ATTRIBUTION SOURCES</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-dealerboard.png" alt="">
+    <div class="trend-overlay"><div class="coin-source-grid">
     <a href="https://www.pcgs.com/photograde" target="_blank" rel="noopener"><small>PCGS</small><b>Photograde</b><span>Visual grading reference ↗</span></a>
     <a href="https://www.ngccoin.com/resources/grading-standards/" target="_blank" rel="noopener"><small>NGC</small><b>Grading Standards</b><span>Official grading reference ↗</span></a>
     <a href="https://www.pcgs.com/coinfacts" target="_blank" rel="noopener"><small>PCGS</small><b>CoinFacts</b><span>Coin and variety reference ↗</span></a>
     <a href="https://en.numista.com" target="_blank" rel="noopener"><small>NUMISTA</small><b>Catalog</b><span>World coin catalog ↗</span></a>
-   </div></div></section>
-   <section class="card" id="coinReferenceHub"><div class="card-head">BDP NUMISMATIC DATABASE</div><div class="card-body"><p class="module-copy">The existing BDP database contains deeper key-date, series, grading, error, specification, and coin-value tables. V3 keeps one controlled fallback to that database while the larger reference library is migrated.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER ↗</button></div></section>
+    </div></div>
+   </div></section>
+   <section class="card intel-card" id="coinReferenceHub"><div class="card-head">BDP NUMISMATIC DATABASE</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-portfolio.png" alt="">
+    <div class="trend-overlay"><p class="module-copy">The existing BDP database contains deeper key-date, series, grading, error, specification, and coin-value tables. V3 keeps one controlled fallback to that database while the larger reference library is migrated.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER ↗</button></div>
+   </div></section>
   </div>
  </div>`;
  drawCoinLibrary();
@@ -753,7 +789,6 @@ function renderGoldbacks(){
  const estimate=Number(apiOne?.marketValue||apiOne?.rate||intrinsic*mult);
  const working=official>0?official:estimate;
  page.innerHTML=`<section class="hero goldback-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>GOLDBACK CENTER</h1><p>Separate intrinsic 24K gold content from the working exchange value, then quote denominations and transactions clearly.</p></section>
- <div class="subnav"><button class="active" onclick="scrollToModule('goldbackRatePanel')">RATE & VALUES</button><button onclick="scrollToModule('goldbackDenoms')">DENOMINATIONS</button><button onclick="scrollToModule('goldbackRetailerCard')">RETAILERS</button><a class="subnav-link" href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">VERIFY OFFICIAL RATE ↗</a></div>
  <div class="page">
   <section class="gb-rate-hero" id="goldbackRatePanel">
    <div class="gb-rate-copy"><small>GOLDBACK WORKING RATE</small><h2 id="gbWorking">${fmt(working)} <em>/ 1 GB</em></h2><p id="gbSource">${official>0?'User-entered official daily rate':goldbackApi?'Server-calculated BDP estimate — not the official daily exchange rate':'BDP modeled estimate — not the official daily exchange rate'}</p></div>
@@ -765,11 +800,17 @@ function renderGoldbacks(){
   </section>
   <section id="goldbackDenoms"><div class="section-line"><span>DENOMINATIONS</span><small>WORKING RATE VS INTRINSIC GOLD</small></div><div id="gbDenoms" class="gb-denom-grid"></div></section>
   <div class="grid two" style="margin-top:12px">
-   <section class="card"><div class="card-head">TRANSACTION CONVERTER</div><div class="card-body">
+   <section class="card intel-card"><div class="card-head">TRANSACTION CONVERTER</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-goldbacks.png" alt="">
+    <div class="trend-overlay">
     <div class="form-row"><div class="field"><label>PURCHASE TOTAL (USD)</label><input id="gbUsd" type="number" value="25" min="0" step=".01" oninput="calcGbTxn()"></div><div class="field"><label>GOLDBACKS TENDERED</label><input id="gbTendered" type="number" value="0" min="0" step=".25" oninput="calcGbTxn()"></div></div>
     <div class="calc-result"><div><small>GOLDBACKS DUE</small><strong id="gbDue">—</strong></div><div><small>TENDER VALUE</small><strong id="gbTenderValue">—</strong></div><div><small>REMAINING / CHANGE</small><strong id="gbBalance">—</strong></div></div>
+    </div>
    </div></section>
-   <section class="card"><div class="card-head">STATE / SERIES WORKSPACE <span class="gb-selected-state" id="gbSelectedState">${selectedGoldbackState.toUpperCase()}</span></div><div class="card-body"><div class="state-grid">${['Utah','Nevada','Wyoming','New Hampshire','South Dakota','Florida','Arizona','Oklahoma'].map(s=>`<button data-gb-state="${s}" class="${selectedGoldbackState===s?'active':''}" onclick="selectGoldbackState('${s}')"><span>${s.slice(0,2).toUpperCase()}</span><b>${s}</b><small>${selectedGoldbackState===s?'SELECTED':'SELECT SERIES'}</small></button>`).join('')}</div></div></section>
+   <section class="card intel-card"><div class="card-head">STATE / SERIES WORKSPACE <span class="gb-selected-state" id="gbSelectedState">${selectedGoldbackState.toUpperCase()}</span></div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/goldback-hero.png" alt="">
+    <div class="trend-overlay"><div class="state-grid">${['Utah','Nevada','Wyoming','New Hampshire','South Dakota','Florida','Arizona','Oklahoma'].map(s=>`<button data-gb-state="${s}" class="${selectedGoldbackState===s?'active':''}" onclick="selectGoldbackState('${s}')"><span>${s.slice(0,2).toUpperCase()}</span><b>${s}</b><small>${selectedGoldbackState===s?'SELECTED':'SELECT SERIES'}</small></button>`).join('')}</div></div>
+   </div></section>
   </div>
   <div class="grid two" style="margin-top:12px">
    <section class="card"><div class="card-head">EXCHANGE VALUE VS MELT</div><div class="card-body"><p class="module-copy">Goldbacks contain defined fractions of a troy ounce of 24K gold. The intrinsic melt value follows gold spot; the exchange or retail value is a separate number. V3 keeps those values visibly separate.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER →</button></div></section>
@@ -981,7 +1022,7 @@ function renderDashboard(){
 function renderInventory(){
  const inv=loadJson(INV_KEY,[]),sum=inventorySummary(),pnl=sum.current-sum.cost;
  page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
- <div class="subnav"><button class="active" onclick="scrollToModule('inventoryHoldings')">HOLDINGS</button><button onclick="scrollToModule('inventoryAdd')">ADD ITEM</button><button onclick="exportInventoryCsv()">EXPORT CSV</button><button onclick="go('account')">ACCOUNT TOOLS</button><div class="subnav-status" data-sync-badge>${syncBadge()}</div></div>
+ <div class="inventory-actions"><button class="module-open" onclick="exportInventoryCsv()">⬇ EXPORT CSV</button><span data-sync-badge>${syncBadge()}</span></div>
  <div class="page">
   <div class="inventory-summary">${[['ITEMS',sum.count],['COST BASIS',fmt(sum.cost)],['CURRENT VALUE',fmt(sum.current)],['UNREALIZED P/L',fmt(pnl)]].map((x,i)=>`<article><small>${x[0]}</small><strong class="${i===3?(pnl>=0?'up':'down'):''}">${x[1]}</strong></article>`).join('')}</div>
   <div class="inventory-allocation">${Object.entries(inventoryByMetal()).length?Object.entries(inventoryByMetal()).map(([metal,g])=>`<article><small>${metal.toUpperCase()}</small><strong>${fmt(g.current)}</strong><span>${g.count} item${g.count===1?'':'s'} · ${sum.current?((g.current/sum.current)*100).toFixed(1):'0.0'}%</span></article>`).join(''):`<article class="allocation-empty"><small>PORTFOLIO ALLOCATION</small><span>Add holdings to see allocation by metal.</span></article>`}</div>
@@ -1012,17 +1053,26 @@ function renderAlerts(){
  const alerts=loadJson(ALERT_KEY,[]);
  page.innerHTML=`<section class="hero alerts-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>PRICE ALERTS</h1><p>Create simple local price triggers and see exactly how far the market is from your target.</p></section>
  <div class="page"><div class="sync-row"><span>ALERT STORAGE</span><span data-sync-badge>${syncBadge()}</span></div><div class="grid two">
-  <section class="card"><div class="card-head">CREATE ALERT</div><div class="card-body">
+  <section class="card intel-card"><div class="card-head">CREATE ALERT</div><div class="card-body">
+   <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+   <div class="trend-overlay">
    <div class="form-row"><div class="field"><label>METAL</label><select id="aMetal" onchange="syncAlertTarget()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="RATIO">Gold / Silver Ratio</option></select></div><div class="field"><label>TRIGGER</label><select id="aDirection"><option value="above">Price rises above</option><option value="below">Price falls below</option></select></div></div>
    <div class="field"><label id="aTargetLabel">TARGET PRICE</label><input id="aTarget" type="number" step=".01" value="${prices.XAU.toFixed(2)}"></div>
    <div class="alert-presets"><small>QUICK TARGETS FROM CURRENT PRICE</small><div><button onclick="applyAlertPreset(-10)">−10%</button><button onclick="applyAlertPreset(-5)">−5%</button><button onclick="applyAlertPreset(5)">+5%</button><button onclick="applyAlertPreset(10)">+10%</button></div></div>
    <div id="alertFormMsg" class="alert-form-msg"></div>
    <button class="gold-btn" onclick="addAlert()">SAVE ALERT</button>
    <p class="local-note">Signed-in alert definitions sync to BDP cloud storage. Trigger evaluation is shown in-app; push/email delivery is not claimed here.</p>
+   </div>
   </div></section>
-  <section class="card"><div class="card-head">ALERT OVERVIEW</div><div class="card-body"><div class="alert-kpis"><div><small>TOTAL</small><strong>${alerts.length}</strong></div><div><small>TRIGGERED</small><strong class="${alerts.some(alertTriggered)?'down':'up'}">${alerts.filter(alertTriggered).length}</strong></div><div><small>WATCHING</small><strong>${alerts.filter(a=>!alertTriggered(a)).length}</strong></div></div>${chartSVG()}</div></section>
+  <section class="card intel-card"><div class="card-head">ALERT OVERVIEW</div><div class="card-body">
+   <img class="card-bg" src="/img/newlook/card-trend.png" alt="">
+   <div class="trend-overlay"><div class="alert-kpis"><div><small>TOTAL</small><strong>${alerts.length}</strong></div><div><small>TRIGGERED</small><strong class="${alerts.some(alertTriggered)?'down':'up'}">${alerts.filter(alertTriggered).length}</strong></div><div><small>WATCHING</small><strong>${alerts.filter(a=>!alertTriggered(a)).length}</strong></div></div>${chartSVG()}</div>
+  </div></section>
  </div>
- <section class="card" style="margin-top:12px"><div class="card-head">ACTIVE ALERTS</div><div class="card-body">${alerts.length?`<div class="alerts-grid">${alerts.map((a,i)=>alertCard(a,i)).join('')}</div>`:`<div class="empty-state">No alerts configured yet.</div>`}</div></section>
+ <section class="card intel-card" style="margin-top:12px"><div class="card-head">ACTIVE ALERTS</div><div class="card-body">
+  <img class="card-bg" src="/img/newlook/card-gold.png" alt="">
+  <div class="trend-overlay">${alerts.length?`<div class="alerts-grid">${alerts.map((a,i)=>alertCard(a,i)).join('')}</div>`:`<div class="empty-state">No alerts configured yet.</div>`}</div>
+ </div></section>
  </div>`;
 }
 function syncAlertTarget(){
@@ -1072,13 +1122,28 @@ function renderAccount(){
  page.innerHTML=`<section class="hero account-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>ACCOUNT</h1><p>Profile, preferences and BDP Pro access in the same premium workspace.</p></section>
  <div class="page">
   <div class="grid three">
-   <section class="card"><div class="card-head">PROFILE <span data-sync-badge>${syncBadge()}</span></div><div class="card-body">${currentUser?`<div class="profile-live"><small>SIGNED IN</small><strong>${escapeHtml(currentUser.email||'Account')}</strong><span>Plan: ${escapeHtml(String(currentUser.plan||'free').toUpperCase())}</span></div>`:`<p class="module-copy">Sign in to use the existing secure account system and cloud synchronization.</p>`}<div class="account-buttons" style="margin-top:12px"><a href="/login">LOGIN / SECURITY</a><a href="/pricing">PRICING</a></div></div></section>
-   <section class="card pro-pricing-card"><div class="card-head">BDP PRO</div><div class="card-body"><small>CURRENT PLANS &amp; PRICING</small><div class="pro-price">BDP PRO</div><div class="pro-year">See the live pricing page for current options.</div><ul><li>Advanced dealer workflow</li><li>Inventory workspace</li><li>Price alerts</li><li>Saved preferences</li></ul><a href="/pricing">VIEW CURRENT PRICING ↗</a><p class="billing-note">The pricing page is the source of truth for current subscription offers.</p></div></section>
-   <section class="card"><div class="card-head">YOUR BDP DATA</div><div class="card-body"><div class="account-stats"><div><small>INVENTORY ITEMS</small><strong>${inv.count}</strong></div><div><small>LOCAL ALERTS</small><strong>${alerts.count}</strong></div><div><small>PORTFOLIO VALUE</small><strong>${fmt(inv.current)}</strong></div></div></div></section>
+   <section class="card intel-card"><div class="card-head">PROFILE <span data-sync-badge>${syncBadge()}</span></div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+    <div class="trend-overlay">${currentUser?`<div class="profile-live"><small>SIGNED IN</small><strong>${escapeHtml(currentUser.email||'Account')}</strong><span>Plan: ${escapeHtml(String(currentUser.plan||'free').toUpperCase())}</span></div>`:`<p class="module-copy">Sign in to use the existing secure account system and cloud synchronization.</p>`}<div class="account-buttons" style="margin-top:12px"><a href="/login">LOGIN / SECURITY</a><a href="/pricing">PRICING</a></div></div>
+   </div></section>
+   <section class="card intel-card pro-pricing-card"><div class="card-head">BDP PRO</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-gold.png" alt="">
+    <div class="trend-overlay"><small>CURRENT PLANS &amp; PRICING</small><div class="pro-price">BDP PRO</div><div class="pro-year">See the live pricing page for current options.</div><ul><li>Advanced dealer workflow</li><li>Inventory workspace</li><li>Price alerts</li><li>Saved preferences</li></ul><a href="/pricing">VIEW CURRENT PRICING ↗</a><p class="billing-note">The pricing page is the source of truth for current subscription offers.</p></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">YOUR BDP DATA</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-portfolio.png" alt="">
+    <div class="trend-overlay"><div class="account-stats"><div><small>INVENTORY ITEMS</small><strong>${inv.count}</strong></div><div><small>LOCAL ALERTS</small><strong>${alerts.count}</strong></div><div><small>PORTFOLIO VALUE</small><strong>${fmt(inv.current)}</strong></div></div></div>
+   </div></section>
   </div>
   <div class="grid two" style="margin-top:12px">
-   <section class="card"><div class="card-head">PREFERENCES</div><div class="card-body"><div class="form-row"><div class="field"><label>DEFAULT METAL</label><select id="prefMetal" onchange="savePref()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option></select></div><div class="field"><label>DEFAULT PAYOUT %</label><input id="prefPayout" type="number" value="${localStorage.getItem('bdp-v3-pref-payout')||80}" oninput="savePref()"></div></div><p class="local-note">Preferences are currently stored locally; inventory and alert definitions can use BDP cloud sync when signed in.</p></div></section>
-   <section class="card"><div class="card-head">SECURITY & BILLING</div><div class="card-body"><p class="module-copy">Authentication and subscription management continue to use BDP's existing secure account pages until the final production integration.</p><div class="account-buttons"><a href="/login">LOGIN / SECURITY</a><a href="/pricing">PRICING</a><a href="/register">CREATE ACCOUNT</a></div></div></section>
+   <section class="card intel-card"><div class="card-head">PREFERENCES</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-quickactions.png" alt="">
+    <div class="trend-overlay"><div class="form-row"><div class="field"><label>DEFAULT METAL</label><select id="prefMetal" onchange="savePref()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option></select></div><div class="field"><label>DEFAULT PAYOUT %</label><input id="prefPayout" type="number" value="${localStorage.getItem('bdp-v3-pref-payout')||80}" oninput="savePref()"></div></div><p class="local-note">Preferences are currently stored locally; inventory and alert definitions can use BDP cloud sync when signed in.</p></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">SECURITY & BILLING</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-dealerboard.png" alt="">
+    <div class="trend-overlay"><p class="module-copy">Authentication and subscription management continue to use BDP's existing secure account pages until the final production integration.</p><div class="account-buttons"><a href="/login">LOGIN / SECURITY</a><a href="/pricing">PRICING</a><a href="/register">CREATE ACCOUNT</a></div></div>
+   </div></section>
   </div>
  </div>`;
  const pm=localStorage.getItem('bdp-v3-pref-metal')||'XAU';const prefMetalEl=document.querySelector('#prefMetal');if(prefMetalEl)prefMetalEl.value=pm;
@@ -1138,7 +1203,7 @@ const RESOURCE_GROUPS=[
 
 function renderNews(){
  page.innerHTML=`<section class="hero news-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>MARKET NEWS</h1><p>A clean precious-metals news gateway without pretending unverified headlines are live BDP data.</p></section>
- <div class="subnav"><button class="active">NEWS SOURCES</button><button onclick="filterNews('MARKETS',this)">MARKETS</button><button onclick="filterNews('BULLION',this)">BULLION</button><button onclick="filterNews('COINS',this)">COINS</button><button onclick="filterNews('GOLDBACKS',this)">GOLDBACKS</button></div>
+ <div class="news-filters"><button class="active" onclick="filterNews('ALL',this)">ALL</button><button onclick="filterNews('MARKETS',this)">MARKETS</button><button onclick="filterNews('BULLION',this)">BULLION</button><button onclick="filterNews('COINS',this)">COINS</button><button onclick="filterNews('GOLDBACKS',this)">GOLDBACKS</button></div>
  <div class="page">
   <section class="news-lead">
    <div><small>BDP NEWS CENTER</small><h2>Know what is moving the metals market.</h2><p>Use trusted specialist sources, then jump back into BDP to price the deal.</p></div>
@@ -1149,9 +1214,18 @@ function renderNews(){
   <div class="section-line"><span>TRUSTED SPECIALIST SOURCES</span><small>OPENS AT SOURCE</small></div>
   <div id="newsSourceGrid" class="news-source-grid"></div>
   <div class="grid three" style="margin-top:12px">
-   <section class="card"><div class="card-head">MARKET TOPICS</div><div class="card-body"><div class="topic-pills"><button onclick="go('markets')">Gold Spot</button><button onclick="go('markets')">Silver Spot</button><button onclick="go('markets')">G/S Ratio</button><button onclick="go('markets')">Futures</button><button onclick="go('markets')">Macro</button></div></div></section>
-   <section class="card"><div class="card-head">FROM NEWS TO ACTION</div><div class="card-body"><p class="module-copy">After reading the market, move directly into the tool you need.</p><div class="dash-actions"><button onclick="go('gold')">${icon('i-bars')}<span>Gold Center</span></button><button onclick="go('silver')">${icon('i-coins')}<span>Silver Center</span></button><button onclick="go('dealer')">${icon('i-tools')}<span>Dealer Tools</span></button><button onclick="go('alerts')">${icon('i-bell')}<span>Set Alert</span></button></div></div></section>
-   <section class="card"><div class="card-head">SOURCE STANDARD</div><div class="card-body"><p class="module-copy">V3 only labels information as live when it comes from an actual connected data endpoint. External news sources are clearly identified and opened at the publisher.</p><button class="module-open" onclick="go('resources')">VIEW RESOURCE CENTER ↗</button></div></section>
+   <section class="card intel-card"><div class="card-head">MARKET TOPICS</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-market.png" alt="">
+    <div class="trend-overlay"><div class="topic-pills"><button onclick="go('markets')">Gold Spot</button><button onclick="go('markets')">Silver Spot</button><button onclick="go('markets')">G/S Ratio</button><button onclick="go('markets')">Futures</button><button onclick="go('markets')">Macro</button></div></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">FROM NEWS TO ACTION</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-trend.png" alt="">
+    <div class="trend-overlay"><p class="module-copy">After reading the market, move directly into the tool you need.</p><div class="dash-actions"><button onclick="go('gold')">${icon('i-bars')}<span>Gold Center</span></button><button onclick="go('silver')">${icon('i-coins')}<span>Silver Center</span></button><button onclick="go('dealer')">${icon('i-tools')}<span>Dealer Tools</span></button><button onclick="go('alerts')">${icon('i-bell')}<span>Set Alert</span></button></div></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">SOURCE STANDARD</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-intel.png" alt="">
+    <div class="trend-overlay"><p class="module-copy">V3 only labels information as live when it comes from an actual connected data endpoint. External news sources are clearly identified and opened at the publisher.</p><button class="module-open" onclick="go('resources')">VIEW RESOURCE CENTER ↗</button></div>
+   </div></section>
   </div>
  </div>`;
  drawLiveNews();drawNewsSources('ALL');
@@ -1177,8 +1251,14 @@ function renderResources(){
    ${NEWS_SOURCES.map(x=>`<a href="${x.url}" target="_blank" rel="noopener"><img src="/img/newlook/${x.art}" alt=""><div><small>${x.tag}</small><b>${x.name}</b><span>${x.desc}</span></div></a>`).join('')}
   </div>
   <div class="grid two" style="margin-top:12px">
-   <section class="card"><div class="card-head">BDP REFERENCE PATH</div><div class="card-body"><p class="module-copy">Use the native Coin Center for grading sources and the controlled deep numismatic database, or open Goldbacks and Markets for specialist reference.</p><button class="gold-btn" onclick="go('coins')">OPEN COIN REFERENCE HUB →</button></div></section>
-   <section class="card"><div class="card-head">START WITH A QUESTION</div><div class="card-body"><div class="question-links"><button onclick="go('gold')">What is my gold worth?</button><button onclick="go('silver')">What is my silver worth?</button><button onclick="go('coins')">What coin am I looking at?</button><button onclick="go('goldbacks')">What is a Goldback worth?</button><button onclick="go('dealer')">What should I pay or sell for?</button><button onclick="go('markets')">What is the market doing?</button></div></div></section>
+   <section class="card intel-card"><div class="card-head">BDP REFERENCE PATH</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-dealerboard.png" alt="">
+    <div class="trend-overlay"><p class="module-copy">Use the native Coin Center for grading sources and the controlled deep numismatic database, or open Goldbacks and Markets for specialist reference.</p><button class="gold-btn" onclick="go('coins')">OPEN COIN REFERENCE HUB →</button></div>
+   </div></section>
+   <section class="card intel-card"><div class="card-head">START WITH A QUESTION</div><div class="card-body">
+    <img class="card-bg" src="/img/newlook/card-quickactions.png" alt="">
+    <div class="trend-overlay"><div class="question-links"><button onclick="go('gold')">What is my gold worth?</button><button onclick="go('silver')">What is my silver worth?</button><button onclick="go('coins')">What coin am I looking at?</button><button onclick="go('goldbacks')">What is a Goldback worth?</button><button onclick="go('dealer')">What should I pay or sell for?</button><button onclick="go('markets')">What is the market doing?</button></div></div>
+   </div></section>
   </div>
  </div>`;
 }
