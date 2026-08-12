@@ -193,7 +193,7 @@ function render(){
 function renderGold(){
  const au=prices.XAU, gram=au/31.1034768, auFeed=feedState.XAU, auPrev=Number(auFeed.prev||au), auCh=Number(auFeed.ch||0), gbPreviewRate=goldbackWorkingRate();
  const karats=[[24,.9999],[22,.9167],[18,.75],[14,.5833],[10,.4167]];
- page.innerHTML=`<section class="hero" style="--hero:url('/img/newlook/card-gold.png')"><h1>GOLD CENTER</h1><p>Real-time gold prices, calculators, Goldbacks, and tools to help you buy, sell and profit with confidence.</p></section>
+ page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>GOLD CENTER</h1><p>Real-time gold prices, calculators, Goldbacks, and tools to help you buy, sell and profit with confidence.</p></section>
  <div class="subnav"><button class="active">▰ OVERVIEW</button><button onclick="scrollToModule('goldKaratCard')">KARAT CALCULATOR</button><button onclick="go('goldbacks')">GOLDBACKS</button><button onclick="go('coins')">BULLION & COINS</button><button onclick="scrollToModule('goldKaratCard')">SCRAP GOLD</button><button onclick="go('markets')">HISTORICAL CHARTS</button></div>
  <div class="page">
  <div class="grid three">
@@ -260,7 +260,7 @@ function renderSilver(){
  const rolls=[
   ['Dime Roll',50,0.07234],['Quarter Roll',40,0.18084],['Half Roll',20,0.36169]
  ];
- page.innerHTML=`<section class="hero" style="--hero:url('/img/newlook/card-silver.png')"><h1>SILVER CENTER</h1><p>Live silver, constitutional values, rolls, bullion and dealer pricing in one compact workspace.</p></section>
+ page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>SILVER CENTER</h1><p>Live silver, constitutional values, rolls, bullion and dealer pricing in one compact workspace.</p></section>
  <div class="subnav"><button class="active">OVERVIEW</button><button onclick="scrollToModule('silverConstitutional')">CONSTITUTIONAL</button><button onclick="scrollToModule('silverBullion')">BULLION</button><button onclick="scrollToModule('silverRolls')">ROLLS</button><button onclick="go('markets')">HISTORICAL CHARTS</button></div>
  <div class="page">
   <div class="grid three">
@@ -405,7 +405,7 @@ function swapFx(){
 }
 
 function renderCalculators(){
- page.innerHTML=`<section class="hero" style="--hero:url('/img/newlook/card-gold.png')"><h1>CALCULATOR CENTER</h1><p>One workspace for metals, dealer pricing, coin math and unit conversion.</p></section>
+ page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>CALCULATOR CENTER</h1><p>One workspace for metals, dealer pricing, coin math and unit conversion.</p></section>
  <div class="subnav"><button class="active" onclick="scrollToModule('universalCalc')">UNIVERSAL METAL CALCULATOR</button><button onclick="go('gold')">KARAT GOLD</button><button onclick="go('silver')">SILVER / ROLLS</button><button onclick="go('dealer')">DEALER PRICING</button><button onclick="scrollToModule('fxCard');loadFxRates()">CURRENCY EXCHANGE</button></div>
  <div class="page"><div class="grid two">
   <section class="card" id="universalCalc"><div class="card-head">UNIVERSAL METAL VALUE</div><div class="card-body">
@@ -473,7 +473,7 @@ function calcCopperPennies(){
 
 function renderDealer(){
  const au=prices.XAU,ag=prices.XAG;
- page.innerHTML=`<section class="hero" style="--hero:url('/img/newlook/card-dealer.png')"><h1>DEALER TOOLS</h1><p>Quote a deal, check margins, compare benchmarks and jump directly into the working dealer engine.</p></section>
+ page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>DEALER TOOLS</h1><p>Quote a deal, check margins, compare benchmarks and jump directly into the working dealer engine.</p></section>
  <div class="subnav"><button class="active" onclick="scrollToModule('dealerDealSheet')">DEAL SHEET</button><button onclick="scrollToModule('dealerTradingCard')">ALL TOOLS</button><button onclick="scrollToModule('dealerPremiumCard')">PREMIUMS</button><button onclick="go('markets')">MARKETS</button></div>
  <div class="page">
   <div class="grid three">
@@ -612,7 +612,7 @@ function renderMarkets(){
   ['COPPER','XCU',prices.XCU,'/img/newlook/copper-hero.png'],
   ['GOLD / SILVER','RATIO',ratio,'/img/newlook/card-market.png']
  ];
- page.innerHTML=`<section class="hero markets-hero" style="--hero:url('/img/newlook/fx-hero.png')"><h1>LIVE MARKETS</h1><p>Precious-metals pricing, ratios and dealer benchmarks in one high-visibility command center.</p></section>
+ page.innerHTML=`<section class="hero markets-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>LIVE MARKETS</h1><p>Precious-metals pricing, ratios and dealer benchmarks in one high-visibility command center.</p></section>
  <div class="subnav"><button class="active">MARKET OVERVIEW</button><button onclick="scrollToModule('marketDealerBoard')">FULL MARKET DATA</button><button onclick="scrollToModule('dealerTradingCard')">TRADING SHEET</button><button onclick="go('news')">MARKET NEWS</button></div>
  <div class="page">
   <div class="market-command-grid">${cards.map((c,i)=>`<section class="market-command-card" style="--market-art:url('${c[3]}')">
@@ -673,7 +673,7 @@ const COIN_LIBRARY=[
 ];
 
 function renderCoins(){
- page.innerHTML=`<section class="hero" style="--hero:url('/img/newlook/coins-hero.png')"><h1>COIN CENTER</h1><p>Bullion coins, constitutional silver and numismatic reference presented as a visual research workspace.</p></section>
+ page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>COIN CENTER</h1><p>Bullion coins, constitutional silver and numismatic reference presented as a visual research workspace.</p></section>
  <div class="subnav"><button class="active">COIN OVERVIEW</button><button onclick="scrollToModule('coinReferenceHub')">NUMISMATIC GUIDE</button><button onclick="go('silver')">MELT VALUES</button><button onclick="scrollToModule('coinReferenceHub')">KEY DATES</button><button onclick="scrollToModule('coinGradingHub')">GRADING</button></div>
  <div class="page">
   <section class="coin-search-panel">
@@ -735,7 +735,7 @@ function renderGoldbacks(){
  const apiOne=goldbackApi?.rates?.find(r=>String(r.label||'').startsWith('1 Goldback'));
  const estimate=Number(apiOne?.marketValue||apiOne?.rate||intrinsic*mult);
  const working=official>0?official:estimate;
- page.innerHTML=`<section class="hero goldback-hero" style="--hero:url('/img/newlook/card-goldbacks.png')"><h1>GOLDBACK CENTER</h1><p>Separate intrinsic 24K gold content from the working exchange value, then quote denominations and transactions clearly.</p></section>
+ page.innerHTML=`<section class="hero goldback-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>GOLDBACK CENTER</h1><p>Separate intrinsic 24K gold content from the working exchange value, then quote denominations and transactions clearly.</p></section>
  <div class="subnav"><button class="active" onclick="scrollToModule('goldbackRatePanel')">RATE & VALUES</button><button onclick="scrollToModule('goldbackDenoms')">DENOMINATIONS</button><button onclick="scrollToModule('goldbackRetailerCard')">RETAILERS</button><a class="subnav-link" href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">VERIFY OFFICIAL RATE ↗</a></div>
  <div class="page">
   <section class="gb-rate-hero" id="goldbackRatePanel">
@@ -927,7 +927,7 @@ function alertTriggered(a){
 
 function renderDashboard(){
  const inv=inventorySummary(),al=activeAlertSummary(),pnl=inv.current-inv.cost,ratio=prices.XAU/prices.XAG;
- page.innerHTML=`<section class="hero dashboard-hero" style="--hero:url('/img/newlook/card-market.png')"><h1>DASHBOARD</h1><p>Your precious-metals command center — live pricing, quick actions, dealer benchmarks, alerts and portfolio value.</p></section>
+ page.innerHTML=`<section class="hero dashboard-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>DASHBOARD</h1><p>Your precious-metals command center — live pricing, quick actions, dealer benchmarks, alerts and portfolio value.</p></section>
  <div class="page">
   <div class="dashboard-kpis">
    ${[['GOLD',fmt(prices.XAU),'up'],['SILVER',fmt(prices.XAG),'up'],['G/S RATIO',ratio.toFixed(2),'up'],['PORTFOLIO',fmt(inv.current),pnl>=0?'up':'down'],['ALERTS',String(al.triggered)+' / '+String(al.count),al.triggered?'down':'up']].map(x=>`<article><small>${x[0]}</small><strong>${x[1]}</strong><span class="${x[2]}">${x[0]==='PORTFOLIO'?(pnl>=0?'+':'')+fmt(pnl).replace('$','')+' P/L':x[0]==='ALERTS'?'triggered / total':x[0]==='G/S RATIO'?(ratioPct()===null?'REFERENCE':'LIVE'):(x[0]==='GOLD'?(feedState.XAU.state.toUpperCase()):x[0]==='SILVER'?feedState.XAG.state.toUpperCase():'LIVE')}</span></article>`).join('')}
@@ -947,7 +947,7 @@ function renderDashboard(){
 
 function renderInventory(){
  const inv=loadJson(INV_KEY,[]),sum=inventorySummary(),pnl=sum.current-sum.cost;
- page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/img/newlook/card-coins.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
+ page.innerHTML=`<section class="hero inventory-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>INVENTORY</h1><p>Track metal holdings, cost basis and current melt value using live BDP prices.</p></section>
  <div class="subnav"><button class="active" onclick="scrollToModule('inventoryHoldings')">HOLDINGS</button><button onclick="scrollToModule('inventoryAdd')">ADD ITEM</button><button onclick="exportInventoryCsv()">EXPORT CSV</button><button onclick="go('account')">ACCOUNT TOOLS</button><div class="subnav-status" data-sync-badge>${syncBadge()}</div></div>
  <div class="page">
   <div class="inventory-summary">${[['ITEMS',sum.count],['COST BASIS',fmt(sum.cost)],['CURRENT VALUE',fmt(sum.current)],['UNREALIZED P/L',fmt(pnl)]].map((x,i)=>`<article><small>${x[0]}</small><strong class="${i===3?(pnl>=0?'up':'down'):''}">${x[1]}</strong></article>`).join('')}</div>
@@ -977,7 +977,7 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':
 
 function renderAlerts(){
  const alerts=loadJson(ALERT_KEY,[]);
- page.innerHTML=`<section class="hero alerts-hero" style="--hero:url('/img/newlook/card-market.png')"><h1>PRICE ALERTS</h1><p>Create simple local price triggers and see exactly how far the market is from your target.</p></section>
+ page.innerHTML=`<section class="hero alerts-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>PRICE ALERTS</h1><p>Create simple local price triggers and see exactly how far the market is from your target.</p></section>
  <div class="page"><div class="sync-row"><span>ALERT STORAGE</span><span data-sync-badge>${syncBadge()}</span></div><div class="grid two">
   <section class="card"><div class="card-head">CREATE ALERT</div><div class="card-body">
    <div class="form-row"><div class="field"><label>METAL</label><select id="aMetal" onchange="syncAlertTarget()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="RATIO">Gold / Silver Ratio</option></select></div><div class="field"><label>TRIGGER</label><select id="aDirection"><option value="above">Price rises above</option><option value="below">Price falls below</option></select></div></div>
@@ -1036,7 +1036,7 @@ function alertCard(a,i){
 
 function renderAccount(){
  const inv=inventorySummary(),alerts=activeAlertSummary();
- page.innerHTML=`<section class="hero account-hero" style="--hero:url('/img/newlook/card-gold.png')"><h1>ACCOUNT</h1><p>Profile, preferences and BDP Pro access in the same premium workspace.</p></section>
+ page.innerHTML=`<section class="hero account-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>ACCOUNT</h1><p>Profile, preferences and BDP Pro access in the same premium workspace.</p></section>
  <div class="page">
   <div class="grid three">
    <section class="card"><div class="card-head">PROFILE <span data-sync-badge>${syncBadge()}</span></div><div class="card-body">${currentUser?`<div class="profile-live"><small>SIGNED IN</small><strong>${escapeHtml(currentUser.email||'Account')}</strong><span>Plan: ${escapeHtml(String(currentUser.plan||'free').toUpperCase())}</span></div>`:`<p class="module-copy">Sign in to use the existing secure account system and cloud synchronization.</p>`}<div class="account-buttons" style="margin-top:12px"><a href="/login">LOGIN / SECURITY</a><a href="/pricing">PRICING</a></div></div></section>
@@ -1104,7 +1104,7 @@ const RESOURCE_GROUPS=[
 ];
 
 function renderNews(){
- page.innerHTML=`<section class="hero news-hero" style="--hero:url('/img/newlook/fx-hero.png')"><h1>MARKET NEWS</h1><p>A clean precious-metals news gateway without pretending unverified headlines are live BDP data.</p></section>
+ page.innerHTML=`<section class="hero news-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>MARKET NEWS</h1><p>A clean precious-metals news gateway without pretending unverified headlines are live BDP data.</p></section>
  <div class="subnav"><button class="active">NEWS SOURCES</button><button onclick="filterNews('MARKETS',this)">MARKETS</button><button onclick="filterNews('BULLION',this)">BULLION</button><button onclick="filterNews('COINS',this)">COINS</button><button onclick="filterNews('GOLDBACKS',this)">GOLDBACKS</button></div>
  <div class="page">
   <section class="news-lead">
@@ -1135,7 +1135,7 @@ function filterNews(filter,btn){
 }
 
 function renderResources(){
- page.innerHTML=`<section class="hero resources-hero" style="--hero:url('/img/newlook/coins-hero.png')"><h1>RESOURCE CENTER</h1><p>BDP tools, educational pathways and trusted specialist references organized visually instead of buried in link lists.</p></section>
+ page.innerHTML=`<section class="hero resources-hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>RESOURCE CENTER</h1><p>BDP tools, educational pathways and trusted specialist references organized visually instead of buried in link lists.</p></section>
  <div class="page">
   <section class="resource-intro"><small>LEARN · CHECK · CALCULATE · ACT</small><h2>Everything should lead to a useful next step.</h2><p>Use BDP Centers for calculations and working values; use specialist external sources for deeper market, coin and Goldback reference.</p></section>
   <div class="resource-groups">${RESOURCE_GROUPS.map(g=>`<section class="resource-group"><div class="resource-group-head">${icon(g.icon)}<h3>${g.title}</h3></div><div class="resource-links">${g.items.map(i=>`<button onclick="go('${i[1]}')">${i[0]}<span>→</span></button>`).join('')}</div></section>`).join('')}</div>
