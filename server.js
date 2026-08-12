@@ -629,7 +629,7 @@ app.get('/api/sync', auth, async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Account not found' });
     const inventoryAllowed = user.plan === 'monthly' || user.plan === 'annual' || user.plan === 'admin' ||
       (user.plan === 'trial' && new Date(user.trialEnd) > new Date());
-    res.json({ inventory: inventoryAllowed ? (user.syncInventory||[]) : [], inventoryAllowed, slabs: user.syncSlabs||[], typesets: inventoryAllowed ? (user.syncTypesets||{}) : {}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
+    res.json({ inventory: inventoryAllowed ? (user.syncInventory||[]) : [], inventoryAllowed, slabs: inventoryAllowed ? (user.syncSlabs||[]) : [], typesets: inventoryAllowed ? (user.syncTypesets||{}) : {}, presets: user.syncPresets||{}, alerts: user.syncAlerts||[] });
   } catch(e) { res.status(500).json({ error: 'Sync read failed' }); }
 });
 
@@ -641,13 +641,25 @@ app.post('/api/sync', auth, async (req, res) => {
     const inventoryAllowed = user.plan === 'monthly' || user.plan === 'annual' || user.plan === 'admin' ||
       (user.plan === 'trial' && new Date(user.trialEnd) > new Date());
     const updates = {
-      syncSlabs:     slabs     || [],
       syncPresets:   presets   || {},
       syncAlerts:    alerts    || []
     };
     if (inventoryAllowed) {
       updates.syncInventory = Array.isArray(inventory) ? inventory : [];
       updates.syncTypesets = typesets && typeof typesets === 'object' && !Array.isArray(typesets) ? typesets : {};
+      updates.syncSlabs = (Array.isArray(slabs) ? slabs : []).slice(0, 5000).map(record => ({
+        id: String(record?.id || '').slice(0, 80),
+        setId: String(record?.setId || '').slice(0, 80),
+        coinId: String(record?.coinId || '').slice(0, 120),
+        service: String(record?.service || 'Raw').slice(0, 16),
+        grade: String(record?.grade || '').slice(0, 24),
+        cert: String(record?.cert || '').slice(0, 48),
+        purchaseDate: String(record?.purchaseDate || '').slice(0, 10),
+        cost: Math.max(0, Number(record?.cost || 0)),
+        marketValue: Math.max(0, Number(record?.marketValue || 0)),
+        notes: String(record?.notes || '').slice(0, 500),
+        createdAt: String(record?.createdAt || '').slice(0, 32)
+      }));
     }
     await User.findByIdAndUpdate(req.user.id, updates);
     res.json({ ok: true, inventoryAllowed });
