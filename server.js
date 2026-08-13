@@ -512,8 +512,26 @@ app.post('/api/create-checkout', auth, async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(401).json({ error: 'Account not found' });
     let customerId = user.stripeCustomerId;
+    if (customerId) {
+      try {
+        const existingCustomer = await stripe.customers.retrieve(customerId);
+        if (existingCustomer.deleted) customerId = null;
+      } catch (e) {
+        // A customer ID created in Stripe test mode (or another Stripe account)
+        // cannot be reused in live mode. Recover without exposing Stripe details.
+        if (e?.code === 'resource_missing') {
+          console.warn('[create-checkout] Replacing a stale Stripe customer ID.');
+          customerId = null;
+        } else {
+          throw e;
+        }
+      }
+    }
     if (!customerId) {
-      const c = await stripe.customers.create({ email: user.email });
+      const c = await stripe.customers.create({
+        email: user.email,
+        metadata: { bdpUserId: String(user._id) }
+      });
       customerId = c.id;
       user.stripeCustomerId = customerId;
       await user.save();
