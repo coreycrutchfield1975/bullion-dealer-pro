@@ -129,13 +129,15 @@ function planBadge(p) {
 
 function renderUsers(users) {
   const tbody = document.getElementById('user-tbody');
+  const monthlyPrice = 4.99;
+  const annualPrice = 49;
   let total=0, trial=0, monthly=0, annual=0, mrr=0;
   tbody.innerHTML = '';
   for (const u of users) {
     total++;
     if (u.plan==='trial') trial++;
-    else if (u.plan==='monthly') { monthly++; mrr+=19; }
-    else if (u.plan==='annual') { annual++; mrr+=149/12; }
+    else if (u.plan==='monthly') { monthly++; mrr+=monthlyPrice; }
+    else if (u.plan==='annual') { annual++; mrr+=annualPrice/12; }
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${u.email}</td>
@@ -159,7 +161,7 @@ function renderUsers(users) {
   document.getElementById('s-trial').textContent = trial;
   document.getElementById('s-monthly').textContent = monthly;
   document.getElementById('s-annual').textContent = annual;
-  document.getElementById('s-mrr').textContent = '$'+Math.round(mrr);
+  document.getElementById('s-mrr').textContent = '$'+mrr.toFixed(2);
 }
 
 function renderPromos(promos) {

@@ -30,6 +30,10 @@ const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 const TEST_MODE = process.env.TEST_MODE === 'true';
 const STRIPE_TEST_MONTHLY = process.env.STRIPE_TEST_MONTHLY_PRICE_ID;
 const STRIPE_TEST_ANNUAL  = process.env.STRIPE_TEST_ANNUAL_PRICE_ID;
+const BILLING_PLANS = Object.freeze({
+  monthly: { unitAmount: 499, interval: 'month' },
+  annual: { unitAmount: 4900, interval: 'year' }
+});
 // BDP_SERVER_HARDENING_V325
 if (!JWT_SECRET && !TEST_MODE) {
   console.error('FATAL: JWT_SECRET environment variable is required outside TEST_MODE.');
@@ -497,6 +501,14 @@ app.post('/api/create-checkout', auth, async (req, res) => {
       ? (plan === 'annual' ? STRIPE_TEST_ANNUAL : STRIPE_TEST_MONTHLY)
       : (plan === 'annual' ? STRIPE_ANNUAL_PRICE_ID : STRIPE_MONTHLY_PRICE_ID);
     if (!priceId) return res.status(503).json({ error: 'Billing plan is not configured' });
+    const configuredPrice = await stripe.prices.retrieve(priceId);
+    const expectedPlan = BILLING_PLANS[plan];
+    if (!configuredPrice.active || configuredPrice.currency !== 'usd' ||
+        configuredPrice.unit_amount !== expectedPlan.unitAmount ||
+        configuredPrice.recurring?.interval !== expectedPlan.interval) {
+      console.error(`[billing] ${plan} Stripe Price ID does not match the approved BDP price.`);
+      return res.status(503).json({ error: 'Billing plan configuration does not match current pricing' });
+    }
     const user = await User.findById(req.user.id);
     if (!user) return res.status(401).json({ error: 'Account not found' });
     let customerId = user.stripeCustomerId;
