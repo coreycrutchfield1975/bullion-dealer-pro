@@ -501,7 +501,18 @@ app.post('/api/create-checkout', auth, async (req, res) => {
       ? (plan === 'annual' ? STRIPE_TEST_ANNUAL : STRIPE_TEST_MONTHLY)
       : (plan === 'annual' ? STRIPE_ANNUAL_PRICE_ID : STRIPE_MONTHLY_PRICE_ID);
     if (!priceId) return res.status(503).json({ error: 'Billing plan is not configured' });
-    const configuredPrice = await stripe.prices.retrieve(priceId);
+    let configuredPrice;
+    try {
+      configuredPrice = await stripe.prices.retrieve(priceId);
+    } catch (e) {
+      if (e?.code === 'resource_missing') {
+        console.error(`[billing] ${plan} Stripe Price ID is unavailable to the configured Stripe key.`);
+        return res.status(503).json({
+          error: `${plan === 'annual' ? 'Annual' : 'Monthly'} billing is connected to a Stripe Price ID that is not available in the active Stripe mode`
+        });
+      }
+      throw e;
+    }
     const expectedPlan = BILLING_PLANS[plan];
     if (!configuredPrice.active || configuredPrice.currency !== 'usd' ||
         configuredPrice.unit_amount !== expectedPlan.unitAmount ||
