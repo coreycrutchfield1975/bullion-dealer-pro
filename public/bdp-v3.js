@@ -414,6 +414,28 @@ function swapFx(){
  const a=from.value;from.value=to.value;to.value=a;calcFx();
 }
 
+const PURITY_PRESETS=[
+ {id:'custom',group:'Manual',label:'Custom / enter percentage',metal:'',purity:null,note:'Use for tested or unusual material.'},
+ {id:'gold9999',group:'Gold bullion',label:'.9999 fine gold bullion',metal:'XAU',purity:99.99,note:'Gold Buffalo, Maple Leaf and many modern bars.'},
+ {id:'gold999',group:'Gold bullion',label:'.999 fine gold bullion',metal:'XAU',purity:99.9,note:'Common investment-grade bars and coins.'},
+ {id:'gold22k',group:'Gold bullion',label:'22k gold alloy / Eagle / Krugerrand',metal:'XAU',purity:91.67,note:'Use only with actual gross scale weight. If entering the coin’s stated fine-gold weight, use 100%.'},
+ {id:'gold18k',group:'Gold & jewelry',label:'18k gold',metal:'XAU',purity:75,note:'750 fineness.'},
+ {id:'gold14k',group:'Gold & jewelry',label:'14k gold',metal:'XAU',purity:58.33,note:'Common U.S. jewelry alloy.'},
+ {id:'gold10k',group:'Gold & jewelry',label:'10k gold',metal:'XAU',purity:41.67,note:'Minimum U.S. karat designation.'},
+ {id:'silver9999',group:'Silver bullion',label:'.9999 fine silver bullion',metal:'XAG',purity:99.99,note:'Some modern government bullion.'},
+ {id:'silver999',group:'Silver bullion',label:'.999 silver / American Silver Eagle',metal:'XAG',purity:99.9,note:'Common rounds, bars and U.S. Silver Eagles.'},
+ {id:'silver925',group:'Silver & flatware',label:'Sterling silver',metal:'XAG',purity:92.5,note:'925 hallmark.'},
+ {id:'silver90',group:'U.S. constitutional silver',label:'90% U.S. silver coinage',metal:'XAG',purity:90,note:'Pre-1965 dimes, quarters and halves; Morgan and Peace dollars.'},
+ {id:'silver40',group:'U.S. constitutional silver',label:'40% Kennedy half / collector Eisenhower',metal:'XAG',purity:40,note:'Kennedy halves 1965–1970; only specified silver-clad Eisenhower issues.'},
+ {id:'silver35',group:'U.S. constitutional silver',label:'35% wartime nickel',metal:'XAG',purity:35,note:'Jefferson nickels dated 1942–1945 with large reverse mintmark.'},
+ {id:'platinum9995',group:'Platinum & palladium',label:'.9995 platinum bullion',metal:'XPT',purity:99.95,note:'Common platinum bullion fineness.'},
+ {id:'palladium9995',group:'Platinum & palladium',label:'.9995 palladium bullion',metal:'XPD',purity:99.95,note:'Common palladium bullion fineness.'},
+ {id:'copper95',group:'Copper',label:'95% copper U.S. cent',metal:'XCU',purity:95,note:'Most U.S. cents dated 1909–1982; verify 1982 by weight.'}
+];
+function purityPresetOptions(){let group='';return PURITY_PRESETS.map(x=>{const head=x.group!==group?(group=x.group,`</optgroup><optgroup label="${group}">`):'';return `${head}<option value="${x.id}">${x.label}</option>`}).join('').replace('</optgroup>','')+'</optgroup>'}
+function applyPurityPreset(prefix,calcFn){const preset=PURITY_PRESETS.find(x=>x.id===document.querySelector(`#${prefix}Preset`)?.value);if(!preset)return;const purity=document.querySelector(`#${prefix}Purity`),metal=document.querySelector(`#${prefix}Metal`),note=document.querySelector(`#${prefix}PurityNote`);if(preset.purity!==null&&purity)purity.value=preset.purity;if(preset.metal&&metal?.querySelector(`option[value="${preset.metal}"]`))metal.value=preset.metal;if(note)note.textContent=preset.note;calcFn();if(prefix==='c')updateCalcBasis()}
+function purityReferenceTable(){return `<div class="purity-reference"><div class="purity-reference-head"><div><small>FINENESS REFERENCE</small><h3>Not sure which percentage to use?</h3></div><span>Choose any row to load it into the calculator.</span></div><div class="purity-reference-grid">${PURITY_PRESETS.filter(x=>x.purity!==null).map(x=>`<button onclick="loadReferencePreset('${x.id}')"><b>${x.label}</b><strong>${x.purity}%</strong><span>${x.note}</span></button>`).join('')}</div><p>Reference values describe metal composition, not collectible value. Dates and special issues matter—verify questionable pieces before buying or selling. Reference: <a href="https://www.usmint.gov/learn/coins-and-medals/circulating-coins/coin-specifications" target="_blank" rel="noopener">U.S. Mint coin specifications ↗</a></p></div>`}
+function loadReferencePreset(id){const select=document.querySelector('#cPreset');if(!select)return;select.value=id;applyPurityPreset('c',multiCalc);document.querySelector('#universalCalc')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function renderCalculators(){
  page.innerHTML=`<section class="hero" style="--hero:url('/bdp-mountain-bullion-banner-v328.png')"><h1>CALCULATOR CENTER</h1><p>One universal workspace for metal value, purity, buying targets and selling targets.</p></section>
  <div class="page"><div class="grid one">
@@ -421,12 +443,13 @@ function renderCalculators(){
    <img class="card-bg" src="/img/newlook/card-gold.png" alt="">
    <div class="trend-overlay">
    <div class="form-row"><div class="field"><label>METAL</label><select id="cMetal" onchange="multiCalc();updateCalcBasis()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option><option value="XCU">Copper</option></select><small id="cBasis" class="input-basis">SPOT BASIS: USD / OZT</small></div><div class="field"><label>WEIGHT</label><input id="cWeight" type="number" value="1" oninput="multiCalc()"></div></div>
-   <div class="form-row"><div class="field"><label>UNIT</label><select id="cUnit" onchange="multiCalc()">${Object.entries(UNIT_NAMES).map(([v,n])=>`<option value="${v}" ${v==='ozt'?'selected':''}>${n}</option>`).join('')}</select></div><div class="field"><label>PURITY %</label><input id="cPurity" type="number" value="100" oninput="multiCalc()"></div></div>
+   <div class="field"><label>COIN / BULLION PURITY PRESET</label><select id="cPreset" onchange="applyPurityPreset('c',multiCalc)">${purityPresetOptions()}</select><small id="cPurityNote" class="input-basis">Choose a common item or enter a custom percentage below.</small></div>
+   <div class="form-row"><div class="field"><label>UNIT</label><select id="cUnit" onchange="multiCalc()">${Object.entries(UNIT_NAMES).map(([v,n])=>`<option value="${v}" ${v==='ozt'?'selected':''}>${n}</option>`).join('')}</select></div><div class="field"><label>PURITY %</label><input id="cPurity" type="number" min="0" max="100" step=".01" value="100" oninput="document.querySelector('#cPreset').value='custom';multiCalc()"></div></div>
    <div class="form-row"><div class="field"><label>BUY % UNDER</label><input id="cUnder" type="number" value="5" oninput="multiCalc()"></div><div class="field"><label>SELL % OVER</label><input id="cOver" type="number" value="5" oninput="multiCalc()"></div></div>
    <div class="calc-result four-result"><div><small>MELT</small><strong id="cMelt">—</strong></div><div><small>BUY</small><strong id="cBuy" class="up">—</strong></div><div><small>SELL</small><strong id="cSell">—</strong></div><div><small>SPREAD</small><strong id="cSpread">—</strong></div></div>
    <button class="gold-btn" onclick="multiCalc()">CALCULATE</button>
    </div>
-  </div></section>
+  </div></section>${purityReferenceTable()}
  </div>`;
  multiCalc();updateCalcBasis();
 }
@@ -477,8 +500,9 @@ function renderDealer(){
  <div class="page">
  <div class="grid three">
    <section class="card" id="dealerDealSheet"><div class="card-head">QUICK DEAL SHEET</div><div class="card-body">
+    <div class="field"><label>COIN / BULLION PURITY PRESET</label><select id="dPreset" onchange="applyPurityPreset('d',dealerCalc)">${purityPresetOptions()}</select><small id="dPurityNote" class="input-basis">Choose a common item or use manual purity.</small></div>
     <div class="form-row"><div class="field"><label>METAL</label><select id="dMetal" onchange="dealerCalc()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option></select></div><div class="field"><label>WEIGHT</label><input id="dWeight" type="number" min="0" step="any" value="1" oninput="dealerCalc()"></div></div>
-    <div class="form-row"><div class="field"><label>WEIGHT UNIT</label><select id="dUnit" onchange="dealerCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div><div class="field"><label>PURITY %</label><input id="dPurity" type="number" value="100" oninput="dealerCalc()"></div></div>
+    <div class="form-row"><div class="field"><label>WEIGHT UNIT</label><select id="dUnit" onchange="dealerCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div><div class="field"><label>PURITY %</label><input id="dPurity" type="number" min="0" max="100" step=".01" value="100" oninput="document.querySelector('#dPreset').value='custom';dealerCalc()"></div></div>
     <div class="dealer-weight-conversion"><span><small>TROY OUNCES</small><b id="dOztEquivalent">—</b></span><span><small>GRAMS</small><b id="dGramEquivalent">—</b></span></div>
     <div class="form-row"><div class="field"><label>BUY % UNDER</label><input id="dUnder" type="number" value="5" oninput="dealerCalc()"></div><div class="field"><label>SELL % OVER</label><input id="dOver" type="number" value="5" oninput="dealerCalc()"></div></div>
     <div class="calc-result"><div><small>MELT</small><strong id="dMelt">—</strong></div><div><small>BUY TARGET</small><strong id="dBuy" class="up">—</strong></div><div><small>SELL TARGET</small><strong id="dSell">—</strong></div></div>
@@ -498,9 +522,10 @@ function renderDealer(){
     <div class="dealer-compare-result"><small>BEST ENTERED QUOTE</small><strong id="dcBest">Enter at least one quote</strong><span id="dcSpread"></span></div>
    </div></section>
    <section class="card" id="dealerPremiumCard"><div class="card-head">PREMIUM ANALYZER</div><div class="card-body">
+    <div class="field"><label>COIN / BULLION PURITY PRESET</label><select id="pmPreset" onchange="applyPurityPreset('pm',premiumCalc)">${purityPresetOptions()}</select><small id="pmPurityNote" class="input-basis">Choose a common item or use manual purity.</small></div>
     <div class="form-row"><div class="field"><label>METAL</label><select id="pmMetal" onchange="premiumCalc()"><option value="XAU">Gold</option><option value="XAG">Silver</option><option value="XPT">Platinum</option><option value="XPD">Palladium</option></select></div><div class="field"><label>DEALER PRICE</label><input id="pmPrice" type="number" min="0" step=".01" placeholder="Total quoted price" oninput="premiumCalc()"></div></div>
     <div class="form-row"><div class="field"><label>WEIGHT</label><input id="pmWeight" type="number" min="0" step="any" value="1" oninput="premiumCalc()"></div><div class="field"><label>UNIT</label><select id="pmUnit" onchange="premiumCalc()"><option value="ozt">Troy Ounces</option><option value="g">Grams</option></select></div></div>
-    <div class="form-row"><div class="field"><label>PURITY %</label><input id="pmPurity" type="number" min="0" max="100" value="100" oninput="premiumCalc()"></div><div class="field"><label>SPOT BASIS</label><input id="pmSpot" type="text" readonly></div></div>
+    <div class="form-row"><div class="field"><label>PURITY %</label><input id="pmPurity" type="number" min="0" max="100" step=".01" value="100" oninput="document.querySelector('#pmPreset').value='custom';premiumCalc()"></div><div class="field"><label>SPOT BASIS</label><input id="pmSpot" type="text" readonly></div></div>
     <div class="premium-results"><div><small>MELT VALUE</small><strong id="pmMelt">—</strong></div><div><small>PREMIUM $</small><strong id="pmDollars">—</strong></div><div><small>PREMIUM %</small><strong id="pmPercent">—</strong></div><div><small>PRICE / OZT</small><strong id="pmPerOzt">—</strong></div></div>
     <p class="local-note">Premium is calculated from the dealer price you enter versus live/reference BDP spot for the selected metal and fine-metal content.</p>
    </div></section>
