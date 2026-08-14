@@ -14,7 +14,7 @@ const engineOpenTab=document.getElementById('engineOpenTab');
 const engineFrame=document.getElementById('engineFrame');
 
 const nav=[
-["dashboard","i-grid","Dashboard","","dashboard"],["markets","i-chart","Live Markets","","markets"],["gold","i-bars","Gold","","gold"],["silver","i-coins","Silver","","silver"],["coins","i-coin","Coins","","coins"],["goldbacks","i-note","Goldbacks","","goldbacks"],["calculators","i-calc","Calculators","","calculators"],["dealer","i-tools","Dealer Tools","PRO","dealer"],["inventory","i-box","Inventory","PRO","inventory"],["alerts","i-bell","Alerts","","alerts"],["news","i-news","News","","news"],["resources","i-book","Resources","","resources"],["account","i-user","Account","","account"]];
+["dashboard","i-grid","Dashboard","","dashboard"],["markets","i-chart","Live Markets","","markets"],["gold","i-bars","Gold Center","","gold"],["silver","i-coins","Silver Center","","silver"],["coins","i-coin","Coins","","coins"],["goldbacks","i-note","Goldbacks","","goldbacks"],["calculators","i-calc","Calculators","","calculators"],["dealer","i-tools","Dealer Tools","PRO","dealer"],["inventory","i-box","Inventory","PRO","inventory"],["alerts","i-bell","Alerts","","alerts"],["news","i-news","News","","news"],["resources","i-book","Resources","","resources"],["account","i-user","Account","","account"]];
 const marketDefs=[["XAU","GOLD"],["XAG","SILVER"],["XPT","PLATINUM"],["XPD","PALLADIUM"],["RATIO","GOLD/SILVER"]];
 const referencePrices={XAU:2387.45,XAG:28.74,XPT:978.50,XPD:1021.35,XCU:4.28};
 let prices={...referencePrices};
@@ -489,7 +489,7 @@ function renderDealer(){
    <section class="card"><div class="card-head">SILVER BENCHMARKS</div><div class="card-body">${benchmarkTable('Silver',ag)}</div></section>
   </div>
   <div class="grid two dealer-workbench" style="margin-top:12px">
-   <section class="card"><div class="card-head">SCRAP BUYER</div><div class="card-body"><p class="module-copy">Use the complete existing scrap-gold workflow while it is migrated into V3.</p><button class="gold-btn" onclick="go('gold')">OPEN NATIVE GOLD / SCRAP CALCULATOR →</button></div></section>
+   <section class="card"><div class="card-head">SCRAP BUYER</div><div class="card-body"><p class="module-copy">Price scrap gold with the complete karat, weight, purity and payout workflow.</p><button class="gold-btn" onclick="go('gold')">OPEN GOLD / SCRAP CALCULATOR →</button></div></section>
    <section class="card" id="dealerCompareCard"><div class="card-head">COMPARE DEALER QUOTES <span class="manual-badge">MANUAL INPUT</span></div><div class="card-body">
     <p class="module-copy">Enter quotes you already have. BDP compares only the numbers you enter here; these are not scraped or live dealer offers.</p>
     <div class="dealer-compare-mode"><label>TRANSACTION</label><select id="dcMode" onchange="dealerCompare()"><option value="buy">Buying from dealer — lowest quote wins</option><option value="sell">Selling to dealer — highest quote wins</option></select></div>
@@ -505,7 +505,7 @@ function renderDealer(){
     <div class="premium-results"><div><small>MELT VALUE</small><strong id="pmMelt">—</strong></div><div><small>PREMIUM $</small><strong id="pmDollars">—</strong></div><div><small>PREMIUM %</small><strong id="pmPercent">—</strong></div><div><small>PRICE / OZT</small><strong id="pmPerOzt">—</strong></div></div>
     <p class="local-note">Premium is calculated from the dealer price you enter versus live/reference BDP spot for the selected metal and fine-metal content.</p>
    </div></section>
-   <section class="card" id="dealerTradingCard"><div class="card-head">TRADING / PURCHASE SHEET</div><div class="card-body"><p class="module-copy">Keep the current working purchase sheet available during the V3 migration.</p><button class="gold-btn" data-classic="#trading" data-title="Trading / Purchase Sheet">OPEN SHEET ↗</button></div></section>
+   <section class="card" id="dealerTradingCard"><div class="card-head">TRADING / PURCHASE SHEET</div><div class="card-body"><p class="module-copy">Open the detailed purchase sheet for itemized buy pricing and transaction notes.</p><button class="gold-btn" data-classic="#trading" data-title="Trading / Purchase Sheet">OPEN SHEET ↗</button></div></section>
   </div>
  </div>`;
  dealerCalc();premiumCalc();dealerCompare();
@@ -700,7 +700,7 @@ function renderCoins(){
     <a href="https://www.pcgs.com/coinfacts" target="_blank" rel="noopener"><small>PCGS</small><b>CoinFacts</b><span>Coin and variety reference ↗</span></a>
     <a href="https://en.numista.com" target="_blank" rel="noopener"><small>NUMISTA</small><b>Catalog</b><span>World coin catalog ↗</span></a>
    </div></div></section>
-   <section class="card" id="coinReferenceHub"><div class="card-head">BDP NUMISMATIC DATABASE</div><div class="card-body"><p class="module-copy">The existing BDP database contains deeper key-date, series, grading, error, specification, and coin-value tables. V3 keeps one controlled fallback to that database while the larger reference library is migrated.</p><button class="gold-btn" data-classic="#numismatic" data-title="Numismatic Database">OPEN BDP NUMISMATIC DATABASE ↗</button></div></section>
+   <section class="card" id="coinReferenceHub"><div class="card-head">BDP NUMISMATIC DATABASE</div><div class="card-body"><p class="module-copy">Use BDP's deeper key-date, series, grading, error, specification and coin-value reference library.</p><button class="gold-btn" data-classic="#numismatic" data-title="Numismatic Database">OPEN BDP NUMISMATIC DATABASE ↗</button></div></section>
   </div>
  </div>`;
  drawCoinLibrary();
@@ -755,8 +755,8 @@ function renderGoldbacks(){
    <section class="card"><div class="card-head">STATE / SERIES WORKSPACE <span class="gb-selected-state" id="gbSelectedState">${selectedGoldbackState.toUpperCase()}</span></div><div class="card-body"><div class="state-grid">${['Utah','Nevada','Wyoming','New Hampshire','South Dakota','Florida','Arizona','Oklahoma'].map(s=>`<button data-gb-state="${s}" class="${selectedGoldbackState===s?'active':''}" onclick="selectGoldbackState('${s}')"><span>${s.slice(0,2).toUpperCase()}</span><b>${s}</b><small>${selectedGoldbackState===s?'SELECTED':'SELECT SERIES'}</small></button>`).join('')}</div></div></section>
   </div>
   <div class="grid two" style="margin-top:12px">
-   <section class="card"><div class="card-head">EXCHANGE VALUE VS MELT</div><div class="card-body"><p class="module-copy">Goldbacks contain defined fractions of a troy ounce of 24K gold. The intrinsic melt value follows gold spot; the exchange or retail value is a separate number. V3 keeps those values visibly separate.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER →</button></div></section>
-   <section class="card" id="goldbackRetailerCard"><div class="card-head">RETAILER / DEALER LINKS</div><div class="card-body"><div class="goldback-art"><img src="/img/newlook/card-goldbacks.png" alt="Goldbacks"><div><b>GOLDBACK DEALER WORKSPACE</b><p>Open the existing retailer and dealer-link tools while they are migrated into V3.</p><div class="gb-link-row"><button data-classic="#goldback" data-title="Goldback Retailers">OPEN RETAILERS ↗</button><a href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">OFFICIAL RATES ↗</a></div></div></div></div></section>
+   <section class="card"><div class="card-head">EXCHANGE VALUE VS MELT</div><div class="card-body"><p class="module-copy">Goldbacks contain defined fractions of a troy ounce of 24K gold. The intrinsic melt value follows gold spot; the exchange or retail value is shown separately for clear quoting.</p><button class="gold-btn" onclick="go('resources')">OPEN BDP RESOURCE CENTER →</button></div></section>
+   <section class="card" id="goldbackRetailerCard"><div class="card-head">RETAILER / DEALER LINKS</div><div class="card-body"><div class="goldback-art"><img src="/img/newlook/card-goldbacks.png" alt="Goldbacks"><div><b>GOLDBACK DEALER WORKSPACE</b><p>Open retailer references and verify the current official exchange rate.</p><div class="gb-link-row"><button data-classic="#goldback" data-title="Goldback Retailers">OPEN RETAILERS ↗</button><a href="https://goldback.com/exchange-rates/" target="_blank" rel="noopener">OFFICIAL RATES ↗</a></div></div></div></div></section>
   </div>
  </div>`;
  drawGbDenoms();
@@ -1118,7 +1118,7 @@ function renderNews(){
   <div class="grid three" style="margin-top:12px">
    <section class="card"><div class="card-head">MARKET TOPICS</div><div class="card-body"><div class="topic-pills"><button onclick="go('markets')">Gold Spot</button><button onclick="go('markets')">Silver Spot</button><button onclick="go('markets')">G/S Ratio</button><button data-classic="#fx" data-title="Futures">Futures</button><button data-classic="#fx" data-title="Macro Markets">Macro</button></div></div></section>
    <section class="card"><div class="card-head">FROM NEWS TO ACTION</div><div class="card-body"><p class="module-copy">After reading the market, move directly into the tool you need.</p><div class="dash-actions"><button onclick="go('gold')">${icon('i-bars')}<span>Gold Center</span></button><button onclick="go('silver')">${icon('i-coins')}<span>Silver Center</span></button><button onclick="go('dealer')">${icon('i-tools')}<span>Dealer Tools</span></button><button onclick="go('alerts')">${icon('i-bell')}<span>Set Alert</span></button></div></div></section>
-   <section class="card"><div class="card-head">SOURCE STANDARD</div><div class="card-body"><p class="module-copy">V3 only labels information as live when it comes from an actual connected data endpoint. External news sources are clearly identified and opened at the publisher.</p><button class="module-open" onclick="go('resources')">VIEW RESOURCE CENTER ↗</button></div></section>
+   <section class="card"><div class="card-head">SOURCE STANDARD</div><div class="card-body"><p class="module-copy">BDP only labels information as live when it comes from a connected data endpoint. External news sources are clearly identified and opened at the publisher.</p><button class="module-open" onclick="go('resources')">VIEW RESOURCE CENTER ↗</button></div></section>
   </div>
  </div>`;
  drawLiveNews();drawNewsSources('ALL');
