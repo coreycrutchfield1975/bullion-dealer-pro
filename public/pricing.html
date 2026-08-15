@@ -51,7 +51,7 @@
         <div class="trial-note">Includes a <strong>14-day Pro trial</strong></div>
       </article>
     </section>
-    <footer class="site-footer"><a class="back" href="/">← Back to home</a><div class="footer-note">© 2026 BullionDealerPro.com · All rights reserved.</div></footer>
+    <footer class="site-footer"><a class="back" href="/">← Back to home</a><div style="margin-top:14px"><a href="/privacy" style="color:var(--gold);text-decoration:none;margin-right:16px">Privacy</a><a href="/terms" style="color:var(--gold);text-decoration:none;margin-right:16px">Terms</a><a href="/refund" style="color:var(--gold);text-decoration:none">Refund</a></div><div class="footer-note">© 2026 BullionDealerPro.com · All rights reserved.</div></footer>
   </main>
   <script>
     fetch('/api/me').then(r=>r.ok?r.json():null).then(u=>{if(u&&u.testMode){document.getElementById('test-banner').style.display='block';document.getElementById('test-card').style.display='block'}}).catch(()=>{});
