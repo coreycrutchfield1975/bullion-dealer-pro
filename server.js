@@ -738,6 +738,8 @@ app.get('/api/admin/promos', adminAuth, async (req, res) => {
 // STATIC FILES
 // ════════════════════════════════════════════════════════════════════════════════
 app.get('/privacy', (req, res) => res.sendFile(path.join(__dirname, 'public', 'privacy.html')));
+app.get('/terms', (req, res) => res.sendFile(path.join(__dirname, 'public', 'terms.html')));
+app.get('/refund', (req, res) => res.sendFile(path.join(__dirname, 'public', 'refund.html')));
 app.use(express.static(path.join(__dirname, 'public'), { etag: false, maxAge: 0, setHeaders: (res, filePath) => { if (filePath.endsWith('.html') || filePath.endsWith('sw.js')) { res.set('Cache-Control', 'no-cache, no-store, must-revalidate'); res.set('Pragma', 'no-cache'); } } }));
 
 // Page routes
