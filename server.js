@@ -8,7 +8,6 @@ const rateLimit = require('express-rate-limit');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
 const fetch = require('node-fetch');
 const Stripe = require('stripe');
 const Parser = require('rss-parser');
@@ -23,7 +22,7 @@ const {
   MONGO_URI, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD,
   STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
   STRIPE_PRICE_MONTHLY: STRIPE_MONTHLY_PRICE_ID, STRIPE_PRICE_ANNUAL: STRIPE_ANNUAL_PRICE_ID,
-  GOLD_API_KEY, GMAIL_USER, GMAIL_PASS, APP_URL = 'https://bulliondealerpro.com'
+  GOLD_API_KEY, BREVO_API_KEY, BREVO_FROM, APP_URL = 'https://bulliondealerpro.com'
 } = process.env;
 
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
@@ -251,21 +250,22 @@ async function connectDB() {
 }
 
 // ── EMAIL ─────────────────────────────────────────────────────────────────────
-function mailer() {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user: GMAIL_USER, pass: GMAIL_PASS }
-  });
-}
+// Brevo (free tier, own-domain) transactional email. Removes reliance on personal Gmail SMTP.
+const { BrevoClient } = require('@getbrevo/brevo');
+const _brevoApi = BREVO_API_KEY ? new BrevoClient({ apiKey: BREVO_API_KEY }) : null;
 
 async function sendResetEmail(to, token) {
+  if (!_brevoApi) {
+    console.error('sendResetEmail: BREVO_API_KEY not configured; reset email NOT sent to', to);
+    return;
+  }
   const link = `${APP_URL}/reset-password?token=${token}`;
-  await mailer().sendMail({
-    from: `"Bullion Dealer Pro" <${GMAIL_USER}>`,
-    to,
+  await _brevoApi.transactionalEmails.sendTransacEmail({
     subject: 'Reset your password',
-    html: `<p>Click to reset your password (expires in 1 hour):</p>
-           <p><a href="${link}">${link}</a></p>`
+    htmlContent: `<p>Click to reset your password (expires in 1 hour):</p>
+           <p><a href="${link}">${link}</a></p>`,
+    sender: { name: 'Bullion Dealer Pro', email: BREVO_FROM || 'no-reply@bulliondealerpro.com' },
+    to: [{ email: to }]
   });
 }
 
