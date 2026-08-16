@@ -13,6 +13,7 @@ const Stripe = require('stripe');
 const Parser = require('rss-parser');
 const path = require('path');
 const crypto = require('crypto');
+const otp = require('otplib');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -76,6 +77,8 @@ const userSchema = new mongoose.Schema({
   stripeSubId:     String,
   resetToken:      String,
   resetExpires:    Date,
+  totpSecret:      String,
+  totpEnabled:     { type: Boolean, default: false },
   createdAt:       { type: Date, default: Date.now },
   syncInventory:   { type: Array,  default: [] },
   syncSlabs:       { type: Array,  default: [] },
@@ -302,6 +305,14 @@ app.post('/api/login', loginLimiter, async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
+    // 2FA: admin accounts with TOTP enabled require a second step.
+    if (user.plan === 'admin' && user.totpEnabled && user.totpSecret) {
+      const pendingToken = jwt.sign(
+        { id: user._id, email: user.email, plan: user.plan, totpStep: true },
+        JWT_KEY, { expiresIn: '5m' }
+      );
+      return res.status(200).json({ ok: true, twoFactorRequired: true, pendingToken });
+    }
     const token = jwt.sign(
       { id: user._id, email: user.email, plan: user.plan, trialEnd: user.trialEnd }, JWT_KEY, { expiresIn: '7d' }
     );
@@ -317,10 +328,85 @@ app.post('/api/logout', (req, res) => {
   res.json({ ok: true });
 });
 
+// ── 2FA: verify the TOTP code after a password login for admin accounts ──
+app.post('/api/login/2fa', async (req, res) => {
+  try {
+    const { pendingToken, code } = req.body || {};
+    if (!pendingToken || typeof code !== 'string' || !/^\d{6}$/.test(code)) {
+      return res.status(400).json({ error: 'A 6-digit code is required' });
+    }
+    let pending;
+    try {
+      pending = jwt.verify(pendingToken, JWT_KEY);
+    } catch { return res.status(401).json({ error: '2FA session expired, please log in again' }); }
+    if (!pending.totpStep || !pending.id) return res.status(401).json({ error: 'Invalid 2FA session' });
+
+    const user = await User.findById(pending.id);
+    if (!user || user.plan !== 'admin' || !user.totpEnabled || !user.totpSecret) {
+      return res.status(403).json({ error: '2FA not enabled for this account' });
+    }
+    const result = otp.verifySync({ secret: user.totpSecret, token: code });
+    if (!result || result.valid !== true) {
+      return res.status(401).json({ error: 'Invalid 2FA code' });
+    }
+    const token = jwt.sign(
+      { id: user._id, email: user.email, plan: user.plan, trialEnd: user.trialEnd }, JWT_KEY, { expiresIn: '7d' }
+    );
+    res.cookie('token', token, TOKEN_COOKIE);
+    res.json({ ok: true, plan: user.plan, trialEnd: user.trialEnd });
+  } catch (e) {
+    return safeServerError(res, 500, '2FA verification failed', e, 'login2fa');
+  }
+});
+
+// ── 2FA: admin setup (generate secret + QR URI) ──
+app.post('/api/admin/setup-2fa', adminAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user || user.plan !== 'admin') return res.status(403).json({ error: 'Admin only' });
+    if (user.totpEnabled) return res.status(409).json({ error: '2FA is already enabled' });
+    const secret = otp.generateSecret();
+    user.totpSecret = secret;
+    await user.save();
+    const uri = otp.generateURI({
+      secret,
+      algorithm: 'TOTP',
+      issuer: 'BullionDealerPro',
+      label: user.email
+    });
+    res.json({ ok: true, secret, otpauthUrl: uri });
+  } catch (e) {
+    return safeServerError(res, 500, '2FA setup failed', e, 'setup2fa');
+  }
+});
+
+// ── 2FA: admin confirm (enable after verifying a code) ──
+app.post('/api/admin/confirm-2fa', adminAuth, async (req, res) => {
+  try {
+    const { code } = req.body || {};
+    if (typeof code !== 'string' || !/^\d{6}$/.test(code)) {
+      return res.status(400).json({ error: 'A 6-digit code is required' });
+    }
+    const user = await User.findById(req.user.id);
+    if (!user || user.plan !== 'admin') return res.status(403).json({ error: 'Admin only' });
+    if (!user.totpSecret) return res.status(409).json({ error: 'Run setup-2fa first' });
+    if (user.totpEnabled) return res.status(409).json({ error: '2FA is already enabled' });
+    const result = otp.verifySync({ secret: user.totpSecret, token: code });
+    if (!result || result.valid !== true) return res.status(401).json({ error: 'Invalid 2FA code' });
+    user.totpEnabled = true;
+    await user.save();
+    res.json({ ok: true });
+  } catch (e) {
+    return safeServerError(res, 500, '2FA confirm failed', e, 'confirm2fa');
+  }
+});
+
 app.get('/api/me', auth, async (req, res) => {
-  const user = await User.findById(req.user.id).select('-passwordHash -resetToken');
+  const user = await User.findById(req.user.id).select('-passwordHash -resetToken -totpSecret');
   if (!user) return res.status(401).json({ error: 'Account not found' });
   const userData = user.toObject();
+  userData.totpEnabled = user.totpEnabled ? true : false;
+  delete userData.totpSecret;
   userData.testMode = TEST_MODE;
   // isPro: true if on paid plan, admin, or active trial
   const now = new Date();
@@ -708,7 +794,7 @@ app.post('/api/sync', auth, async (req, res) => {
 });
 
 app.get('/api/admin/users', adminAuth, async (req, res) => {
-  const users = await User.find().select('-passwordHash -resetToken').sort({ createdAt: -1 });
+  const users = await User.find().select('-passwordHash -resetToken -totpSecret').sort({ createdAt: -1 });
   res.json(users);
 });
 
@@ -720,7 +806,7 @@ app.patch('/api/admin/users/:id', adminAuth, async (req, res) => {
     req.params.id,
     { $set: { plan } },
     { new: true, runValidators: true }
-  ).select('-passwordHash -resetToken');
+  ).select('-passwordHash -resetToken -totpSecret');
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
