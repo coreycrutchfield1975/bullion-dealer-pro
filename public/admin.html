@@ -108,6 +108,23 @@
     </table>
   </div>
 
+  <!-- TWO-FACTOR AUTHENTICATION -->
+  <h2 style="margin-top:28px">Security — Two-Factor Authentication</h2>
+  <div class="promo-form" style="align-items:center">
+    <div id="tfa-status" style="flex-basis:100%;font-size:14px;color:var(--muted)">Loading 2FA status…</div>
+    <div id="tfa-qr" style="display:none;margin:4px 0 8px;justify-content:center;background:#fff;padding:12px;border-radius:8px"></div>
+    <div id="tfa-secret-box" style="display:none;flex-basis:100%;font-size:14px">
+      <span style="color:var(--muted)">Manual entry key:</span>
+      <span class="code-box" id="tfa-secret" style="text-transform:uppercase"></span>
+    </div>
+    <div id="tfa-input-row" style="display:none;flex-wrap:wrap;gap:10px;align-items:flex-end">
+      <div class="field"><label>6-DIGIT CODE</label><input id="tfa-code" maxlength="6" inputmode="numeric" autocomplete="one-time-code" placeholder="123456"></div>
+      <button class="create-btn" id="tfa-confirm" onclick="confirm2FA()">CONFIRM &amp; ENABLE</button>
+    </div>
+    <button class="hbtn danger" id="tfa-enable" style="display:none" onclick="setup2FA()">ENABLE 2FA</button>
+    <div id="tfa-msg" style="flex-basis:100%"></div>
+  </div>
+
 </main>
 <script>
 async function load() {
@@ -216,7 +233,81 @@ async function logout() {
   window.location.href = '/login';
 }
 
+/* ── 2FA (TOTP) ─────────────────────────────────────────── */
+async function tfaStatus() {
+  const st = document.getElementById('tfa-status');
+  const en = document.getElementById('tfa-enable');
+  try {
+    const r = await fetch('/api/me');
+    const me = await r.json();
+    if (me && me.totpEnabled) {
+      st.textContent = 'Two-factor authentication is ENABLED.';
+      st.style.color = 'var(--green)';
+      en.style.display = 'none';
+    } else {
+      st.textContent = 'Two-factor authentication is DISABLED.';
+      st.style.color = 'var(--muted)';
+      en.style.display = 'inline-block';
+    }
+  } catch (e) {
+    st.textContent = 'Could not load 2FA status.';
+    en.style.display = 'inline-block';
+  }
+}
+
+async function setup2FA() {
+  const msg = document.getElementById('tfa-msg');
+  msg.innerHTML = '';
+  try {
+    const r = await fetch('/api/admin/setup-2fa', { method:'POST' });
+    const d = await r.json();
+    if (!r.ok) { msg.innerHTML = `<div class="msg err">${d.error||'Setup failed'}</div>`; return; }
+    document.getElementById('tfa-secret').textContent = d.secret;
+    document.getElementById('tfa-secret-box').style.display = 'block';
+    const qr = document.getElementById('tfa-qr');
+    qr.innerHTML = '';
+    qr.style.display = 'flex';
+    if (d.qrDataUrl) {
+      const img = document.createElement('img');
+      img.alt = 'Scan with your authenticator app';
+      img.style.width = '200px'; img.style.height = '200px';
+      img.src = d.qrDataUrl;
+      qr.appendChild(img);
+    } else {
+      qr.textContent = '(QR unavailable — use the manual key above)';
+      qr.style.background = 'var(--bg2)';
+      qr.style.color = 'var(--muted)';
+    }
+    document.getElementById('tfa-input-row').style.display = 'flex';
+    document.getElementById('tfa-enable').style.display = 'none';
+    msg.innerHTML = '<div class="msg ok">Scan the QR code (or enter the manual key) into your authenticator app, then enter the 6-digit code to enable.</div>';
+    document.getElementById('tfa-code').focus();
+  } catch (e) { msg.innerHTML = `<div class="msg err">Error: ${e.message}</div>`; }
+}
+
+async function confirm2FA() {
+  const code = document.getElementById('tfa-code').value.trim();
+  const msg  = document.getElementById('tfa-msg');
+  if (!/^\d{6}$/.test(code)) { msg.innerHTML = '<div class="msg err">Enter the 6-digit code from your authenticator.</div>'; return; }
+  try {
+    const r = await fetch('/api/admin/confirm-2fa', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code })
+    });
+    const d = await r.json();
+    if (!r.ok) { msg.innerHTML = `<div class="msg err">${d.error||'Confirm failed'}</div>`; return; }
+    msg.innerHTML = '<div class="msg ok">2FA enabled! You\'ll need your authenticator code on every admin login now.</div>';
+    document.getElementById('tfa-qr').style.display = 'none';
+    document.getElementById('tfa-secret-box').style.display = 'none';
+    document.getElementById('tfa-input-row').style.display = 'none';
+    document.getElementById('tfa-enable').style.display = 'none';
+    tfaStatus();
+  } catch (e) { msg.innerHTML = `<div class="msg err">Error: ${e.message}</div>`; }
+}
+
+/* QR code is generated server-side (setup-2fa returns qrDataUrl), so no client encoder needed. */
+
 load();
+tfaStatus();
 setInterval(load, 30000);
 </script>
 </body>

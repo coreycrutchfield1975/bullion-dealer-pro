@@ -14,6 +14,7 @@ const Parser = require('rss-parser');
 const path = require('path');
 const crypto = require('crypto');
 const otp = require('otplib');
+const QRCode = require('qrcode');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -374,7 +375,11 @@ app.post('/api/admin/setup-2fa', adminAuth, async (req, res) => {
       issuer: 'BullionDealerPro',
       label: user.email
     });
-    res.json({ ok: true, secret, otpauthUrl: uri });
+    // Server-side QR so the admin panel needs no client-side encoder.
+    let qrDataUrl = null;
+    try { qrDataUrl = await QRCode.toDataURL(uri, { width: 200, margin: 1 }); }
+    catch (qrErr) { /* QR failure is non-fatal; manual key still shown */ }
+    res.json({ ok: true, secret, otpauthUrl: uri, qrDataUrl });
   } catch (e) {
     return safeServerError(res, 500, '2FA setup failed', e, 'setup2fa');
   }
