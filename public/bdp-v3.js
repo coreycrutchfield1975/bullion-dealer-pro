@@ -451,9 +451,123 @@ function renderCalculators(){
    </div>
   </div></section>${purityReferenceTable()}
  </div>`;
- multiCalc();updateCalcBasis();
+
+ const coinGrid = `<div class="grid one" style="margin-top:16px"><section class="card intel-card" id="coinWeightCalc"><div class="card-head">COIN WEIGHT &amp; MIXED BAG</div><div class="card-body">
+   <img class="card-bg" src="/img/newlook/card-silver.png" alt="">
+   <div class="trend-overlay">
+   <div class="calc-tabs" style="display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="seg active" onclick="coinWeightTab('individual',this)">🪙 Per Coin</button>
+    <button class="seg" onclick="coinWeightTab('mixed',this)">📦 Mixed Bag</button>
+    <button class="seg" onclick="coinWeightTab('reverse',this)">🔄 Reverse</button>
+    <button class="seg" onclick="coinWeightTab('table',this)">📋 Reference</button>
+   </div>
+   <div id="cwIndividual"><div class="form-row"><div class="field"><label>COIN TYPE</label><select id="cwType" onchange="coinWeightCalc()${COIN_WEIGHT_OPTIONS}</select></div><div class="field"><label>QUANTITY</label><input id="cwQty" type="number" min="0" step="1" value="1" oninput="coinWeightCalc()"></div></div>
+   <div class="calc-result four-result"><div><small>TOTAL WEIGHT (OZT)</small><strong id="cwTotalOz">—</strong></div><div><small>PURE SILVER (OZT)</small><strong id="cwSilverOz">—</strong></div><div><small>TOTAL WEIGHT (G)</small><strong id="cwTotalG">—</strong></div><div><small>FACE VALUE</small><strong id="cwFace">—</strong></div></div>
+   <button class="gold-btn" onclick="coinWeightCalc()">CALCULATE WEIGHT</button>
+   </div>
+   <div id="cwMixed" style="display:none"><div class="form-row"><div class="field"><label>90% DIMES</label><input class="cw-mixed-input" id="cwMDime" type="number" min="0" step="1" value="0" oninput="coinWeightMixed()"></div><div class="field"><label>90% QUARTERS</label><input class="cw-mixed-input" id="cwMQuarter" type="number" min="0" step="1" value="0" oninput="coinWeightMixed()"></div><div class="field"><label>90% HALVES</label><input class="cw-mixed-input" id="cwMHalf" type="number" min="0" step="1" value="0" oninput="coinWeightMixed()"></div></div>
+   <div class="form-row"><div class="field"><label>90% DOLLARS</label><input class="cw-mixed-input" id="cwMDollar" type="number" min="0" step="1" value="0" oninput="coinWeightMixed()"></div><div class="field"><label>40% KENNEDY HALVES</label><input class="cw-mixed-input" id="cwMHalf40" type="number" min="0" step="1" value="0" oninput="coinWeightMixed()"></div><div class="field"><label>WAR NICKELS</label><input class="cw-mixed-input" id="cwMNickel" type="number" min="0" step="1" value="0" oninput="coinWeightMixed()"></div></div>
+   <div class="calc-result four-result"><div><small>TOTAL COINS</small><strong id="cwMTotalCoins">—</strong></div><div><small>TOTAL WEIGHT (OZT)</small><strong id="cwMTotalOz">—</strong></div><div><small>PURE SILVER (OZT)</small><strong id="cwMTotalAg">—</strong></div><div><small>COMBINED FACE</small><strong id="cwMFace">—</strong></div></div>
+   <button class="gold-btn" onclick="coinWeightMixed()">CALCULATE BATCH</button>
+   </div>
+   <div id="cwReverse" style="display:none"><div class="form-row"><div class="field"><label>COIN TYPE</label><select id="cwRType" onchange="coinWeightReverse()">${COIN_WEIGHT_OPTIONS}</select></div><div class="field"><label>TOTAL WEIGHT (OZT)</label><input id="cwRWeight" type="number" min="0" step="any" value="10" oninput="coinWeightReverse()"></div></div>
+   <div class="calc-result four-result"><div><small>ESTIMATED COUNT</small><strong id="cwRCount">—</strong></div><div><small>PURE SILVER (OZT)</small><strong id="cwRSilver">—</strong></div><div><small>MELT VALUE</small><strong id="cwRMelt">—</strong></div><div><small>$/OZT PAID</small><strong id="cwRRate">—</strong></div></div>
+   <button class="gold-btn" onclick="coinWeightReverse()">CALCULATE</button>
+   </div>
+   <div id="cwTable" style="display:none"><div class="cw-ref-table-wrap"><table><thead><tr><th>COIN</th><th>COMP.</th><th>WT (OZT)</th><th>WT (G)</th><th>SILVER OZT</th><th>FACE</th></tr></thead>
+   <tbody>${COIN_WEIGHT_ROWS.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>$${r[5]}</td></tr>`).join('')}</tbody></table></div>
+   <p style="font-size:12px;color:var(--muted);margin-top:8px">Total weight includes both precious metal and base metal content.</p>
+   </div>
+   </div>
+  </div></section></div>`;
+
+ page.innerHTML+=coinGrid; multiCalc();updateCalcBasis(); coinWeightCalc();
 }
 function updateCalcBasis(){const el=document.querySelector('#cBasis'),m=document.querySelector('#cMetal')?.value;if(el)el.textContent=`SPOT BASIS: ${marketBasis(m)}`}
+
+const COIN_WEIGHT_DATA={
+ dime_90:{silverOz:.07234,purity:.9,face:.10,label:'Dime 90%'},
+ quarter_90:{silverOz:.18084,purity:.9,face:.25,label:'Quarter 90%'},
+ half_90:{silverOz:.36169,purity:.9,face:.50,label:'Half Dollar 90%'},
+ dollar_90:{silverOz:.77344,purity:.9,face:1.00,label:'Morgan/Peace Dollar 90%'},
+ half_40:{silverOz:.14792,purity:.4,face:.50,label:'Kennedy Half 40%'},
+ nickel_35:{silverOz:.05626,purity:.35,face:.05,label:'War Nickel 35%'}
+};
+const COIN_WEIGHT_OPTIONS=Object.entries(COIN_WEIGHT_DATA).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+const COIN_WEIGHT_ROWS=[
+ ['Dime 90%','90% Ag / 10% Cu','0.08038','2.500','0.07234','0.10'],
+ ['Quarter 90%','90% Ag / 10% Cu','0.20093','6.250','0.18084','0.25'],
+ ['Half Dollar 90%','90% Ag / 10% Cu','0.40188','12.500','0.36169','0.50'],
+ ['Morgan/Peace $ 90%','90% Ag / 10% Cu','0.85938','26.730','0.77344','1.00'],
+ ['Kennedy Half 40%','40% Ag / 60% Cu','0.36980','11.500','0.14792','0.50'],
+ ['War Nickel 35%','35% Ag / 56% Cu / 9% Mn','0.16074','5.000','0.05626','0.05']
+];
+function coinWeightTab(tab,btn){
+ ['individual','mixed','reverse','table'].forEach(k=>{
+  const e=document.querySelector('#cw'+k.charAt(0).toUpperCase()+k.slice(1));
+  if(e)e.style.display=tab===k?'':'none';
+ });
+ if(btn){
+  btn.closest('.calc-tabs').querySelectorAll('.seg').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+ }
+}
+function coinWeightCalc(){
+ const t=document.querySelector('#cwType')?.value||'half_90';
+ const q=Math.max(0,Number(document.querySelector('#cwQty')?.value||0))||1;
+ const d=COIN_WEIGHT_DATA[t]||COIN_WEIGHT_DATA.half_90;
+ const totalOz=(d.silverOz/d.purity)*q;
+ const silverOz=d.silverOz*q;
+ const totalG=totalOz*31.1034768;
+ const face=d.face*q;
+ ['cwTotalOz','cwSilverOz','cwTotalG','cwFace'].forEach(id=>{
+  const e=document.querySelector('#'+id);
+  if(!e)return;
+  if(id==='cwTotalOz')e.textContent=totalOz.toFixed(5)+' ozt';
+  else if(id==='cwSilverOz')e.textContent=silverOz.toFixed(5)+' ozt';
+  else if(id==='cwTotalG')e.textContent=totalG.toFixed(2)+' g';
+  else if(id==='cwFace')e.textContent='$'+face.toFixed(2);
+ });
+}
+function coinWeightMixed(){
+ const items=[
+  {id:'cwMDime',key:'dime_90'},{id:'cwMQuarter',key:'quarter_90'},
+  {id:'cwMHalf',key:'half_90'},{id:'cwMDollar',key:'dollar_90'},
+  {id:'cwMHalf40',key:'half_40'},{id:'cwMNickel',key:'nickel_35'}
+ ];
+ let totalCoins=0,totalOz=0,totalAg=0,totalFace=0;
+ items.forEach(({id,key})=>{
+  const q=Math.max(0,Number(document.querySelector('#'+id)?.value||0));
+  if(q>0){const d=COIN_WEIGHT_DATA[key];totalCoins+=q;totalOz+=(d.silverOz/d.purity)*q;totalAg+=d.silverOz*q;totalFace+=d.face*q;}
+ });
+ ['cwMTotalCoins','cwMTotalOz','cwMTotalAg','cwMFace'].forEach(id=>{
+  const e=document.querySelector('#'+id);
+  if(!e)return;
+  if(id==='cwMTotalCoins')e.textContent=totalCoins;
+  else if(id==='cwMTotalOz')e.textContent=totalOz.toFixed(4)+' ozt';
+  else if(id==='cwMTotalAg')e.textContent=totalAg.toFixed(4)+' ozt';
+  else if(id==='cwMFace')e.textContent='$'+totalFace.toFixed(2);
+ });
+}
+function coinWeightReverse(){
+ const t=document.querySelector('#cwRType')?.value||'half_90';
+ const w=Math.max(0,Number(document.querySelector('#cwRWeight')?.value||0))||10;
+ const d=COIN_WEIGHT_DATA[t]||COIN_WEIGHT_DATA.half_90;
+ const perCoinTotal=d.silverOz/d.purity;
+ const count=w/perCoinTotal;
+ const silver=w*d.purity;
+ const ag=prices.XAG||0;
+ const melt=silver*ag;
+ const rate=melt&&w?melt/w:0;
+ ['cwRCount','cwRSilver','cwRMelt','cwRRate'].forEach(id=>{
+  const e=document.querySelector('#'+id);
+  if(!e)return;
+  if(id==='cwRCount')e.textContent=Math.round(count)+' (~'+count.toFixed(2)+')';
+  else if(id==='cwRSilver')e.textContent=silver.toFixed(5)+' ozt';
+  else if(id==='cwRMelt')e.textContent=fmt(melt);
+  else if(id==='cwRRate')e.textContent=fmt(rate)+'/ozt';
+ });
+}
 function multiCalc(){
  const metal=document.querySelector('#cMetal')?.value||'XAU';
  const raw=Math.max(0,Number(document.querySelector('#cWeight')?.value||0));
